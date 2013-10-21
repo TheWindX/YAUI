@@ -115,6 +115,8 @@ namespace timer1
                 mIntervalCount -= mInterval;
                 mIntervalStation += mInterval;
             }
+
+
         }
 
         Func<UInt32> mTimer;
@@ -140,6 +142,12 @@ namespace timer1
 
         int mIDCount = 0;
         static int mLog = 0;
+
+        public int timerCount()
+        {
+            return mInterpolates.Count;
+        }
+
         public int setInterpolates(Action<float> handler, float a, float b, UInt32 duration, UInt32 interval = 0)
         {
 

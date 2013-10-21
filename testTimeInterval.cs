@@ -138,7 +138,8 @@ namespace ConsoleApplication1
             Func<Func<Action<UInt32>, UInt32, Action<UInt32>, UInt32, int>> getsetinterval,
             Func<Func<Action<UInt32>, UInt32, int>> getsettimeout,
             Action tickAll,
-            Func<Func<int, bool>> getclearTimer
+            Func<Func<int, bool>> getclearTimer,
+            Func< Func<int> > getTimerCount
             )
         {
             updateTimer();
@@ -170,7 +171,7 @@ namespace ConsoleApplication1
             bool exit = false;
             id3 = setInterval((n) => { Console.WriteLine("id3 interval:" + n); }, 200, (n) => { exit = true; }, 3000);
 
-            while (!exit)
+            while (!exit && getTimerCount()() != 0 )
             {
                 updateTimer();
                 tickAll();
@@ -184,6 +185,7 @@ namespace ConsoleApplication1
             Func<Func<Action<UInt32>, UInt32, int>> getsettimeout = () => timer1.TimerManager.get().setTimeout;
             Action tickAll = timer1.TimerManager.tickAll;
             Func<Func<int, bool>> getclearTimer = () => timer1.TimerManager.get().clearTimer;
+            Func<Func<int>> getTimerCount = 
 
             testCompex(init, getsetinterval, getsettimeout, tickAll, getclearTimer);
         }

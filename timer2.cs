@@ -135,6 +135,11 @@ namespace timer2
             {
                 m_arr.Clear();
             }
+
+            public int size()
+            {
+                return m_arr.Count;
+            }
         };
 
         class TimeContext
@@ -292,6 +297,13 @@ namespace timer2
                 return true;
             }
             return false;
+        }
+
+        public int timerCount()
+        {
+            int sz = mInterpolates.size();
+            int sz1 = mID2Interpolation.Count();
+            return sz;
         }
 
         public void clearAll()
