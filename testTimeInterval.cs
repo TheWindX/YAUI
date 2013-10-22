@@ -149,9 +149,16 @@ namespace ConsoleApplication1
             var setTimeout = getsettimeout();
             var clearTimer = getclearTimer();
 
+
+            int id0 = 0;
             int id1 = 0;
             int id2 = 0;
             int id3 = 0;
+            id0 = setInterval((n) =>
+                {
+                    //every frame
+                }, 0, null, UInt32.MaxValue);
+
                 id1 = setInterval((n) => 
                 {
                     Console.WriteLine("id 1 interval:" + n);

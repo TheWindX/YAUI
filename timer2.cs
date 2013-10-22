@@ -1,7 +1,8 @@
 ﻿
-
+#define NO_ACCUMULATE
 namespace timer2
 {
+
     using System;
     using System.Linq;
     using System.Collections.Generic;
@@ -170,6 +171,12 @@ namespace timer2
                     mIntervalCount = mIntervalCount + mInterval;
                     var t = ((float)(now - mStartTime)) / mDuration;
                     mIntevalHandler(now - mStartTime, false);
+#if NO_ACCUMULATE
+                    if (mIntervalCount < now)
+                    {
+                        mIntervalCount = now + 1;
+                    }
+#endif
                 }
                 return ret;
             }

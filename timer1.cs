@@ -141,7 +141,7 @@ namespace timer1
         }
 
         int mIDCount = 0;
-        static int mLog = 0;
+
 
         public int timerCount()
         {
