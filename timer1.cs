@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
 
 namespace timer1
 {
@@ -145,7 +145,7 @@ namespace timer1
 
         public int timerCount()
         {
-            return mInterpolates.Count;
+            return mInterpolates.Count+mPreInterpolates.Count;
         }
 
         public int setInterpolates(Action<float> handler, float a, float b, UInt32 duration, UInt32 interval = 0)

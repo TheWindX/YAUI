@@ -171,11 +171,13 @@ namespace ConsoleApplication1
             bool exit = false;
             id3 = setInterval((n) => { Console.WriteLine("id3 interval:" + n); }, 200, (n) => { exit = true; }, 3000);
 
+            Console.WriteLine("timerCount:" + getTimerCount()());
             while (!exit && getTimerCount()() != 0 )
             {
                 updateTimer();
                 tickAll();
             }
+            Console.WriteLine("timerCount:" + getTimerCount()());
         }
 
         static void testCompex1()
@@ -185,9 +187,9 @@ namespace ConsoleApplication1
             Func<Func<Action<UInt32>, UInt32, int>> getsettimeout = () => timer1.TimerManager.get().setTimeout;
             Action tickAll = timer1.TimerManager.tickAll;
             Func<Func<int, bool>> getclearTimer = () => timer1.TimerManager.get().clearTimer;
-            Func<Func<int>> getTimerCount = 
+            Func<Func<int>> getTimerCount = ()=>timer1.TimerManager.get().timerCount;
 
-            testCompex(init, getsetinterval, getsettimeout, tickAll, getclearTimer);
+            testCompex(init, getsetinterval, getsettimeout, tickAll, getclearTimer, getTimerCount);
         }
 
         static void testCompex2()
@@ -197,8 +199,9 @@ namespace ConsoleApplication1
             Func<Func<Action<UInt32>, UInt32, int>> getsettimeout = () => timer2.TimerManager.get().setTimeout;
             Action tickAll = timer2.TimerManager.tickAll;
             Func<Func<int, bool>> getclearTimer = () => timer2.TimerManager.get().clearTimer;
+            Func<Func<int>> getTimerCount = () => timer2.TimerManager.get().timerCount;
 
-            testCompex(init, getsetinterval, getsettimeout, tickAll, getclearTimer);
+            testCompex(init, getsetinterval, getsettimeout, tickAll, getclearTimer, getTimerCount);
         }
 
         static void test1()
@@ -240,7 +243,7 @@ namespace ConsoleApplication1
         
         public static void test()
         {
-            testCompex1();
+            testCompex2();
         }
 
     }
