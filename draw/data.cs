@@ -254,6 +254,9 @@ namespace draw1
 
     class Data
     {
+        static int idc = 0;
+        public int id = 0;
+        public Data() { id = idc ++; }
         public MetaType mType;
 
         public object extra;
@@ -401,23 +404,30 @@ namespace draw1
     class BehAccessory
     {
         public BehaviourData mData;
+        public int idx = 0;
     };
 
     class BehData : BehAccessory
     {
-        public BehData mFrom;
         public List<BehData> mTo = new List<BehData>();
         public Data mCurrentData;
 
+        public virtual BehData clone(BehaviourData d)
+        {
+            BehData ret = new BehData();
+            ret.mData = d;
+            ret.idx = idx;
+            ret.mCurrentData = mCurrentData.clone();
+            return ret;
+        }
+
         public void linkTo(BehData to)
         {
-            to.mFrom = this;
             mTo.Add(to);//may be duplicate
         }
 
         public void linkFrom(BehData from)
         {
-            mFrom = from;
             from.mTo.Add(this);//may be duplicate
         }
         
@@ -429,16 +439,14 @@ namespace draw1
         {
             mData = d;
         }
-        public void update()
-        {
-            if (mFrom == null)
-            {
 
-            }
-            else
-            {
-                mCurrentData = mFrom.mCurrentData;
-            }
+        public override BehData clone(BehaviourData d)
+        {
+            BehDataIn ret = new BehDataIn(d);
+            ret.mData = d;
+            ret.idx = idx;
+            ret.mCurrentData = mCurrentData.clone();
+            return ret;
         }
     }
 
@@ -450,35 +458,48 @@ namespace draw1
         {
             mData = d;
         }
-
-        public void push()
+        public override BehData clone(BehaviourData d)
         {
-            mDataStack.AddLast(mCurrentData);
-            mCurrentData = mCurrentData.clone();
+            BehDataOut ret = new BehDataOut(d);
+            ret.mData = d;
+            ret.idx = idx;
+            ret.mCurrentData = mCurrentData.clone();
+            return ret;
         }
-        public void pop()
-        {
-            mCurrentData = mDataStack.Last();
-            mDataStack.RemoveLast();
-        }
+        //public void push()
+        //{
+        //    mDataStack.AddLast(mCurrentData);
+        //    mCurrentData = mCurrentData.clone();
+        //}
+        //public void pop()
+        //{
+        //    mCurrentData = mDataStack.Last();
+        //    mDataStack.RemoveLast();
+        //}
     };
 
     class BehTrigger : BehAccessory
     {
         public bool mState = false;
-        public BehTrigger mFrom;
         public List<BehTrigger> mTo = new List<BehTrigger>();
 
         public void linkTo(BehTrigger to)
         {
-            to.mFrom = this;
             mTo.Add(to);//may be duplicate
         }
 
         public void linkFrom(BehTrigger from)
         {
-            mFrom = from;
             from.mTo.Add(this);//may be duplicate
+        }
+
+        public virtual BehTrigger clone(BehaviourData d)
+        {
+            BehTrigger ret = new BehTrigger();
+            ret.mData = d;
+            ret.idx = idx;
+            ret.mState = mState;
+            return ret;
         }
     }
 
@@ -489,16 +510,13 @@ namespace draw1
             mData = d;
         }
 
-        public void update()
+        public override BehTrigger clone(BehaviourData d)
         {
-            if (mFrom == null)
-            {
-                mState = false;
-            }
-            else
-            {
-                mState = mFrom.mState;
-            }
+            BehTriggerIn ret = new BehTriggerIn(d);
+            ret.mData = d;
+            ret.idx = idx;
+            ret.mState = mState;
+            return ret;
         }
     }
 
@@ -521,6 +539,15 @@ namespace draw1
             mState = mStateStack.Last();
             mStateStack.RemoveLast();
         }
+
+        public override BehTrigger clone(BehaviourData d)
+        {
+            BehTriggerOut ret = new BehTriggerOut(d);
+            ret.mData = d;
+            ret.idx = idx;
+            ret.mState = mState;
+            return ret;
+        }
     }
 
     class BehGraphcs : BehAccessory
@@ -542,6 +569,7 @@ namespace draw1
 
         public void addBehaviourData(BehaviourData bd)
         {
+            bd.idx = mBehavious.Count;
             mBehavious.Add(bd);
         }
 
@@ -551,6 +579,9 @@ namespace draw1
             ret.mBehavious = mBehavious;
             ret.mPcStack = new LinkedList<LinkedList<BehaviourData>>();
             ret.mBehStack = new LinkedList<BehaviourData>();
+
+
+
             return ret;
         }
 
@@ -567,7 +598,7 @@ namespace draw1
             {
                 foreach (var elem in di.mTo)
                 {
-                    elem.mCurrentData = di.mCurrentData;
+                    elem.mCurrentData = di.mCurrentData.clone();
                 }
             }
 
@@ -602,11 +633,32 @@ namespace draw1
 
     class BehaviourData : Data
     {
+        public int idx = 0;
         public enum EDATATYPE
         {
             e_script,
             e_ghaphic,
         };
+
+        public void DataInLinkTo(BehaviourData other, int idx1, int idx2)
+        {
+            mDataIn[idx1].linkTo(other.mDataIn[idx2]);
+        }
+
+        public void DataOutLinkTo(BehaviourData other, int idx1, int idx2)
+        {
+            mDataOut[idx1].linkTo(other.mDataIn[idx2]);
+        }
+
+        public void TILinkTo(BehaviourData other, int idx1, int idx2)
+        {
+            mTriggerIn[idx1].linkTo(other.mTriggerIn[idx2]);
+        }
+
+        public void TOLinkTo(BehaviourData other, int idx1, int idx2)
+        {
+            mTriggerOut[idx1].linkTo(other.mTriggerIn[idx2]);
+        }
 
         public EDATATYPE mDataType = EDATATYPE.e_script;
         public Action<BehaviourData> mAction = null;
@@ -626,8 +678,10 @@ namespace draw1
                 ListExtra.Resize(mDataIn, idx+1);
             }
             var di = new BehDataIn(this);
+            
             di.mCurrentData = IntData.getData(0);
-            mDataIn[idx]  = di;
+            mDataIn[idx] = di;
+            di.idx = idx;
         }
 
         public void addInterfaceDataOutInt(int idx)
@@ -639,6 +693,7 @@ namespace draw1
             var dout = new BehDataOut(this);
             dout.mCurrentData = IntData.getData(0);
             mDataOut[idx]  = dout;
+            dout.idx = idx;
         }
 
         public void setInterfaceTriggerIn(int sz)
@@ -648,6 +703,7 @@ namespace draw1
             {
                 var t = new BehTriggerIn(this);
                 mTriggerIn[i] = t;
+                t.idx = i;
             }
         }
 
@@ -658,6 +714,7 @@ namespace draw1
             {
                 var t = new BehTriggerOut(this);
                 mTriggerOut[i] = t;
+                t.idx = i;
             }
         }
 
@@ -668,10 +725,6 @@ namespace draw1
         {
             mUpList.AddLast(mUp);
             mUp = beh;
-            foreach (var d in mDataOut)
-            {
-                d.push();
-            }
 
             foreach (var t in mTriggerOut)
             {
@@ -683,10 +736,7 @@ namespace draw1
         {
             mUp = mUpList.Last();
             mUpList.RemoveLast();
-            foreach (var d in mDataOut)
-            {
-                d.pop();
-            }
+
             foreach (var t in mTriggerOut)
             {
                 t.pop();
@@ -710,11 +760,54 @@ namespace draw1
             }
         }
 
+        void copyTriggerIn(BehaviourData from, BehaviourData to)
+        {
+            ListExtra.Resize(to.mTriggerIn, from.mTriggerIn.Count);
+            for (int i = 0; i < from.mTriggerIn.Count; ++i)
+            {
+                to.mTriggerIn[i] = from.mTriggerIn[i].clone(to) as BehTriggerIn;
+            }
+        }
+
+        void copyTriggerOut(BehaviourData from, BehaviourData to)
+        {
+            ListExtra.Resize(to.mTriggerOut, from.mTriggerOut.Count);
+            for (int i = 0; i < from.mTriggerOut.Count; ++i)
+            {
+                to.mTriggerOut[i] = from.mTriggerOut[i].clone(to) as BehTriggerOut;
+            }
+        }
+
+        void copyDataIn(BehaviourData from, BehaviourData to)
+        {
+            ListExtra.Resize(to.mDataIn, from.mDataIn.Count);
+            for (int i = 0; i < from.mDataIn.Count; ++i)
+            {
+                to.mDataIn[i] = from.mDataIn[i].clone(to) as BehDataIn;
+            }
+        }
+
+        void copyDataOut(BehaviourData from, BehaviourData to)
+        {
+            ListExtra.Resize(to.mDataOut, from.mDataOut.Count);
+            for (int i = 0; i < from.mDataOut.Count; ++i)
+            {
+                to.mDataOut[i] = from.mDataOut[i].clone(to) as BehDataOut;
+            }
+        }
+
         public override Data clone() 
         {
             var ret = new BehaviourData();
             ret.mDataType = this.mDataType;
             ret.mAction = this.mAction;
+            ListExtra.Resize(ret.mTriggerIn, mTriggerIn.Count);
+
+            copyDataIn(this, ret);
+            copyDataOut(this, ret);
+            copyTriggerIn(this, ret);
+            copyTriggerOut(this, ret);
+
             if(this.mGraph != null)
                 ret.mGraph = this.mGraph.clone(ret);
             return ret;
@@ -738,6 +831,11 @@ namespace draw1
             ((to.mCurrentData) as IntData).mVal = val;
             foreach (var d in to.mTo)
             {
+                
+                for (int i = 0; i < d.mData.mDataIn.Count; ++i)
+                {
+                    var t = d.mData.mDataIn[i];
+                }
                 ((d.mCurrentData) as IntData).mVal = val;
             }
         }
@@ -769,7 +867,7 @@ namespace draw1
 
         public void setDataIntIn (int idx, int val)
         {
-            (mDataIn[idx].mCurrentData as IntData).mVal = val;
+            (mDataIn[idx].mCurrentData as IntData).mVal = val;  
         }
     }
 
@@ -785,7 +883,6 @@ namespace draw1
 
         void prelude()
         {
-
             bset.mDataType = BehaviourData.EDATATYPE.e_script;
             bset.addInterfaceDataInInt(0);
             bset.addInterfaceDataOutInt(0);
@@ -823,7 +920,6 @@ namespace draw1
                     int a = beh.getIntIn(0);
                     int b = beh.getIntIn(1);
                     int ret = a+b;
-                    Console.WriteLine(ret);
                     beh.setIntOut(0, ret);
                     beh.setTriggerOut(0, true);
                 };
@@ -840,29 +936,45 @@ namespace draw1
                     beh.setTriggerOut(0, true);
                 };
 
-            
+
+
+            var add1 = badd.clone() as BehaviourData;
+            var add2 = badd.clone() as BehaviourData;
+            var log0 = blog.clone() as BehaviourData;
+            var gt3 = bgreat.clone() as BehaviourData;
+
 
             test1.mDataType = BehaviourData.EDATATYPE.e_ghaphic;
             test1.mGraph = new BehGraphcs(test1);
-            test1.mGraph.addBehaviourData(badd);
-            test1.mGraph.addBehaviourData(blog);
-
             test1.addInterfaceDataInInt(0);
             test1.addInterfaceDataInInt(1);
             test1.setInterfaceTriggerIn(1);
             test1.setTriggerIn(0, true);
-            test1.setDataIntIn(0, 3);
-            test1.setDataIntIn(0, 5);
-            
-            test1.mTriggerIn[0].linkTo(badd.mTriggerIn[0]);
-            test1.mDataIn[0].linkTo(badd.mDataIn[0]);
-            test1.mDataIn[1].linkTo(badd.mDataIn[1]);
-            
-            badd.mTriggerOut[0].linkTo(blog.mTriggerIn[0]);
-            badd.mDataOut[0].linkTo(blog.mDataIn[0]);
-            
-            
+            test1.setDataIntIn(0, 0);
+            test1.setDataIntIn(1, 100);
 
+            test1.mGraph.addBehaviourData(log0);
+            test1.mGraph.addBehaviourData(add1);
+            test1.mGraph.addBehaviourData(add2);
+            test1.mGraph.addBehaviourData(gt3);
+
+            test1.TILinkTo(add1, 0, 0);
+            add1.TOLinkTo(add2, 0, 0);
+            add2.TOLinkTo(gt3, 0, 0);
+            gt3.TOLinkTo(log0, 0, 0);
+            gt3.TOLinkTo(add1, 1, 0);
+
+            test1.DataInLinkTo(add1, 0, 0);
+            test1.DataInLinkTo(add1, 0, 1);
+            test1.DataInLinkTo(add2, 0, 0);
+            add1.DataOutLinkTo(add1, 0, 1);
+            add2.DataOutLinkTo(add1, 0, 0);
+            add2.DataOutLinkTo(add2, 0, 0);
+            add2.DataOutLinkTo(gt3, 0, 0);
+            add2.setDataIntIn(1, 1);
+            gt3.setDataIntIn(1, 100);
+            add1.DataOutLinkTo(log0, 0, 0);
+            
         }
 
         public void t1()
