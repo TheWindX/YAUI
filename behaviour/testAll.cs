@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace ns_behaviour
 {
-    class Program
+    class testAll
     {
-        public static int Main()
+        public static void main()
         {
-            testAll.main();
-            GlobalInit.Instance.init();
-            return 0;
+            var _1 = testPaint1.ins;
+            var _2 = testUIRoot1.Instance;
         }
     }
 }

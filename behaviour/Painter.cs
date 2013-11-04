@@ -11,16 +11,14 @@ namespace ns_behaviour
 
     public class PaintDriver : Form
     {
-        public static PaintDriver ins = null;
         private System.Windows.Forms.Timer mTimer;
         private System.ComponentModel.IContainer components;
 
-        CSRepl mRepl = new CSRepl();
-
+        
+        public PaintDriver mIns = null;
         public PaintDriver()
         {
             InitializeComponent();
-            ins = this;
         }
 
         void InitializeComponent()
@@ -43,61 +41,140 @@ namespace ns_behaviour
             this.Load += new System.EventHandler(this.onLoad);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PaintDriver_KeyDown);
-            this.MouseClick += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseClick);
-            this.ResumeLayout(false);
+            this.MouseDown  += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseDown);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseUp);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseMove);
 
+            this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseWheel);
+
+            this.ResumeLayout(false);
         }
 
-        internal void ResetTimerLoop(int time)
+        public void setSize(int w, int h)
+        {
+            this.ClientSize = new System.Drawing.Size(w, h);
+        }
+
+        public void setUpdateInterval(int time)
         {
             mTimer.Stop();
             mTimer.Interval = time;
             mTimer.Start();
         }
 
+        public delegate void EvtInit();
+        public EvtInit evtInit;
         void onLoad(object sender, EventArgs e)
         {
             this.SetStyle(ControlStyles.DoubleBuffer, true);
             this.SetStyle(ControlStyles.UserPaint, true);
             this.SetStyle(ControlStyles.ResizeRedraw, true);
             this.SetStyle(ControlStyles.AllPaintingInWmPaint, true);
-            mRepl.start();
             Visible = false;
             //ShowInTaskbar = false;
+            mIns = this;
+            if (evtInit != null)
+                evtInit();
         }
+
+        public delegate void EvtUpdate();
+        public EvtUpdate evtUpdate;
 
         private void onUpdate(object sender, EventArgs e)
         {
-            mRepl.runOnce();
+            if (evtUpdate != null)
+                evtUpdate();
+            this.Invalidate();
         }
 
+        public delegate void EvtPaint(Graphics g);
+        public EvtPaint evtPaint;
         private void OnPaint(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(Color.Black);
+            if (evtPaint != null)
+                evtPaint(e.Graphics);
         }
 
-        private void PaintDriver_MouseClick(object sender, MouseEventArgs e)
+        public delegate void EvtLeftDown(int x, int y);
+        public delegate void EvtRightDown(int x, int y);
+        public delegate void EvtMidDown(int x, int y);
+        public EvtLeftDown evtLeftDown;
+        public EvtRightDown evtRightDown;
+        public EvtMidDown evtMidDown;
+        private void PaintDriver_MouseDown(object sender, MouseEventArgs e)
         {
             switch (e.Button)
             {
                 case MouseButtons.Left:
-                    
+                    if (evtLeftDown != null)
+                        evtLeftDown(e.X, e.Y);
                     break;
                 case MouseButtons.Right:
-                    
+                    if (evtRightDown != null)
+                        evtRightDown(e.X, e.Y);
+                    break;
+                case MouseButtons.Middle:
+                    if (evtMidDown != null)
+                        evtMidDown(e.X, e.Y);
+                    break;
+                default:
+                    break;
+            }
+        }
+        public delegate void EvtLeftUp(int x, int y);
+        public delegate void EvtRightUp(int x, int y);
+        public delegate void EvtMidUp(int x, int y);
+        public EvtLeftUp evtLeftUp;
+        public EvtRightUp evtRightUp;
+        public EvtMidUp evtMidUp;
+        private void PaintDriver_MouseUp(object sender, MouseEventArgs e)
+        {
+            switch (e.Button)
+            {
+                case MouseButtons.Left:
+                    if (evtLeftUp != null)
+                        evtLeftUp(e.X, e.Y);
+                    break;
+                case MouseButtons.Right:
+                    if (evtRightUp != null)
+                        evtRightUp(e.X, e.Y);
+                    break;
+                case MouseButtons.Middle:
+                    if (evtMidUp != null)
+                        evtMidUp(e.X, e.Y);
                     break;
                 default:
                     break;
             }
         }
 
+        public delegate void EvtMove(int x, int y);
+        public EvtMove evtMove;
+        private void PaintDriver_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (evtMove != null)
+                evtMove(e.X, e.Y);
+        }
+
+        public delegate void EvtOnKey(int kc);
+        public EvtOnKey evtOnKey;
         private void PaintDriver_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode > Keys.D0 && e.KeyCode <= Keys.D9)
+            if (evtOnKey != null)
             {
-                int skillId = e.KeyCode - Keys.D0;
-                Point p = PointToClient(MousePosition);
-                
+                evtOnKey(e.KeyValue);
+            }
+        }
+
+
+        public delegate void EvtOnWheel(int delta);
+        public EvtOnWheel evtOnWheel;
+        public void PaintDriver_MouseWheel(object sender, MouseEventArgs e)
+        {
+            if (evtOnWheel != null)
+            {
+                evtOnWheel(e.Delta);
             }
         }
     }

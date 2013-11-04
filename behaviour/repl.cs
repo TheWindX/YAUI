@@ -61,6 +61,20 @@ public static class Wrapper
             mCompileOptions.ReferencedAssemblies.Add(typeof(CSRepl).Assembly.Location);
         }
 
+        public void print(string info)
+        {
+            mResult = info;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("\r\n>>> ");
+            if (mState == EState.e_error) Console.ForegroundColor = ConsoleColor.Red;
+            else if (mState == EState.e_warning) Console.ForegroundColor = ConsoleColor.Yellow;
+            else if (mState == EState.e_normal) Console.ForegroundColor = Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine(mResult);
+            mResult = null;
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("<<< ");
+            Console.ForegroundColor = ConsoleColor.White;
+        }
 
         void threadRun()
         {

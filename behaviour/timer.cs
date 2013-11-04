@@ -1,5 +1,8 @@
 ﻿
+
+//一帧内不能处理完成的定时器不做累积
 #define NO_ACCUMULATE
+
 namespace ns_behaviour
 {
 

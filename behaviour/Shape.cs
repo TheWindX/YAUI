@@ -7,7 +7,7 @@ using System.Drawing.Drawing2D;
 using System.Drawing;
 
 
-namespace ns_GameViewer
+namespace ns_behaviour
 {
     class Entity
     {
@@ -49,6 +49,33 @@ namespace ns_GameViewer
         public float mScalex = 1;
         public float mScaley = 1;
 
+        public void scalePoint(Point center, float scaleR)
+        {
+            var pt = invertTransform(center);
+            mScalex += scaleR - 1;
+            mScaley += scaleR - 1;
+
+            var pos = transform(pt);
+            var offset = new Point(pos.X - center.X,  pos.Y - center.Y);
+            mPos = new Point(mPos.X-offset.X, mPos.Y-offset.Y);
+        }
+
+        public Point transform(Point pt)
+        {
+            var pts = new Point[] { pt };
+            getLocalMatrix().TransformPoints(pts);
+            return pts[0];
+        }
+
+        public Point invertTransform(Point pt)
+        {
+            var t = getLocalMatrix();
+            t.Invert();
+            var pts = new Point[] { pt };
+            t.TransformPoints(pts);
+            return pts[0];
+        }
+
         public Matrix getAbsMatrix()
         {
             Matrix m = new Matrix();
@@ -58,6 +85,24 @@ namespace ns_GameViewer
             m.Rotate(mdir);
             m.Scale(mScalex, mScaley);
             return m;
+        }
+
+        public void Local2Abs(ref Point pt)
+        {
+            var t = getAbsMatrix();
+            var pts = new Point[] { pt };
+            t.TransformPoints(pts);
+            pt = pts[0];
+        }
+
+
+        public void Abs2Local(ref Point pt)
+        {
+            var t = getAbsMatrix();
+            t.Invert();
+            var pts = new Point[] { pt };
+            t.TransformPoints(pts);
+            pt = pts[0];
         }
 
         public Matrix getLocalMatrix()
@@ -114,7 +159,7 @@ namespace ns_GameViewer
             g.Transform = _mtxSave;
         }
 
-        static Font mDrawFont = new Font("Arial", ViewMap.fontsize, FontStyle.Bold);
+        static Font mDrawFont = new Font("Arial", 12, FontStyle.Bold);
         internal void doDraw(Graphics g)
         {
             if (!mVisiable)
@@ -126,78 +171,19 @@ namespace ns_GameViewer
             {
                 (e as Shape).doDraw(g);
             }
+            //for text drawing
             SolidBrush drawBrush = new SolidBrush(Color.FromArgb( (int)mStrokeColor ) );
             int sz = size();
-            g.DrawString(mAniState.Substring(0, 1), mDrawFont, drawBrush, new Point(-ViewMap.fontsize / 2, -ViewMap.fontsize/2));
+
+
             popMatrix(g);
         }
 
         internal abstract void onDraw(Graphics g);
 
-        string mAniState = "idle";
-        int mCurAniStateTimerID = -1;
-        public virtual void play(string actName, int aniDur, bool bLoop = false)
-        {
-            if (mMoveTimerID != -1) ViewWorld.getTimer().clearTimer(mMoveTimerID);//stop run
-            if (mCurAniStateTimerID != -1) ViewWorld.getTimer().clearTimer(mCurAniStateTimerID);//stop animation
-            mAniState = actName;
-            if (!bLoop)
-            {
-                mCurAniStateTimerID = ViewWorld.getTimer().setTimeout((t) => { mCurAniStateTimerID = -1; mAniState = "idle"; }, aniDur);
-            }
-        }
-
-        int mMoveTimerID = -1;
-        public virtual void runTo(int dx, int dy, int speed)
-        {
-            if (mMoveTimerID != -1) ViewWorld.getTimer().clearTimer(mMoveTimerID);//stop run
-            if (mCurAniStateTimerID != -1) ViewWorld.getTimer().clearTimer(mCurAniStateTimerID);//stop animation
-            int x = mPos.X;
-            int y = mPos.Y;
-            var dist = Math.Sqrt((dx - x) * (dx - x) + (dy - y) * (dy - y));
-            float t = ((float)dist / speed)*1000;
-            mAniState = "run";
-            mMoveTimerID = ViewWorld.getTimer().setInterval((n) => { 
-                mPos.X = (int)(x + (dx - x) * ((float)n / t) );
-                mPos.Y = (int)(y + (dy - y) * ((float)n / t) ); 
-            },
-                ViewWorld.mFrameInterval, (n) => { mMoveTimerID = -1; mAniState = "idle"; }, (int)t);
-        }
-        
         public virtual int size()
         {
             return 0;
-        }
-
-        public void ObjectEvent(Logic.MapObject obj, string evt, int param)
-        {
-            Logic.Character c = obj as Logic.Character;
-            if (mMoveTimerID != -1) ViewWorld.getTimer().clearTimer(mMoveTimerID);//stop run
-            mAniState = evt;    // Ó¦¸Ãplay
-            switch (evt)
-            {
-                case "run":
-                    mPos.X = obj.Position.x;
-                    mPos.Y = obj.Position.y;
-                    mdir = ViewMap.dir2angle((obj.Target.x - mPos.X), (obj.Target.y - mPos.Y));
-                    if (c != null)
-                        runTo(obj.Target.x, obj.Target.y, c.Attr("MoveSpeed") * 1000 / Logic.GameMap.FrameInterval);
-                    break;
-                case "stop":
-                    mPos.X = obj.Position.x;
-                    mPos.Y = obj.Position.y;
-                    break;
-                case "removed":
-                    ViewMap.removeChar(ID);
-                    if (c is Logic.Player)
-                        ViewWorld.exit();
-                    break;
-                case "Start":
-                    mVisiable = true;
-                    break;
-                default:
-                    break;
-            }
         }
 
         public UInt32 fillColor
@@ -287,7 +273,8 @@ namespace ns_GameViewer
         {
             return mSize;
         }
-
     }
+
+
     
 }
