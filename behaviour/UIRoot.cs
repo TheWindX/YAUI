@@ -33,10 +33,14 @@ namespace ns_behaviour
                     var act = getAction(uiout);
                     if (act != null)
                     {
-                        if (!act(x, y))
+                        if (!act(x, y) )
                         {
                             break;//consumed
                         }
+                    }
+                    if (!uiout.propagate)
+                    {
+                        break;
                     }
 
                     uiout = uiout.mParesent as UIWidget;

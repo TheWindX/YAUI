@@ -11,7 +11,8 @@ namespace ns_behaviour
         public static void main()
         {
             var _1 = testPaint1.ins;
-            var _2 = testUIRoot1.Instance;
+            //var _2 = testUIRoot1.Instance;
+            var _3 = testUI2.Instance;
         }
     }
 }

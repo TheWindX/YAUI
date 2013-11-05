@@ -27,7 +27,7 @@ namespace ns_utils
         public T pop()
         {
             T ret = m_base[m_top];
-
+            m_base[m_top] = default(T);//necessary?
             m_top--;
             if (m_uper > min_size_stack)
             {
@@ -243,8 +243,9 @@ namespace ns_utils
 
         void relloc()
         {
-            int sz = m_base.Count();
-            if (sz > m_top) sz = m_top;
+            //int sz = m_base.Count();//m_top?
+            //if (sz > m_top) sz = m_top;
+            int sz = m_top + 1;
             T[] m_base_old = m_base;
             m_base = new T[m_uper];
             for (int i = 0; i < sz; ++i)

@@ -34,7 +34,7 @@ namespace ns_behaviour
             c.mParesent = this;
         }
 
-        public void setParesent(Entity c)
+        public virtual void setParesent(Entity c)
         {
             if(c == null)
             {
@@ -99,6 +99,30 @@ namespace ns_behaviour
         public void Abs2Local(ref Point pt)
         {
             var t = getAbsMatrix();
+            t.Invert();
+            var pts = new Point[] { pt };
+            t.TransformPoints(pts);
+            pt = pts[0];
+        }
+
+        public void ParesentLocal2Abs(ref Point pt)
+        {
+            Matrix t;
+            if (mParesent != null)
+                t = mParesent.getAbsMatrix();
+            else t = new Matrix();//ID
+            var pts = new Point[] { pt };
+            t.TransformPoints(pts);
+            pt = pts[0];
+        }
+
+
+        public void ParesentAbs2Local(ref Point pt)
+        {
+            Matrix t;
+            if (mParesent != null)
+                t = mParesent.getAbsMatrix();
+            else t = new Matrix();//ID
             t.Invert();
             var pts = new Point[] { pt };
             t.TransformPoints(pts);
