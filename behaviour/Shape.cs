@@ -11,8 +11,22 @@ namespace ns_behaviour
 {
     class Entity
     {
-        internal Entity mParesent = null;
-        internal List<Entity> mChildrent = new List<Entity>();//TODO, optims, first child is better
+        protected Entity mParesent = null;
+        protected List<Entity> mChildrent = new List<Entity>();//TODO, optims, first child is better
+
+        public Entity paresent
+        {
+            get
+            {
+                return mParesent;
+            }
+        }
+
+        public void sortChildrent( Comparison<Entity> pred )
+        {
+            mChildrent.Sort(pred);
+        }
+
         void deattach(Entity c)
         {
             if(c == null) return;
@@ -45,7 +59,7 @@ namespace ns_behaviour
         }
 
         public Point mPos = new Point(0, 0);
-        public float mdir = 0;//0~360
+        public float mDir = 0;//0~360
         public float mScalex = 1;
         public float mScaley = 1;
 
@@ -82,7 +96,7 @@ namespace ns_behaviour
             if(mParesent != null)
                 m = mParesent.getAbsMatrix().Clone();
             m.Translate(mPos.X, mPos.Y);
-            m.Rotate(mdir);
+            m.Rotate(mDir);
             m.Scale(mScalex, mScaley);
             return m;
         }
@@ -94,7 +108,6 @@ namespace ns_behaviour
             t.TransformPoints(pts);
             pt = pts[0];
         }
-
 
         public void Abs2Local(ref Point pt)
         {
@@ -116,7 +129,6 @@ namespace ns_behaviour
             pt = pts[0];
         }
 
-
         public void ParesentAbs2Local(ref Point pt)
         {
             Matrix t;
@@ -133,7 +145,7 @@ namespace ns_behaviour
         {
             Matrix m = new Matrix();
             m.Translate(mPos.X, mPos.Y);
-            m.Rotate(mdir);
+            m.Rotate(mDir);
             m.Scale(mScalex, mScaley);
             return m;
         }
@@ -149,10 +161,10 @@ namespace ns_behaviour
 
         public float getAbsDir()
         {
-            if(mParesent == null) return mdir;
+            if(mParesent == null) return mDir;
             else
             {
-                var dir = mParesent.getAbsDir()+mdir;
+                var dir = mParesent.getAbsDir()+mDir;
                 if(dir >360) return dir-360;
                 return dir;
             }
@@ -167,8 +179,7 @@ namespace ns_behaviour
         Matrix _mtxSave = null;
 
         internal Shape()
-        {
-            
+        {   
         }
         void pushMatrix(Graphics g)
         {
@@ -250,31 +261,7 @@ namespace ns_behaviour
         }
     }
 
-    class Rect : Shape
-    {
-        int mSize = 0;
-        
-        // Create solid brush.
-        public Rect(int size)
-        {
-            mSize = size;
-        }
 
-        internal override void onDraw(Graphics g)
-        {
-            GraphicsPath p = new GraphicsPath();
-            p.AddRectangle(new Rectangle((int)-mSize, (int)-mSize, (int)mSize*2, (int)mSize*2) );
-            g.FillPath(mBrush, p);
-            //g.DrawPath(mPen, p);
-        }
-
-        public override int size()
-        {
-            return mSize;
-        }
-
-
-    }
 
     class Circle : Shape
     {

@@ -22,37 +22,6 @@ namespace ns_behaviour
 
         public void main()
         {
-            GlobalInit.Instance.mPainter.evtPaint += (g) =>
-            {
-                UIRoot.Instance.draw(g);
-            };
-            GlobalInit.Instance.mPainter.evtLeftDown += (x, y) =>
-            {
-                UIRoot.Instance.testLMD(x, y);
-            };
-            GlobalInit.Instance.mPainter.evtLeftUp += (x, y) =>
-            {
-                UIRoot.Instance.testLMU(x, y);
-            };
-            GlobalInit.Instance.mPainter.evtRightDown += (x, y) =>
-            {
-                UIRoot.Instance.testRMD(x, y);
-            };
-            GlobalInit.Instance.mPainter.evtRightUp += (x, y) =>
-            {
-                UIRoot.Instance.testRMU(x, y);
-            };
-            GlobalInit.Instance.mPainter.evtMidDown += (x, y) =>
-            {
-                UIRoot.Instance.testMMD(x, y);
-            };
-            GlobalInit.Instance.mPainter.evtMidUp += (x, y) =>
-            {
-                UIRoot.Instance.testMMU(x, y);
-            };
-
-            UIRoot.Instance.init();
-
             UIRoot.Instance.mRoot.mScalex = 2;
             UIRoot.Instance.mRoot.mScaley = 2;
             UIRoot.Instance.mRoot.px = 20;
@@ -95,14 +64,14 @@ namespace ns_behaviour
                 UIRoot.Instance.mRoot.scalePoint(orgPt, sc);
             };
 
-            UIWidget.EvtOnLMDown leftDown = (x, y) =>
+            UIWidget.EvtOnLMDown leftDown = (ui, x, y) =>
             {
                 orgPt = new Point(x, y);
                 GlobalInit.Instance.mPainter.evtOnWheel += wheel;
                 return true;
             };
 
-            UIWidget.EvtOnLMUp leftUp = (x, y) =>
+            UIWidget.EvtOnLMUp leftUp = (ui, x, y) =>
             {
                 GlobalInit.Instance.mPainter.evtOnWheel -= wheel;
                 return true;

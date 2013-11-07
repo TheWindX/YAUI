@@ -6,14 +6,11 @@ using System.Threading.Tasks;
 
 namespace ns_behaviour
 {
-    class testAll
+    class InitAll
     {
         public static void main()
         {
-            //var _1 = testPaint1.ins;
-            //var _2 = testUIRoot1.Instance;
-            //var _3 = testUI2.Instance;
-            var _4 = testUILines.Instance;
+            var _1 = UIRoot.Instance;
         }
     }
 }

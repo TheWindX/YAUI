@@ -48,7 +48,6 @@ namespace ns_behaviour
                     TimerManager.tickAll();
                 };
 
-
             if(evtOnInit != null)
                 evtOnInit();
 

@@ -26,7 +26,7 @@ namespace ns_behaviour
         {
             if (mParesent != null)
             {
-                mParesent.mChildrent.Sort((a, b) =>
+                mParesent.sortChildrent((a, b) =>
                 {
                     var a1 = a as UIWidget;
                     var b1 = b as UIWidget;
@@ -42,9 +42,9 @@ namespace ns_behaviour
                         return -1;
                 });
 
-                for (int i = 0; i < mParesent.mChildrent.Count(); ++i)
+                for (int i = 0; i < (mParesent as UIWidget).mChildrent.Count(); ++i)
                 {
-                    var u = mParesent.mChildrent[i] as UIWidget;
+                    var u = (mParesent as UIWidget).mChildrent[i] as UIWidget;
                     u.mIdx = i;
                     u.mGlobalDepth = (mParesent as UIWidget).mGlobalDepth + ((float)i) / 10;
                     
@@ -190,7 +190,7 @@ namespace ns_behaviour
             {
                 Matrix m = new Matrix();
                 m.Translate(mPos.X, mPos.Y);
-                m.Rotate(mdir);
+                m.Rotate(mDir);
                 m.Scale(mScalex, mScaley);
                 return m;
             }
@@ -354,15 +354,15 @@ namespace ns_behaviour
         internal virtual void onDraw(Graphics g){}
 
 
-        public delegate bool EvtOnLMDown(int x, int y);
-        public delegate bool EvtOnLMUp(int x, int y);
-        public delegate bool EvtOnRMDown(int x, int y);
-        public delegate bool EvtOnRMUp(int x, int y);
-        public delegate bool EvtOnMMDown(int x, int y);
-        public delegate bool EvtOnMMUp(int x, int y);
-        public delegate bool EvtOnEnter(int x, int y);
-        public delegate bool EvtOnExit(int x, int y);
-        public delegate bool EvtOnChar(int kc);
+        public delegate bool EvtOnLMDown(UIWidget _this, int x, int y);
+        public delegate bool EvtOnLMUp(UIWidget _this, int x, int y);
+        public delegate bool EvtOnRMDown(UIWidget _this, int x, int y);
+        public delegate bool EvtOnRMUp(UIWidget _this, int x, int y);
+        public delegate bool EvtOnMMDown(UIWidget _this, int x, int y);
+        public delegate bool EvtOnMMUp(UIWidget _this, int x, int y);
+        public delegate bool EvtOnEnter(UIWidget _this, int x, int y);
+        public delegate bool EvtOnExit(UIWidget _this, int x, int y);
+        public delegate bool EvtOnChar(UIWidget _this, int kc);
 
         public EvtOnLMDown evtOnLMDown;
         public EvtOnLMUp evtOnLMUp;
@@ -405,7 +405,7 @@ namespace ns_behaviour
         Point moveStart;
         Point rcStart;
 
-        bool onDragStart(int x, int y)
+        bool onDragStart(UIWidget _this, int x, int y)
         {
             var pt = new Point(x, y);
             

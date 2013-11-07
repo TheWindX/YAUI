@@ -11,6 +11,7 @@ namespace ns_behaviour
     {
         public static int Main()
         {
+            InitAll.main();
             testAll.main();
             GlobalInit.Instance.init();
             return 0;

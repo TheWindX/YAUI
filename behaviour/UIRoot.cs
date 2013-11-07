@@ -11,9 +11,44 @@ namespace ns_behaviour
     class UIRoot : Singleton<UIRoot>
     {
         public UIWidget mRoot;
-        public void init()
+
+        public UIRoot()
+        {
+            GlobalInit.Instance.evtOnInit += init;
+        }
+
+        void init()
         {
             mRoot = new UIStub();
+
+            GlobalInit.Instance.mPainter.evtPaint += (g) =>
+            {
+                UIRoot.Instance.draw(g);
+            };
+            GlobalInit.Instance.mPainter.evtLeftDown += (x, y) =>
+            {
+                UIRoot.Instance.testLMD(x, y);
+            };
+            GlobalInit.Instance.mPainter.evtLeftUp += (x, y) =>
+            {
+                UIRoot.Instance.testLMU(x, y);
+            };
+            GlobalInit.Instance.mPainter.evtRightDown += (x, y) =>
+            {
+                UIRoot.Instance.testRMD(x, y);
+            };
+            GlobalInit.Instance.mPainter.evtRightUp += (x, y) =>
+            {
+                UIRoot.Instance.testRMU(x, y);
+            };
+            GlobalInit.Instance.mPainter.evtMidDown += (x, y) =>
+            {
+                UIRoot.Instance.testMMD(x, y);
+            };
+            GlobalInit.Instance.mPainter.evtMidUp += (x, y) =>
+            {
+                UIRoot.Instance.testMMU(x, y);
+            };
         }
 
         public void draw(Graphics g)
@@ -43,7 +78,7 @@ namespace ns_behaviour
                         break;
                     }
 
-                    uiout = uiout.mParesent as UIWidget;
+                    uiout = uiout.paresent as UIWidget;
                 }
             }
         }
@@ -53,7 +88,7 @@ namespace ns_behaviour
             testUIEvent(x, y, (ui) =>
             {
                 if(ui.evtOnLMDown != null)
-                    return (x1, y1) => { return ui.evtOnLMDown(x1, y1); };
+                    return (x1, y1) => { return ui.evtOnLMDown(ui, x1, y1); };
                 return null;
             });
         }
@@ -63,7 +98,7 @@ namespace ns_behaviour
             testUIEvent(x, y, (ui) =>
             {
                 if (ui.evtOnLMUp != null)
-                    return (x1, y1) => { return ui.evtOnLMUp(x1, y1); };
+                    return (x1, y1) => { return ui.evtOnLMUp(ui, x1, y1); };
                 return null;
             });
         }
@@ -73,7 +108,7 @@ namespace ns_behaviour
             testUIEvent(x, y, (ui) =>
             {
                 if (ui.evtOnRMDown != null)
-                    return (x1, y1) => { return ui.evtOnRMDown(x1, y1); };
+                    return (x1, y1) => { return ui.evtOnRMDown(ui, x1, y1); };
                 return null;
             });
         }
@@ -83,7 +118,7 @@ namespace ns_behaviour
             testUIEvent(x, y, (ui) =>
             {
                 if (ui.evtOnRMUp != null)
-                    return (x1, y1) => { return ui.evtOnRMUp(x1, y1); };
+                    return (x1, y1) => { return ui.evtOnRMUp(ui, x1, y1); };
                 return null;
             });
         }
@@ -93,7 +128,7 @@ namespace ns_behaviour
             testUIEvent(x, y, (ui) =>
             {
                 if (ui.evtOnMMDown != null)
-                    return (x1, y1) => { return ui.evtOnMMDown(x1, y1); };
+                    return (x1, y1) => { return ui.evtOnMMDown(ui, x1, y1); };
                 return null;
             });
         }
@@ -103,7 +138,7 @@ namespace ns_behaviour
             testUIEvent(x, y, (ui) =>
             {
                 if (ui.evtOnMMUp != null)
-                    return (x1, y1) => { return ui.evtOnMMUp(x1, y1); };
+                    return (x1, y1) => { return ui.evtOnMMUp(ui, x1, y1); };
                 return null;
             });
         }
