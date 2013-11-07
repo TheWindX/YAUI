@@ -12,7 +12,7 @@ namespace ns_behaviour
     {
         public testUILines()
         {
-            GlobalInit.Instance.evtOnInit += this.main;
+            Globals.Instance.evtOnInit += this.main;
         }
 
         UILineLinker.cons mTester;
@@ -29,7 +29,7 @@ namespace ns_behaviour
             mCreate = new CEditCreate(this);
             mMoveFrag = new CEditMoveFragment(this);
 
-            GlobalInit.Instance.mPainter.evtOnKey += onKey;
+            Globals.Instance.mPainter.evtOnKey += onKey;
         }
 
         class CEditInfo
@@ -59,12 +59,12 @@ namespace ns_behaviour
 
             public override void onAdd()
             {
-                GlobalInit.Instance.mPainter.evtLeftDown += onClick;
+                Globals.Instance.mPainter.evtLeftDown += onClick;
             }
 
             public override void onRemove()
             {
-                GlobalInit.Instance.mPainter.evtLeftDown -= onClick;
+                Globals.Instance.mPainter.evtLeftDown -= onClick;
             }
 
         }
@@ -94,12 +94,12 @@ namespace ns_behaviour
                         mNodeSelect.adjustPos(newUiPos);
                     } );
 
-                GlobalInit.Instance.mPainter.evtLeftUp = (px, py) =>
+                Globals.Instance.mPainter.evtLeftUp = (px, py) =>
                     {
-                        GlobalInit.Instance.mPainter.evtMove -= onMove;
+                        Globals.Instance.mPainter.evtMove -= onMove;
                     };
 
-                GlobalInit.Instance.mPainter.evtMove += onMove;
+                Globals.Instance.mPainter.evtMove += onMove;
 
                 return false;
             }

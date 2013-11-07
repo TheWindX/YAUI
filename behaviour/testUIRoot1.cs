@@ -12,7 +12,7 @@ namespace ns_behaviour
     {
         public testUIRoot1()
         {
-            GlobalInit.Instance.evtOnInit += main;
+            Globals.Instance.evtOnInit += main;
         }
 
         UIRect rc;
@@ -31,7 +31,7 @@ namespace ns_behaviour
 
             rcStart = rc.mPos;
 
-            GlobalInit.Instance.mPainter.evtMove += onMove;
+            Globals.Instance.mPainter.evtMove += onMove;
             return false;
         }
 
@@ -39,7 +39,7 @@ namespace ns_behaviour
         {
             Console.WriteLine("onDragEnd:" + x + "," + y);
             
-            GlobalInit.Instance.mPainter.evtMove -= onMove;
+            Globals.Instance.mPainter.evtMove -= onMove;
             return false;
         }
 
@@ -77,16 +77,16 @@ namespace ns_behaviour
                     UIRoot.Instance.mRoot.scalePoint(orgPt, sc);
                 };
 
-            UIWidget.EvtOnLMDown leftDown = (ui, x, y) =>
+            UIWidget.EvtMouse leftDown = (ui, x, y) =>
                 {
                     orgPt = new Point(x, y);
-                    GlobalInit.Instance.mPainter.evtOnWheel += wheel;
+                    Globals.Instance.mPainter.evtOnWheel += wheel;
                     return true;
                 };
 
-            UIWidget.EvtOnLMUp leftUp = (ui, x, y) =>
+            UIWidget.EvtMouse leftUp = (ui, x, y) =>
             {
-                GlobalInit.Instance.mPainter.evtOnWheel -= wheel;
+                Globals.Instance.mPainter.evtOnWheel -= wheel;
                 return true;
             };
 

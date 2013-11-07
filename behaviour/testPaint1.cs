@@ -11,15 +11,15 @@ namespace ns_behaviour
         public static testPaint1 ins = new testPaint1();
         testPaint1()
         {
-            GlobalInit.Instance.evtOnInit += main;
+            Globals.Instance.evtOnInit += main;
         }
 
         public void main()
         {
-            GlobalInit.Instance.mPainter.setSize(1024, 1024);
-            GlobalInit.Instance.mPainter.evtLeftDown += (x, y) =>
+            Globals.Instance.mPainter.setSize(1024, 1024);
+            Globals.Instance.mPainter.evtLeftDown += (x, y) =>
             {
-                GlobalInit.Instance.mRepl.print("position:" + x + ", " + y);
+                Globals.Instance.mRepl.print("position:" + x + ", " + y);
             };
         }
 

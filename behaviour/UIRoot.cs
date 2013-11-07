@@ -14,38 +14,38 @@ namespace ns_behaviour
 
         public UIRoot()
         {
-            GlobalInit.Instance.evtOnInit += init;
+            Globals.Instance.evtOnInit += init;
         }
 
         void init()
         {
             mRoot = new UIStub();
 
-            GlobalInit.Instance.mPainter.evtPaint += (g) =>
+            Globals.Instance.mPainter.evtPaint += (g) =>
             {
                 UIRoot.Instance.draw(g);
             };
-            GlobalInit.Instance.mPainter.evtLeftDown += (x, y) =>
+            Globals.Instance.mPainter.evtLeftDown += (x, y) =>
             {
                 UIRoot.Instance.testLMD(x, y);
             };
-            GlobalInit.Instance.mPainter.evtLeftUp += (x, y) =>
+            Globals.Instance.mPainter.evtLeftUp += (x, y) =>
             {
                 UIRoot.Instance.testLMU(x, y);
             };
-            GlobalInit.Instance.mPainter.evtRightDown += (x, y) =>
+            Globals.Instance.mPainter.evtRightDown += (x, y) =>
             {
                 UIRoot.Instance.testRMD(x, y);
             };
-            GlobalInit.Instance.mPainter.evtRightUp += (x, y) =>
+            Globals.Instance.mPainter.evtRightUp += (x, y) =>
             {
                 UIRoot.Instance.testRMU(x, y);
             };
-            GlobalInit.Instance.mPainter.evtMidDown += (x, y) =>
+            Globals.Instance.mPainter.evtMidDown += (x, y) =>
             {
                 UIRoot.Instance.testMMD(x, y);
             };
-            GlobalInit.Instance.mPainter.evtMidUp += (x, y) =>
+            Globals.Instance.mPainter.evtMidUp += (x, y) =>
             {
                 UIRoot.Instance.testMMU(x, y);
             };

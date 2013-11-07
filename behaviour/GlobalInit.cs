@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 namespace ns_behaviour
 {
-    class GlobalInit : Singleton<GlobalInit>
+    class Globals : Singleton<Globals>
     {
         public PaintDriver mPainter;
         public CSRepl mRepl;
@@ -51,7 +51,7 @@ namespace ns_behaviour
             if(evtOnInit != null)
                 evtOnInit();
 
-            Application.Run(GlobalInit.Instance.mPainter);
+            Application.Run(Globals.Instance.mPainter);
         }
     }
 }

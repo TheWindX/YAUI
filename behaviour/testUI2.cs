@@ -13,7 +13,7 @@ namespace ns_behaviour
 
         public testUI2()
         {
-            GlobalInit.Instance.evtOnInit += main;
+            Globals.Instance.evtOnInit += main;
         }
 
         UIRect rc;
@@ -64,16 +64,16 @@ namespace ns_behaviour
                 UIRoot.Instance.mRoot.scalePoint(orgPt, sc);
             };
 
-            UIWidget.EvtOnLMDown leftDown = (ui, x, y) =>
+            UIWidget.EvtMouse leftDown = (ui, x, y) =>
             {
                 orgPt = new Point(x, y);
-                GlobalInit.Instance.mPainter.evtOnWheel += wheel;
+                Globals.Instance.mPainter.evtOnWheel += wheel;
                 return true;
             };
 
-            UIWidget.EvtOnLMUp leftUp = (ui, x, y) =>
+            UIWidget.EvtMouse leftUp = (ui, x, y) =>
             {
-                GlobalInit.Instance.mPainter.evtOnWheel -= wheel;
+                Globals.Instance.mPainter.evtOnWheel -= wheel;
                 return true;
             };
 

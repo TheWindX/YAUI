@@ -13,7 +13,7 @@ namespace ns_behaviour
         {
             InitAll.main();
             testAll.main();
-            GlobalInit.Instance.init();
+            Globals.Instance.init();
             return 0;
         }
     }

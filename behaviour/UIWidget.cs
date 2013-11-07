@@ -45,7 +45,7 @@ namespace ns_behaviour
                 for (int i = 0; i < (mParesent as UIWidget).mChildrent.Count(); ++i)
                 {
                     var u = (mParesent as UIWidget).mChildrent[i] as UIWidget;
-                    u.mIdx = i;
+                    u.mDepth = i;
                     u.mGlobalDepth = (mParesent as UIWidget).mGlobalDepth + ((float)i) / 10;
                     
                     for (int j = 0; j < u.mChildrent.Count(); ++j)
@@ -59,6 +59,31 @@ namespace ns_behaviour
         public override void setParesent(Entity c)
         {
             base.setParesent(c);
+            sortSibling();
+        }
+
+        void setDepthTail()
+        {
+            var p = mParesent;
+            this.setParesent(null);
+            this.setParesent(p);
+        }
+
+        void setDepthHead()
+        {
+            mDepth = -1;
+            sortSibling();
+        }
+
+        void setDepthDeeper()
+        {
+            mDepth += 1.5f;
+            sortSibling();
+        }
+
+        void setDepthShallower()
+        {
+            mDepth -= 1.5f;
             sortSibling();
         }
 
@@ -109,7 +134,6 @@ namespace ns_behaviour
         }
 
         float mGlobalDepth = 0;
-        int mIdx = -1;
         float mDepth = 0;
         public float depth
         {
@@ -311,9 +335,7 @@ namespace ns_behaviour
                 ui = null;
                 return false;
             }
-
         }
-
 
         IEnumerable<UIWidget> children()
         {
@@ -354,25 +376,19 @@ namespace ns_behaviour
         internal virtual void onDraw(Graphics g){}
 
 
-        public delegate bool EvtOnLMDown(UIWidget _this, int x, int y);
-        public delegate bool EvtOnLMUp(UIWidget _this, int x, int y);
-        public delegate bool EvtOnRMDown(UIWidget _this, int x, int y);
-        public delegate bool EvtOnRMUp(UIWidget _this, int x, int y);
-        public delegate bool EvtOnMMDown(UIWidget _this, int x, int y);
-        public delegate bool EvtOnMMUp(UIWidget _this, int x, int y);
-        public delegate bool EvtOnEnter(UIWidget _this, int x, int y);
-        public delegate bool EvtOnExit(UIWidget _this, int x, int y);
-        public delegate bool EvtOnChar(UIWidget _this, int kc);
+        public delegate bool EvtMouse(UIWidget _this, int x, int y);
 
-        public EvtOnLMDown evtOnLMDown;
-        public EvtOnLMUp evtOnLMUp;
-        public EvtOnRMDown evtOnRMDown;
-        public EvtOnRMUp evtOnRMUp;
-        public EvtOnMMDown evtOnMMDown;
-        public EvtOnMMUp evtOnMMUp;
-        public EvtOnEnter evtOnEnter;
-        public EvtOnExit evtOnExit;
-        public EvtOnChar evtOnChar;
+        public delegate bool EvtKeyboard(UIWidget _this, int kc);
+
+        public EvtMouse evtOnLMDown;
+        public EvtMouse evtOnLMUp;
+        public EvtMouse evtOnRMDown;
+        public EvtMouse evtOnRMUp;
+        public EvtMouse evtOnMMDown;
+        public EvtMouse evtOnMMUp;
+        public EvtMouse evtOnEnter;
+        public EvtMouse evtOnExit;
+        public EvtKeyboard evtOnChar;
 
         //for test 
 
@@ -407,6 +423,7 @@ namespace ns_behaviour
 
         bool onDragStart(UIWidget _this, int x, int y)
         {
+            _this.setDepthHead();
             var pt = new Point(x, y);
             
             ParesentAbs2Local(ref pt);
@@ -415,14 +432,14 @@ namespace ns_behaviour
 
             rcStart = mPos;
 
-            GlobalInit.Instance.mPainter.evtMove += this.onMove;
-            GlobalInit.Instance.mPainter.evtLeftUp += this.onDragEnd;
+            Globals.Instance.mPainter.evtMove += this.onMove;
+            Globals.Instance.mPainter.evtLeftUp += this.onDragEnd;
             return false;
         }
 
         void onDragEnd(int x, int y)
         {
-            GlobalInit.Instance.mPainter.evtMove -= this.onMove;
+            Globals.Instance.mPainter.evtMove -= this.onMove;
         }
 
         void onMove(int x, int y)
