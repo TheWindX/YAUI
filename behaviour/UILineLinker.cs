@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * author: xiaofeng.li
+ * mail: 453588006@qq.com
+ * desc: 
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +18,8 @@ namespace ns_behaviour
 
     class UILineNode : UIWidget
     {
-        const int lineWidth = 3;
-        
+        const int lineWidth = 1;
+
         public enum EDIR
         {
             e_ver,
@@ -31,6 +37,40 @@ namespace ns_behaviour
         }
 
         public override Rectangle rect
+        {
+            get
+            {
+                int pickLineWidth = lineWidth * 3;
+                if (mDir == EDIR.e_ver)
+                {
+                    int left = -pickLineWidth;
+                    int width = pickLineWidth * 2;
+                    int top = 0;
+                    int height = mLength;
+                    if (mLength < 0)
+                    {
+                        top = mLength;
+                        height = -mLength;
+                    }
+                    return new Rectangle(left, top, width, height);
+                }
+                else
+                {
+                    int left = 0;
+                    int width = mLength;
+                    int top = -pickLineWidth;
+                    int height = pickLineWidth * 2;
+                    if (mLength < 0)
+                    {
+                        left = mLength;
+                        width = -mLength;
+                    }
+                    return new Rectangle(left, top, width, height);
+                }
+            }
+        }
+
+        public Rectangle drawRect
         {
             get
             {
@@ -52,7 +92,7 @@ namespace ns_behaviour
                     int left = 0;
                     int width = mLength;
                     int top = -lineWidth;
-                    int height = lineWidth*2;
+                    int height = lineWidth * 2;
                     if (mLength < 0)
                     {
                         left = mLength;
@@ -79,7 +119,7 @@ namespace ns_behaviour
             {
                 var linker = mParesent as UILineLinker;
                 GraphicsPath p = new GraphicsPath();
-                p.AddRectangle(rect);
+                p.AddRectangle(drawRect);
                 g.FillPath(linker.mBrush, p);
             }
         }
@@ -116,125 +156,198 @@ namespace ns_behaviour
 
         internal void restorePost()
         {
-            restorePos();
-            if (mNext != null)
-                mNext.restorePost();
+            //restorePos();
+            //if (mNext != null)
+            //    mNext.restorePost();
         }
 
-        internal Point tailPos()//由mPos and length 得到的 tail pos
+
+        public Point headPos
         {
+            get
+            {
+                return mPos;
+            }
+            set
+            {
+                mPos = value;
+            }
+        }
+
+        public Point tailPos
+        {
+            get
+            {
+                if (mDir == EDIR.e_hor)
+                {
+                    return new Point(mPos.X + mLength, mPos.Y);
+                }
+                //else if(mDir == EDIR.e_ver)
+                {
+                    return new Point(mPos.X, mPos.Y + mLength);
+                }
+            }
+            set
+            {
+                var tp = tailPos;
+                int dx = value.X - tp.X;
+                int dy = value.Y - tp.Y;
+                mPos = new Point(mPos.X + dx, mPos.Y + dy);
+            }
+        }
+
+
+        bool setHeadPosStable(Point val)
+        {
+            var tpos = tailPos;
+            headPos = val;
+            var tPos1 = tailPos;
+
             if (mDir == EDIR.e_hor)
             {
-                return new Point(mPos.X + mLength, mPos.Y);
+                int dx = tpos.X - tPos1.X;
+                int dy = tpos.Y - tPos1.Y;
+
+                mLength += dx;
+                if (dy == 0) return true;
+                else if (mNext == null)
+                {
+                    mPos.Y += dy;
+                    if (mPre != null)
+                    {
+                        //mPre.adjustPosPre(new Point(mPre.mPos.X, mPre.mPos.Y+dy));
+                        adjustPos(mPos);
+                    }
+                }
             }
-            else
+            else if (mDir == EDIR.e_ver)
             {
-                return new Point(mPos.X, mPos.Y + mLength);
+                int dx = tpos.X - tPos1.X;
+                int dy = tpos.Y - tPos1.Y;
+
+                mLength += dy;
+                if (dx == 0) return true;
+                else if (mNext == null)
+                {
+                    mPos.X += dx;
+                    if (mPre != null)
+                    {
+                        //mPre.adjustPosPre(new Point(mPre.mPos.X + dx, mPre.mPos.Y));
+                        adjustPos(mPos);
+                    }
+                }
             }
+
+            return false;
         }
 
-        //返回是否原点有调整
+
+        bool setTailPosStable(Point val)
+        {
+            var hpos = headPos;
+            tailPos = val;
+            var hPos1 = headPos;
+
+            if (mDir == EDIR.e_hor)
+            {
+                int dx = hpos.X - hPos1.X;
+                int dy = hpos.Y - hPos1.Y;
+
+                mPos.X += dx;
+                mLength -= dx;
+                if (dy == 0) return true;
+                else if (mPre == null)
+                {
+                    mPos.Y += dy;
+                    if(mNext != null)
+                    {
+                        mNext.adjustPosPost(tailPos);
+                    }
+                }
+            }
+            else if (mDir == EDIR.e_ver)
+            {
+                int dx = hpos.X - hPos1.X;
+                int dy = hpos.Y - hPos1.Y;
+
+                mPos.Y += dy;
+                mLength -= dy;
+                if (dx == 0) return true;
+                else if(mPre == null)
+                {
+                    mPos.X += dx;
+                    if (mNext != null)
+                    {
+                        mNext.adjustPosPost(tailPos);
+                        //mNext.tryAdjustByHead(tailPos);
+                    }
+                }
+            }
+
+            
+            return false;
+        }
+
+
+        //返回是否原点维持
         internal bool tryAdjustByTail(Point pt)
         {
-            savePos();
-            Point tpos = tailPos();
-            if (pt == tpos) return true;
-            if (mDir == EDIR.e_hor)
+            bool ret = setTailPosStable(pt);
+            if (ret)
             {
-                int dx = pt.X - tpos.X;
-                mLength += dx;
-
-                int dy = pt.Y - tpos.Y;
-                if (dy == 0) return true;
-                else mPos.Y += dy;
-            }
-            else if (mDir == EDIR.e_ver)
-            {
-                int dx = pt.X - tpos.X;
-                int dy = pt.Y - tpos.Y;
-
-                mLength += dy;
-
-                if (dx == 0) return true;
-                else mPos.X += dx;
-            }
-            if (mPre == null)//cannot ajust
-            {
-                restorePos();
-                return false;
+                return true;
             }
             else
             {
-                bool t = mPre.tryAdjustByTail(mPos);
-                if (!t)
+                if (mPre != null)
                 {
-                    restorePos();
-                    return false;
+                    mPre.tryAdjustByTail(headPos);
                 }
-                return true;
             }
-            return true;
+
+            return false;
         }
 
-        //返回是否原点有调整
+        //返回是否原点维持
         internal bool tryAdjustByHead(Point pt)
         {
-            savePos();
-            Point tpos = tailPos();
-            mPos = pt;
-            Point tPos1 = tailPos();
-
-            if (tpos == tPos1) return true;
-            if (mDir == EDIR.e_hor)
+            bool ret = setHeadPosStable(pt);
+            if (ret)
             {
-                int dx = tpos.X - tPos1.X;
-                int dy = tpos.Y - tPos1.Y;
-
-                mLength += dx;
-
-                if (dy == 0) return true;
-            }
-            else if (mDir == EDIR.e_ver)
-            {
-                int dx = tpos.X - tPos1.X;
-                int dy = tpos.Y - tPos1.Y;
-
-                mLength += dy;
-
-                if (dx == 0) return true;
-            }
-            if (mNext == null)//cannot ajust
-            {
-                restorePos();
-                return false;
+                return true;
             }
             else
             {
-                bool t = mNext.tryAdjustByHead(tPos1);
-                if (!t)
+                if (mNext != null)
                 {
-                    restorePos();
-                    return false;
+                    mNext.tryAdjustByHead(tailPos);
                 }
-                return true;
             }
-            return true;
+
+            return false;
         }
 
         internal bool adjustPos(Point pt)
         {
-            if(mPre == null || mNext == null) return false;
-            savePos();
-            if (!tryAdjustByHead(pt))
-            {
-                return false;
-            }
-            else 
-                if (mPre != null && !mPre.tryAdjustByTail(pt))
-            {
-                restorePost();
-                return false;
-            }
+            headPos = pt;
+            adjustPosPost(pt);
+            adjustPosPre(pt);
+            return true;
+        }
+
+        internal bool adjustPosPost(Point pt)
+        {
+            headPos = pt;
+            if (mNext != null)
+                mNext.tryAdjustByHead(tailPos);
+            return true;
+        }
+
+        internal bool adjustPosPre(Point pt)
+        {
+            headPos = pt;
+            if (mPre != null)
+                mPre.tryAdjustByTail(pt);
             return true;
         }
     }
@@ -325,7 +438,7 @@ namespace ns_behaviour
             UIWidget mParesent;
             public UILineLinker mLinker;
             UILineNode mBaseNode;
-
+            Point mStartPos;
             public cons(UIWidget p)
             {
                 mParesent = p;
@@ -335,11 +448,7 @@ namespace ns_behaviour
             {
                 mLinker = new UILineLinker();
                 mLinker.setParesent(mParesent);
-
-                mBaseNode = new UILineNode(UILineNode.EDIR.e_hor, 0);
-                mBaseNode.setParesent(mLinker);
-                mLinker.mFirst = mBaseNode;
-                mBaseNode.mPos = pt;
+                mStartPos = pt;                
             }
 
             public void tryLineTo(Point pt)
@@ -357,7 +466,7 @@ namespace ns_behaviour
                     mBaseNode.mDir = UILineNode.EDIR.e_hor;
                     mBaseNode.mLength = dx;
                 }
-                
+
             }
 
             public void lineTo(Point pt)
@@ -365,13 +474,35 @@ namespace ns_behaviour
                 if (mLinker == null) { moveTo(pt); return; }
                 else
                 {
-                    tryLineTo(pt);
-                    var newNode = new UILineNode(UILineNode.EDIR.e_hor, 0);
-                    newNode.setParesent(mLinker);
-                    newNode.mPre = mBaseNode;
-                    mBaseNode.mNext = newNode;
-                    mBaseNode = newNode;
-                    mBaseNode.mPos = mBaseNode.mPre.tailPos();
+                    
+                    if (mBaseNode == null)
+                    {
+                        mBaseNode = new UILineNode(UILineNode.EDIR.e_hor, 0);
+                        mBaseNode.setParesent(mLinker);
+                        mLinker.mFirst = mBaseNode;
+                        mBaseNode.mPos = mStartPos;
+                        tryLineTo(pt);
+                    }
+                    else
+                    {
+                        var oldNode = mBaseNode;
+                        var newNode = new UILineNode(UILineNode.EDIR.e_hor, 0);
+                        newNode.setParesent(mLinker);
+                        newNode.mPre = mBaseNode;
+                        mBaseNode.mNext = newNode;
+                        newNode.mPos = mBaseNode.tailPos;
+                        mBaseNode = newNode;
+                        tryLineTo(pt);
+
+                        if (oldNode.mDir == newNode.mDir)
+                        {
+                            oldNode.mNext = null;
+                            newNode.setParesent(null);
+                            mBaseNode = oldNode;
+                            tryLineTo(pt);
+                        }
+                        
+                    }
                 }
             }
         }

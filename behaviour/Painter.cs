@@ -1,3 +1,9 @@
+/*
+ * author: xiaofeng.li
+ * mail: 453588006@qq.com
+ * desc: driver for paint and client IO
+ * */
+
 using System;
 using System.Drawing;
 using System.Windows.Forms;

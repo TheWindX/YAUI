@@ -1,4 +1,10 @@
-﻿using System.Diagnostics;
+﻿/*
+ * author: xiaofeng.li
+ * mail: 453588006@qq.com
+ * desc: 
+ * */
+
+using System.Diagnostics;
 
 public class Singleton<T> where T: new()
 {

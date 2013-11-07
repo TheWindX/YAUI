@@ -1,7 +1,7 @@
 /*
  * author: xiaofeng.li
- * mail: 453588006
- * desc: REPL for c#
+ * mail: 453588006@qq.com
+ * desc: Console for c#
  * */
 
 using System;

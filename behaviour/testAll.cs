@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * author: xiaofeng.li
+ * mail: 453588006@qq.com
+ * desc: plugs for test
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +18,8 @@ namespace ns_behaviour
         {
             //var _1 = testPaint1.ins;
             //var _2 = testUIRoot1.Instance;
-            var _3 = testUI2.Instance;
-            //var _4 = testUILines.Instance;
+            //var _3 = testUI2.Instance;
+            var _4 = testUILines.Instance;
         }
     }
 }
