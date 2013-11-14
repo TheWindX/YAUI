@@ -101,24 +101,26 @@ namespace ns_behaviour
             return m;
         }
 
-        public void Local2Abs(ref Point pt)
+        public Point transformAbs(Point pt)
         {
             var t = getAbsMatrix();
             var pts = new Point[] { pt };
             t.TransformPoints(pts);
             pt = pts[0];
+            return pt;
         }
 
-        public void Abs2Local(ref Point pt)
+        public Point invertTransformAbs(Point pt)
         {
             var t = getAbsMatrix();
             t.Invert();
             var pts = new Point[] { pt };
             t.TransformPoints(pts);
             pt = pts[0];
+            return pt;
         }
 
-        public void ParesentLocal2Abs(ref Point pt)
+        public Point transformParesentAbs(Point pt)
         {
             Matrix t;
             if (mParesent != null)
@@ -127,9 +129,10 @@ namespace ns_behaviour
             var pts = new Point[] { pt };
             t.TransformPoints(pts);
             pt = pts[0];
+            return pt;
         }
 
-        public void ParesentAbs2Local(ref Point pt)
+        public Point invertTransformParesentAbs(Point pt)
         {
             Matrix t;
             if (mParesent != null)
@@ -139,6 +142,7 @@ namespace ns_behaviour
             var pts = new Point[] { pt };
             t.TransformPoints(pts);
             pt = pts[0];
+            return pt;
         }
 
         public Matrix getLocalMatrix()
@@ -150,25 +154,25 @@ namespace ns_behaviour
             return m;
         }
 
-        public Point getAbsPos()
-        {
-            Matrix m = getAbsMatrix();
-            Point p = new Point(0, 0);
-            Point[] myArray = {p};
-            m.TransformPoints(myArray);
-            return p;
-        }
+        //public Point getAbsPos()
+        //{
+        //    Matrix m = getAbsMatrix();
+        //    Point p = new Point(0, 0);
+        //    Point[] myArray = {p};
+        //    m.TransformPoints(myArray);
+        //    return p;
+        //}
 
-        public float getAbsDir()
-        {
-            if(mParesent == null) return mDir;
-            else
-            {
-                var dir = mParesent.getAbsDir()+mDir;
-                if(dir >360) return dir-360;
-                return dir;
-            }
-        }
+        //public float getAbsDir()
+        //{
+        //    if(mParesent == null) return mDir;
+        //    else
+        //    {
+        //        var dir = mParesent.getAbsDir()+mDir;
+        //        if(dir >360) return dir-360;
+        //        return dir;
+        //    }
+        //}
     }
 
 

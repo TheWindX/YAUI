@@ -1,7 +1,7 @@
 ﻿/*
  * author: xiaofeng.li
  * mail: 453588006@qq.com
- * desc: timer inspired by JS timer
+ * desc: timer as in JS timer
  * */
 
 
@@ -408,8 +408,6 @@ namespace ns_behaviour
             }
         }
     }
-
-
 
     //namespace TEST
     //{   

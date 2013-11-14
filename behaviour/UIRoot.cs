@@ -62,13 +62,106 @@ namespace ns_behaviour
             mRoot.doDraw(g);
         }
 
+        void onKeyLock(int kc)
+        {
+            if (kc == (int)System.Windows.Forms.Keys.Space)
+            {
+                if (lockWidget)
+                {
+                    lockWidget = false;
+                }
+                else
+                {
+                    lockWidget = true;
+                }
+            }
+        }
+        bool mLockable = false;
+        void setLock()
+        {
+            if (mLockable == true) return;
+            mLockable = true;
+            Globals.Instance.mPainter.evtOnKey += onKeyLock;
+        }
+
+        void unsetLock()
+        {
+            if (mLockable == false) return;
+            mLockable = false;
+            Globals.Instance.mPainter.evtOnKey -= onKeyLock;
+        }
+
+        public bool lockable
+        {
+            get
+            {
+                return mLockable;
+            }
+            set
+            {
+                if (value)
+                    setLock();
+                else
+                    unsetLock();
+            }
+        }
+
+        public UIWidget focusWidget
+        {
+            get
+            {
+                object o;
+                bool ret = mRoot.attrs.TryGetValue("focus", out o);
+                if (!ret) return null;
+                return o as UIWidget;
+            }
+            set
+            {
+                mRoot.attrs["focus"] = value;
+            }
+        }
+
+        public UIWidget currentWidget
+        {
+            get
+            {
+                object o;
+                bool ret = mRoot.attrs.TryGetValue("current", out o);
+                if (!ret) return null;
+                return o as UIWidget;
+            }
+            set
+            {
+                mRoot.attrs["current"] = value;
+            }
+        }
+
+        public bool lockWidget
+        {
+            get
+            {
+                return (focusWidget != null);
+            }
+            set
+            {
+                if (value)
+                    focusWidget = currentWidget;
+                else
+                    focusWidget = null;
+            }
+            
+        }
+
         public void testUIEvent(int x, int y, Func<UIWidget, Func<int, int, bool>> getAction)
         {
             UIWidget uiout;
-
-            bool ret = mRoot.doTestPick(new Point(x, y), out uiout);
+            bool ret = true;
+            uiout = focusWidget;
+            if(uiout == null)
+                ret  = mRoot.doTestPick(new Point(x, y), out uiout);
             if (ret)
             {
+                currentWidget = uiout;
                 while (uiout != null)
                 {
                     var act = getAction(uiout);

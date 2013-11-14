@@ -14,14 +14,14 @@ using System.Drawing.Drawing2D;
 
 namespace ns_behaviour
 {
-    class UIString : UIWidget
+    class UILable : UIWidget
     {
         string mText = "template";
         int mSz = 12;
         uint mColor = 0xffffffff;
         Brush mBrush;
         Rectangle mRect = new Rectangle();
-        public UIString(string t = "template", int sz = 12, uint color = 0xffffffff)
+        public UILable(string t = "Template", int sz = 12, uint color = 0xffffffff)
         {
             mSz = sz;
             textColor = color;

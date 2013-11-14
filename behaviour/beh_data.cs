@@ -9,189 +9,173 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace ns_behaviour
 {
-    using ns_utils;    
-    class Data
+    using ns_utils;
+
+    class BehviourAccessory
     {
-        //static int idc = 0;
-        //public int id = 0;
-        //public Data() { id = idc++; }
-        public MetaType mType;
-        virtual public MetaType getType()
-        {
-            return mType;
-        }
-        public virtual Data clone() { return null; }
-    }
-
-    class IntData : Data
-    {
-        public int mVal;
-        IntData(int v)
-        {
-            mType = MetaTypePrimary.instance(MetaTypePrimary.ETYPE.e_int);
-            mVal = v;
-        }
-
-        public static IntData getData(int v)
-        {
-            return new IntData(v);
-        }
-
-        public static IntData defaultData()
-        {
-            return getData(0);
-        }
-
-        public override Data clone() { return getData(mVal); }
-    }
-
-
-    class StringData : Data
-    {
-        public string mVal;
-        StringData(string v)
-        {
-            mType = MetaTypePrimary.instance(MetaTypePrimary.ETYPE.e_string);
-            mVal = v;
-        }
-
-        public static StringData getData(string v)
-        {
-            return new StringData(v);
-        }
-
-        public static StringData defaultData()
-        {
-            return getData("");
-        }
-
-        public override Data clone() { return getData(mVal); }
-    }
-
-    class BehData
-    {
-        public MetaType mType;//type
-        public BehaviourData mData;//belongs
-        public int mIdx;//位置
-        public bool inOrOut;
-    }
-
-    class BehTrigger
-    {
-        public BehaviourData mData;//belongs
-        public int mIdx;//位置
-        public bool inOrOut;
-    }
-
-    class BehaviourData : Data
-    {
-        public string mName = "";
-        public array<BehData> mDIn = new array<BehData>();
-        public array<BehData> mDOut = new array<BehData>();
-        public array<BehTrigger> mTIn = new array<BehTrigger>();
-        public array<BehTrigger> mTOut = new array<BehTrigger>();
-    }
-
-    class BehaviourScriptData : BehaviourData
-    {
-        public Action<BehaviourData> mAction;
-    }
-
-    class BehaviourGraphicData : BehaviourData
-    {
-        array<GBehavioursInstance> mBehGraphic = new array<GBehavioursInstance>();
-        array<GDataLink> mDataLinks = new array<GDataLink>();
-    }
-
-    interface IGraphicDraw
-    {
-        void drawRect(float x, float y, float wide, float height, UInt32 color);
-        void fillRect(float x, float y, float wide, float height, UInt32 color);
-
-        void drawLine(float x1, float y1, float x2, float y2, UInt32 color);
-        void drawText(string str, float x, float y, int sz, UInt32 color = 0xffffffff);
-
-        void pushClip(float x, float y, float wide, float height);
-        void popClip();
+        public Behaviour mBehaviour;//belonging
+        public int mIdx;//in list
     };
 
-    class GraphicData
+    class DataIn : BehviourAccessory
     {
-        public BehaviourGraphicData mData;
+        public MetaType mType;
     }
 
-    class GVector2D
+    class DataOut : BehviourAccessory
     {
-        public float x;
-        public float y;
-        public GVector2D(float px, float py)
+        public MetaType mType;
+    }
+
+    class TriggerIn : BehviourAccessory
+    {
+    }
+
+    class TriggerOut : BehviourAccessory
+    {
+    }
+
+
+
+    class Behaviour
+    {
+        public array<DataIn> mDataIn;
+        public array<DataIn> mDataOut;
+        public array<TriggerIn> mTriggerIn;
+        public array<TriggerOut> mTriggerOut;
+
+        public string name
         {
-            x = px;
-            y = py;
+            get;
+            set;
         }
+    }
 
-        public GVector2D() : this(0, 0)
-        {   
-        }
 
-        public static GVector2D operator +(GVector2D p1, GVector2D p2)
+    class BehaviourScript : Behaviour
+    {
+        public Action<Behaviour> mAction;
+    }
+
+    class BehaviourGraphic : Behaviour
+    {
+        
+    }
+
+    class BehaviourInGraphic
+    {
+        
+    }
+
+
+
+    class GBehaviour : BehaviourInGraphic
+    {
+        public Point mPosition;
+        public Behaviour mBeh;
+    }
+
+    class GSelfDataIn : BehaviourInGraphic, iGDataOut
+    {
+        public DataIn mDataIn;
+        public MetaType getType()
         {
-            return new GVector2D(p1.x + p2.x, p1.y+p2.y);
+            return mDataIn.mType;
         }
-
     }
 
-    class GBehavioursInstance : GraphicData
+    class GSelfDataOut : BehaviourInGraphic, iGDataIn
     {
-        public BehaviourData mSource;
-
-        public GVector2D calculateSize()
+        public DataOut mDataOut;
+        public MetaType getType()
         {
-            int szH = mSource.mDIn.size();
-            szH = szH > mSource.mDOut.size() ? szH : mSource.mDOut.size();
-            if(szH == 0) szH = 64;
-
-            int szV = mSource.mTIn.size();
-            szV = szV > mSource.mTOut.size() ? szV : mSource.mTOut.size();
-            if(szV == 0) szV = 48;
-
-            int nameLength = mSource.mName.Count()*24;
-            if (nameLength > szH) szH = nameLength;
-            return new GVector2D(szH, szV);
+            return mDataOut.mType;
         }
     }
 
-    class GDataLinkPos : GraphicData
-    {   
-        public GBehavioursInstance mIns;//if null, it is self link
-        bool mInOrOut;
-        int mIndex;
-    }
-
-    class GDataLink : GraphicData
+    class GSelfTriggerIn : BehaviourInGraphic, iGTriggerOut
     {
-        public GDataLinkPos from;
-        public GDataLinkPos to;
-        //position
-
-        array<GVector2D> mShape = new array<GVector2D>();
+        public TriggerIn mTriggerIn;
     }
 
-    class GTriggerLinkPos : GraphicData
+    class GSelfTriggerOut : BehaviourInGraphic, iGTriggerIn
     {
-        public GBehavioursInstance mIns;//if null, it is mData linker
-        int mIndex;
-        bool mInOrOut;
+        public TriggerOut mTriggerOut;
     }
 
-    class GTriggerLink : GraphicData
-    {   
-        public GTriggerLinkPos from;
-        public GTriggerLinkPos to;
-        //
-        array<GVector2D> mShape = new array<GVector2D>();
+    interface iGDataIn
+    {
+        MetaType getType();
     }
+
+    interface iGDataOut
+    {
+        MetaType getType();
+    }
+
+    interface iGTriggerIn
+    {
+        
+    }
+
+    interface iGTriggerOut
+    {
+
+    }
+
+    class GDataIn : BehaviourInGraphic, iGDataIn
+    {
+        public GBehaviour mGBeh;
+        public DataIn mDataIn;
+
+        public MetaType getType()
+        {
+            return mDataIn.mType;
+        }
+    }
+
+    class GDataOut : BehaviourInGraphic, iGDataOut
+    {
+        public GBehaviour mGBeh;
+        public DataOut mDataOut;
+
+        public MetaType getType()
+        {
+            return mDataOut.mType;
+        }
+    }
+
+
+    class GTriggerIn : BehaviourInGraphic, iGTriggerIn
+    {
+        public GBehaviour mGBeh;
+        public TriggerIn mDataIn;
+    }
+
+    class GTriggerOut : BehaviourInGraphic, iGTriggerOut
+    {
+        public GBehaviour mGBeh;
+        public TriggerOut mDataOut;
+    }
+
+    class GDataLinker : BehaviourInGraphic
+    {
+        public iGDataIn mDi;
+        public iGDataOut mDo;
+
+        public List<Point> mPoints = new List<Point>();
+    }
+
+    class GTriggerLinker : BehaviourInGraphic
+    {
+        public iGTriggerIn mTi;
+        public iGTriggerOut mTo;
+
+        public List<Point> mPoints = new List<Point>();
+    }
+
 }

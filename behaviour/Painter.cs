@@ -12,6 +12,11 @@ using System.Reflection;
 using Microsoft.CSharp;
 using System.Threading;
 
+using System.Runtime.InteropServices;
+
+
+
+
 namespace ns_behaviour
 {
 
@@ -20,8 +25,17 @@ namespace ns_behaviour
         private System.Windows.Forms.Timer mTimer;
         private System.ComponentModel.IContainer components;
 
-        
         public PaintDriver mIns = null;
+        private InputForm mTextEdit;
+
+        public InputForm textEdit
+        {
+            get
+            {
+                return mTextEdit;
+            }
+        }
+
         public PaintDriver()
         {
             InitializeComponent();
@@ -31,6 +45,8 @@ namespace ns_behaviour
         {
             this.components = new System.ComponentModel.Container();
             this.mTimer = new System.Windows.Forms.Timer(this.components);
+            this.mTextEdit = new ns_behaviour.InputForm();
+            
             this.SuspendLayout();
             // 
             // mTimer
@@ -39,21 +55,33 @@ namespace ns_behaviour
             this.mTimer.Interval = 10;
             this.mTimer.Tick += new System.EventHandler(this.onUpdate);
             // 
+            // mTextEdit
+            // 
+            this.mTextEdit.BackColor = System.Drawing.Color.BlanchedAlmond;
+            this.mTextEdit.ClientSize = new System.Drawing.Size(433, 72);
+            this.mTextEdit.ControlBox = false;
+            this.mTextEdit.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.mTextEdit.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.mTextEdit.Location = new System.Drawing.Point(52, 52);
+            this.mTextEdit.Name = "mTestForm";
+            this.mTextEdit.TransparencyKey = System.Drawing.Color.BlanchedAlmond;
+            this.mTextEdit.Visible = false;
+            // 
             // PaintDriver
             // 
             this.ClientSize = new System.Drawing.Size(585, 523);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "PaintDriver";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.onLoad);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PaintDriver_KeyDown);
-            this.MouseDown  += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseDown);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseUp);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseMove);
-
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseUp);
             this.MouseWheel += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseWheel);
-
             this.ResumeLayout(false);
+
         }
 
         public void setSize(int w, int h)
@@ -102,12 +130,11 @@ namespace ns_behaviour
                 evtPaint(e.Graphics);
         }
 
-        public delegate void EvtLeftDown(int x, int y);
-        public delegate void EvtRightDown(int x, int y);
-        public delegate void EvtMidDown(int x, int y);
-        public EvtLeftDown evtLeftDown;
-        public EvtRightDown evtRightDown;
-        public EvtMidDown evtMidDown;
+        public delegate void EvtMouse(int x, int y);
+        
+        public EvtMouse evtLeftDown;
+        public EvtMouse evtRightDown;
+        public EvtMouse evtMidDown;
         private void PaintDriver_MouseDown(object sender, MouseEventArgs e)
         {
             switch (e.Button)
@@ -128,12 +155,10 @@ namespace ns_behaviour
                     break;
             }
         }
-        public delegate void EvtLeftUp(int x, int y);
-        public delegate void EvtRightUp(int x, int y);
-        public delegate void EvtMidUp(int x, int y);
-        public EvtLeftUp evtLeftUp;
-        public EvtRightUp evtRightUp;
-        public EvtMidUp evtMidUp;
+
+        public EvtMouse evtLeftUp;
+        public EvtMouse evtRightUp;
+        public EvtMouse evtMidUp;
         private void PaintDriver_MouseUp(object sender, MouseEventArgs e)
         {
             switch (e.Button)
@@ -155,8 +180,7 @@ namespace ns_behaviour
             }
         }
 
-        public delegate void EvtMove(int x, int y);
-        public EvtMove evtMove;
+        public EvtMouse evtMove;
         private void PaintDriver_MouseMove(object sender, MouseEventArgs e)
         {
             if (evtMove != null)

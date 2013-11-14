@@ -30,8 +30,6 @@ namespace ns_behaviour
             var r = UIRoot.Instance.mRoot;
             mTester = new UILineLinker.cons(r);
 
-            var rc = new UIRect(128, 64, 0x88ffffff, 0x33333333);
-            rc.setParesent(UIRoot.Instance.mRoot);
             mCreate = new CEditCreate(this);
             mMoveFrag = new CEditMoveFragment(this);
 
@@ -92,12 +90,12 @@ namespace ns_behaviour
                 mNodeSelect = ui as UILineNode;
                 Point orgUiPos = mNodeSelect.mPos;
 
-                var onMove = new PaintDriver.EvtMove( (px, py) =>
+                var onMove = new PaintDriver.EvtMouse( (px, py) =>
                     {
                         int dx = px - x;
                         int dy = py - y;
                         Point newUiPos = new Point(orgUiPos.X + dx, orgUiPos.Y + dy);
-                        mNodeSelect.adjustPos(newUiPos);
+                        mNodeSelect.adjustFromFrontToBothSide(newUiPos);
                     } );
 
                 Globals.Instance.mPainter.evtLeftUp = (px, py) =>
@@ -143,7 +141,7 @@ namespace ns_behaviour
                 mCurrentEdit = mCreate;
                 mCurrentEdit.onAdd();
             }
-            if (kc == (int)System.Windows.Forms.Keys.M)
+            else if (kc == (int)System.Windows.Forms.Keys.M)
             {
                 if (mCurrentEdit != null)
                 {
@@ -152,7 +150,17 @@ namespace ns_behaviour
                 mCurrentEdit = mMoveFrag;
                 mCurrentEdit.onAdd();
             }
-
+            else if (kc == (int)System.Windows.Forms.Keys.Space)
+            {
+                if (UIRoot.Instance.lockWidget)
+                {
+                    UIRoot.Instance.lockWidget = false;
+                }
+                else
+                {
+                    UIRoot.Instance.lockWidget = true;
+                }
+            }
         }
 
     }

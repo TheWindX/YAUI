@@ -31,7 +31,7 @@ namespace ns_behaviour
             Console.WriteLine("onDragStart:" + x + "," + y);
         
             var pt = new Point(x, y);
-            rc.paresent.Abs2Local(ref pt);
+            pt = rc.paresent.invertTransformAbs(pt);
 
             moveStart = pt;
 
@@ -53,7 +53,7 @@ namespace ns_behaviour
         {
             Console.WriteLine("onMove:" + x + "," + rc.py);
             Point pt = new Point(x, y);
-            rc.paresent.Abs2Local(ref pt);
+            pt = rc.paresent.invertTransformAbs(pt);
 
             rc.px = rcStart.X + pt.X - moveStart.X;
             rc.py = rcStart.Y + pt.Y - moveStart.Y;
@@ -63,6 +63,7 @@ namespace ns_behaviour
 
         public void main()
         {
+            UIRoot.Instance.lockable = true;
             UIRoot.Instance.mRoot.mScalex = 4;
             UIRoot.Instance.mRoot.mScaley = 4;
             UIRoot.Instance.mRoot.px = 20;

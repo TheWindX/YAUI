@@ -36,11 +36,69 @@ namespace ns_behaviour
             mLength = length;
         }
 
+        public EForward beginForward
+        {
+            get
+            {
+                if (mDir == EDIR.e_hor)
+                {
+                    if (endPos.X > beginPos.X)
+                    {
+                        return EForward.e_left;
+                    }
+                    else
+                    {
+                        return EForward.e_right;
+                    }
+                }
+                else //if (mDir == EDIR.e_ver)
+                {
+                    if (endPos.Y > beginPos.Y)
+                    {
+                        return EForward.e_up;
+                    }
+                    else
+                    {
+                        return EForward.e_down;
+                    }
+                }
+            }
+        }
+
+        public EForward endForward
+        {
+            get
+            {
+                if (mDir == EDIR.e_hor)
+                {
+                    if (endPos.X > beginPos.X)
+                    {
+                        return EForward.e_right;
+                    }
+                    else
+                    {
+                        return EForward.e_left;
+                    }
+                }
+                else //if (mDir == EDIR.e_ver)
+                {
+                    if (endPos.Y > beginPos.Y)
+                    {
+                        return EForward.e_down;
+                    }
+                    else
+                    {
+                        return EForward.e_up;
+                    }
+                }
+            }
+        }
+
         public override Rectangle rect
         {
             get
             {
-                int pickLineWidth = lineWidth * 3;
+                int pickLineWidth = lineWidth * 5;
                 if (mDir == EDIR.e_ver)
                 {
                     int left = -pickLineWidth;
@@ -162,7 +220,7 @@ namespace ns_behaviour
         }
 
 
-        public Point headPos
+        public Point beginPos
         {
             get
             {
@@ -174,7 +232,7 @@ namespace ns_behaviour
             }
         }
 
-        public Point tailPos
+        public Point endPos
         {
             get
             {
@@ -182,14 +240,14 @@ namespace ns_behaviour
                 {
                     return new Point(mPos.X + mLength, mPos.Y);
                 }
-                //else if(mDir == EDIR.e_ver)
+                else //if(mDir == EDIR.e_ver)
                 {
                     return new Point(mPos.X, mPos.Y + mLength);
                 }
             }
             set
             {
-                var tp = tailPos;
+                var tp = endPos;
                 int dx = value.X - tp.X;
                 int dy = value.Y - tp.Y;
                 mPos = new Point(mPos.X + dx, mPos.Y + dy);
@@ -197,11 +255,11 @@ namespace ns_behaviour
         }
 
 
-        bool setHeadPosStable(Point val)
+        bool adjustFromFrontStable(Point val)
         {
-            var tpos = tailPos;
-            headPos = val;
-            var tPos1 = tailPos;
+            var tpos = endPos;
+            beginPos = val;
+            var tPos1 = endPos;
 
             if (mDir == EDIR.e_hor)
             {
@@ -210,15 +268,12 @@ namespace ns_behaviour
 
                 mLength += dx;
                 if (dy == 0) return true;
-                else if (mNext == null)
-                {
-                    mPos.Y += dy;
-                    if (mPre != null)
-                    {
-                        //mPre.adjustPosPre(new Point(mPre.mPos.X, mPre.mPos.Y+dy));
-                        adjustPos(mPos);
-                    }
-                }
+                //else if (mNext == null)
+                //{
+                //    mPos.Y += dy;
+                //    if(mPre != null)
+                //        mPre.adjustFromEndStable(beginPos);
+                //}
             }
             else if (mDir == EDIR.e_ver)
             {
@@ -227,26 +282,23 @@ namespace ns_behaviour
 
                 mLength += dy;
                 if (dx == 0) return true;
-                else if (mNext == null)
-                {
-                    mPos.X += dx;
-                    if (mPre != null)
-                    {
-                        //mPre.adjustPosPre(new Point(mPre.mPos.X + dx, mPre.mPos.Y));
-                        adjustPos(mPos);
-                    }
-                }
+                //else if (mNext == null)
+                //{
+                //    mPos.X += dx;
+                //    if (mPre != null)
+                //        mPre.adjustFromEndStable(beginPos);
+                //}
             }
 
             return false;
         }
 
 
-        bool setTailPosStable(Point val)
+        bool adjustFromEndStable(Point val)
         {
-            var hpos = headPos;
-            tailPos = val;
-            var hPos1 = headPos;
+            var hpos = beginPos;
+            endPos = val;
+            var hPos1 = beginPos;
 
             if (mDir == EDIR.e_hor)
             {
@@ -256,14 +308,12 @@ namespace ns_behaviour
                 mPos.X += dx;
                 mLength -= dx;
                 if (dy == 0) return true;
-                else if (mPre == null)
-                {
-                    mPos.Y += dy;
-                    if(mNext != null)
-                    {
-                        mNext.adjustPosPost(tailPos);
-                    }
-                }
+                //else if (mPre == null)
+                //{
+                //    mPos.Y += dy;
+                //    if (mNext != null)
+                //        mNext.adjustFromFrontStable(endPos);
+                //}
             }
             else if (mDir == EDIR.e_ver)
             {
@@ -272,16 +322,16 @@ namespace ns_behaviour
 
                 mPos.Y += dy;
                 mLength -= dy;
-                if (dx == 0) return true;
-                else if(mPre == null)
+                if (dx == 0)
                 {
-                    mPos.X += dx;
-                    if (mNext != null)
-                    {
-                        mNext.adjustPosPost(tailPos);
-                        //mNext.tryAdjustByHead(tailPos);
-                    }
+                    return true;
                 }
+                //else if (mPre == null)
+                //{
+                //    mPos.X += dx;
+                //    if (mNext != null)
+                //        mNext.adjustFromFrontStable(endPos);
+                //}
             }
 
             
@@ -290,9 +340,9 @@ namespace ns_behaviour
 
 
         //返回是否原点维持
-        internal bool tryAdjustByTail(Point pt)
+        internal bool adjustFromEndSeq(Point pt)
         {
-            bool ret = setTailPosStable(pt);
+            bool ret = adjustFromEndStable(pt);
             if (ret)
             {
                 return true;
@@ -301,7 +351,7 @@ namespace ns_behaviour
             {
                 if (mPre != null)
                 {
-                    mPre.tryAdjustByTail(headPos);
+                    mPre.adjustFromEndSeq(beginPos);
                 }
             }
 
@@ -309,9 +359,9 @@ namespace ns_behaviour
         }
 
         //返回是否原点维持
-        internal bool tryAdjustByHead(Point pt)
+        internal bool adjustFromFrontSeq(Point pt)
         {
-            bool ret = setHeadPosStable(pt);
+            bool ret = adjustFromFrontStable(pt);
             if (ret)
             {
                 return true;
@@ -320,34 +370,50 @@ namespace ns_behaviour
             {
                 if (mNext != null)
                 {
-                    mNext.tryAdjustByHead(tailPos);
+                    mNext.adjustFromFrontSeq(endPos);
                 }
             }
 
             return false;
         }
 
-        internal bool adjustPos(Point pt)
+        internal bool adjustFromFrontToBothSide(Point pt)
         {
-            headPos = pt;
-            adjustPosPost(pt);
-            adjustPosPre(pt);
+            //if ( (mPre != null && mPre.mPre != null)
+            //     || (mNext != null && mNext.mNext != null))
+            //{
+            //    if (mDir == EDIR.e_hor)
+            //    {
+            //        pt.X = mPos.X;
+            //    }
+            //    else if (mDir == EDIR.e_ver)
+            //    {
+            //        pt.Y = mPos.Y;
+            //    }   
+            //}
+
+            adjustFromFrontToTail(pt);
+            adjustFromFrontToHead(pt);
             return true;
         }
 
-        internal bool adjustPosPost(Point pt)
-        {
-            headPos = pt;
+        internal bool adjustFromFrontToTail(Point pt)
+        {   
             if (mNext != null)
-                mNext.tryAdjustByHead(tailPos);
+            {
+                beginPos = pt;
+                mNext.adjustFromFrontSeq(endPos);
+            }
             return true;
         }
 
-        internal bool adjustPosPre(Point pt)
+        internal bool adjustFromFrontToHead(Point pt)
         {
-            headPos = pt;
             if (mPre != null)
-                mPre.tryAdjustByTail(pt);
+            {  
+                beginPos = pt;
+                mPre.adjustFromEndSeq(pt);
+            }
             return true;
         }
     }
@@ -355,6 +421,34 @@ namespace ns_behaviour
     class UILineLinker : UIWidget
     {
         UILineNode mFirst;
+        UILineNode mLast;
+
+        UIRect mStartRect;
+        UIArrow mBeginArrow;
+        UIArrow mEndArrow;
+        public UILineNode first
+        {
+            get
+            {
+                return mFirst;
+            }
+        }
+
+        public UILineNode last
+        {
+            get
+            {
+                //UILineNode iter = first;
+                //UILineNode lastNode = iter;
+                //while (iter != null)
+                //{
+                //    lastNode = iter;
+                //    iter = iter.mNext;
+                //}
+                //return lastNode;
+                return mLast;
+            }
+        }
 
         uint mFillColor;
         internal Brush mBrush;
@@ -365,23 +459,73 @@ namespace ns_behaviour
             setFillColor(fill);
         }
 
-        void setFillColor(uint fillColor = 0xff888888)
+        public void setFillColor(uint fillColor = 0xff888888)
         {
             mFillColor = fillColor;
             mBrush = new SolidBrush(Color.FromArgb((Int32)mFillColor));
         }
 
-        static int min(int a, int b) { if (a < b)return a; else return b; }
-        static int max(int a, int b) { if (a > b)return a; else return b; }
-        static Rectangle expandRect(Rectangle r1, Rectangle r2)
-        {
-            int left = min(r1.Left, r2.Left);
-            int top = min(r1.Top, r2.Top);
-            int right = max(r1.Right, r2.Right);
-            int buttom = max(r1.Bottom, r2.Bottom);
+        Point mFrom;
 
-            return new Rectangle(left, top, right - left, buttom - top);
+        //线的终点
+        public Point endPos
+        {
+            get
+            {
+                if (last == null)
+                    return mFrom;
+                else
+                {
+                    return last.endPos;
+                }
+            }
         }
+
+        //线的终点
+        public Point beginPos
+        {
+            get
+            {
+                if (first == null)
+                    return mFrom;
+                else
+                {
+                    return first.beginPos;
+                }
+            }
+        }
+
+        public void startFrom(Point pt)
+        {
+            mFrom = pt;
+        }
+
+        public void appendNode(UILineNode.EDIR dir, int length)
+        {
+            var node = new UILineNode(dir, length);
+            node.setParesent(this);
+            if (first == null)
+            {
+                node.beginPos = mFrom;
+                mFirst = node;
+                mLast = node;
+            }
+            else
+            {
+                if(last.mDir == dir)
+                {
+                    last.mLength += length;
+                }
+                else
+                {
+                    node.beginPos = last.endPos;
+                    last.mNext = node;
+                    node.mPre = last;
+                    mLast = node;
+                }
+            }
+        }
+
 
         public IEnumerable<UILineNode> nodeIter()
         {
@@ -430,78 +574,96 @@ namespace ns_behaviour
 
         internal override void onDraw(Graphics g)
         {
-            //no use
+            //set up sign end
+            if (mFirst == null)
+            {
+                if (mStartRect == null)
+                {
+                    mStartRect = new UIRect(4, 4, 0xffff0000);
+                    mStartRect.setParesent(this);
+                    mStartRect.mPos = beginPos;
+                    mStartRect.mPos.X -= 2;
+                    mStartRect.mPos.Y -= 2;
+                }
+            }
+            else
+            {
+                if (mStartRect != null)
+                {
+                    mStartRect.setParesent(null);
+                    mStartRect = null;
+                }
+                if (mBeginArrow == null)
+                {
+                    mBeginArrow = new UIArrow(8, 8);
+                    mEndArrow = new UIArrow(8, 8);
+                    mBeginArrow.setParesent(this);
+                    mEndArrow.setParesent(this);
+                }
+                mBeginArrow.center = beginPos;
+                mBeginArrow.forward = mFirst.beginForward;
+                mEndArrow.center = endPos;
+                mEndArrow.forward = mLast.endForward;
+
+            }
         }
 
         public class cons
         {
             UIWidget mParesent;
             public UILineLinker mLinker;
-            UILineNode mBaseNode;
-            Point mStartPos;
             public cons(UIWidget p)
             {
                 mParesent = p;
             }
 
-            public void moveTo(Point pt)
-            {
-                mLinker = new UILineLinker();
-                mLinker.setParesent(mParesent);
-                mStartPos = pt;                
-            }
-
             public void tryLineTo(Point pt)
             {
-                int dx = pt.X - mBaseNode.mPos.X;
-                int dy = pt.Y - mBaseNode.mPos.Y;
+                pt = mParesent.invertTransformAbs(pt);
+                int dx = pt.X - mLinker.last.mPos.X;
+                int dy = pt.Y - mLinker.last.mPos.Y;
 
                 if (Math.Abs(dy) > Math.Abs(dx))
                 {
-                    mBaseNode.mDir = UILineNode.EDIR.e_ver;
-                    mBaseNode.mLength = dy;
+                    mLinker.last.mDir = UILineNode.EDIR.e_ver;
+                    mLinker.last.mLength = dy;
                 }
                 else
                 {
-                    mBaseNode.mDir = UILineNode.EDIR.e_hor;
-                    mBaseNode.mLength = dx;
+                    mLinker.last.mDir = UILineNode.EDIR.e_hor;
+                    mLinker.last.mLength = dx;
                 }
 
             }
 
             public void lineTo(Point pt)
             {
-                if (mLinker == null) { moveTo(pt); return; }
+                pt = mParesent.invertTransformAbs(pt);
+                if (mLinker == null) 
+                {
+                    mLinker = new UILineLinker();
+                    mLinker.setParesent(mParesent);
+                    mLinker.startFrom(pt);
+                }
                 else
                 {
-                    
-                    if (mBaseNode == null)
+                    int dx;
+                    int dy;
+
+                    dx = pt.X - mLinker.endPos.X;
+                    dy = pt.Y - mLinker.endPos.Y;
+
+                    if (Math.Abs(dy) > Math.Abs(dx))
                     {
-                        mBaseNode = new UILineNode(UILineNode.EDIR.e_hor, 0);
-                        mBaseNode.setParesent(mLinker);
-                        mLinker.mFirst = mBaseNode;
-                        mBaseNode.mPos = mStartPos;
-                        tryLineTo(pt);
+                        var dir = UILineNode.EDIR.e_ver;
+                        var length = dy;
+                        mLinker.appendNode(dir, length);
                     }
                     else
                     {
-                        var oldNode = mBaseNode;
-                        var newNode = new UILineNode(UILineNode.EDIR.e_hor, 0);
-                        newNode.setParesent(mLinker);
-                        newNode.mPre = mBaseNode;
-                        mBaseNode.mNext = newNode;
-                        newNode.mPos = mBaseNode.tailPos;
-                        mBaseNode = newNode;
-                        tryLineTo(pt);
-
-                        if (oldNode.mDir == newNode.mDir)
-                        {
-                            oldNode.mNext = null;
-                            newNode.setParesent(null);
-                            mBaseNode = oldNode;
-                            tryLineTo(pt);
-                        }
-                        
+                        var dir = UILineNode.EDIR.e_hor;
+                        var length = dx;
+                        mLinker.appendNode(dir, length);
                     }
                 }
             }

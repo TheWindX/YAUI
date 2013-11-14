@@ -35,29 +35,29 @@ namespace ns_behaviour
             UIRoot.Instance.mRoot.dragAble = true;
             rc = new UIRect(128, 64, 0x88333333, 0x33333333);
             rc.setParesent(UIRoot.Instance.mRoot);
-            rc.bClip = true;
+            rc.clip = true;
             rc.px = 64;
             rc.py = 64;
-            rc.bEnable = true;
+            rc.enable = true;
 
             rc1 = new UIRect(128, 64);
             rc1.mPos.X = -20;
             rc1.mPos.Y = -20;
             rc1.setParesent(rc);
             rc1.dragAble = true;
-            rc1.bClip = true;
+            rc1.clip = true;
 
             var rc2 = new UIRect(64, 128);
             rc2.setParesent(rc1);
             rc2.dragAble = true;
 
-            var t1 = new UIString("lable test");
+            var t1 = new UILable("lable test");
             t1.dragAble = true;
             t1.setParesent(rc1);
             t1.depth = -1;
 
 
-            var tri = new UITriangle(32, 32);
+            var tri = new UIArrow(32, 32);
             tri.setParesent(rc);
             tri.dragAble = true;
 

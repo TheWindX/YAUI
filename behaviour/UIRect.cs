@@ -32,16 +32,40 @@ namespace ns_behaviour
             mPen = new Pen(Color.FromArgb((Int32)scolor));
         }
 
-        void setFillColor(uint fill = 0xff888888)
+        public void setFillColor(uint fill = 0xff888888)
         {
             fcolor = fill;
             mBrush = new SolidBrush(Color.FromArgb((Int32)fcolor));
         }
 
-        void setStrokeColor(uint stroke = 0xff888888)
+        public void setStrokeColor(uint stroke = 0xff888888)
         {
             scolor = stroke;
             mPen = new Pen(Color.FromArgb((Int32)scolor));
+        }
+
+        public int width
+        {
+            get
+            {
+                return _w;
+            }
+            set
+            {
+                _w = value;
+            }
+        }
+
+        public int height
+        {
+            get
+            {
+                return _h;
+            }
+            set
+            {
+                _w = value;
+            }
         }
 
         public override Rectangle rect

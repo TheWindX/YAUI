@@ -107,12 +107,46 @@ namespace ns_behaviour
         {
             g.Transform = _mtxSave;
         }
+        
+        public UIWidget topParesent
+        {
+            get
+            {
+                if (mParesent != null)
+                {
+                    return (mParesent as UIWidget).topParesent;
+                }
+                else
+                {
+                    return this;
+                }
+            }
+        }
 
         //properties start
         public bool focus
-        {
-            get;
-            set;
+        {   
+            set
+            {
+                if (value)
+                {
+                    topParesent.attrs["focus"] = this;
+                }
+                else
+                {
+                    topParesent.attrs["focus"] = null;
+                }
+            }
+            get
+            {
+                object o = null;
+                bool r = topParesent.attrs.TryGetValue("focus", out o);
+                if (r)
+                {
+                    return object.ReferenceEquals(this, r);
+                }
+                return false;
+            }
         }
 
         public int px
@@ -232,11 +266,164 @@ namespace ns_behaviour
             set;
         }
 
+        public Point center
+        {
+            get
+            {
+                return transform(rect.center());
+            }
+
+            set
+            {
+                var pt = center;
+                int dx = value.X - pt.X;
+                int dy = value.Y - pt.Y;
+                mPos.X += dx;
+                mPos.Y += dy;
+            }
+        }
+
+        public Point leftTop
+        {
+            get
+            {
+                return transform(rect.leftTop());
+            }
+            set
+            {
+                var pt = leftTop;
+                int dx = value.X - pt.X;
+                int dy = value.Y - pt.Y;
+                mPos.X += dx;
+                mPos.Y += dy;
+            }
+        }
+
+        public Point leftMiddle
+        {
+            get
+            {
+                return transform(rect.leftMiddle());
+            }
+            set
+            {
+                var pt = leftMiddle;
+                int dx = value.X - pt.X;
+                int dy = value.Y - pt.Y;
+                mPos.X += dx;
+                mPos.Y += dy;
+            }
+        }
+
+        public Point leftButtom
+        {
+            get
+            {
+                return transform(rect.leftButtom());
+            }
+            set
+            {
+                var pt = leftButtom;
+                int dx = value.X - pt.X;
+                int dy = value.Y - pt.Y;
+                mPos.X += dx;
+                mPos.Y += dy;
+            }
+        }
+
+        public Point rightTop
+        {
+            get
+            {
+                return transform(rect.rightTop());
+            }
+            set
+            {
+                var pt = rightTop;
+                int dx = value.X - pt.X;
+                int dy = value.Y - pt.Y;
+                mPos.X += dx;
+                mPos.Y += dy;
+            }
+        }
+
+        public Point rightMiddle
+        {
+            get
+            {
+                return transform(rect.rightMiddle());
+            }
+            set
+            {
+                var pt = rightMiddle;
+                int dx = value.X - pt.X;
+                int dy = value.Y - pt.Y;
+                mPos.X += dx;
+                mPos.Y += dy;
+            }
+        }
+
+        public Point rightButtom
+        {
+            get
+            {
+                return transform(rect.rightButtom());
+            }
+            set
+            {
+                var pt = rightButtom;
+                int dx = value.X - pt.X;
+                int dy = value.Y - pt.Y;
+                mPos.X += dx;
+                mPos.Y += dy;
+            }
+        }
+
+        public Point middleTop
+        {
+            get
+            {
+                return transform(rect.middleTop());
+            }
+            set
+            {
+                var pt = middleTop;
+                int dx = value.X - pt.X;
+                int dy = value.Y - pt.Y;
+                mPos.X += dx;
+                mPos.Y += dy;
+            }
+        }
+
+        public Point middleButtom
+        {
+            get
+            {
+                return transform(rect.middleButtom());
+            }
+            set
+            {
+                var pt = middleButtom;
+                int dx = value.X - pt.X;
+                int dy = value.Y - pt.Y;
+                mPos.X += dx;
+                mPos.Y += dy;
+            }
+        }
+
+        public void offset(int dx, int dy)
+        {
+            mPos.X += dx;
+            mPos.Y += dy;
+        }
+
         public Dictionary<string, object> attrs = new Dictionary<string,object>();
 
-        public bool bClip = false;
+        bool mClip = false;
+        public bool clip { get{return mClip;} set{mClip = value;} }
 
-        public bool bEnable = true;
+        bool mEnable = true;
+        public bool enable { get{return mEnable;} set{mEnable = value;} }
 
         public string name
         {
@@ -281,9 +468,9 @@ namespace ns_behaviour
             return false;
         }
 
-        public bool doTestPick(Point pos, out UIWidget ui)
+        public bool doTestPick(Point pos, out UIWidget ui, bool testEnable = true)
         {
-            if (!bEnable)
+            if (testEnable && !enable)
             {
                 ui = null;
                 return false;
@@ -306,7 +493,7 @@ namespace ns_behaviour
             foreach (UIWidget elem in children() )
             {
                 UIWidget picked = null;
-                if(elem.doTestPick(newpos, out picked) )
+                if (elem.doTestPick(newpos, out picked, testEnable))
                 {
                     uilist.Add(picked);
                 }
@@ -358,7 +545,7 @@ namespace ns_behaviour
                 return;
             var gs = g.Save();
             pushMatrix(g);
-            if (bClip)
+            if (clip)
             {
                 var r = rect;
                 GraphicsPath p = new GraphicsPath();
@@ -424,15 +611,19 @@ namespace ns_behaviour
         }
 
 
+
         Point moveStart;
         Point rcStart;
-
+        bool mBDragDown = false;
         bool onDragStart(UIWidget _this, int x, int y)
         {
+            if (mBDragDown) return true;
+            mBDragDown = true;
+
             _this.setDepthHead();
             var pt = new Point(x, y);
             
-            ParesentAbs2Local(ref pt);
+            pt = invertTransformParesentAbs(pt);
 
             moveStart = pt;
 
@@ -445,18 +636,31 @@ namespace ns_behaviour
 
         void onDragEnd(int x, int y)
         {
+            if (!mBDragDown) return;
+            mBDragDown = false;
             Globals.Instance.mPainter.evtMove -= this.onMove;
         }
 
         void onMove(int x, int y)
         {
             Point pt = new Point(x, y);
-            ParesentAbs2Local(ref pt);
+            pt = invertTransformParesentAbs(pt);
 
             px = rcStart.X + pt.X - moveStart.X;
             py = rcStart.Y + pt.Y - moveStart.Y;
         }
 
+        //utils
+        protected static int min(int a, int b) { if (a < b)return a; else return b; }
+        protected static int max(int a, int b) { if (a > b)return a; else return b; }
+        protected static Rectangle expandRect(Rectangle r1, Rectangle r2)
+        {
+            int left = min(r1.Left, r2.Left);
+            int top = min(r1.Top, r2.Top);
+            int right = max(r1.Right, r2.Right);
+            int buttom = max(r1.Bottom, r2.Bottom);
 
+            return new Rectangle(left, top, right - left, buttom - top);
+        }
     }
 }
