@@ -16,7 +16,14 @@ namespace ns_behaviour
 {
     class UIRoot : Singleton<UIRoot>
     {
-        public UIWidget mRoot;
+        UIWidget mRoot;
+        public UIWidget root
+        {
+            get
+            {
+                return mRoot;
+            }
+        }
 
         public UIRoot()
         {
@@ -29,37 +36,41 @@ namespace ns_behaviour
 
             Globals.Instance.mPainter.evtPaint += (g) =>
             {
-                UIRoot.Instance.draw(g);
+                Instance.draw(g);
             };
             Globals.Instance.mPainter.evtLeftDown += (x, y) =>
             {
-                UIRoot.Instance.testLMD(x, y);
+                Instance.testLMD(x, y);
             };
             Globals.Instance.mPainter.evtLeftUp += (x, y) =>
             {
-                UIRoot.Instance.testLMU(x, y);
+                Instance.testLMU(x, y);
             };
             Globals.Instance.mPainter.evtRightDown += (x, y) =>
             {
-                UIRoot.Instance.testRMD(x, y);
+                Instance.testRMD(x, y);
             };
             Globals.Instance.mPainter.evtRightUp += (x, y) =>
             {
-                UIRoot.Instance.testRMU(x, y);
+                Instance.testRMU(x, y);
             };
             Globals.Instance.mPainter.evtMidDown += (x, y) =>
             {
-                UIRoot.Instance.testMMD(x, y);
+                Instance.testMMD(x, y);
             };
             Globals.Instance.mPainter.evtMidUp += (x, y) =>
             {
-                UIRoot.Instance.testMMU(x, y);
+                testMMU(x, y);
+            };
+            Globals.Instance.mPainter.evtDClick += (x, y) =>
+            {
+                testDClick(x, y);
             };
         }
 
         public void draw(Graphics g)
         {
-            mRoot.doDraw(g);
+            root.doDraw(g);
         }
 
         void onKeyLock(int kc)
@@ -111,13 +122,13 @@ namespace ns_behaviour
             get
             {
                 object o;
-                bool ret = mRoot.attrs.TryGetValue("focus", out o);
+                bool ret = root.attrs.TryGetValue("focus", out o);
                 if (!ret) return null;
                 return o as UIWidget;
             }
             set
             {
-                mRoot.attrs["focus"] = value;
+                root.attrs["focus"] = value;
             }
         }
 
@@ -126,13 +137,13 @@ namespace ns_behaviour
             get
             {
                 object o;
-                bool ret = mRoot.attrs.TryGetValue("current", out o);
+                bool ret = root.attrs.TryGetValue("current", out o);
                 if (!ret) return null;
                 return o as UIWidget;
             }
             set
             {
-                mRoot.attrs["current"] = value;
+                root.attrs["current"] = value;
             }
         }
 
@@ -158,7 +169,7 @@ namespace ns_behaviour
             bool ret = true;
             uiout = focusWidget;
             if(uiout == null)
-                ret  = mRoot.doTestPick(new Point(x, y), out uiout);
+                ret  = root.doTestPick(new Point(x, y), out uiout);
             if (ret)
             {
                 currentWidget = uiout;
@@ -185,10 +196,8 @@ namespace ns_behaviour
         public void testLMD(int x, int y)
         {
             testUIEvent(x, y, (ui) =>
-            {
-                if(ui.evtOnLMDown != null)
-                    return (x1, y1) => { return ui.evtOnLMDown(ui, x1, y1); };
-                return null;
+            {   
+                return (x1, y1) => { return ui.doEvtOnLMDown(x1, y1); };
             });
         }
 
@@ -196,9 +205,7 @@ namespace ns_behaviour
         {
             testUIEvent(x, y, (ui) =>
             {
-                if (ui.evtOnLMUp != null)
-                    return (x1, y1) => { return ui.evtOnLMUp(ui, x1, y1); };
-                return null;
+               return (x1, y1) => { return ui.doEvtOnLMUp(x1, y1); };
             });
         }
 
@@ -206,9 +213,7 @@ namespace ns_behaviour
         {
             testUIEvent(x, y, (ui) =>
             {
-                if (ui.evtOnRMDown != null)
-                    return (x1, y1) => { return ui.evtOnRMDown(ui, x1, y1); };
-                return null;
+                return (x1, y1) => { return ui.doEvtOnRMDown(x1, y1); };
             });
         }
 
@@ -216,9 +221,7 @@ namespace ns_behaviour
         {
             testUIEvent(x, y, (ui) =>
             {
-                if (ui.evtOnRMUp != null)
-                    return (x1, y1) => { return ui.evtOnRMUp(ui, x1, y1); };
-                return null;
+                return (x1, y1) => { return ui.doEvtOnRMUp(x1, y1); };
             });
         }
 
@@ -226,9 +229,7 @@ namespace ns_behaviour
         {
             testUIEvent(x, y, (ui) =>
             {
-                if (ui.evtOnMMDown != null)
-                    return (x1, y1) => { return ui.evtOnMMDown(ui, x1, y1); };
-                return null;
+                return (x1, y1) => { return ui.doEvtOnMMDown(x1, y1); };
             });
         }
 
@@ -236,9 +237,15 @@ namespace ns_behaviour
         {
             testUIEvent(x, y, (ui) =>
             {
-                if (ui.evtOnMMUp != null)
-                    return (x1, y1) => { return ui.evtOnMMUp(ui, x1, y1); };
-                return null;
+                return (x1, y1) => { return ui.doEvtOnMMUp(x1, y1); };
+            });
+        }
+
+        public void testDClick(int x, int y)
+        {
+            testUIEvent(x, y, (ui) =>
+            {
+                return (x1, y1) => { return ui.doEvtOnDClick(x1, y1); };
             });
         }
     }

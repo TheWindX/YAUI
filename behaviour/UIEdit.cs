@@ -16,7 +16,7 @@ namespace ns_behaviour
             mMaxCharLength = maxCharLength;
             this.evtOnLMDown += onClick;
             mBackGround.mPos = new Point(-2, -2);
-            mBackGround.setParesent(this);
+            mBackGround.paresent = this;
             mBackGround.depth = -1;
             mBackGround.width = (maxCharLength+1) * 18/2+2;
         }
@@ -31,8 +31,8 @@ namespace ns_behaviour
 
         public bool onClick(UIWidget _this, int x, int y)
         {
-            Globals.Instance.mPainter.textEdit.show(true, x, y);
-            Globals.Instance.mPainter.textEdit.evtInputExit += (text) =>
+            InputForm.Instance.show(true, x, y);
+            InputForm.Instance.evtInputExit += (text) =>
                 {
                     if (mMaxCharLength < text.Length)
                         this.text = text.Substring(0, mMaxCharLength);

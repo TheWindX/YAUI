@@ -503,7 +503,7 @@ namespace ns_behaviour
         public void appendNode(UILineNode.EDIR dir, int length)
         {
             var node = new UILineNode(dir, length);
-            node.setParesent(this);
+            node.paresent = this;
             if (first == null)
             {
                 node.beginPos = mFrom;
@@ -580,7 +580,7 @@ namespace ns_behaviour
                 if (mStartRect == null)
                 {
                     mStartRect = new UIRect(4, 4, 0xffff0000);
-                    mStartRect.setParesent(this);
+                    mStartRect.paresent = this;
                     mStartRect.mPos = beginPos;
                     mStartRect.mPos.X -= 2;
                     mStartRect.mPos.Y -= 2;
@@ -590,15 +590,15 @@ namespace ns_behaviour
             {
                 if (mStartRect != null)
                 {
-                    mStartRect.setParesent(null);
+                    mStartRect.paresent = null;
                     mStartRect = null;
                 }
                 if (mBeginArrow == null)
                 {
                     mBeginArrow = new UIArrow(8, 8);
                     mEndArrow = new UIArrow(8, 8);
-                    mBeginArrow.setParesent(this);
-                    mEndArrow.setParesent(this);
+                    mBeginArrow.paresent = this;
+                    mEndArrow.paresent = this;
                 }
                 mBeginArrow.center = beginPos;
                 mBeginArrow.forward = mFirst.beginForward;
@@ -642,7 +642,7 @@ namespace ns_behaviour
                 if (mLinker == null) 
                 {
                     mLinker = new UILineLinker();
-                    mLinker.setParesent(mParesent);
+                    mLinker.paresent = mParesent;
                     mLinker.startFrom(pt);
                 }
                 else

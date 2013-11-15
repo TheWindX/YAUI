@@ -26,19 +26,19 @@ namespace ns_behaviour
 
         public void main1()
         {
-            UIRoot.Instance.mRoot.mPos = new Point(0, 0);
-
+            UIRoot.Instance.root.mPos = new Point(0, 0);
+            
             var edit = new UIEdit();
             edit.mPos = new Point(128, 128);
             var di1 = UIGSelfEnd.create(EForward.e_left);
             var di2 = UIGSelfEnd.create(EForward.e_right);
             var di3 = UIGSelfEnd.create(EForward.e_up);
             var di4 = UIGSelfEnd.create(EForward.e_down);
-            edit.setParesent(UIRoot.Instance.mRoot);
-            di1.setParesent(UIRoot.Instance.mRoot);
-            di2.setParesent(UIRoot.Instance.mRoot);
-            di3.setParesent(UIRoot.Instance.mRoot);
-            di4.setParesent(UIRoot.Instance.mRoot);
+            edit.paresent = UIRoot.Instance.root;
+            di1.paresent = UIRoot.Instance.root;
+            di2.paresent = UIRoot.Instance.root;
+            di3.paresent = UIRoot.Instance.root;
+            di4.paresent = UIRoot.Instance.root;
 
             di1.dragAble = true;
             di2.dragAble = true;
@@ -55,10 +55,13 @@ namespace ns_behaviour
 
         public void main()
         {
-            UIRoot.Instance.mRoot.mPos = new Point(0, 0);
+            UIRoot.Instance.root.mPos = new Point(0, 0);
+            UIRoot.Instance.root.dragAble = true;
+            UIRoot.Instance.root.scaleAble = true;
 
-            var v = model.Instance.mRootNs.viewSelf;
-            v.setParesent(UIRoot.Instance.mRoot);
+            var v = NamespaceModel.Instance.mRootNs.viewSelf;
+            v.paresent = UIRoot.Instance.root;
+            v.scaleAble = true;
         }
     }
 }

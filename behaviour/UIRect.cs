@@ -32,16 +32,31 @@ namespace ns_behaviour
             mPen = new Pen(Color.FromArgb((Int32)scolor));
         }
 
-        public void setFillColor(uint fill = 0xff888888)
+
+        public uint fillColor
         {
-            fcolor = fill;
-            mBrush = new SolidBrush(Color.FromArgb((Int32)fcolor));
+            get
+            {
+                return fcolor;
+            }
+            set
+            {
+                fcolor = value;
+                mBrush = new SolidBrush(Color.FromArgb((Int32)fcolor) );
+            }
         }
 
-        public void setStrokeColor(uint stroke = 0xff888888)
+        public uint strokeColor
         {
-            scolor = stroke;
-            mPen = new Pen(Color.FromArgb((Int32)scolor));
+            get
+            {
+                return scolor;
+            }
+            set
+            {
+                scolor = value;
+                mPen = new Pen(Color.FromArgb((Int32)scolor));
+            }
         }
 
         public int width

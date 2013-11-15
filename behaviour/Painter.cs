@@ -26,15 +26,7 @@ namespace ns_behaviour
         private System.ComponentModel.IContainer components;
 
         public PaintDriver mIns = null;
-        private InputForm mTextEdit;
-
-        public InputForm textEdit
-        {
-            get
-            {
-                return mTextEdit;
-            }
-        }
+        
 
         public PaintDriver()
         {
@@ -45,8 +37,6 @@ namespace ns_behaviour
         {
             this.components = new System.ComponentModel.Container();
             this.mTimer = new System.Windows.Forms.Timer(this.components);
-            this.mTextEdit = new ns_behaviour.InputForm();
-            
             this.SuspendLayout();
             // 
             // mTimer
@@ -54,18 +44,6 @@ namespace ns_behaviour
             this.mTimer.Enabled = true;
             this.mTimer.Interval = 10;
             this.mTimer.Tick += new System.EventHandler(this.onUpdate);
-            // 
-            // mTextEdit
-            // 
-            this.mTextEdit.BackColor = System.Drawing.Color.BlanchedAlmond;
-            this.mTextEdit.ClientSize = new System.Drawing.Size(433, 72);
-            this.mTextEdit.ControlBox = false;
-            this.mTextEdit.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.mTextEdit.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.mTextEdit.Location = new System.Drawing.Point(52, 52);
-            this.mTextEdit.Name = "mTestForm";
-            this.mTextEdit.TransparencyKey = System.Drawing.Color.BlanchedAlmond;
-            this.mTextEdit.Visible = false;
             // 
             // PaintDriver
             // 
@@ -76,6 +54,7 @@ namespace ns_behaviour
             this.Load += new System.EventHandler(this.onLoad);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PaintDriver_KeyDown);
+            this.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseDoubleClick);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.PaintDriver_MouseUp);
@@ -97,7 +76,7 @@ namespace ns_behaviour
         }
 
         public delegate void EvtInit();
-        public EvtInit evtInit;
+        public event EvtInit evtInit;
         void onLoad(object sender, EventArgs e)
         {
             this.SetStyle(ControlStyles.DoubleBuffer, true);
@@ -112,7 +91,7 @@ namespace ns_behaviour
         }
 
         public delegate void EvtUpdate();
-        public EvtUpdate evtUpdate;
+        public event EvtUpdate evtUpdate;
 
         private void onUpdate(object sender, EventArgs e)
         {
@@ -122,7 +101,7 @@ namespace ns_behaviour
         }
 
         public delegate void EvtPaint(Graphics g);
-        public EvtPaint evtPaint;
+        public event EvtPaint evtPaint;
         private void OnPaint(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(Color.Black);
@@ -132,9 +111,9 @@ namespace ns_behaviour
 
         public delegate void EvtMouse(int x, int y);
         
-        public EvtMouse evtLeftDown;
-        public EvtMouse evtRightDown;
-        public EvtMouse evtMidDown;
+        public event EvtMouse evtLeftDown;
+        public event EvtMouse evtRightDown;
+        public event EvtMouse evtMidDown;
         private void PaintDriver_MouseDown(object sender, MouseEventArgs e)
         {
             switch (e.Button)
@@ -156,9 +135,9 @@ namespace ns_behaviour
             }
         }
 
-        public EvtMouse evtLeftUp;
-        public EvtMouse evtRightUp;
-        public EvtMouse evtMidUp;
+        public event EvtMouse evtLeftUp;
+        public event EvtMouse evtRightUp;
+        public event EvtMouse evtMidUp;
         private void PaintDriver_MouseUp(object sender, MouseEventArgs e)
         {
             switch (e.Button)
@@ -180,7 +159,7 @@ namespace ns_behaviour
             }
         }
 
-        public EvtMouse evtMove;
+        public event EvtMouse evtMove;
         private void PaintDriver_MouseMove(object sender, MouseEventArgs e)
         {
             if (evtMove != null)
@@ -188,7 +167,7 @@ namespace ns_behaviour
         }
 
         public delegate void EvtOnKey(int kc);
-        public EvtOnKey evtOnKey;
+        public event EvtOnKey evtOnKey;
         private void PaintDriver_KeyDown(object sender, KeyEventArgs e)
         {
             if (evtOnKey != null)
@@ -199,12 +178,21 @@ namespace ns_behaviour
 
 
         public delegate void EvtOnWheel(int delta);
-        public EvtOnWheel evtOnWheel;
+        public event EvtOnWheel evtOnWheel;
         public void PaintDriver_MouseWheel(object sender, MouseEventArgs e)
         {
             if (evtOnWheel != null)
             {
                 evtOnWheel(e.Delta);
+            }
+        }
+
+        public event EvtMouse evtDClick;
+        private void PaintDriver_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (evtDClick != null)
+            {
+                evtDClick(e.X, e.Y);
             }
         }
     }

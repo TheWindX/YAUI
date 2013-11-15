@@ -9,16 +9,26 @@ using System.Drawing;
 
 namespace ns_behaviour
 {
+
     class Entity
     {
         protected Entity mParesent = null;
         protected List<Entity> mChildrent = new List<Entity>();//TODO, optims, 
 
-        public Entity paresent
+        public virtual Entity paresent
         {
             get
             {
                 return mParesent;
+            }
+            set
+            {
+                if (value == null)
+                {
+                    mParesent.deattach(this);
+                }
+                else
+                    value.attach(this);
             }
         }
 
@@ -46,16 +56,6 @@ namespace ns_behaviour
             
             mChildrent.Add(c);
             c.mParesent = this;
-        }
-
-        public virtual void setParesent(Entity c)
-        {
-            if(c == null)
-            {
-               mParesent.deattach(this);
-            }
-            else
-                c.attach(this);
         }
 
         public Point mPos = new Point(0, 0);

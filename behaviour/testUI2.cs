@@ -28,13 +28,13 @@ namespace ns_behaviour
 
         public void main()
         {
-            UIRoot.Instance.mRoot.mScalex = 2;
-            UIRoot.Instance.mRoot.mScaley = 2;
-            UIRoot.Instance.mRoot.px = 20;
-            UIRoot.Instance.mRoot.py = 20;
-            UIRoot.Instance.mRoot.dragAble = true;
+            UIRoot.Instance.root.mScalex = 2;
+            UIRoot.Instance.root.mScaley = 2;
+            UIRoot.Instance.root.px = 20;
+            UIRoot.Instance.root.py = 20;
+            UIRoot.Instance.root.dragAble = true;
             rc = new UIRect(128, 64, 0x88333333, 0x33333333);
-            rc.setParesent(UIRoot.Instance.mRoot);
+            rc.paresent = UIRoot.Instance.root;
             rc.clip = true;
             rc.px = 64;
             rc.py = 64;
@@ -43,22 +43,22 @@ namespace ns_behaviour
             rc1 = new UIRect(128, 64);
             rc1.mPos.X = -20;
             rc1.mPos.Y = -20;
-            rc1.setParesent(rc);
+            rc1.paresent = rc;
             rc1.dragAble = true;
             rc1.clip = true;
 
             var rc2 = new UIRect(64, 128);
-            rc2.setParesent(rc1);
+            rc2.paresent = rc1;
             rc2.dragAble = true;
 
             var t1 = new UILable("lable test");
             t1.dragAble = true;
-            t1.setParesent(rc1);
+            t1.paresent = rc1;
             t1.depth = -1;
 
 
             var tri = new UIArrow(32, 32);
-            tri.setParesent(rc);
+            tri.paresent = rc;
             tri.dragAble = true;
 
             Point orgPt = new Point();
@@ -67,7 +67,7 @@ namespace ns_behaviour
                 float sc = 1;
                 if (delta > 0) sc = 1.1f;
                 else sc = 0.9f;
-                UIRoot.Instance.mRoot.scalePoint(orgPt, sc);
+                UIRoot.Instance.root.scalePoint(orgPt, sc);
             };
 
             UIWidget.EvtMouse leftDown = (ui, x, y) =>
@@ -84,8 +84,8 @@ namespace ns_behaviour
             };
 
 
-            UIRoot.Instance.mRoot.evtOnLMDown += leftDown;
-            UIRoot.Instance.mRoot.evtOnLMUp += leftUp;
+            UIRoot.Instance.root.evtOnLMDown += leftDown;
+            UIRoot.Instance.root.evtOnLMUp += leftUp;
         }
     }
 }

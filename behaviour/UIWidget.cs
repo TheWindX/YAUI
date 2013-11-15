@@ -38,14 +38,14 @@ namespace ns_behaviour
                     var b1 = b as UIWidget;
                     if (a1.depth < b1.depth)
                     {
-                        return 1;
+                        return -1;
                     }
                     else if (a1.depth == b1.depth)
                     {
                         return 0;
                     }
                     else
-                        return -1;
+                        return 1;
                 });
 
                 for (int i = 0; i < (mParesent as UIWidget).mChildrent.Count(); ++i)
@@ -62,17 +62,26 @@ namespace ns_behaviour
             }
         }
 
-        public override void setParesent(Entity c)
+
+
+        public override Entity paresent
         {
-            base.setParesent(c);
-            sortSibling();
+            set
+            {
+                base.paresent = value;
+                if (value != null)
+                {
+                    setDepthHead();
+                }
+            }
         }
+
+
 
         void setDepthTail()
         {
-            var p = mParesent;
-            this.setParesent(null);
-            this.setParesent(p);
+            mDepth = mChildrent.Count + 1;
+            sortSibling();
         }
 
         void setDepthHead()
@@ -462,7 +471,6 @@ namespace ns_behaviour
         }
         //properties end
 
-
         public virtual bool testPick(Point pos)
         {
             return false;
@@ -489,32 +497,20 @@ namespace ns_behaviour
                 return false;
             }
 
-            List<UIWidget> uilist = new List<UIWidget>();
+            //List<UIWidget> uilist = new List<UIWidget>();
+            UIWidget picked = null;
             foreach (UIWidget elem in children() )
             {
-                UIWidget picked = null;
                 if (elem.doTestPick(newpos, out picked, testEnable))
                 {
-                    uilist.Add(picked);
+                    //uilist.Add(picked);
+                    break;
                 }
             }
-            uilist.Sort((a, b) =>
-                {
-                    if (a.mGlobalDepth < b.mGlobalDepth)
-                    {
-                        return 1;
-                    }
-                    else if (a.mGlobalDepth < b.mGlobalDepth)
-                    {
-                        return 0;
-                    }
-                    else
-                        return -1;
-                });
 
-            if (uilist.Count != 0)
+            if (picked != null)
             {
-                ui = uilist[0];
+                ui = picked;
                 return true;
             }
             else
@@ -532,13 +528,13 @@ namespace ns_behaviour
 
         IEnumerable<UIWidget> children()
         {
-            for (int i = mChildrent.Count-1; i >= 0; --i)
+            for (int i = 0; i < mChildrent.Count; ++i)
             {
                 yield return mChildrent[i] as UIWidget;
             }
         }
 
-        public static Font mDrawFont = new Font("Arial", 12, FontStyle.Bold);
+        //public static Font mDrawFont = new Font("Arial", 12, FontStyle.Bold);
         internal void doDraw(Graphics g)
         {
             if (!mVisiable)
@@ -558,8 +554,14 @@ namespace ns_behaviour
 
             foreach (Entity e in mChildrent)
             {
-                (e as UIWidget).doDraw(g);
+                
             }
+
+            for (int i = mChildrent.Count - 1; i >= 0; --i)
+            {
+                (mChildrent[i] as UIWidget).doDraw(g);
+            }
+
             //for text drawing            
 
             g.Restore(gs);
@@ -570,21 +572,114 @@ namespace ns_behaviour
 
 
         public delegate bool EvtMouse(UIWidget _this, int x, int y);
-
         public delegate bool EvtKeyboard(UIWidget _this, int kc);
 
-        public EvtMouse evtOnLMDown;
-        public EvtMouse evtOnLMUp;
-        public EvtMouse evtOnRMDown;
-        public EvtMouse evtOnRMUp;
-        public EvtMouse evtOnMMDown;
-        public EvtMouse evtOnMMUp;
-        public EvtMouse evtOnEnter;
-        public EvtMouse evtOnExit;
-        public EvtKeyboard evtOnChar;
+        public event EvtMouse evtOnLMDown;
+        public event EvtMouse evtOnLMUp;
+        public event EvtMouse evtOnRMDown;
+        public event EvtMouse evtOnRMUp;
+        public event EvtMouse evtOnMMDown;
+        public event EvtMouse evtOnMMUp;
+        public event EvtMouse evtOnEnter;
+        public event EvtMouse evtOnExit;
+        public event EvtMouse evtOnDClick;
+
+        public event EvtKeyboard evtOnChar;
+
+        public bool doEvtOnLMDown(int x, int y)
+		{
+            if (evtOnLMDown == null)
+            {
+                return true;
+            }
+            return evtOnLMDown(this, x, y);
+		}
+
+        public bool doEvtOnLMUp(int x, int y)
+		{
+            if (evtOnLMUp == null)
+            {
+                return true;
+            }
+            return evtOnLMUp(this, x, y);
+		}
+
+        public bool doEvtOnRMDown(int x, int y)
+		{
+            if (evtOnRMDown == null)
+            {
+                return true;
+            }
+            return evtOnRMDown(this, x, y);
+		}
+
+        public bool doEvtOnRMUp(int x, int y)
+		{
+            if (evtOnRMUp == null)
+            {
+                return true;
+            }
+            return evtOnRMUp(this, x, y);
+		}
+
+        public bool doEvtOnMMDown(int x, int y)
+		{
+            if (evtOnMMDown == null)
+            {
+                return true;
+            }
+            return evtOnMMDown(this, x, y);
+		}
+
+        public bool doEvtOnMMUp(int x, int y)
+		{
+            if (evtOnMMUp == null)
+            {
+                return true;
+            }
+            return evtOnMMUp(this, x, y);
+		}
+
+        public bool doEvtOnEnter(int x, int y)
+		{
+            if (evtOnEnter == null)
+            {
+                return true;
+            }
+            return evtOnEnter(this, x, y);
+		}
+
+        public bool doEvtOnExit(int x, int y)
+		{
+            if (evtOnExit == null)
+            {
+                return true;
+            }
+            return evtOnExit(this, x, y);
+		}
+
+        public bool doEvtOnChar(int kc)
+		{
+            if (evtOnChar == null)
+            {
+                return true;
+            }
+            return evtOnChar(this, kc);
+		}
+
+        public bool doEvtOnDClick(int x, int y)
+        {
+            if (evtOnDClick == null)
+            {
+                return true;
+            }
+            return evtOnDClick(this, x, y);
+        }
 
         //for test 
-
+        /// <summary>
+        /// dragable
+        /// </summary>
         bool mDragAble = false;
         public bool dragAble
         {
@@ -593,12 +688,12 @@ namespace ns_behaviour
                 mDragAble = value;
                 if (mDragAble)
                 {
-                    evtOnLMDown += onDragStart;
+                    evtOnLMDown += onDragBegin;
                     //evtOnLMUp += onDragEnd;
                 }
                 else
                 {
-                    evtOnLMDown -= onDragStart;
+                    evtOnLMDown -= onDragBegin;
                     onDragEnd(0, 0);
                 }
                 
@@ -610,46 +705,90 @@ namespace ns_behaviour
             }
         }
 
-
-
-        Point moveStart;
-        Point rcStart;
-        bool mBDragDown = false;
-        bool onDragStart(UIWidget _this, int x, int y)
+        Point mPtDragBegin;
+        Point mPosBegin;
+        void onDragMove(int x, int y)
         {
-            if (mBDragDown) return true;
-            mBDragDown = true;
+            var pt = invertTransformParesentAbs(new Point(x, y));
+            int dx = pt.X - mPtDragBegin.X;
+            int dy = pt.Y - mPtDragBegin.Y;
+            mPos.X = mPosBegin.X + dx;
+            mPos.Y = mPosBegin.Y + dy;
+        }
 
-            _this.setDepthHead();
-            var pt = new Point(x, y);
-            
-            pt = invertTransformParesentAbs(pt);
-
-            moveStart = pt;
-
-            rcStart = mPos;
-
-            Globals.Instance.mPainter.evtMove += this.onMove;
-            Globals.Instance.mPainter.evtLeftUp += this.onDragEnd;
+        bool onDragBegin(UIWidget _this, int x, int y)
+        {
+            mPosBegin = mPos;
+            mPtDragBegin = invertTransformParesentAbs(new Point(x, y));
+            Globals.Instance.mPainter.evtMove += onDragMove;
+            Globals.Instance.mPainter.evtLeftUp += onDragEnd;
             return false;
         }
 
         void onDragEnd(int x, int y)
         {
-            if (!mBDragDown) return;
-            mBDragDown = false;
-            Globals.Instance.mPainter.evtMove -= this.onMove;
+            Globals.Instance.mPainter.evtMove -= onDragMove;
+            Globals.Instance.mPainter.evtLeftUp -= onDragEnd;
         }
 
-        void onMove(int x, int y)
+        /// <summary>
+        /// dragable end
+        /// </summary>
+
+
+        /// <summary>
+        /// scaleAble begin
+        /// </summary>
+        bool mScaleAble = false;
+        public bool scaleAble
         {
-            Point pt = new Point(x, y);
-            pt = invertTransformParesentAbs(pt);
+            set
+            {
+                mScaleAble = value;
+                if (mScaleAble)
+                {
+                    evtOnLMDown += onScaleBegin;
+                    Globals.Instance.mPainter.evtLeftUp += onScaleEnd;
+                    //evtOnLMUp += onDragEnd;
+                }
+                else
+                {
+                    evtOnLMDown -= onScaleBegin;
+                    Globals.Instance.mPainter.evtLeftUp -= onScaleEnd;
+                    onScaleEnd(0, 0);
+                }
 
-            px = rcStart.X + pt.X - moveStart.X;
-            py = rcStart.Y + pt.Y - moveStart.Y;
+            }
+
+            get
+            {
+                return mDragAble;
+            }
+        }
+        Point mWheelScaleBegin;
+        void onScaleWheel(int delta)
+        {
+            float sc = 1;
+            if (delta > 0) sc = 1.1f;
+            else sc = 0.9f;
+            this.scalePoint(mWheelScaleBegin, sc);
         }
 
+        bool onScaleBegin(UIWidget ui, int x, int y)
+        {
+            mWheelScaleBegin = new Point(x, y);
+            Globals.Instance.mPainter.evtOnWheel += onScaleWheel;
+            return false;
+        }
+
+        void onScaleEnd(int x, int y)
+        {
+            Globals.Instance.mPainter.evtOnWheel -= onScaleWheel;
+        }
+        /// <summary>
+        /// scaleAble end
+        /// </summary>
+        
         //utils
         protected static int min(int a, int b) { if (a < b)return a; else return b; }
         protected static int max(int a, int b) { if (a > b)return a; else return b; }

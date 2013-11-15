@@ -27,7 +27,7 @@ namespace ns_behaviour
         CEditMoveFragment mMoveFrag;
         void main()
         {
-            var r = UIRoot.Instance.mRoot;
+            var r = UIRoot.Instance.root;
             mTester = new UILineLinker.cons(r);
 
             mCreate = new CEditCreate(this);
@@ -98,7 +98,7 @@ namespace ns_behaviour
                         mNodeSelect.adjustFromFrontToBothSide(newUiPos);
                     } );
 
-                Globals.Instance.mPainter.evtLeftUp = (px, py) =>
+                Globals.Instance.mPainter.evtLeftUp += (px, py) =>
                     {
                         Globals.Instance.mPainter.evtMove -= onMove;
                     };

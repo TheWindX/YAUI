@@ -13,10 +13,12 @@ namespace ns_behaviour
     {
         private TextBox mTextBox;
         private System.ComponentModel.IContainer components;
-        public InputForm()
+        InputForm()
         {
             InitializeComponent();
         }
+
+        public static InputForm Instance = new InputForm();
 
         void InitializeComponent()
         {
@@ -25,25 +27,28 @@ namespace ns_behaviour
             // 
             // mTextBox
             // 
+            this.mTextBox.BackColor = System.Drawing.Color.White;
             this.mTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.mTextBox.Font = new System.Drawing.Font("SimSun", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.mTextBox.Location = new System.Drawing.Point(12, 12);
+            this.mTextBox.Font = new System.Drawing.Font("SimSun", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.mTextBox.ForeColor = System.Drawing.SystemColors.ActiveBorder;
+            this.mTextBox.Location = new System.Drawing.Point(12, 13);
             this.mTextBox.Name = "mTextBox";
-            this.mTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.mTextBox.Size = new System.Drawing.Size(409, 28);
-            this.mTextBox.TabIndex = 0;
+            this.mTextBox.Size = new System.Drawing.Size(366, 25);
+            this.mTextBox.TabIndex = 1;
+            this.mTextBox.Text = "Template";
+            this.mTextBox.Click += new System.EventHandler(this.mTextBox_Click);
             this.mTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.mTextBox_KeyUp);
             // 
             // InputForm
             // 
-            this.BackColor = System.Drawing.Color.BlanchedAlmond;
-            this.ClientSize = new System.Drawing.Size(435, 55);
+            this.BackColor = System.Drawing.Color.Maroon;
+            this.ClientSize = new System.Drawing.Size(390, 52);
             this.ControlBox = false;
             this.Controls.Add(this.mTextBox);
             this.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "InputForm";
-            this.TransparencyKey = this.BackColor;
+            this.TransparencyKey = System.Drawing.Color.Maroon;
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SimpleCustomControl_Paint);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -57,11 +62,7 @@ namespace ns_behaviour
             Pen greenPen = new Pen(Color.FromArgb(255, 200, 200, 200), 10);
             greenPen.Alignment = PenAlignment.Center;
 
-
-
             g.DrawRectangle(greenPen, ClientRectangle);
-            //g.FillRectangle(Brushes.Yellow, ClientRectangle);
-            
         }
 
         private void mTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -76,12 +77,23 @@ namespace ns_behaviour
             }
         }
 
+        string mTintText = "Template";
+        public string tintText
+        {
+            set
+            {
+                mTintText = value;
+            }
+        }
+
         public void show(bool bShow, int x = 0, int y = 0)
         {
             if (bShow)
             {
                 this.TopMost = true;
-                mTextBox.Text = "";
+                mTextBox.Text = mTintText;
+                uint c1 = 0x888888;
+                mTextBox.ForeColor = Color.FromArgb((Int32)c1);
                 this.Visible = true;
                 this.Location = Globals.Instance.mPainter.PointToScreen(new Point(x, y));
                 if (evtInputEnter != null)
@@ -96,6 +108,8 @@ namespace ns_behaviour
             }
         }
 
+
+
         public void clear()
         {
             mTextBox.Text = "";
@@ -103,6 +117,13 @@ namespace ns_behaviour
 
         public Action evtInputEnter = null;
         public Action<string> evtInputExit = null;
+
+        private void mTextBox_Click(object sender, EventArgs e)
+        {
+            uint c1 = 0xffffffff;
+            mTextBox.Text = "";
+            mTextBox.ForeColor = Color.FromArgb((Int32)c1);
+        }
 
     }
 }

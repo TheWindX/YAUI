@@ -64,12 +64,12 @@ namespace ns_behaviour
         public void main()
         {
             UIRoot.Instance.lockable = true;
-            UIRoot.Instance.mRoot.mScalex = 4;
-            UIRoot.Instance.mRoot.mScaley = 4;
-            UIRoot.Instance.mRoot.px = 20;
-            UIRoot.Instance.mRoot.py = 20;
+            UIRoot.Instance.root.mScalex = 4;
+            UIRoot.Instance.root.mScaley = 4;
+            UIRoot.Instance.root.px = 20;
+            UIRoot.Instance.root.py = 20;
             rc = new UIRect(128, 64);
-            rc.setParesent(UIRoot.Instance.mRoot);
+            rc.paresent = UIRoot.Instance.root;
 
             rc.evtOnLMDown += onDragStart;
             rc.evtOnLMUp += onDragEnd;
@@ -81,7 +81,7 @@ namespace ns_behaviour
                     float sc = 1;
                     if(delta>0) sc = 1.1f;
                     else sc = 0.9f;
-                    UIRoot.Instance.mRoot.scalePoint(orgPt, sc);
+                    UIRoot.Instance.root.scalePoint(orgPt, sc);
                 };
 
             UIWidget.EvtMouse leftDown = (ui, x, y) =>
@@ -98,8 +98,8 @@ namespace ns_behaviour
             };
 
 
-            UIRoot.Instance.mRoot.evtOnLMDown += leftDown;
-            UIRoot.Instance.mRoot.evtOnLMUp += leftUp;
+            UIRoot.Instance.root.evtOnLMDown += leftDown;
+            UIRoot.Instance.root.evtOnLMUp += leftUp;
         }
     }
 }

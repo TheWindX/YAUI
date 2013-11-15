@@ -94,8 +94,8 @@ namespace ns_behaviour
             }
 
             
-            mRect.setParesent(this);
-            mArrow.setParesent(this);
+            mRect.paresent = this;
+            mArrow.paresent = this;
             mRect.enable = false;
             mArrow.enable = false;
         }
@@ -241,7 +241,7 @@ namespace ns_behaviour
         public UIGBehviour():base(128, 64)
         {
             mName = new UILable("Template");
-            mName.setParesent(this);
+            mName.paresent = this;
         }
     }
 
