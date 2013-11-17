@@ -5,6 +5,7 @@
  * */
 
 using System;
+using System.Xml;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,8 +31,61 @@ namespace ns_behaviour
             Globals.Instance.evtOnInit += init;
         }
 
+        //xml
+        public delegate XmlNodeList funcFromXML(XmlNode nd, out UIWidget ui, UIWidget p);
+
+        static Dictionary<string, funcFromXML> mXML2widget = new Dictionary<string, funcFromXML>();
+
+        public static void regMethodFromXML(string tag, funcFromXML method)
+        {
+            mXML2widget.Add(tag, method);
+        }
+
+        void XMLinit()
+        {
+            regMethodFromXML("stub", UIStub.fromXML);
+            regMethodFromXML("rect", UIRect.fromXML);
+            regMethodFromXML("lable", UILable.fromXML);
+            regMethodFromXML("edit", UIEdit.fromXML);
+        }
+
+        UIWidget loadFromXMLNode(XmlNode node, UIWidget p)
+        {
+            UIWidget uiret = null;
+            funcFromXML fromxmlFunc = null;
+            if(mXML2widget.TryGetValue(node.Name, out fromxmlFunc) )
+            {
+                var uichildren = fromxmlFunc(node, out uiret, p);
+                foreach (XmlNode elem in uichildren)
+                {
+                    var uichild = loadFromXMLNode(elem, uiret);
+                    if (uichild != null)
+                    {
+                        uichild.paresent = uiret;
+                    }
+                }
+            }
+            return uiret;
+        }
+
+        public UIWidget loadFromXML(string xml)
+        {
+            UIWidget ret = null;
+            try
+            {
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(xml);
+                var node = doc.ChildNodes[0];
+                ret = loadFromXMLNode(node, null);
+            }
+            catch (Exception e){ Globals.Instance.mRepl.print(e.ToString() ); }
+            return ret;
+        }
+
         void init()
         {
+            XMLinit();
+
             mRoot = new UIStub();
 
             Globals.Instance.mPainter.evtPaint += (g) =>

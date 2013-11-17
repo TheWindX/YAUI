@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace ns_behaviour
 {
@@ -85,6 +86,28 @@ namespace ns_behaviour
             //mRect.Width = (int)td.Width;
             //mRect.Height = (int)td.Height;
             g.DrawString(mText, mFont, mBrush, new PointF());
+        }
+
+        public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
+        {
+            string text = "template";
+            int size = 12;
+            uint color = 0xffffffff;
+
+            var ret = node.Attributes.GetNamedItem("text");
+            if (ret != null) text = ret.Value;
+
+            ret = node.Attributes.GetNamedItem("size");
+            if (ret != null) size = ret.Value.castInt(12);
+
+            ret = node.Attributes.GetNamedItem("color");
+            if (ret != null) color = ret.Value.castHex(0xffffffff);
+
+            ui = new UILable(text, size, color);
+            ui.paresent = p;
+            ui.fromXML(node);
+
+            return node.ChildNodes;
         }
     }
 }

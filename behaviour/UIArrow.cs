@@ -121,12 +121,12 @@ namespace ns_behaviour
         {
             get
             {
-                return new Point(mPos.X + _w / 2, mPos.Y + _h / 2);
+                return new Point(position.X + _w / 2, position.Y + _h / 2);
             }
             set
             {
-                mPos.X = value.X - _w / 2;
-                mPos.Y = value.Y - _h / 2;
+                position.X = value.X - _w / 2;
+                position.Y = value.Y - _h / 2;
             }
         }
 

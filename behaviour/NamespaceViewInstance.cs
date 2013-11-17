@@ -13,63 +13,46 @@ namespace ns_behaviour
         void unselect();
     }
 
-    class NamespaceViewInstance : UIRect, iVieweInstance
+    class NamespaceViewInstance : UIStub, iVieweInstance
     {
-        public UIRect mLayer1;
-        public UIRect mLayer2;
+        const string xmllayout = @"
+<stub name=""root"">
+    <rect width=""96"" height=""64"" 
+        offsetx=""4"" offsety=""4""
+        stokeColor=""0xffffffff"" fillColor=""0xffdeb887""> </rect>
+    <rect width=""96"" height=""64"" 
+        offsetx=""2"" offsety=""2""
+        stokeColor=""0xffffffff"" fillColor=""0xffdeb887""> </rect>
+    <rect name=""main"" width=""96"" height=""64"" 
+        stokeColor=""0xffffffff"" fillColor=""0xffdeb887"">
+        <rect width=""18"" height=""18"" offsetx=""4"" offsety=""4"">
+            <lable text=""NS""
+                size=""8""
+                color=""0xff00ff00""
+                align=""center"" alignParesent=""center"">
+            </lable>
+        </rect>
+        <lable name=""text""> </lable>
+    </rect>
+</stub>";
 
-        public UIRect mAccesory1;
-        //public UILine mAccesory2;
-        public UILable mType;
-        public UILable mLable;
-        public MNamespace mModel;
-
-        const string mTag = "NS";
-
-        const int mWidth = 96;
-        const int mHeight = 64;
-
-        const uint mStanderdColor = 0xffdeb887;
-        const uint mSelectColor = 0xffadff2f;
+        MNamespace mModel;
 
         public NamespaceViewInstance(MNamespace self)
-            : base(mWidth, mHeight, 0xffffffff, mStanderdColor)
         {
             mModel = self;
+            var root = UIRoot.Instance.loadFromXML(xmllayout);
+            if (mModel != null)
+            {
+                var lb = (root.childOfPath("main/text") as UILable);
+                lb.text = mModel.name;
+                lb.alignParesent(EAlign.center, EAlign.center);
+            }
 
-            mLayer1 = new UIRect(mWidth, mHeight, 0xffffffff, mStanderdColor);
-            mLayer1.enable = false;
-            mLayer1.paresent = this;
-            mLayer1.mPos.Offset(-2, -2);
-
-            mLayer2 = new UIRect(mWidth, mHeight, 0xffffffff, mStanderdColor);
-            mLayer2.enable = false;
-            mLayer2.paresent = mLayer1;
-            mLayer2.mPos.Offset(-2, -2);
-
-            mAccesory1 = new UIRect(18, 18);
-            mAccesory1.enable = false;
-            mAccesory1.paresent = this;
-
-            //mAccesory2 = new UILine((int)(24 * 1.414f), 1);
-            //mAccesory2.enable = false;
-            //mAccesory2.paresent = this;
-            //mAccesory2.mDir = -45;
-            //mAccesory2.leftTop = mAccesory1.leftButtom;
-
-            mType = new UILable(mTag, 8, 0xff00ff00);
-            mType.enable = false;
-            mType.paresent = this;
-            mType.center = mAccesory1.center;
-
-            mLable = new UILable(mModel.name, 12, 0xffffffff);
-            mLable.enable = false;
-            mLable.paresent = this;
-
-            adjust();
-
-            dragAble = true;
-
+            root.paresent = this;
+            this.dragAble = true;
+            this.clip = true;
+            
             evtOnLMDown += (ui, x, y) =>
                 {
                     if (mParesent != null && mParesent is NamespaceViewSelf)
@@ -87,24 +70,19 @@ namespace ns_behaviour
                 };
         }
 
+        const uint mStanderdColor = 0xffdeb887;
+        const uint mSelectColor = 0xffadff2f;
         public void select()
         {
-            this.fillColor = mSelectColor;
-            mLayer1.fillColor = mSelectColor;
-            mLayer2.fillColor = mSelectColor;
+            (this.childOfPath("root/main") as UIRect).fillColor = mSelectColor;
         }
 
         public void unselect()
         {
-            this.fillColor = mStanderdColor;
-            mLayer1.fillColor = mStanderdColor;
-            mLayer2.fillColor = mStanderdColor;
+            (this.childOfPath("root/main") as UIRect).fillColor = mStanderdColor;
         }
 
-        void adjust()
-        {
-            mLable.center = invertTransform(this.center);
-        }
+
     }
 
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Xml;
 
 namespace ns_behaviour
 {
@@ -15,7 +16,7 @@ namespace ns_behaviour
         {
             mMaxCharLength = maxCharLength;
             this.evtOnLMDown += onClick;
-            mBackGround.mPos = new Point(-2, -2);
+            mBackGround.position = new Point(-2, -2);
             mBackGround.paresent = this;
             mBackGround.depth = -1;
             mBackGround.width = (maxCharLength+1) * 18/2+2;
@@ -40,6 +41,27 @@ namespace ns_behaviour
                         this.text = text;
                 };
             return true;
+        }
+
+        public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
+        {
+            string text = "";
+            int length = 16;
+            uint color = 0xffffffff;
+            var ret = node.Attributes.GetNamedItem("text");
+            if (ret != null) text = ret.Value;
+
+            ret = node.Attributes.GetNamedItem("length");
+            if (ret != null) length = ret.Value.castInt(12);
+
+            ret = node.Attributes.GetNamedItem("color");
+            if (ret != null) color = ret.Value.castHex(0xffffffff);
+
+            ui = new UIEdit(text, length, color);
+            ui.paresent = p;
+            ui.fromXML(node);
+
+            return node.ChildNodes;
         }
     }
 }

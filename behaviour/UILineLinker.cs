@@ -190,7 +190,7 @@ namespace ns_behaviour
         Point mPosBack = mInvalidPt;
         internal void savePos()
         {
-            mPosBack = mPos;
+            mPosBack = position;
         }
 
         internal bool restorePos()
@@ -198,7 +198,7 @@ namespace ns_behaviour
             return true;
             if (mPosBack != mInvalidPt)
             {
-                mPos = mPosBack;
+                position = mPosBack;
                 mPosBack = mInvalidPt;
                 return true;
             }
@@ -224,11 +224,11 @@ namespace ns_behaviour
         {
             get
             {
-                return mPos;
+                return position;
             }
             set
             {
-                mPos = value;
+                position = value;
             }
         }
 
@@ -238,11 +238,11 @@ namespace ns_behaviour
             {
                 if (mDir == EDIR.e_hor)
                 {
-                    return new Point(mPos.X + mLength, mPos.Y);
+                    return new Point(position.X + mLength, position.Y);
                 }
                 else //if(mDir == EDIR.e_ver)
                 {
-                    return new Point(mPos.X, mPos.Y + mLength);
+                    return new Point(position.X, position.Y + mLength);
                 }
             }
             set
@@ -250,7 +250,7 @@ namespace ns_behaviour
                 var tp = endPos;
                 int dx = value.X - tp.X;
                 int dy = value.Y - tp.Y;
-                mPos = new Point(mPos.X + dx, mPos.Y + dy);
+                position = new Point(position.X + dx, position.Y + dy);
             }
         }
 
@@ -270,7 +270,7 @@ namespace ns_behaviour
                 if (dy == 0) return true;
                 //else if (mNext == null)
                 //{
-                //    mPos.Y += dy;
+                //    position.Y += dy;
                 //    if(mPre != null)
                 //        mPre.adjustFromEndStable(beginPos);
                 //}
@@ -284,7 +284,7 @@ namespace ns_behaviour
                 if (dx == 0) return true;
                 //else if (mNext == null)
                 //{
-                //    mPos.X += dx;
+                //    position.X += dx;
                 //    if (mPre != null)
                 //        mPre.adjustFromEndStable(beginPos);
                 //}
@@ -305,12 +305,12 @@ namespace ns_behaviour
                 int dx = hpos.X - hPos1.X;
                 int dy = hpos.Y - hPos1.Y;
 
-                mPos.X += dx;
+                position.X += dx;
                 mLength -= dx;
                 if (dy == 0) return true;
                 //else if (mPre == null)
                 //{
-                //    mPos.Y += dy;
+                //    position.Y += dy;
                 //    if (mNext != null)
                 //        mNext.adjustFromFrontStable(endPos);
                 //}
@@ -320,7 +320,7 @@ namespace ns_behaviour
                 int dx = hpos.X - hPos1.X;
                 int dy = hpos.Y - hPos1.Y;
 
-                mPos.Y += dy;
+                position.Y += dy;
                 mLength -= dy;
                 if (dx == 0)
                 {
@@ -328,7 +328,7 @@ namespace ns_behaviour
                 }
                 //else if (mPre == null)
                 //{
-                //    mPos.X += dx;
+                //    position.X += dx;
                 //    if (mNext != null)
                 //        mNext.adjustFromFrontStable(endPos);
                 //}
@@ -384,11 +384,11 @@ namespace ns_behaviour
             //{
             //    if (mDir == EDIR.e_hor)
             //    {
-            //        pt.X = mPos.X;
+            //        pt.X = position.X;
             //    }
             //    else if (mDir == EDIR.e_ver)
             //    {
-            //        pt.Y = mPos.Y;
+            //        pt.Y = position.Y;
             //    }   
             //}
 
@@ -549,12 +549,12 @@ namespace ns_behaviour
                     {
                         init = true;
                         ret = elem.rect;
-                        ret.Offset(elem.mPos);
+                        ret.Offset(elem.position);
                     }
                     else
                     {
                         var elemRc = elem.rect;
-                        elemRc.Offset(elem.mPos);
+                        elemRc.Offset(elem.position);
                         ret = expandRect(ret, elemRc);
                     }
                 }
@@ -581,9 +581,9 @@ namespace ns_behaviour
                 {
                     mStartRect = new UIRect(4, 4, 0xffff0000);
                     mStartRect.paresent = this;
-                    mStartRect.mPos = beginPos;
-                    mStartRect.mPos.X -= 2;
-                    mStartRect.mPos.Y -= 2;
+                    mStartRect.position = beginPos;
+                    mStartRect.position.X -= 2;
+                    mStartRect.position.Y -= 2;
                 }
             }
             else
@@ -620,8 +620,8 @@ namespace ns_behaviour
             public void tryLineTo(Point pt)
             {
                 pt = mParesent.invertTransformAbs(pt);
-                int dx = pt.X - mLinker.last.mPos.X;
-                int dy = pt.Y - mLinker.last.mPos.Y;
+                int dx = pt.X - mLinker.last.position.X;
+                int dy = pt.Y - mLinker.last.position.Y;
 
                 if (Math.Abs(dy) > Math.Abs(dx))
                 {

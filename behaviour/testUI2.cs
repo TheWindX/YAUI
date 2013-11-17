@@ -41,8 +41,8 @@ namespace ns_behaviour
             rc.enable = true;
 
             rc1 = new UIRect(128, 64);
-            rc1.mPos.X = -20;
-            rc1.mPos.Y = -20;
+            rc1.position.X = -20;
+            rc1.position.Y = -20;
             rc1.paresent = rc;
             rc1.dragAble = true;
             rc1.clip = true;

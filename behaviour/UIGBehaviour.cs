@@ -61,7 +61,7 @@ namespace ns_behaviour
                     {
                         mRect.width = rectLen;
                         mArrow.width = arrowLen;
-                        mArrow.mPos.X -= arrowLen;
+                        mArrow.position.X -= arrowLen;
                         mArrow.forward = EForward.e_left;
                         break;
                     };
@@ -69,7 +69,7 @@ namespace ns_behaviour
                     {
                         mRect.width = rectLen;
                         mArrow.width = arrowLen;
-                        mArrow.mPos.X += rectLen;
+                        mArrow.position.X += rectLen;
                         mArrow.forward = EForward.e_right;
                         break;
                     };
@@ -77,7 +77,7 @@ namespace ns_behaviour
                     {
                         mRect.height = rectLen;
                         mArrow.height = arrowLen;
-                        mArrow.mPos.Y -= arrowLen;
+                        mArrow.position.Y -= arrowLen;
                         mArrow.forward = EForward.e_up;
                         break;
                     };
@@ -85,7 +85,7 @@ namespace ns_behaviour
                     {
                         mRect.height = rectLen;
                         mArrow.height = arrowLen;
-                        mArrow.mPos.Y += rectLen;
+                        mArrow.position.Y += rectLen;
                         mArrow.forward = EForward.e_down;
                         break;
                     };
@@ -157,8 +157,8 @@ namespace ns_behaviour
             {
                 var pos = basePos;
                 Point dpt = new Point(pos.X - value.X, pos.Y - value.Y);
-                mPos.X -= dpt.X;
-                mPos.Y -= dpt.Y;
+                position.X -= dpt.X;
+                position.Y -= dpt.Y;
             }
         }
     }

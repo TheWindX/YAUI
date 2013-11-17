@@ -25,7 +25,8 @@ namespace ns_behaviour
             {
                 if (value == null)
                 {
-                    mParesent.deattach(this);
+                    if(mParesent != null)
+                        mParesent.deattach(this);
                 }
                 else
                     value.attach(this);
@@ -58,7 +59,7 @@ namespace ns_behaviour
             c.mParesent = this;
         }
 
-        public Point mPos = new Point(0, 0);
+        public Point position = new Point(0, 0);
         public float mDir = 0;//0~360
         public float mScalex = 1;
         public float mScaley = 1;
@@ -71,7 +72,7 @@ namespace ns_behaviour
 
             var pos = transform(pt);
             var offset = new Point(pos.X - center.X,  pos.Y - center.Y);
-            mPos = new Point(mPos.X-offset.X, mPos.Y-offset.Y);
+            position = new Point(position.X-offset.X, position.Y-offset.Y);
         }
 
         public Point transform(Point pt)
@@ -95,7 +96,7 @@ namespace ns_behaviour
             Matrix m = new Matrix();
             if(mParesent != null)
                 m = mParesent.getAbsMatrix().Clone();
-            m.Translate(mPos.X, mPos.Y);
+            m.Translate(position.X, position.Y);
             m.Rotate(mDir);
             m.Scale(mScalex, mScaley);
             return m;
@@ -148,7 +149,7 @@ namespace ns_behaviour
         public Matrix getLocalMatrix()
         {
             Matrix m = new Matrix();
-            m.Translate(mPos.X, mPos.Y);
+            m.Translate(position.X, position.Y);
             m.Rotate(mDir);
             m.Scale(mScalex, mScaley);
             return m;

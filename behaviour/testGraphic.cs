@@ -26,10 +26,10 @@ namespace ns_behaviour
 
         public void main1()
         {
-            UIRoot.Instance.root.mPos = new Point(0, 0);
+            UIRoot.Instance.root.position = new Point(0, 0);
             
             var edit = new UIEdit();
-            edit.mPos = new Point(128, 128);
+            edit.position = new Point(128, 128);
             var di1 = UIGSelfEnd.create(EForward.e_left);
             var di2 = UIGSelfEnd.create(EForward.e_right);
             var di3 = UIGSelfEnd.create(EForward.e_up);
@@ -55,7 +55,7 @@ namespace ns_behaviour
 
         public void main()
         {
-            UIRoot.Instance.root.mPos = new Point(0, 0);
+            UIRoot.Instance.root.position = new Point(0, 0);
             UIRoot.Instance.root.dragAble = true;
             UIRoot.Instance.root.scaleAble = true;
 

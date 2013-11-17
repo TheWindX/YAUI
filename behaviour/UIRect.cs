@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Xml;
 
 namespace ns_behaviour
 {
@@ -107,6 +108,44 @@ namespace ns_behaviour
             p.AddRectangle(new Rectangle(0, 0, _w, _h));
             g.FillPath(mBrush, p);
             g.DrawPath(mPen, p);
+        }
+
+        public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
+        {
+            int w = 64;
+            int h = 64;
+            uint fc = 0xffaaaaaa;
+            uint sc = 0xffffffff;
+
+            var ret = node.Attributes.GetNamedItem("width");
+            if (ret != null)
+            {
+                w = ret.Value.castInt();
+            }
+
+            ret = node.Attributes.GetNamedItem("height");
+            if (ret != null)
+            {
+                h = ret.Value.castInt();
+            }
+
+            ret = node.Attributes.GetNamedItem("strokeColor");
+            if (ret != null)
+            {
+                sc = ret.Value.castHex(0xffffffff);
+            }
+
+            ret = node.Attributes.GetNamedItem("fillColor");
+            if (ret != null)
+            {
+                fc = ret.Value.castHex(0xff888888);
+            }
+
+            ui = new UIRect(w, h, sc, fc);
+            ui.paresent = p;
+            ui.fromXML(node);
+
+            return node.ChildNodes;
         }
     }
 }

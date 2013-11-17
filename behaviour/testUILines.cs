@@ -88,7 +88,7 @@ namespace ns_behaviour
             {
                 var orgMPos = new Point(x, y);
                 mNodeSelect = ui as UILineNode;
-                Point orgUiPos = mNodeSelect.mPos;
+                Point orgUiPos = mNodeSelect.position;
 
                 var onMove = new PaintDriver.EvtMouse( (px, py) =>
                     {
