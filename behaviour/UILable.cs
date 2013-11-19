@@ -59,10 +59,11 @@ namespace ns_behaviour
                 mText = value;
                 var fontsz = TextRenderer.MeasureText(mText, mFont);
                 mRect = new Rectangle(new Point(0, 0), fontsz);
+                adjust();
             }
         }
 
-        public override Rectangle rect
+        public override Rectangle drawRect
         {
             get
             {
@@ -104,8 +105,8 @@ namespace ns_behaviour
             if (ret != null) color = ret.Value.castHex(0xffffffff);
 
             ui = new UILable(text, size, color);
-            ui.paresent = p;
             ui.fromXML(node);
+            ui.paresent = p;
 
             return node.ChildNodes;
         }

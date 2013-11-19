@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Xml;
+
 
 namespace ns_behaviour
 {
@@ -54,14 +56,14 @@ namespace ns_behaviour
             }
         }
 
-        public override Rectangle rect
+        public override Rectangle drawRect
         {
             get
             {
                 if(mHorizen)
-                    return new Rectangle(0, 0, _length, _lineWidth);
+                    return new Rectangle(0, -_lineWidth, _length, _lineWidth*2);
                 else
-                    return new Rectangle(0, 0, _lineWidth, _length);
+                    return new Rectangle(-_lineWidth, 0, _lineWidth*2, _length);
             }
         }
 
@@ -78,8 +80,33 @@ namespace ns_behaviour
         internal override void onDraw(Graphics g)
         {
             GraphicsPath p = new GraphicsPath();
-            p.AddRectangle(rect);
+            p.AddRectangle(drawRect);
             g.FillPath(mBrush, p);
+        }
+
+        public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
+        {
+            int length = 16;
+            uint color = 0xffffffff;
+            int lineWidth = 2;
+            bool horizen = true;
+            var ret = node.Attributes.GetNamedItem("length");
+            if (ret != null) length = ret.Value.castInt(16);
+
+            ret = node.Attributes.GetNamedItem("line_width");
+            if (ret != null) lineWidth = ret.Value.castInt(12);
+
+            ret = node.Attributes.GetNamedItem("color");
+            if (ret != null) color = ret.Value.castHex(0xffffffff);
+
+            ret = node.Attributes.GetNamedItem("horizen");
+            if (ret != null) horizen = ret.Value.castBool(true);
+
+            ui = new UILine(length, lineWidth, color, horizen);
+            ui.fromXML(node);
+            ui.paresent = p;
+
+            return node.ChildNodes;
         }
     }
 }

@@ -22,11 +22,8 @@ namespace ns_behaviour
 
         public void main()
         {
-            Globals.Instance.mPainter.setSize(1024, 1024);
-            Globals.Instance.mPainter.evtLeftDown += (x, y) =>
-            {
-                Globals.Instance.mRepl.print("position:" + x + ", " + y);
-            };
+            UIRoot.Instance.root.appendFromXML(@"<rect dragAble=""true""></rect>");
+            UIRoot.Instance.root.appendFromXML(@"<rect dragAble=""true""></rect>");
         }
 
 

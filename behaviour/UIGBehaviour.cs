@@ -12,17 +12,17 @@ namespace ns_behaviour
         UIRect mRect;
         UIArrow mArrow;
         
-        public override Rectangle rect
+        public override Rectangle drawRect
         {
             get
             {
-                var rtl = new Point(mRect.rect.Top, mRect.rect.Left);
+                var rtl = new Point(mRect.drawRect.Top, mRect.drawRect.Left);
                 rtl = mRect.transform(rtl);
-                var rrb = new Point(mRect.rect.Right, mRect.rect.Bottom);
+                var rrb = new Point(mRect.drawRect.Right, mRect.drawRect.Bottom);
                 rrb = mRect.transform(rrb);
-                var atl = new Point(mArrow.rect.Top, mArrow.rect.Left);
+                var atl = new Point(mArrow.drawRect.Top, mArrow.drawRect.Left);
                 atl = mArrow.transform(atl);
-                var arb = new Point(mArrow.rect.Right, mArrow.rect.Bottom);
+                var arb = new Point(mArrow.drawRect.Right, mArrow.drawRect.Bottom);
                 arb = mArrow.transform(arb);
                 
                 Rectangle rn = new Rectangle(rtl, new Size(rrb.X-rtl.X, rrb.Y-rtl.Y) );

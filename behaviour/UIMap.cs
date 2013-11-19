@@ -1,8 +1,4 @@
-﻿/*
- * author: xiaofeng.li
- * mail: 453588006@qq.com
- * desc: 
- * */
+﻿
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +11,7 @@ using System.Xml;
 
 namespace ns_behaviour
 {
-    class UIStub : UIWidget
+    class UIMap : UIWidget
     {
         public override Rectangle drawRect
         {
@@ -40,9 +36,17 @@ namespace ns_behaviour
             }
         }
 
+        public override Rectangle pickRect
+        {
+            get
+            {
+                return new Rectangle(-1000000, -1000000, 2000000, 2000000);
+            }
+        }
+
         public override string typeName
         {
-            get { return "stub"; }
+            get { return "map"; }
         }
 
         public override bool testPick(Point pos)
@@ -57,10 +61,11 @@ namespace ns_behaviour
 
         public static XmlNodeList fromXML(XmlNode nd, out UIWidget ui, UIWidget p)
         {
-            ui = new UIStub();
+            ui = new UIMap();
             ui.fromXML(nd);
             ui.paresent = p;
             return nd.ChildNodes;
         }
     }
 }
+

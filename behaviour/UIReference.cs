@@ -16,7 +16,7 @@
 //            mRef = reference;
 //        }
 
-//        public override Rectangle rect
+//        public override Rectangle drawRect
 //        {
 //            get
 //            {
@@ -28,7 +28,7 @@
 
 //        public override string typeName
 //        {
-//            get { return "rect"; }
+//            get { return "drawRect"; }
 //        }
 
 //        public override bool testPick(Point pos)

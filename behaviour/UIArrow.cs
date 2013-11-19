@@ -130,7 +130,7 @@ namespace ns_behaviour
             }
         }
 
-        public override Rectangle rect
+        public override Rectangle drawRect
         {
             get
             {

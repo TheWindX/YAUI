@@ -9,9 +9,9 @@ namespace ns_behaviour
 {
     interface iNameItem
     {
-        string name { get; set; }
-        MNamespace namespaceParesent {get; set;}
-
+        string name { get;  }
+        string type { get;  }
+        
         UIWidget viewSelf
         {
             get;
@@ -42,6 +42,20 @@ namespace ns_behaviour
                 mName = value;
             }
         }
+
+        string mType = "NS";
+        public string type
+        {
+            get
+            {
+                return mType;
+            }
+            set
+            {
+                mName = mType;
+            }
+        }
+
 
         protected MNamespace mParesent = null;
         protected List<MNamespace> mChildrent = new List<MNamespace>();//TODO, optims, 
@@ -144,6 +158,7 @@ namespace ns_behaviour
 
     class NamespaceModel : Singleton<NamespaceModel>
     {
+        //此处为全局root
         public MNamespace mRootNs = new MNamespace("root");
     }
 }

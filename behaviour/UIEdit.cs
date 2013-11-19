@@ -22,11 +22,11 @@ namespace ns_behaviour
             mBackGround.width = (maxCharLength+1) * 18/2+2;
         }
 
-        public override Rectangle rect
+        public override Rectangle drawRect
         {
             get
             {
-                return mBackGround.rect;
+                return mBackGround.drawRect;
             }
         }
 
@@ -58,9 +58,9 @@ namespace ns_behaviour
             if (ret != null) color = ret.Value.castHex(0xffffffff);
 
             ui = new UIEdit(text, length, color);
-            ui.paresent = p;
             ui.fromXML(node);
-
+            ui.paresent = p;
+            
             return node.ChildNodes;
         }
     }

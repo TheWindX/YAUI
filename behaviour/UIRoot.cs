@@ -47,6 +47,7 @@ namespace ns_behaviour
             regMethodFromXML("rect", UIRect.fromXML);
             regMethodFromXML("lable", UILable.fromXML);
             regMethodFromXML("edit", UIEdit.fromXML);
+            regMethodFromXML("line", UILine.fromXML);
         }
 
         UIWidget loadFromXMLNode(XmlNode node, UIWidget p)

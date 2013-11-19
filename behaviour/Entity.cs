@@ -23,13 +23,12 @@ namespace ns_behaviour
             }
             set
             {
-                if (value == null)
-                {
-                    if(mParesent != null)
-                        mParesent.deattach(this);
-                }
-                else
+                if (mParesent != null)
+                    mParesent.deattach(this);
+                if (value != null)
+                {   
                     value.attach(this);
+                }
             }
         }
 

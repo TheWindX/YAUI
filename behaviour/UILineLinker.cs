@@ -94,7 +94,7 @@ namespace ns_behaviour
             }
         }
 
-        public override Rectangle rect
+        public override Rectangle pickRect
         {
             get
             {
@@ -537,7 +537,7 @@ namespace ns_behaviour
             }
         }
 
-        public override Rectangle rect
+        public override Rectangle drawRect
         {
             get
             {
@@ -548,12 +548,12 @@ namespace ns_behaviour
                     if (!init)
                     {
                         init = true;
-                        ret = elem.rect;
+                        ret = elem.drawRect;
                         ret.Offset(elem.position);
                     }
                     else
                     {
-                        var elemRc = elem.rect;
+                        var elemRc = elem.drawRect;
                         elemRc.Offset(elem.position);
                         ret = expandRect(ret, elemRc);
                     }

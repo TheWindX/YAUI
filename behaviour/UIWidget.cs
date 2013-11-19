@@ -138,7 +138,7 @@ namespace ns_behaviour
 
         public void setDepthHead()
         {
-            mDepth = -1;
+            depth = -100;
             sortSibling();
         }
 
@@ -153,8 +153,6 @@ namespace ns_behaviour
             mDepth -= 1.5f;
             sortSibling();
         }
-
-        #endregion
 
         ////在同一层次上的比较
         //static int levelCompare(UIWidget u1, UIWidget u2)
@@ -180,16 +178,25 @@ namespace ns_behaviour
         //    }
         //}
 
+        #endregion
+
         #region properties
         public int ID = -1;
 
         //properties start
-        public virtual Rectangle rect
+        public virtual Rectangle drawRect
         {
-            get;
-            set;
+            get { return new Rectangle(); }
         }
 
+
+        public virtual Rectangle pickRect
+        {
+            get
+            {
+                return drawRect;
+            }
+        }
         public bool focus
         {
             set
@@ -285,7 +292,6 @@ namespace ns_behaviour
         }
         public Dictionary<string, object> attrs = new Dictionary<string, object>();
 
-        //properties end
         #endregion
 
         #region align
@@ -293,7 +299,7 @@ namespace ns_behaviour
         {
             get
             {
-                return transform(rect.center());
+                return transform(drawRect.center());
             }
 
             set
@@ -310,7 +316,7 @@ namespace ns_behaviour
         {
             get
             {
-                return transform(rect.leftTop());
+                return transform(drawRect.leftTop());
             }
             set
             {
@@ -326,7 +332,7 @@ namespace ns_behaviour
         {
             get
             {
-                return transform(rect.leftMiddle());
+                return transform(drawRect.leftMiddle());
             }
             set
             {
@@ -342,7 +348,7 @@ namespace ns_behaviour
         {
             get
             {
-                return transform(rect.leftButtom());
+                return transform(drawRect.leftButtom());
             }
             set
             {
@@ -358,7 +364,7 @@ namespace ns_behaviour
         {
             get
             {
-                return transform(rect.rightTop());
+                return transform(drawRect.rightTop());
             }
             set
             {
@@ -374,7 +380,7 @@ namespace ns_behaviour
         {
             get
             {
-                return transform(rect.rightMiddle());
+                return transform(drawRect.rightMiddle());
             }
             set
             {
@@ -390,7 +396,7 @@ namespace ns_behaviour
         {
             get
             {
-                return transform(rect.rightButtom());
+                return transform(drawRect.rightButtom());
             }
             set
             {
@@ -406,7 +412,7 @@ namespace ns_behaviour
         {
             get
             {
-                return transform(rect.middleTop());
+                return transform(drawRect.middleTop());
             }
             set
             {
@@ -422,7 +428,7 @@ namespace ns_behaviour
         {
             get
             {
-                return transform(rect.middleButtom());
+                return transform(drawRect.middleButtom());
             }
             set
             {
@@ -436,6 +442,7 @@ namespace ns_behaviour
 
         public enum EAlign
         {
+            noAlign,
             center,
             leftTop,
             leftMiddle,
@@ -447,15 +454,80 @@ namespace ns_behaviour
             middleButtom,
         }
 
-        public void alignParesent(EAlign thisAlign, EAlign pAlign)
+        EAlign mAlign = EAlign.noAlign;
+        public EAlign align
+        {
+            get
+            {
+                return mAlign;
+            }
+            set
+            {
+                mAlign = value;
+            }
+            
+        }
+
+        EAlign mAlignParesent = EAlign.noAlign;
+        public EAlign alignParesent
+        {
+            get
+            {
+                return mAlignParesent;
+            }
+            set
+            {
+                mAlignParesent = value;
+            }
+
+        }
+
+        int mOffsetx = 0;
+        int offsetx
+        {
+            get
+            {
+                return mOffsetx;
+            }
+            set
+            {
+                mOffsetx = value;
+            }
+        }
+
+        int mOffsety = 0;
+        int offsety
+        {
+            get
+            {
+                return mOffsety;
+            }
+            set
+            {
+                mOffsety = value;
+            }
+        }
+
+        public virtual void adjust()
         {
             if(paresent == null)
                 return;
 
+            if (mAlign == EAlign.noAlign || mAlignParesent == EAlign.noAlign)
+            {
+                return;
+            }
+
             var pui = (paresent as UIWidget);
 
+            if (mAlign == EAlign.leftTop && mAlignParesent == EAlign.leftTop)
+            {
+                position.X = offsetx;
+                position.Y = offsety;
+                return;
+            }
             Point alignPos = new Point();
-            switch (pAlign)
+            switch (mAlign)
             {
                 case EAlign.center:
                     alignPos = paresent.invertTransform((paresent as UIWidget).center);
@@ -489,7 +561,7 @@ namespace ns_behaviour
                     ;
             }
 
-            switch (thisAlign)
+            switch (mAlignParesent)
             {
                 case EAlign.center:
                     this.center = alignPos;
@@ -523,6 +595,8 @@ namespace ns_behaviour
                     ;
             }
 
+            position.X += offsetx;
+            position.Y += offsety;
         }
 
         #endregion
@@ -595,6 +669,7 @@ namespace ns_behaviour
         #region events
         public delegate bool EvtMouse(UIWidget _this, int x, int y);
         public delegate bool EvtKeyboard(UIWidget _this, int kc);
+        public delegate void EvtSizeChanged(UIWidget _this, int w, int h);
 
         public event EvtMouse evtOnLMDown;
         public event EvtMouse evtOnLMUp;
@@ -605,6 +680,7 @@ namespace ns_behaviour
         public event EvtMouse evtOnEnter;
         public event EvtMouse evtOnExit;
         public event EvtMouse evtOnDClick;
+        public event Action evtPreDraw;
 
         public event EvtKeyboard evtOnChar;
 
@@ -811,7 +887,7 @@ namespace ns_behaviour
 
         bool onScaleBegin(UIWidget ui, int x, int y)
         {
-            mWheelScaleBegin = new Point(x, y);
+            mWheelScaleBegin = invertTransformParesentAbs(new Point(x, y));
             Globals.Instance.mPainter.evtOnWheel += onScaleWheel;
             return false;
         }
@@ -854,25 +930,26 @@ namespace ns_behaviour
             ret = node.Attributes.GetNamedItem("scalex");
             if (ret != null) mScalex = ret.Value.castFloat(1);
 
-            ret = node.Attributes.GetNamedItem("offsetx");
-            if (ret != null) { var ox = ret.Value.castInt(); translate(ox, 0); }
+            ret = node.Attributes.GetNamedItem("scaley");
+            if (ret != null) mScaley = ret.Value.castFloat(1);
 
-            ret = node.Attributes.GetNamedItem("offsety");
-            if (ret != null) { var oy = ret.Value.castInt(); translate(0, oy); }
-
-            EAlign thisAlign = EAlign.leftTop;
-            EAlign pAlign = EAlign.leftTop;
             ret = node.Attributes.GetNamedItem("align");
             if (ret != null) 
             {
-                thisAlign = (EAlign)Enum.Parse(typeof(EAlign), node.Attributes["align"].Value);
+                mAlign = (EAlign)Enum.Parse(typeof(EAlign), node.Attributes["align"].Value);
             }
             ret = node.Attributes.GetNamedItem("alignParesent");
             if (ret != null)
             {
-                pAlign = (EAlign)Enum.Parse(typeof(EAlign), node.Attributes["alignParesent"].Value);
-                alignParesent(thisAlign, pAlign);
+                mAlignParesent = (EAlign)Enum.Parse(typeof(EAlign), node.Attributes["alignParesent"].Value);
             }
+
+            //note //offset is after align
+            ret = node.Attributes.GetNamedItem("offsetx");
+            if (ret != null) { var ox = ret.Value.castInt(); mOffsetx = ox; }
+
+            ret = node.Attributes.GetNamedItem("offsety");
+            if (ret != null) { var oy = ret.Value.castInt(); mOffsety = oy; }
 
             ret = node.Attributes.GetNamedItem("clip");
             if (ret != null)
@@ -906,6 +983,14 @@ namespace ns_behaviour
             
             return node.ChildNodes;
         }
+
+        public bool appendFromXML(string xml)
+        {
+            var ui = UIRoot.Instance.loadFromXML(xml);
+            if (ui == null) return false;
+            else ui.paresent = this;
+            return true;
+        }
         #endregion
 
         #region others
@@ -928,7 +1013,7 @@ namespace ns_behaviour
             t.TransformPoints(ps);
             var newpos = ps[0];
 
-            var r = rect;
+            var r = pickRect;
             if (!r.Contains(newpos))
             {
                 ui = null;
@@ -969,6 +1054,10 @@ namespace ns_behaviour
         {
             if (!mVisiable)
                 return;
+            if (evtPreDraw != null)
+                    evtPreDraw();
+
+            adjust();
             var gs = g.Save();
 
             Matrix _mtx = g.Transform;
@@ -977,7 +1066,7 @@ namespace ns_behaviour
 
             if (clip)
             {
-                var r = rect;
+                var r = drawRect;
                 //r.Offset(-1, -1);
                 r.Width += 1;
                 r.Height += 1;

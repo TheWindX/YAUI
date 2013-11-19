@@ -80,11 +80,17 @@ namespace ns_behaviour
             }
             set
             {
-                _w = value;
+                _h = value;
             }
         }
 
-        public override Rectangle rect
+        public void setSize(int w, int h)
+        {
+            _w = w;
+            _h = h;
+        }
+
+        public override Rectangle drawRect
         {
             get
             {
@@ -142,9 +148,8 @@ namespace ns_behaviour
             }
 
             ui = new UIRect(w, h, sc, fc);
-            ui.paresent = p;
             ui.fromXML(node);
-
+            ui.paresent = p;
             return node.ChildNodes;
         }
     }
