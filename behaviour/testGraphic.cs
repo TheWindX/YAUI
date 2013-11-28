@@ -59,7 +59,10 @@ namespace ns_behaviour
             UIRoot.Instance.root.dragAble = true;
             UIRoot.Instance.root.scaleAble = true;
 
-            var v = NamespaceModel.Instance.mRootNs.viewSelf;
+            NamespaceModel.Instance.mRootNs.addItem(BehaviourModelInstance.Instance.mAdd);
+            NamespaceModel.Instance.mRootNs.addItem(BehaviourModelInstance.Instance.mLogS);
+            NamespaceModel.Instance.mRootNs.addItem(BehaviourModelInstance.Instance.mMain);
+            var v = NamespaceModel.Instance.mRootNs.getViewerSelf().asWidget();
             v.paresent = UIRoot.Instance.root;
             v.scaleAble = true;
         }

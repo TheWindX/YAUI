@@ -7,29 +7,9 @@ using System.Drawing;
 
 namespace ns_behaviour
 {
-    interface iNameItem
+    class MNamespace : iModelName
     {
-        string name { get;  }
-        string type { get;  }
-        
-        UIWidget viewSelf
-        {
-            get;
-        }
-
-        UIWidget viewInstance
-        {
-            get;
-        }
-    }
-
-    class MNamespace : iNameItem
-    {
-        public MNamespace(string name_)
-        {
-            name = name_;
-        }
-
+        #region interface
         string mName;
         public string name
         {
@@ -56,11 +36,29 @@ namespace ns_behaviour
             }
         }
 
+        NamespaceViewSelf mViewSelf;
+        public iViewerSelf getViewerSelf()
+        {
+            mViewSelf = new NamespaceViewSelf(this);
+            return mViewSelf;
+        }
+
+        public iViewerNameItem getViewerNameItem()
+        {
+            return new NamespaceViewInstance(this);
+        }
+
+        #endregion
+
+        public MNamespace(string name_)
+        {
+            name = name_;
+        }
 
         protected MNamespace mParesent = null;
-        protected List<MNamespace> mChildrent = new List<MNamespace>();//TODO, optims, 
+        protected List<iModelName> mChildrent = new List<iModelName>();//TODO, optims, 
 
-        public IEnumerable<MNamespace> enumChildrent()
+        public IEnumerable<iModelName> enumChildrent()
         {
             for (int i = 0; i < mChildrent.Count; ++i)
             {
@@ -69,7 +67,7 @@ namespace ns_behaviour
         }
 
 
-        public void sortChildrent(Comparison<MNamespace> pred)
+        public void sortChildrent(Comparison<iNameItem> pred)
         {
             mChildrent.Sort(pred);
         }
@@ -109,25 +107,25 @@ namespace ns_behaviour
         }
 
 
-        NamespaceViewSelf mViewSelf; 
-        public UIWidget viewSelf
-        {
-            get
-            {
-                mViewSelf = new NamespaceViewSelf(this);
-                return mViewSelf;
-            }
-        }
 
-        public void reflushViewSelf()
-        {
-            if (mViewSelf != null)
-            {
-                mViewSelf.paresent = null;
-            }
-            var flushed = viewSelf;
-            flushed.paresent = UIRoot.Instance.root;
-        }
+
+        //public void reflushViewSelf()
+        //{
+        //    if (mViewSelf != null)
+        //    {
+        //        //mViewSelf.paresent = null;
+        //        mViewSelf.reflush();
+        //    }
+        //    //var oldView = mViewSelf;
+
+
+        //    //var flushed = viewSelf;
+        //    //flushed.px = oldView.px;
+        //    //flushed.py = oldView.py;
+            
+
+        //    flushed.paresent = UIRoot.Instance.root;
+        //}
 
         public UIWidget viewInstance
         {
@@ -153,6 +151,11 @@ namespace ns_behaviour
         {
             var ns = new MNamespace(name_);
             ns.namespaceParesent = this;
+        }
+
+        public void addItem(iModelName item)
+        {
+            mChildrent.Add(item);
         }
     }
 

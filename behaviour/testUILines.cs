@@ -130,7 +130,7 @@ namespace ns_behaviour
         }
 
         CEditInfo mCurrentEdit;
-        void onKey(int kc)
+        void onKey(int kc, bool isControl, bool isShift)
         {
             if (kc == (int)System.Windows.Forms.Keys.C)
             {

@@ -166,13 +166,13 @@ namespace ns_behaviour
                 evtMove(e.X, e.Y);
         }
 
-        public delegate void EvtOnKey(int kc);
+        public delegate void EvtOnKey(int kc, bool isControl, bool isShift);
         public event EvtOnKey evtOnKey;
         private void PaintDriver_KeyDown(object sender, KeyEventArgs e)
         {
             if (evtOnKey != null)
             {
-                evtOnKey(e.KeyValue);
+                evtOnKey(e.KeyValue, e.Control, e.Shift);
             }
         }
 

@@ -20,10 +20,11 @@ namespace ns_behaviour
     class ViewItemTemplate : UIStub
     {
         const string xmllayout = @"
+<stub name=""root"">
     <rect name=""main"" width=""96"" height=""64"" 
         stokeColor=""0xffffffff"" fillColor=""0xffdeb887"" 
         clip=""true"">
-        <rect name=""typerc"" width=""18"" height=""18"" offsetx=""4"" offsety=""4"">
+        <rect name=""typerc"" width=""18"" height=""18"" ><!--px=""4"" py=""4""--> 
             <lable name=""type"" text=""NS""
                 size=""8"" color=""0xff00ff00""
                 align=""center"" alignParesent=""center"">
@@ -31,7 +32,9 @@ namespace ns_behaviour
         </rect>
         <lable name=""lable"" text=""text"" size=""18""
                 align=""center"" alignParesent=""center""> </lable>
-    </rect>";
+    </rect>
+</stub>
+";
 
         UIRect mMainRc;
         UILable mLable;
@@ -44,12 +47,12 @@ namespace ns_behaviour
 
         void build()
         {
-            this.dragAble = true;
+            //this.dragAble = true;
             var ui = UIRoot.Instance.loadFromXML(xmllayout);
             ui.paresent = this;
-            mType = this.childOfPath("main/typerc/type") as UILable;
-            mLable = this.childOfPath("main/lable") as UILable;
-            mMainRc = this.childOfPath("main") as UIRect;
+            mType = this.childOfPath("root/main/typerc/type") as UILable;
+            mLable = this.childOfPath("root/main/lable") as UILable;
+            mMainRc = this.childOfPath("root/main") as UIRect;
         }
 
         public Point getSize()
@@ -113,6 +116,7 @@ namespace ns_behaviour
             </lable>
 
             <rect name=""size_controller"" width=""32"" height=""32""
+                fillColor=""FFDDDDDD""
                 align=""rightButtom"" alignParesent=""rightButtom"">
             </rect>
         </rect>
@@ -142,10 +146,19 @@ namespace ns_behaviour
             sizeController.evtOnLMDown += onLMDown;
 
             var closeButton = this.childOfPath("root/title_bar/close") as UIRect;
-            closeButton.evtOnLMDown += (sender, x, y) =>
+            closeButton.evtOnLMDown += (cui, x, y) =>
+                {
+                    //to propogate upward
+                    return false;
+                };
+
+            closeButton.evtOnLMUp += (sender, x, y) =>
                 {
                     if (evtClose != null)
-                        evtClose();
+                    {
+                        return evtClose();
+                    }
+                    paresent = null;
                     return false;
                 };
         }
@@ -207,8 +220,13 @@ namespace ns_behaviour
             lbType.text = type;
         }
 
+        public UIRect getClient()
+        {
+            return this.childOfPath("root/client") as UIRect;
+        }
+
         public event Action<int, int> evtResize;
-        public event Action evtClose;
+        public event Func<bool> evtClose;
 
     }
 

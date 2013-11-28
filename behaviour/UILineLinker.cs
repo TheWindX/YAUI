@@ -166,7 +166,7 @@ namespace ns_behaviour
             get { return "UILineNode"; }
         }
 
-        public override bool testPick(Point pos)
+        public override bool postTestPick(Point pos)
         {
             return true;
         }
@@ -567,7 +567,7 @@ namespace ns_behaviour
             get { return "lineList"; }
         }
 
-        public override bool testPick(Point pos)
+        public override bool postTestPick(Point pos)
         {
             return true;
         }

@@ -121,6 +121,20 @@ namespace ns_behaviour
             {
                 testDClick(x, y);
             };
+
+            //keys
+            Globals.Instance.mPainter.evtOnKey += (kc, isC, isS) =>
+                {
+                    var ui = currentWidget;
+                    while (ui != null)
+                    {
+                        if (!ui.doEvtOnChar(kc, isC, isS))
+                        {
+                            return;
+                        }
+                        ui = ui.paresent as UIWidget;
+                    }
+                };
         }
 
         public void draw(Graphics g)
@@ -128,7 +142,7 @@ namespace ns_behaviour
             root.doDraw(g);
         }
 
-        void onKeyLock(int kc)
+        void onKeyLock(int kc, bool isControl, bool isShift)
         {
             if (kc == (int)System.Windows.Forms.Keys.Space)
             {

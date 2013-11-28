@@ -52,8 +52,8 @@ namespace ns_behaviour
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SimpleCustomControl_Paint);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
+
         private void SimpleCustomControl_Paint(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -62,7 +62,7 @@ namespace ns_behaviour
             Pen greenPen = new Pen(Color.FromArgb(255, 200, 200, 200), 10);
             greenPen.Alignment = PenAlignment.Center;
 
-            g.DrawRectangle(greenPen, ClientRectangle);
+            //g.DrawRectangle(greenPen, ClientRectangle);
         }
 
         private void mTextBox_KeyUp(object sender, KeyEventArgs e)

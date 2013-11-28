@@ -37,9 +37,9 @@ namespace ns_behaviour
             get { return "UIGSelfEnd"; }
         }
 
-        public override bool testPick(Point pos)
+        public override bool postTestPick(Point pos)
         {   
-            return mRect.testPick(mRect.transform(pos)) || mArrow.testPick(mArrow.transform(pos));
+            return mRect.postTestPick(mRect.transform(pos)) || mArrow.postTestPick(mArrow.transform(pos));
         }
 
         internal override void onDraw(Graphics g)
@@ -163,39 +163,9 @@ namespace ns_behaviour
         }
     }
 
-    class UIGSelfDataIn : UIGSelfEnd
-    {
-        public MetaType mType;
-        public UIGSelfDataIn(MetaType type) : base(EForward.e_down)
-        {
-            mType = type;
-        }
-    }
-
-    class UIGSelfDataOut : UIGSelfEnd
-    {
-        public MetaType mType;
-        public UIGSelfDataOut(MetaType type) : base(EForward.e_up)
-        {
-            mType = type;
-        }
-    }
-
-    class UIGSelfTriggerIn : UIGSelfEnd
-    {
-        public UIGSelfTriggerIn()
-            : base(EForward.e_right)
-        {   
-        }
-    }
-
-    class UIGSelfTriggerOut : UIGSelfEnd
-    {
-        public UIGSelfTriggerOut()
-            : base(EForward.e_left)
-        {
-        }
-    }
+/// <summary>
+/// 
+/// </summary>
 
     class UIGDataIn : UIGSelfEnd
     {

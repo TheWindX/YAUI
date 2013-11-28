@@ -7,14 +7,26 @@ using System.Drawing;
 
 namespace ns_behaviour
 {
-    class NamespaceViewSelf : ViewWindowTemplate
+    class NamespaceViewSelf : ViewWindowTemplate, iViewerSelf
     {
+
+        #region interface
+        public iModel getModel()
+        {
+            return mModel;
+        }
+
+        public UIWidget asWidget()
+        {
+            return this;
+        }
+        #endregion
         public MNamespace mModel;
-        public List<UIWidget> mItems = new List<UIWidget>();
+        public List<iViewerNameItem> mItems = new List<iViewerNameItem>();
 
-        UIWidget mSelectItem;
+        iViewerNameItem mSelectItem;
 
-        public UIWidget selectItem
+        public iViewerNameItem selectItem
         {
             get
             {
@@ -23,15 +35,11 @@ namespace ns_behaviour
 
             set
             {
-                if (mSelectItem is iViewInstance)
-                {
-                    (mSelectItem as iViewInstance).unselect();
-                }
+                if(mSelectItem != null)
+                    mSelectItem.unselect();
                 mSelectItem = value;
-                if (mSelectItem is iViewInstance)
-                {
-                    (mSelectItem as iViewInstance).select();
-                }
+                if (mSelectItem != null)
+                    mSelectItem.select();
             }
         }
 
@@ -47,17 +55,39 @@ namespace ns_behaviour
 
                 evtOnRMUp += onRUp;
             }
-            evtClose += () =>
+
+
+            evtOnChar += (ui, kc, isC, isS) =>
             {
-                this.paresent = null;
+                if (kc == (int)System.Windows.Forms.Keys.V && isC)
+                {
+                    var m = GlobalModel.mModelCopy;
+                    if (m != null)
+                    {
+                        if (m is iModelName)
+                        {
+                            var mn = (m as iModelName);
+                            var vitem = mn.getViewerNameItem();
+                            var uiitem = vitem.asWidget();
+                            this.addItem(uiitem, 20, 20);//todo
+
+                        }
+                    }
+                }
+                return false;
             };
+        }
+
+        public void reflush()
+        {
+            showContent();
         }
 
         void showContent()
         {
             for (int i = 0; i < mItems.Count; ++i)
             {
-                mItems[i].paresent = null;
+                mItems[i].asWidget().paresent = null;
             }
             mItems.Clear();
 
@@ -69,25 +99,27 @@ namespace ns_behaviour
 
             foreach (var elem in mModel.enumChildrent())
             {
-                var viewItem = elem.viewInstance;
+                var viewItem = elem.getViewerNameItem();
 
-                viewItem.evtOnLMDown += (ui, px, py) =>
+                viewItem.asWidget().evtOnLMDown += (ui, px, py) =>
                     {
-                        selectItem = ui;
+                        var item = ui as iViewerNameItem;
+                        if (item != null)
+                            selectItem = item;
                         return false;
                     };
 
                 mItems.Add(viewItem);
-                addItem(viewItem, x, y);
-                var pt = viewItem.rightButtom;
+                addItem(viewItem.asWidget(), x, y);
+                var pt = viewItem.asWidget().rightButtom;
                 if (pt.X > this.getSize().X)
                 {
                     x = dx;
                     y = yNext;
-                    viewItem.leftTop = new Point(x, y);
+                    viewItem.asWidget().leftTop = new Point(x, y);
                 }
 
-                var ptrb = viewItem.rightButtom;
+                var ptrb = viewItem.asWidget().rightButtom;
                 x = ptrb.X + dx;
                 yNext = ptrb.Y + dy;
             }
@@ -118,7 +150,7 @@ namespace ns_behaviour
             edit.evtInputExit = (text) =>
             {
                 mModel.addNameSpace(text);
-                mModel.reflushViewSelf();
+                reflush();
             };
 
             return false;

@@ -72,7 +72,7 @@ namespace ns_behaviour
             get { return "line"; }
         }
 
-        public override bool testPick(Point pos)
+        public override bool postTestPick(Point pos)
         {
             return true;
         }

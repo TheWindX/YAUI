@@ -668,7 +668,7 @@ namespace ns_behaviour
 
         #region events
         public delegate bool EvtMouse(UIWidget _this, int x, int y);
-        public delegate bool EvtKeyboard(UIWidget _this, int kc);
+        public delegate bool EvtKeyboard(UIWidget _this, int kc, bool isControl, bool isShift);
         public delegate void EvtSizeChanged(UIWidget _this, int w, int h);
 
         public event EvtMouse evtOnLMDown;
@@ -683,6 +683,7 @@ namespace ns_behaviour
         public event Action evtPreDraw;
 
         public event EvtKeyboard evtOnChar;
+
 
         public bool doEvtOnLMDown(int x, int y)
         {
@@ -756,13 +757,13 @@ namespace ns_behaviour
             return evtOnExit(this, x, y);
         }
 
-        public bool doEvtOnChar(int kc)
+        public bool doEvtOnChar(int kc, bool isControl, bool isShift)
         {
             if (evtOnChar == null)
             {
                 return true;
             }
-            return evtOnChar(this, kc);
+            return evtOnChar(this, kc, isControl, isShift);
         }
 
         public bool doEvtOnDClick(int x, int y)
@@ -922,7 +923,7 @@ namespace ns_behaviour
             if (ret != null) px = ret.Value.castInt();
 
             ret = node.Attributes.GetNamedItem("py");
-            if (ret != null) px = ret.Value.castInt();
+            if (ret != null) py = ret.Value.castInt();
 
             ret = node.Attributes.GetNamedItem("rotate");
             if (ret != null) mDir = ret.Value.castFloat();
@@ -994,9 +995,16 @@ namespace ns_behaviour
         #endregion
 
         #region others
-        public virtual bool testPick(Point pos)
+
+        public virtual bool postTestPick(Point pos)
         {
             return false;
+        }
+
+
+        public virtual bool preTestPick(Point pos)
+        {
+            return true;
         }
 
         public bool doTestPick(Point pos, out UIWidget ui, bool testEnable = true)
@@ -1020,7 +1028,13 @@ namespace ns_behaviour
                 return false;
             }
 
-            //List<UIWidget> uilist = new List<UIWidget>();
+            bool ret = preTestPick(newpos);
+            if (!ret)
+            {
+                ui = null;
+                return false;
+            }
+
             UIWidget picked = null;
             foreach (UIWidget elem in children())
             {
@@ -1036,17 +1050,15 @@ namespace ns_behaviour
                 ui = picked;
                 return true;
             }
-            else
+
+            ret = postTestPick(newpos);
+            if (!ret)
             {
-                bool ret = testPick(newpos);
-                if (ret)
-                {
-                    ui = this;
-                    return true;
-                }
                 ui = null;
                 return false;
             }
+            ui = this;
+            return true;
         }
 
         //public static Font mDrawFont = new Font("Arial", 12, FontStyle.Bold);

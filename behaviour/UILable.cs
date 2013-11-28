@@ -76,7 +76,7 @@ namespace ns_behaviour
             get { return "string"; }
         }
 
-        public override bool testPick(Point pos)
+        public override bool postTestPick(Point pos)
         {
             return true;
         }
