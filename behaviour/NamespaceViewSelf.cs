@@ -20,6 +20,15 @@ namespace ns_behaviour
         {
             return this;
         }
+
+        Dictionary<string, object> mAttrs = new Dictionary<string, object>();
+        public Dictionary<string, object> attr
+        {
+            get
+            {
+                return mAttrs;
+            }
+        }
         #endregion
         public MNamespace mModel;
         public List<iViewerNameItem> mItems = new List<iViewerNameItem>();
@@ -67,15 +76,18 @@ namespace ns_behaviour
                         if (m is iModelName)
                         {
                             var mn = (m as iModelName);
-                            var vitem = mn.getViewerNameItem();
+                            var vitem = mn.getViewerNameItem();//created
+                            this.addItem(vitem);
                             var uiitem = vitem.asWidget();
-                            this.addItem(uiitem, 20, 20);//todo
-
+                            var pt = Globals.Instance.mPainter.getMousePosition();
+                            uiitem.position = getClient().invertTransformAbs(pt);
                         }
                     }
                 }
                 return false;
             };
+
+            this.rotateAble = true;
         }
 
         public void reflush()
@@ -100,6 +112,7 @@ namespace ns_behaviour
             foreach (var elem in mModel.enumChildrent())
             {
                 var viewItem = elem.getViewerNameItem();
+                viewItem.attr["container"] = this;
 
                 viewItem.asWidget().evtOnLMDown += (ui, px, py) =>
                     {
@@ -144,16 +157,33 @@ namespace ns_behaviour
 
         public bool onRUp(UIWidget _this, int x, int y)
         {
-            var edit = InputForm.Instance;
-            edit.tintText = "set name for new namespace";
-            edit.show(true, x, y);
-            edit.evtInputExit = (text) =>
+            if (System.Windows.Forms.Control.ModifierKeys == System.Windows.Forms.Keys.Control)
             {
-                mModel.addNameSpace(text);
-                reflush();
-            };
-
+                var edit = InputForm.Instance;
+                edit.tintText = "set name for new namespace";
+                edit.show(true, x, y);
+                edit.evtInputExit = (text) =>
+                {
+                    mModel.addNameSpace(text);
+                    reflush();
+                };
+            }
             return false;
+        }
+
+        public void addItem(iViewerNameItem item)
+        {
+            //mModel.removeItem(item.getModel() as iModelName);
+            mModel.addItem(item.getModel() as iModelName);
+            mItems.Add(item);
+            item.asWidget().paresent = getClient();
+            //reflush();
+        }
+
+        public void removeItem(iViewerNameItem item)
+        {
+            mModel.removeItem(item.getModel() as iModelName);
+            reflush();
         }
     }
 }

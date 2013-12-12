@@ -195,5 +195,15 @@ namespace ns_behaviour
                 evtDClick(e.X, e.Y);
             }
         }
+
+        public Point getMousePosition()
+        {
+            return PointToClient(Control.MousePosition);
+        }
+
+        public Keys getModify()
+        {
+            return Control.ModifierKeys;
+        }
     }
 }

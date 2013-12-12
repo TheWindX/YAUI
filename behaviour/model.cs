@@ -39,6 +39,10 @@ namespace ns_behaviour
     {
         iModel getModel();
         UIWidget asWidget();
+        Dictionary<string, object> attr
+        {
+            get;
+        }
     }
 
 

@@ -44,6 +44,7 @@ namespace ns_behaviour
         void XMLinit()
         {
             regMethodFromXML("stub", UIStub.fromXML);
+            regMethodFromXML("map", UIMap.fromXML);
             regMethodFromXML("rect", UIRect.fromXML);
             regMethodFromXML("lable", UILable.fromXML);
             regMethodFromXML("edit", UIEdit.fromXML);
@@ -87,7 +88,7 @@ namespace ns_behaviour
         {
             XMLinit();
 
-            mRoot = new UIStub();
+            mRoot = new UIMap();
 
             Globals.Instance.mPainter.evtPaint += (g) =>
             {

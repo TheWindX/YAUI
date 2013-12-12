@@ -1,0 +1,8 @@
+bin/
+obj/
+/Properties/
+*.config
+*.sln
+*.user
+*.suo
+*.csproj

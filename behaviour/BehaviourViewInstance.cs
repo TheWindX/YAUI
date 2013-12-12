@@ -33,6 +33,15 @@ namespace ns_behaviour
         {
             mMainIns.setColor(mColorMainUnSelect);
         }
+
+        Dictionary<string, object> mAttrs = new Dictionary<string, object>();
+        public Dictionary<string, object> attr
+        {
+            get
+            {
+                return mAttrs;
+            }
+        }
         #endregion
 
         ViewItemTemplate mMainIns;
@@ -62,6 +71,15 @@ namespace ns_behaviour
                 if (kc == (int)System.Windows.Forms.Keys.C && isC)
                 {
                     GlobalModel.mModelCopy = getModel();
+                }
+                else if (kc == (int)System.Windows.Forms.Keys.Delete)
+                {
+                    if (attr.ContainsKey("container"))
+                    {
+                        var container = attr["container"] as NamespaceViewSelf;
+                        container.removeItem(this);
+
+                    }
                 }
                 return false;
             };
@@ -146,6 +164,5 @@ namespace ns_behaviour
                 mTriggerOut.Add(ui);
             }
         }
-
     }
 }

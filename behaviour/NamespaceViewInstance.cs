@@ -34,6 +34,14 @@ namespace ns_behaviour
             setColor(mStanderdColor);
         }
 
+        Dictionary<string, object> mAttrs = new Dictionary<string, object>();
+        public Dictionary<string, object> attr
+        {
+            get
+            {
+                return mAttrs;
+            }
+        }
         #endregion
 
         MNamespace mModel;
@@ -62,11 +70,23 @@ namespace ns_behaviour
                     {
                         GlobalModel.mModelCopy = getModel();
                     }
+                    else if (kc == (int)System.Windows.Forms.Keys.Delete)
+                    {
+                        if (attr.ContainsKey("container"))
+                        {
+                            var container = attr["container"] as NamespaceViewSelf;
+                            container.removeItem(this);
+
+                        }
+                    }
                     return false;
                 };
         }
 
-        
+        void selfDelete()
+        {
+
+        }
 
 
     }

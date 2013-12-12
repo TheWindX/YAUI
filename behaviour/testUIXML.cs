@@ -90,7 +90,7 @@ namespace ns_behaviour
         //note: dragAble cannot set in childs, for it in stub will seem right, but no this widget set position!!!
         const string xmllayout = @"
     <stub name=""root"">
-        <rect name=""title_bar"" clip=""true"" width=""512"" height=""32"" 
+        <rect name=""title_bar"" clip=""false"" width=""512"" height=""32"" 
             strokeColor=""0xffffffff"" fillColor=""0xFF0072E3"">
             <rect name=""typerc"" width=""18"" height=""18"" 
                 align=""leftMiddle"" alignParesent=""leftMiddle"" offsetx=""4"" >
@@ -131,6 +131,7 @@ namespace ns_behaviour
             //var sizeController = this.childOfPath("root/client/size_controller") as UIRect;
             //sizeController.setDepthHead();
         }
+
 
         public ViewWindowTemplate()
         {

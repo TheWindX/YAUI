@@ -157,6 +157,11 @@ namespace ns_behaviour
         {
             mChildrent.Add(item);
         }
+
+        public void removeItem(iModelName item)
+        {
+            mChildrent.Remove(item);
+        }
     }
 
     class NamespaceModel : Singleton<NamespaceModel>

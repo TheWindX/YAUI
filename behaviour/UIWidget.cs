@@ -843,6 +843,67 @@ namespace ns_behaviour
             Globals.Instance.mPainter.evtLeftUp -= onDragEnd;
         }
 
+
+        bool mRotateAble = false;
+        public bool rotateAble
+        {
+            set
+            {
+                mRotateAble = value;
+                if (mRotateAble)
+                {
+                    evtOnRMDown += onRotateBegin;
+                    //evtOnRMUp += onRotateEnd;
+                }
+                else
+                {
+                    evtOnRMDown -= onRotateBegin;
+                    onRotateEnd(0, 0);
+                }
+            }
+
+            get
+            {
+                return mRotateAble;
+            }
+        }
+
+        Point ptRotateOrg;
+        float dirRotateOrg;
+        Point ptLocalRotateOrg;
+        bool onRotateBegin(UIWidget _this, int x, int y)
+        {
+            ptRotateOrg = position;
+            dirRotateOrg = mDir;
+            ptLocalRotateOrg = invertTransformAbs(new Point(x, y));
+
+            Globals.Instance.mPainter.evtMove += onRotateMove;
+            Globals.Instance.mPainter.evtRightUp += onRotateEnd;
+            return false;
+        }
+
+        void onRotateMove(int x, int y)
+        {
+            int dx = x - ptRotateOrg.X;
+            int dy = y - ptRotateOrg.Y;
+
+            var dist = dx;
+
+            mDir = dirRotateOrg + (float)(dist * 0.2f);
+            var pt = invertTransformAbs(new Point(x, y));
+
+            int posDx = pt.X - ptLocalRotateOrg.X;
+            int posDy = pt.Y - ptLocalRotateOrg.Y;
+            //position.X += posDx;
+            //position.Y += posDy;
+        }
+
+        void onRotateEnd(int x, int y)
+        {
+            Globals.Instance.mPainter.evtMove -= onRotateMove;
+            Globals.Instance.mPainter.evtRightUp -= onRotateEnd;
+        }
+
         /// <summary>
         /// dragable end
         /// </summary>
@@ -992,6 +1053,7 @@ namespace ns_behaviour
             else ui.paresent = this;
             return true;
         }
+
         #endregion
 
         #region others
@@ -1076,6 +1138,9 @@ namespace ns_behaviour
             _mtx.Multiply(this.getLocalMatrix());
             g.Transform = _mtx;
 
+            //catch it?
+            onDraw(g);
+
             if (clip)
             {
                 var r = drawRect;
@@ -1086,9 +1151,6 @@ namespace ns_behaviour
                 p.AddRectangle(r);
                 g.SetClip(p, CombineMode.Intersect);
             }
-
-            //catch it?
-            onDraw(g);
 
             foreach (Entity e in mChildrent)
             {

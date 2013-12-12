@@ -56,11 +56,18 @@ namespace ns_behaviour
             return new Point(rc.Left + rc.Width / 2, rc.Top + rc.Height / 2);
         }
 
+        static int min(int a, int b) { if (a < b)return a; else return b; }
+        static int max(int a, int b) { if (a > b)return a; else return b; }
+
         public static Rectangle transform(this Rectangle rc, Matrix m)
         {
-            Point[] pts = new Point[]{rc.leftTop(), rc.rightButtom()};
+            Point[] pts = new Point[]{rc.leftTop(), rc.leftButtom(), rc.rightTop(), rc.rightButtom()};
             m.TransformPoints(pts);
-            return new Rectangle(pts[0], new Size(pts[1].X - pts[0].X, pts[1].Y - pts[0].Y));
+            int left = min(min(min(pts[0].X, pts[1].X), pts[2].X), pts[3].X);
+            int right = max(max(max(pts[0].X, pts[1].X), pts[2].X), pts[3].X);
+            int top = min(min(min(pts[0].Y, pts[1].Y), pts[2].Y), pts[3].Y);
+            int bottom = max(max(max(pts[0].Y, pts[1].Y), pts[2].Y), pts[3].Y);
+            return new Rectangle(left, top, right - left, bottom - top);
         }
 
     }

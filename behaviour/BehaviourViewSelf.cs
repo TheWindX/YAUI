@@ -86,6 +86,15 @@ namespace ns_behaviour
         {
             return this;
         }
+
+        Dictionary<string, object> mAttrs = new Dictionary<string, object>();
+        public Dictionary<string, object> attr
+        {
+            get
+            {
+                return mAttrs;
+            }
+        }
         #endregion
 
         public BehaviourModel mModel;
@@ -116,12 +125,17 @@ namespace ns_behaviour
                             var mn = (m as iModelBeh);
                             var vitem = mn.getViewerBehItem();
                             var uiitem = vitem.asWidget();
-                            this.addItem(uiitem, 20, 20);//todo
+
+                            var pt = Globals.Instance.mPainter.getMousePosition();
+                            pt = getClient().invertTransformAbs(pt);
+
+                            this.addItem(uiitem, pt.X, pt.Y);//todo
                         }
                     }
                 }
                 return false;
             };
+            this.rotateAble = true;
         }
 
         public void showContent()
