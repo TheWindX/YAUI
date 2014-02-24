@@ -217,7 +217,6 @@ namespace ns_behaviour
 
     class UIEnviroment : UIWidget
     {
-        
         public string name
         {
             get;

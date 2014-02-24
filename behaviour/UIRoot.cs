@@ -70,7 +70,7 @@ namespace ns_behaviour
             return uiret;
         }
 
-        public UIWidget loadFromXML(string xml)
+        public UIWidget loadFromXML(string xml)//加上一个style默认，style可以是一个状态机
         {
             UIWidget ret = null;
             try
@@ -93,6 +93,10 @@ namespace ns_behaviour
             Globals.Instance.mPainter.evtPaint += (g) =>
             {
                 Instance.draw(g);
+            };
+            Globals.Instance.mPainter.evtMove += (x, y) =>
+            {
+                Instance.testMouseMove(x, y);
             };
             Globals.Instance.mPainter.evtLeftDown += (x, y) =>
             {
@@ -268,6 +272,14 @@ namespace ns_behaviour
             testUIEvent(x, y, (ui) =>
             {   
                 return (x1, y1) => { return ui.doEvtOnLMDown(x1, y1); };
+            });
+        }
+
+        public void testMouseMove(int x, int y)
+        {
+            testUIEvent(x, y, (ui) =>
+            {
+                return (x1, y1) => { return ui.doEvtOnMMove(x1, y1); };
             });
         }
 

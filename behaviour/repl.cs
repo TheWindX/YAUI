@@ -1,7 +1,7 @@
 /*
  * author: xiaofeng.li
- * mail: 453588006@qq.com
- * desc: Console for c#
+ * mail: 453588006
+ * desc: REPL for c#
  * */
 
 using System;
@@ -14,13 +14,28 @@ namespace ns_behaviour
 {
     public class CSRepl
     {
+        static CSRepl mIns = null;
+        private CSRepl()
+        {
+            mIns = this;
+        }
+
+        public static CSRepl Instance()
+        {
+            if (mIns == null)
+            {
+                mIns = new CSRepl();
+            }
+            return mIns;
+        }
+
         string mScript = null;
         public static string mResult = null;
 
         static bool mExit = false;
         public static void exit() { mExit = true; }
 
-        enum EState { e_normal, e_warning, e_error }
+        public enum EState { e_normal, e_warning, e_error }
         EState mState = EState.e_normal;
 
         Thread mThread = null;
@@ -28,7 +43,7 @@ namespace ns_behaviour
         String mCodeFrame = @"
 using System;
 using System.Collections.Generic;
-
+using ns_behaviour;
 public static class Wrapper
 {{
     public static void print(Object o)
@@ -38,7 +53,7 @@ public static class Wrapper
     }}
     public static void exit()
     {{
-        ns_behaviour.CSRepl.stop();
+        CSRepl.stop();
     }}
     public static void PerformAction()
     {{  
@@ -61,20 +76,6 @@ public static class Wrapper
             mCompileOptions.ReferencedAssemblies.Add(typeof(CSRepl).Assembly.Location);
         }
 
-        public void print(string info)
-        {
-            mResult = info;
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write("\r\n>>> ");
-            if (mState == EState.e_error) Console.ForegroundColor = ConsoleColor.Red;
-            else if (mState == EState.e_warning) Console.ForegroundColor = ConsoleColor.Yellow;
-            else if (mState == EState.e_normal) Console.ForegroundColor = Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.WriteLine(mResult);
-            mResult = null;
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("<<< ");
-            Console.ForegroundColor = ConsoleColor.White;
-        }
 
         void threadRun()
         {
@@ -85,7 +86,7 @@ public static class Wrapper
                 Console.Write("<<< ");
                 Console.ForegroundColor = ConsoleColor.White;
                 mScript = Console.ReadLine();
-                while (mResult == null)
+                if (mResult == null)
                 {
                     Thread.Sleep(200);
                 }
@@ -93,11 +94,31 @@ public static class Wrapper
                 Console.Write(">>> ");
                 if (mState == EState.e_error) Console.ForegroundColor = ConsoleColor.Red;
                 else if (mState == EState.e_warning) Console.ForegroundColor = ConsoleColor.Yellow;
-                else if (mState == EState.e_normal) Console.ForegroundColor = Console.ForegroundColor = ConsoleColor.DarkYellow;
+                else if (mState == EState.e_normal) Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine(mResult);
                 mResult = null;
             } while (!mExit);
             mThread = null;
+        }
+
+        public void print(string str, EState st = EState.e_normal)
+        {
+            if (str == "") return;
+            mResult = str;
+            mState = st;
+
+
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("\n>>> ");
+            if (mState == EState.e_error) Console.ForegroundColor = ConsoleColor.Red;
+            else if (mState == EState.e_warning) Console.ForegroundColor = ConsoleColor.Yellow;
+            else if (mState == EState.e_normal) Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine(mResult);
+            mResult = null;
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("<<< ");
+            Console.ForegroundColor = ConsoleColor.White;
         }
 
         public void start()

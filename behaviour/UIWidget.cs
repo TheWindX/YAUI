@@ -71,6 +71,8 @@ namespace ns_behaviour
             }
         }
         
+        
+
         public IEnumerable<UIWidget> children()
         {
             for (int i = 0; i < mChildrent.Count; ++i)
@@ -483,7 +485,7 @@ namespace ns_behaviour
         }
 
         int mOffsetx = 0;
-        int offsetx
+        public int offsetx
         {
             get
             {
@@ -496,7 +498,7 @@ namespace ns_behaviour
         }
 
         int mOffsety = 0;
-        int offsety
+        public int offsety
         {
             get
             {
@@ -671,18 +673,69 @@ namespace ns_behaviour
         public delegate bool EvtKeyboard(UIWidget _this, int kc, bool isControl, bool isShift);
         public delegate void EvtSizeChanged(UIWidget _this, int w, int h);
 
+
+        public event EvtMouse evtOnMMove;
+        public void evtOnMMoveClear()
+        {
+            evtOnMMove = null;
+        }
+
         public event EvtMouse evtOnLMDown;
+        public void evtOnLMDownClear()
+        {
+            evtOnLMDown = null;
+        }
         public event EvtMouse evtOnLMUp;
+        public void evtOnLMUpClear()
+        {
+            evtOnLMUp = null;
+        }
         public event EvtMouse evtOnRMDown;
+        public void evtOnRMDownClear()
+        {
+            evtOnRMDown = null;
+        }
         public event EvtMouse evtOnRMUp;
+        public void evtOnRMUpClear()
+        {
+            evtOnRMUp = null;
+        }
         public event EvtMouse evtOnMMDown;
+        public void evtOnMMDownClear()
+        {
+            evtOnMMDown = null;
+        }
         public event EvtMouse evtOnMMUp;
+        public void evtOnMMUpClear()
+        {
+            evtOnMMUp = null;
+        }
         public event EvtMouse evtOnEnter;
+        public void evtOnEnterClear()
+        {
+            evtOnEnter = null;
+        }
         public event EvtMouse evtOnExit;
+        public void evtOnExitClear()
+        {
+            evtOnExit = null;
+        }
         public event EvtMouse evtOnDClick;
+        public void evtOnDClickClear()
+        {
+            evtOnDClick = null;
+        }
         public event Action evtPreDraw;
+        public void evtPreDrawClear()
+        {
+            evtPreDraw = null;
+        }
 
         public event EvtKeyboard evtOnChar;
+        public void evtOnCharClear()
+        {
+            evtOnChar = null;
+        }
 
 
         public bool doEvtOnLMDown(int x, int y)
@@ -692,6 +745,15 @@ namespace ns_behaviour
                 return true;
             }
             return evtOnLMDown(this, x, y);
+        }
+
+        public bool doEvtOnMMove(int x, int y)
+        {
+            if (evtOnMMove == null)
+            {
+                return true;
+            }
+            return evtOnMMove(this, x, y);
         }
 
         public bool doEvtOnLMUp(int x, int y)

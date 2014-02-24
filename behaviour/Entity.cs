@@ -32,6 +32,20 @@ namespace ns_behaviour
             }
         }
 
+        public virtual void clear()
+        {
+            List<Entity> cCopy = new List<Entity>();
+            foreach (var ent in mChildrent)
+            {
+                cCopy.Add(ent);
+            }
+
+            foreach (var ent in cCopy)
+            {
+                ent.paresent = null;
+            }
+        }
+
         public void sortChildrent( Comparison<Entity> pred )
         {
             mChildrent.Sort(pred);

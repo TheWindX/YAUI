@@ -31,13 +31,14 @@ namespace ns_behaviour
             this.mTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.mTextBox.Font = new System.Drawing.Font("SimSun", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.mTextBox.ForeColor = System.Drawing.SystemColors.ActiveBorder;
-            this.mTextBox.Location = new System.Drawing.Point(12, 13);
+            this.mTextBox.Location = new System.Drawing.Point(12, 15);
             this.mTextBox.Name = "mTextBox";
             this.mTextBox.Size = new System.Drawing.Size(366, 25);
             this.mTextBox.TabIndex = 1;
-            this.mTextBox.Text = "Template";
             this.mTextBox.Click += new System.EventHandler(this.mTextBox_Click);
             this.mTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.mTextBox_KeyUp);
+            //this.mTextBox.Leave += new System.EventHandler(this.mTextBox_Leave);
+            this.Deactivate += new System.EventHandler(this.mTextBox_Leave);
             // 
             // InputForm
             // 
@@ -49,9 +50,11 @@ namespace ns_behaviour
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "InputForm";
             this.TransparencyKey = System.Drawing.Color.Maroon;
+            this.Load += new System.EventHandler(this.InputForm_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SimpleCustomControl_Paint);
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private void SimpleCustomControl_Paint(object sender, PaintEventArgs e)
@@ -77,7 +80,7 @@ namespace ns_behaviour
             }
         }
 
-        string mTintText = "Template";
+        string mTintText = "";
         public string tintText
         {
             set
@@ -123,6 +126,17 @@ namespace ns_behaviour
             uint c1 = 0xffffffff;
             mTextBox.Text = "";
             mTextBox.ForeColor = Color.FromArgb((Int32)c1);
+        }
+
+        private void InputForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mTextBox_Leave(object sender, EventArgs e)
+        {
+            show(false);
+            //this.Visible = false;
         }
 
     }

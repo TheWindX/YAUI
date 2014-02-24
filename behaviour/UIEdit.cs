@@ -33,7 +33,7 @@ namespace ns_behaviour
         public bool onClick(UIWidget _this, int x, int y)
         {
             InputForm.Instance.show(true, x, y);
-            InputForm.Instance.evtInputExit += (text) =>
+            InputForm.Instance.evtInputExit = (text) =>
                 {
                     if (mMaxCharLength < text.Length)
                         this.text = text.Substring(0, mMaxCharLength);
