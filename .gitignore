@@ -2,7 +2,7 @@ bin/
 obj/
 /Properties/
 *.config
-*.sln
+--*.sln
 *.user
 *.suo
-*.csproj
+--*.csproj
