@@ -1152,11 +1152,6 @@ namespace ns_behaviour
                 g.SetClip(p, CombineMode.Intersect);
             }
 
-            foreach (Entity e in mChildrent)
-            {
-
-            }
-
             for (int i = mChildrent.Count - 1; i >= 0; --i)
             {
                 (mChildrent[i] as UIWidget).doDraw(g);
