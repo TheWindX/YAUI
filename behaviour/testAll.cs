@@ -20,8 +20,9 @@ namespace ns_behaviour
             //var _2 = testUIRoot1.Instance;
             //var _3 = testUI2.Instance;
             //var _4 = testUILines.Instance;
-            var _5 = testGraphic.Instance;
+            //var _5 = testGraphic.Instance;
             //var _6 = testUIXML.Instance;
+            var _7 = testLayout.Instance;
         }
     }
 }

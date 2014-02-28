@@ -59,7 +59,7 @@ namespace ns_behaviour
                 mText = value;
                 var fontsz = TextRenderer.MeasureText(mText, mFont);
                 mRect = new Rectangle(new Point(0, 0), fontsz);
-                adjust();
+                adjustAlign();
             }
         }
 

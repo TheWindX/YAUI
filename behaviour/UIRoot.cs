@@ -144,6 +144,7 @@ namespace ns_behaviour
 
         public void draw(Graphics g)
         {
+            root.adjustLayout();
             root.doDraw(g);
         }
 

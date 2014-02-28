@@ -191,6 +191,34 @@ namespace ns_behaviour
             get { return new Rectangle(); }
         }
 
+        protected virtual void setWidth(int width)
+        {
+        }
+
+        protected virtual void setHeight(int height)
+        {
+        }
+
+        public Rectangle layoutRect
+        {
+            get
+            {
+                var rc = drawRect;
+                rc.Location = new Point(rc.Location.X - marginX, rc.Location.Y - marginY);
+                rc.Size = new Size(rc.Size.Width + marginX, rc.Size.Height + marginY);
+                return rc;
+            }
+        }
+
+        public int borderX
+        {
+            get { return drawRect.Width; }
+        }
+
+        public int borderY
+        {
+            get { return drawRect.Height; }
+        }
 
         public virtual Rectangle pickRect
         {
@@ -294,6 +322,11 @@ namespace ns_behaviour
         }
         public Dictionary<string, object> attrs = new Dictionary<string, object>();
 
+        //box model
+        public int marginX = 0;
+        public int marginY = 0;
+        public int paddingX = 0;
+        public int paddingY = 0;
         #endregion
 
         #region align
@@ -510,60 +543,68 @@ namespace ns_behaviour
             }
         }
 
-        public virtual void adjust()
+        /// <returns> need ajust </returns>
+        public virtual bool adjustAlign()
         {
             if(paresent == null)
-                return;
+                return false;
 
             if (mAlign == EAlign.noAlign || mAlignParesent == EAlign.noAlign)
             {
-                return;
+                return false;
             }
 
             var pui = (paresent as UIWidget);
 
-            if (mAlign == EAlign.leftTop && mAlignParesent == EAlign.leftTop)
-            {
-                position.X = offsetx;
-                position.Y = offsety;
-                return;
-            }
             Point alignPos = new Point();
-            switch (mAlign)
+            switch (mAlignParesent)
             {
                 case EAlign.center:
                     alignPos = paresent.invertTransform((paresent as UIWidget).center);
                     break;
                 case EAlign.leftTop:
                     alignPos = paresent.invertTransform((paresent as UIWidget).leftTop);
+                    alignPos.X += offsetx + pui.paddingX + marginX;
+                    alignPos.Y += offsety + pui.paddingY + marginY;
                     break;
                 case EAlign.leftMiddle:
                     alignPos = paresent.invertTransform((paresent as UIWidget).leftMiddle);
+                    alignPos.X += offsetx + pui.paddingX + marginX;
                     break;
                 case EAlign.leftButtom:
                     alignPos = paresent.invertTransform((paresent as UIWidget).leftButtom);
+                    alignPos.X += offsetx + pui.paddingX + marginX;
+                    alignPos.Y += offsety - pui.paddingY - marginY;
                     break;
                 case EAlign.rightTop:
                     alignPos = paresent.invertTransform((paresent as UIWidget).rightTop);
+                    alignPos.X += offsetx - pui.paddingX - marginX;
+                    alignPos.Y += offsety + pui.paddingY + marginY;
                     break;
                 case EAlign.rightMiddle:
                     alignPos = paresent.invertTransform((paresent as UIWidget).rightMiddle);
+                    alignPos.X += offsetx - pui.paddingX - marginX;
                     break;
                 case EAlign.rightButtom:
                     alignPos = paresent.invertTransform((paresent as UIWidget).rightButtom);
+                    alignPos.X += offsetx - pui.paddingX - marginX;
+                    alignPos.Y += offsety - pui.paddingY - marginY;
                     break;
                 case EAlign.middleTop:
                     alignPos = paresent.invertTransform((paresent as UIWidget).middleTop);
+                    alignPos.X += offsetx - pui.paddingX - marginX;
+                    alignPos.Y += offsety - pui.paddingY - marginY;
                     break;
                 case EAlign.middleButtom:
                     alignPos = paresent.invertTransform((paresent as UIWidget).middleButtom);
+                    alignPos.Y += offsety - pui.paddingY - marginY;
                     break;
                 default:
                     break
                     ;
             }
 
-            switch (mAlignParesent)
+            switch (mAlign)
             {
                 case EAlign.center:
                     this.center = alignPos;
@@ -593,14 +634,11 @@ namespace ns_behaviour
                     this.middleButtom = alignPos;
                     break;
                 default:
-                    break
-                    ;
+                    break;
             }
 
-            position.X += offsetx;
-            position.Y += offsety;
+            return true;
         }
-
         #endregion
 
         #region transform
@@ -624,48 +662,96 @@ namespace ns_behaviour
         #endregion
 
         #region methods
-        public UIWidget()
+        public UIWidget(){}
+
+        public enum ELayout
         {
+            none,
+            vertical,
+            horizen,
         }
-        static UIWidget commonParesent(UIWidget u1, UIWidget u2, out UIWidget sub1, out UIWidget sub2)
+        public ELayout mLayout = ELayout.none;
+        public bool wrap = false;
+        public bool resizeAble = false;
+
+        //这个因与渲染次序不同,因此不能让到draw里
+        public virtual void adjustLayout()
         {
-            List<UIWidget> u1Plist = new List<UIWidget>();
-            UIWidget t1 = u1;
-            while (t1 != null)
+            for (int i = 0; i < mChildrent.Count; ++i)
             {
-                u1Plist.Add(t1);
-                t1 = t1.mParesent as UIWidget;
+                var c = mChildrent[i] as UIWidget;
+                c.adjustLayout();
             }
+            bool bAjust = adjustAlign();
 
-            List<UIWidget> u2Plist = new List<UIWidget>();
-            UIWidget t2 = u2;
-            while (t2 != null)
+            if (mLayout == ELayout.none) return;
+
+            #region layout calc
+            Point rb = new Point();
+            Rectangle rc = new Rectangle(new Point(paddingX, paddingY), new Size(0, 0));
+            rb = rc.rightButtom();
+            int idxCount = 0;
+            for (int i = 0; i < mChildrent.Count; ++i)
             {
-                u2Plist.Add(t2);
-                t2 = t2.mParesent as UIWidget;
-            }
-
-            UIWidget c = null;
-            int i1 = u1Plist.Count - 1;
-            int i2 = u2Plist.Count - 1;
-            sub1 = null;
-            sub2 = null;
-            for (; i1 >= 0 && i2 >= 0; )
-            {
-                var c1 = u1Plist[i1];
-                var c2 = u2Plist[i2];
-                sub1 = c1;
-                sub2 = c2;
-
-                if (c1 == c2)
+                if (mLayout == ELayout.vertical)
                 {
-                    c = c1;
+                    var c = mChildrent[i] as UIWidget;
+                    var pt = rc.leftButtom();
+                    pt.X += c.marginX;
+                    pt.Y += c.marginY;
+                    c.leftTop = pt;
+
+                    var lr = c.layoutRect;
+                    var rcOld = rc;
+                    rc.Width = max(lr.Width, rc.Width);
+                    rc.Height = rc.Height + lr.Height;
+                    rb.X = max(rc.Width, rb.X);
+                    rb.Y = max(rc.Height, rb.Y);
+
+                    idxCount++;
+                    if (this.wrap && rc.Bottom > this.drawRect.Height && idxCount > 1)//只能容一个的情况
+                    {
+                        i--;
+                        idxCount = 0;
+                        rc = rcOld;
+                        rc.Location = new Point(rc.Location.X + rc.Width, paddingY);
+                        rc.Size = new Size();
+                    }
                 }
-                i1--;
-                i2--;
+                else
+                {
+                    var c = mChildrent[i] as UIWidget;
+                    var pt = rc.rightTop();
+                    pt.X += c.marginX;
+                    pt.Y += c.marginY;
+                    c.leftTop = pt;
+
+                    var lr = c.layoutRect;
+                    var rcOld = rc;
+                    rc.Height = max(lr.Height, rc.Height);
+                    rc.Width = rc.Width + lr.Width;
+                    rb.X = max(rc.Width, rb.X);
+                    rb.Y = max(rc.Height, rb.Y);
+
+                    idxCount++;
+                    if (this.wrap && rc.Right > this.drawRect.Width && idxCount > 1)//只能容一个的情况
+                    {
+                        i--;
+                        idxCount = 0;
+                        rc = rcOld;
+                        rc.Location = new Point(paddingX, rc.Location.Y + rc.Height);
+                        rc.Size = new Size();
+                    }
+                }
             }
-            return c;
+            if (this.resizeAble)
+            {
+                setWidth(rb.X + paddingX);//right padding
+                setHeight(rb.Y + paddingY);//button padding
+            }
+            #endregion
         }
+        
         #endregion
 
         #region events
@@ -1193,7 +1279,6 @@ namespace ns_behaviour
             if (evtPreDraw != null)
                     evtPreDraw();
 
-            adjust();
             var gs = g.Save();
 
             Matrix _mtx = g.Transform;

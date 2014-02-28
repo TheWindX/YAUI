@@ -85,6 +85,7 @@
     <Compile Include="singleton.cs" />
     <Compile Include="testAll.cs" />
     <Compile Include="testGraphic.cs" />
+    <Compile Include="testLayout.cs" />
     <Compile Include="testPaint1.cs" />
     <Compile Include="testUI2.cs" />
     <Compile Include="testUILines.cs" />
