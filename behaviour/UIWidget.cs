@@ -205,7 +205,7 @@ namespace ns_behaviour
             {
                 var rc = drawRect;
                 rc.Location = new Point(rc.Location.X - marginX, rc.Location.Y - marginY);
-                rc.Size = new Size(rc.Size.Width + marginX, rc.Size.Height + marginY);
+                rc.Size = new Size(rc.Size.Width + marginX*2, rc.Size.Height + marginY*2);
                 return rc;
             }
         }
@@ -664,6 +664,7 @@ namespace ns_behaviour
         #region methods
         public UIWidget(){}
 
+        #region layout
         public enum ELayout
         {
             none,
@@ -682,9 +683,13 @@ namespace ns_behaviour
                 var c = mChildrent[i] as UIWidget;
                 c.adjustLayout();
             }
-            bool bAjust = adjustAlign();
 
-            if (mLayout == ELayout.none) return;
+            if (mLayout == ELayout.none)
+            {
+                //无layout就使用align
+                bool bAjust = adjustAlign();
+                return;
+            }
 
             #region layout calc
             Point rb = new Point();
@@ -705,11 +710,11 @@ namespace ns_behaviour
                     var rcOld = rc;
                     rc.Width = max(lr.Width, rc.Width);
                     rc.Height = rc.Height + lr.Height;
-                    rb.X = max(rc.Width, rb.X);
-                    rb.Y = max(rc.Height, rb.Y);
+                    rb.X = max(rc.Right, rb.X);
+                    rb.Y = max(rc.Bottom, rb.Y);
 
                     idxCount++;
-                    if (this.wrap && rc.Bottom > this.drawRect.Height && idxCount > 1)//只能容一个的情况
+                    if (!this.resizeAble && this.wrap && rc.Bottom > this.drawRect.Height - paddingY && idxCount > 1)//只能容一个的情况
                     {
                         i--;
                         idxCount = 0;
@@ -730,11 +735,11 @@ namespace ns_behaviour
                     var rcOld = rc;
                     rc.Height = max(lr.Height, rc.Height);
                     rc.Width = rc.Width + lr.Width;
-                    rb.X = max(rc.Width, rb.X);
-                    rb.Y = max(rc.Height, rb.Y);
+                    rb.X = max(rc.Right, rb.X);
+                    rb.Y = max(rc.Bottom, rb.Y);
 
                     idxCount++;
-                    if (this.wrap && rc.Right > this.drawRect.Width && idxCount > 1)//只能容一个的情况
+                    if (!this.resizeAble && this.wrap && rc.Right > this.drawRect.Width - paddingX && idxCount > 1)//至少容一个的情况
                     {
                         i--;
                         idxCount = 0;
@@ -746,12 +751,13 @@ namespace ns_behaviour
             }
             if (this.resizeAble)
             {
-                setWidth(rb.X + paddingX);//right padding
-                setHeight(rb.Y + paddingY);//button padding
+                setWidth(rb.X+paddingX );//right padding
+                setHeight(rb.Y+paddingY );//button padding
             }
             #endregion
         }
-        
+        #endregion
+
         #endregion
 
         #region events

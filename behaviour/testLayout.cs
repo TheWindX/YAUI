@@ -23,15 +23,16 @@ namespace ns_behaviour
 
         public void main()
         {
-            var rc = new UIRect(512, 512);
-            rc.paddingX = 20;
-            rc.paddingY = 20;
+            var rc = new UIRect(512, 128);
+            rc.paddingX = 0;
+            rc.paddingY = 100;
             rc.position = new Point(100, 100);
             rc.dragAble = true;
-            rc.mDir = 45;
+            //rc.mDir = 45;
             rc.paresent = UIRoot.Instance.root;
             rc.mLayout = UIWidget.ELayout.vertical;
-            //rc.wrap = true;
+            //rc.resizeAble = true;
+            rc.wrap = true;
 
             var rc1 = new UIRect(128, 128);
             rc1.marginX = 50;

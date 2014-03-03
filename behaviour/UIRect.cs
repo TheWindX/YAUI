@@ -33,6 +33,15 @@ namespace ns_behaviour
             mPen = new Pen(Color.FromArgb((Int32)scolor));
         }
 
+        protected override void setWidth(int w)
+        {
+            width = w;
+        }
+
+        protected override void setHeight(int h)
+        {
+            height = h;
+        }
 
         public uint fillColor
         {
