@@ -1196,7 +1196,48 @@ namespace ns_behaviour
             {
                 scaleAble = ret.Value.castBool();
             }
-            
+
+            ret = node.Attributes.GetNamedItem("layout");
+            if (ret != null)
+            {
+                mLayout = (ELayout)Enum.Parse(typeof(ELayout), ret.Value);
+            }
+
+            ret = node.Attributes.GetNamedItem("wrap");
+            if (ret != null)
+            {
+                wrap = ret.Value.castBool();
+            }
+
+            ret = node.Attributes.GetNamedItem("resizeAble");
+            if (ret != null)
+            {
+                resizeAble = ret.Value.castBool();
+            }
+
+            ret = node.Attributes.GetNamedItem("marginX");
+            if (ret != null)
+            {
+                marginX = ret.Value.castInt();
+            }
+
+            ret = node.Attributes.GetNamedItem("marginY");
+            if (ret != null)
+            {
+                marginY = ret.Value.castInt();
+            }
+
+            ret = node.Attributes.GetNamedItem("paddingX");
+            if (ret != null)
+            {
+                paddingX = ret.Value.castInt();
+            }
+
+            ret = node.Attributes.GetNamedItem("paddingY");
+            if (ret != null)
+            {
+                paddingY = ret.Value.castInt();
+            }
             return node.ChildNodes;
         }
 

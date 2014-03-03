@@ -32,6 +32,8 @@ namespace ns_behaviour
         }
 
         //xml
+        protected Dictionary<string, XmlElement> mName2Template = new Dictionary<string, XmlElement>();
+
         public delegate XmlNodeList funcFromXML(XmlNode nd, out UIWidget ui, UIWidget p);
 
         static Dictionary<string, funcFromXML> mXML2widget = new Dictionary<string, funcFromXML>();
@@ -51,21 +53,112 @@ namespace ns_behaviour
             regMethodFromXML("line", UILine.fromXML);
         }
 
-        UIWidget loadFromXMLNode(XmlNode node, UIWidget p)
+        UIWidget loadFromXMLNode(XmlNode node, UIWidget p, XmlNode pnode)
         {
             UIWidget uiret = null;
             funcFromXML fromxmlFunc = null;
+
+            //attribute inherite
+            if (pnode != null)
+            {
+                var patts = pnode.Attributes;
+                var nodeAttName = (node as XmlElement).GetAttribute("name");
+                foreach (XmlAttribute patt in patts)
+                {
+                    var parts = patt.Name.Split('.');
+                    if (parts.Count() > 1)
+                    {
+                        if (parts[0] == nodeAttName)
+                        {
+                            var name = parts.Skip(1).Aggregate("",
+                                (si, str) => (si + (si == "" ? "" : ",") + str)
+                                );
+                            var value = patt.Value;
+                            (node as XmlElement).SetAttribute(name, value);
+                        }
+                        else
+                        {
+                            (node as XmlElement).SetAttribute(patt.Name, patt.Value);
+                        }
+                    }
+                }
+            }
+                
+            //xml to widget, and children
             if(mXML2widget.TryGetValue(node.Name, out fromxmlFunc) )
             {
                 var uichildren = fromxmlFunc(node, out uiret, p);
                 foreach (XmlNode elem in uichildren)
                 {
-                    var uichild = loadFromXMLNode(elem, uiret);
+                    var uichild = loadFromXMLNode(elem, uiret, node);
                     if (uichild != null)
                     {
                         uichild.paresent = uiret;
                     }
                 }
+            }
+
+            //read template
+            else if(node.Name.ToLower() == "template")//controller template
+            {
+                var ret = node.Attributes.GetNamedItem("name");
+                if (ret != null)
+                {
+                    var templateName = ret.Value;
+                    XmlElement templateNode = null;
+                    if (mName2Template.TryGetValue(templateName, out templateNode))
+                    {
+                        //TODO, 已经存在这个node, exception
+                        
+                    }
+                    else
+                    {
+                        var childrens = node.ChildNodes;
+                        if (childrens.Count < 1)
+                        {
+                            //TODO, no content for controll
+                        }
+                        else
+                        {
+                            templateNode = childrens[0] as XmlElement;
+                            mName2Template[templateName] = templateNode;
+                        }
+                    }
+                }
+                else
+                {
+                    //exception
+                }
+                return null;
+            }
+
+            //apply template
+            else if (node.Name.ToLower() == "apply")
+            {
+                var ret = node.Attributes.GetNamedItem("template");
+                if (ret != null)
+                {
+                    var templateName = ret.Value;
+                    XmlElement templateNode = null;
+                    if (mName2Template.TryGetValue(templateName, out templateNode))
+                    {
+                        var applyNode = templateNode.CloneNode(true);
+                        foreach(XmlAttribute att in node.Attributes)
+                        {
+                            (applyNode as XmlElement).SetAttribute(att.Name, att.Value);
+                        }
+                        return loadFromXMLNode(applyNode, p, pnode);
+                    }
+                    else
+                    {
+                        //TODO, template node不存在, exception
+                    }
+                }
+                else
+                {
+                    //Exception
+                }
+                return null;
             }
             return uiret;
         }
@@ -78,7 +171,7 @@ namespace ns_behaviour
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(xml);
                 var node = doc.ChildNodes[0];
-                ret = loadFromXMLNode(node, null);
+                ret = loadFromXMLNode(node, null, null);
             }
             catch (Exception e){ Globals.Instance.mRepl.print(e.ToString() ); }
             return ret;
