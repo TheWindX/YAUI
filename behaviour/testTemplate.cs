@@ -25,7 +25,6 @@ namespace ns_behaviour
         {
             UIRoot.Instance.root.appendFromXML(
                 @"
-
     <rect width=""256"" height=""256"" layout=""horizen"" paddingX=""4"" paddingY=""4"">
         <template name=""t1"">
             <rect width=""64"" height=""64"" marginX=""2"" marginY=""2"">
@@ -35,8 +34,6 @@ namespace ns_behaviour
         <apply template=""t1"" height=""64""></apply>
         <apply template=""t1"" height=""32""></apply>
     </rect>
-
-
 ");
            
 

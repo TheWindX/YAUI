@@ -675,7 +675,7 @@ namespace ns_behaviour
         public bool wrap = false;
         public bool resizeAble = false;
 
-        //这个因与渲染次序不同,因此不能让到draw里
+        //这个因与渲染的遍历次序不同,因此不能让到draw里
         public virtual void adjustLayout()
         {
             for (int i = 0; i < mChildrent.Count; ++i)
@@ -696,7 +696,7 @@ namespace ns_behaviour
             Rectangle rc = new Rectangle(new Point(paddingX, paddingY), new Size(0, 0));
             rb = rc.rightButtom();
             int idxCount = 0;
-            for (int i = 0; i < mChildrent.Count; ++i)
+            for (int i = mChildrent.Count-1; i >= 0; --i)
             {
                 if (mLayout == ELayout.vertical)
                 {

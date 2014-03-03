@@ -91,6 +91,8 @@ namespace ns_behaviour
                 foreach (XmlNode elem in uichildren)
                 {
                     var uichild = loadFromXMLNode(elem, uiret, node);
+                    //var v = elem.Attributes.GetNamedItem("height");
+                    //Console.WriteLine(v==null?"":v.Value );
                     if (uichild != null)
                     {
                         uichild.paresent = uiret;
