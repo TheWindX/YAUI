@@ -15,7 +15,6 @@ using System.Drawing.Drawing2D;
 
 namespace ns_behaviour
 {
-
     class UILineNode : UIWidget
     {
         const int lineWidth = 1;

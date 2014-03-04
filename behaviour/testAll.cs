@@ -23,7 +23,8 @@ namespace ns_behaviour
             //var _5 = testGraphic.Instance;
             //var _6 = testUIXML.Instance;
             //var _7 = testLayout.Instance;
-            var _8 = testTemplate.Instance;
+            //var _8 = testTemplate.Instance;
+            var _9 = testPath.Instance;
         }
     }
 }

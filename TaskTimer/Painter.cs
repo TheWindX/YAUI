@@ -24,14 +24,15 @@ namespace ns_behaviour
     {
         private System.Windows.Forms.Timer mTimer;
         private System.ComponentModel.IContainer components;
-        public NotifyIcon notifyIcon1;
+        public NotifyIcon shut;
 
-        public PaintDriver mIns = null;
+        static public PaintDriver mIns = null;
+
         
-
         public PaintDriver()
         {
             InitializeComponent();
+            this.WindowState = FormWindowState.Minimized;
         }
 
         void InitializeComponent()
@@ -39,31 +40,31 @@ namespace ns_behaviour
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PaintDriver));
             this.mTimer = new System.Windows.Forms.Timer(this.components);
-            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.shut = new System.Windows.Forms.NotifyIcon(this.components);
             this.SuspendLayout();
             // 
             // mTimer
             // 
             this.mTimer.Enabled = true;
-            this.mTimer.Interval = 10;
             this.mTimer.Tick += new System.EventHandler(this.onUpdate);
             // 
-            // notifyIcon1
+            // shut
             // 
-            this.notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
-            this.notifyIcon1.Tag = "123";
-            this.notifyIcon1.Text = "notifyIcon1";
-            this.notifyIcon1.Visible = true;
-            this.notifyIcon1.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
+            this.shut.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.shut.Icon = ((System.Drawing.Icon)(resources.GetObject("shut.Icon")));
+            this.shut.Tag = "123";
+            this.shut.Text = "shut";
+            this.shut.Visible = true;
+            this.shut.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon1_MouseDoubleClick);
             // 
             // PaintDriver
             // 
             this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(304, 441);
+            this.ClientSize = new System.Drawing.Size(330, 441);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "PaintDriver";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.TransparencyKey = System.Drawing.Color.Black;
             this.Load += new System.EventHandler(this.onLoad);

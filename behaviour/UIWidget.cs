@@ -23,7 +23,6 @@ namespace ns_behaviour
 {
     class UIWidget : Entity
     {
-
         #region Hierarchy
         void sortSibling()
         {
@@ -88,6 +87,12 @@ namespace ns_behaviour
                 if (elem.name == name)
                 {
                     return elem;
+                }
+                else if (elem.name == null || elem.name == "")
+                {
+                    var ui = elem.childOf(name);
+                    if (ui != null)
+                        return ui;
                 }
             }
             return null;
@@ -329,6 +334,7 @@ namespace ns_behaviour
         public int paddingY = 0;
         #endregion
 
+        #region layout
         #region align
         public Point center
         {
@@ -500,7 +506,6 @@ namespace ns_behaviour
             {
                 mAlign = value;
             }
-            
         }
 
         EAlign mAlignParesent = EAlign.noAlign;
@@ -641,39 +646,18 @@ namespace ns_behaviour
         }
         #endregion
 
-        #region transform
-        public Matrix transformMatrix
-        {
-            get
-            {
-                Matrix m = new Matrix();
-                m.Translate(position.X, position.Y);
-                m.Rotate(mDir);
-                m.Scale(mScalex, mScaley);
-                return m;
-            }
-        }
-        
-        public void translate(int dx, int dy)
-        {
-            position.X += dx;
-            position.Y += dy;
-        }
-        #endregion
-
-        #region methods
-        public UIWidget(){}
-
-        #region layout
+        #region layout implement
         public enum ELayout
         {
             none,
             vertical,
             horizen,
         }
+
+
         public ELayout mLayout = ELayout.none;
         public bool wrap = false;
-        public bool resizeAble = false;
+        public bool resizeAble = false;//if resizeAble, wrap is invalid
 
         //这个因与渲染的遍历次序不同,因此不能让到draw里
         public virtual void adjustLayout()
@@ -696,7 +680,7 @@ namespace ns_behaviour
             Rectangle rc = new Rectangle(new Point(paddingX, paddingY), new Size(0, 0));
             rb = rc.rightButtom();
             int idxCount = 0;
-            for (int i = mChildrent.Count-1; i >= 0; --i)
+            for (int i = mChildrent.Count - 1; i >= 0; --i)
             {
                 if (mLayout == ELayout.vertical)
                 {
@@ -716,7 +700,7 @@ namespace ns_behaviour
                     idxCount++;
                     if (!this.resizeAble && this.wrap && rc.Bottom > this.drawRect.Height - paddingY && idxCount > 1)//只能容一个的情况
                     {
-                        i--;
+                        i++;
                         idxCount = 0;
                         rc = rcOld;
                         rc.Location = new Point(rc.Location.X + rc.Width, paddingY);
@@ -741,7 +725,7 @@ namespace ns_behaviour
                     idxCount++;
                     if (!this.resizeAble && this.wrap && rc.Right > this.drawRect.Width - paddingX && idxCount > 1)//至少容一个的情况
                     {
-                        i--;
+                        i++;
                         idxCount = 0;
                         rc = rcOld;
                         rc.Location = new Point(paddingX, rc.Location.Y + rc.Height);
@@ -751,12 +735,38 @@ namespace ns_behaviour
             }
             if (this.resizeAble)
             {
-                setWidth(rb.X+paddingX );//right padding
-                setHeight(rb.Y+paddingY );//button padding
+                setWidth(rb.X + paddingX);//right padding
+                setHeight(rb.Y + paddingY);//button padding
             }
             #endregion
         }
         #endregion
+
+        #endregion
+
+        #region transform
+        public Matrix transformMatrix
+        {
+            get
+            {
+                Matrix m = new Matrix();
+                m.Translate(position.X, position.Y);
+                m.Rotate(mDir);
+                m.Scale(mScalex, mScaley);
+                return m;
+            }
+        }
+        
+        public void translate(int dx, int dy)
+        {
+            position.X += dx;
+            position.Y += dy;
+        }
+        #endregion
+
+        #region methods
+        public UIWidget(){}
+
 
         #endregion
 
@@ -1359,6 +1369,5 @@ namespace ns_behaviour
 
         internal virtual void onDraw(Graphics g) { }
         #endregion
-
     }
 }

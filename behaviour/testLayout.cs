@@ -31,7 +31,7 @@ namespace ns_behaviour
             //rc.mDir = 45;
             rc.paresent = UIRoot.Instance.root;
             rc.mLayout = UIWidget.ELayout.vertical;
-            //rc.resizeAble = true;
+            rc.resizeAble = true;
             rc.wrap = true;
 
             var rc1 = new UIRect(128, 128);

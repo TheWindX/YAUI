@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-
+using System.Runtime.InteropServices;
 using System.IO;
 
 namespace ns_behaviour
@@ -127,7 +127,8 @@ namespace ns_behaviour
                     InputForm.Instance.show(true, x, y);
                     InputForm.Instance.evtInputExit = (text) =>
                     {
-                        mHour.text = text;
+                        if (text != "")
+                            mHour.text = text;
                     };
                     return true;
                 };
@@ -139,7 +140,8 @@ namespace ns_behaviour
                 InputForm.Instance.show(true, x, y);
                 InputForm.Instance.evtInputExit = (text) =>
                 {
-                    mMinute.text = text;
+                    if (text != "")
+                        mMinute.text = text;
                 };
                 return false;
             };
@@ -151,7 +153,8 @@ namespace ns_behaviour
                 InputForm.Instance.show(true, x, y);
                 InputForm.Instance.evtInputExit = (text) =>
                 {
-                    mDesc.text = text;
+                    if (text != "")
+                        mDesc.text = text;
                 };
                 return false;
             };
@@ -193,6 +196,7 @@ namespace ns_behaviour
                     try
                     {
                         getTaskFromUI(task);
+                        TimeTaskManager.Instance.write();
                         TimerListModel.Instance.showList();
                     }
                     catch (Exception e)
@@ -249,7 +253,7 @@ namespace ns_behaviour
 
                         <lable name=""cancel"" text=""取消"" size=""18"" offsetx=""4"" offsety=""4""
                                     align=""leftTop"" alignParesent=""leftTop""> </lable>
-                        <lable name=""delete"" text=""删除"" size=""18"" offsetx=""0"" offsety=""4"" color=""0xffff0000""
+                        <lable name=""delete"" text=""删除"" size=""18"" offsetx=""0"" offsety=""4"" color=""0xffffaf60""
                                     align=""middleTop"" alignParesent=""middleTop""> </lable>
                         <lable name=""comfirm"" text=""确定"" size=""18"" offsetx=""-4"" offsety=""4""
                                     align=""rightTop"" alignParesent=""rightTop""> </lable>
@@ -333,14 +337,8 @@ namespace ns_behaviour
                         </rect>
                         <rect name=""desc"" width=""120"" height=""48"" 
                             align=""leftTop"" alignParesent=""leftTop"" offsetx=""200"" offsety=""0""
-                            stokeColor=""0xffffffff"" fillColor=""0xffdeb887"">
-                            <lable name=""lable"" text=""-"" size=""30""
-                                align=""center"" alignParesent=""center""> </lable>
-                        </rect>
-                        <rect name=""desc"" width=""120"" height=""48"" 
-                            align=""leftTop"" alignParesent=""leftTop"" offsetx=""200"" offsety=""0""
-                            stokeColor=""0xffffffff"" fillColor=""0xffdeb887"">
-                            <lable name=""lable"" text=""-"" size=""30""
+                            stokeColor=""0xffffffff"" fillColor=""0xffdeb887"" clip=""true"">
+                            <lable name=""lable"" text=""-"" size=""12""
                                 align=""center"" alignParesent=""center""> </lable>
                         </rect>
                     </rect>";
@@ -410,8 +408,8 @@ namespace ns_behaviour
                     }
                 }
                 uiTypeLable.text = strType;
-                //var uiDescLable = uiItem1.childOfPath("desc/lable") as UILable;
-                //uiDescLable.text = t.taskDesc;
+                var uiDescLable = uiItem1.childOfPath("desc/lable") as UILable;
+                uiDescLable.text = t.taskDesc;
                 uiItem1.evtOnLMDownClear();
                 uiItem1.evtOnLMDown += (u, x, y) =>
                     {
@@ -426,6 +424,10 @@ namespace ns_behaviour
                     return false;
                 };
         }
+        [DllImport("user32.dll")]
+        public static extern int ShowWindow(int hwnd, int nCmdShow);
+        [DllImport("user32.dll")]
+        public static extern int FindWindow(string lpClassName, string lpWindowName);
 
         public void drawFrame()
         {
@@ -446,23 +448,26 @@ namespace ns_behaviour
                             <lable name=""lable"" text=""+"" size=""30""
                             align=""center"" alignParesent=""center""> </lable>
                     </rect>
-                    <rect name=""t2"" width=""80"" height=""48"" offsetx=""80"" offsety=""0"" align=""leftTop"" alignParesent=""leftTop""
+                    <rect name=""t2"" width=""80"" height=""48"" offsetx=""160"" offsety=""0"" align=""leftTop"" alignParesent=""leftTop""
                         stokeColor=""0xffffffff"" fillColor=""0xff33b887"" 
                         clip=""true"">
-                            <lable name=""lable"" text=""闹钟"" size=""18""
+                            <lable name=""lable"" text="""" size=""14"" color=""0xdddddddd""
                             align=""center"" alignParesent=""center""> </lable>
                     </rect>
-                    <rect name=""t3"" width=""80"" height=""48"" offsetx=""160"" offsety=""0"" align=""leftTop"" alignParesent=""leftTop""
+                    <rect name=""t3"" width=""80"" height=""48"" offsetx=""80"" offsety=""0"" align=""leftTop"" alignParesent=""leftTop""
                         stokeColor=""0xffffffff"" fillColor=""0xff33b887"" 
                         clip=""true"">
-                            <lable name=""lable"" text="""" size=""18""
+                            <lable name=""lable"" text=""SHUT"" size=""14""
                             align=""center"" alignParesent=""center""> </lable>
                     </rect>
                     <rect name=""close"" width=""80"" height=""48"" offsetx=""240"" offsety=""0"" align=""leftTop"" alignParesent=""leftTop""
                         stokeColor=""0xffffffff"" fillColor=""0xff33b887"" 
                         clip=""true"">
-                            <lable name=""lable"" text=""x"" size=""20"" color=""0xffff0000""
-                            align=""center"" alignParesent=""center""
+                            <lable name=""_"" text=""_"" size=""20"" 
+                            align=""center"" alignParesent=""center"" offsetx=""-10"" offsety=""-10""
+                            clip=""true""> </lable>
+                            <lable name=""lable"" text=""x"" size=""20"" color=""0xffffaf60""
+                            align=""center"" alignParesent=""center"" offsetx=""20"" offsety=""0""
                             clip=""true""> </lable>
                     </rect>
                 </stub>";
@@ -475,6 +480,15 @@ namespace ns_behaviour
                     System.Windows.Forms.Application.Exit();
                     return false;
                 };
+
+            var mMin = mBar.childOfPath("close/_");
+            mMin.evtOnLMDown += (u, x, y) =>
+            {
+                //System.Windows.Forms.Application.Exit();
+                //ShowWindow(FindWindow("Shell_TrayWnd", null), 0/9);
+                PaintDriver.mIns.WindowState = System.Windows.Forms.FormWindowState.Minimized;
+                return false;
+            };
 
             mRoot.evtOnLMDown += (u, x, y) =>
                 {
@@ -697,7 +711,7 @@ namespace ns_behaviour
         public void read()
         {
             XmlDocument doc = new XmlDocument();
-            var path = Directory.GetCurrentDirectory() + "\\" + fname;
+            var path = System.Windows.Forms.Application.StartupPath +"\\" + fname;
             bool exist = File.Exists(path);
             byte[] bs = File.ReadAllBytes(path);
             string str = System.Text.Encoding.Default.GetString(bs);
@@ -708,32 +722,32 @@ namespace ns_behaviour
 
             Action<string, PTaskTime> str2bool = delegate(string strWeek, PTaskTime t)
             {
-                
-                    if (strWeek.Contains("日"))
+                for (int i = 0; i < 7; i++) t.setWeekDate(i, false);
+                    if (strWeek.Contains("0"))
                     {
                         t.setWeekDate(0, true);
                     }
-                    if (strWeek.Contains("一"))
+                    if (strWeek.Contains("1"))
                     {
                         t.setWeekDate(1, true);
                     }
-                    if (strWeek.Contains("二"))
+                    if (strWeek.Contains("2"))
                     {
                         t.setWeekDate(2, true);
                     }
-                    if (strWeek.Contains("三"))
+                    if (strWeek.Contains("3"))
                     {
                         t.setWeekDate(3, true);
                     }
-                    if (strWeek.Contains("四"))
+                    if (strWeek.Contains("4"))
                     {
                         t.setWeekDate(4, true);
                     }
-                    if (strWeek.Contains("五"))
+                    if (strWeek.Contains("5"))
                     {
                         t.setWeekDate(5, true);
                     }
-                    if (strWeek.Contains("六"))
+                    if (strWeek.Contains("6"))
                     {
                         t.setWeekDate(6, true);
                     }
@@ -765,8 +779,8 @@ namespace ns_behaviour
         public void write()
         {
             XmlDocument doc = new XmlDocument();
-            XmlNode docNode = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
-            doc.AppendChild(docNode);
+            //XmlNode docNode = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+            //doc.AppendChild(docNode);
 
             XmlNode root = doc.CreateElement("root");
             doc.AppendChild(root);
@@ -792,8 +806,8 @@ namespace ns_behaviour
                 tn.Attributes.Append(att);
 
                 att = doc.CreateAttribute("week");
-                var strWeek = "周";
-                string[] cvt = new string[7]{"日","一", "二","三","四","五","六"};
+                var strWeek = "w";
+                string[] cvt = new string[7]{"0","1", "2","3","4","5","6"};
                 for (int i = 0; i < 7; ++i)
                 {
                     if (t.weekMask[i])

@@ -34,6 +34,45 @@ namespace ns_behaviour
         //xml
         protected Dictionary<string, XmlElement> mName2Template = new Dictionary<string, XmlElement>();
 
+        protected Dictionary<string, Stack<XmlElement>> mName2InnerTemplate = new Dictionary<string, Stack<XmlElement>>();
+        protected void innerTemplatePush(string name, XmlNode node)
+        {
+            Stack<XmlElement> st;
+            if (!mName2InnerTemplate.TryGetValue(name, out st))
+            {
+                st = new Stack<XmlElement>();
+                mName2InnerTemplate.Add(name, st);
+            }
+            st.Push(node as XmlElement);
+        }
+
+        protected void innerTemplatePop(string name)
+        {
+            Stack<XmlElement> st;
+            if (!mName2InnerTemplate.TryGetValue(name, out st))
+            {
+                throw new Exception("innerTemplatePop("+name+")"+" failed");
+            }
+            else
+            {
+                st.Pop();
+            }
+        }
+
+
+        protected XmlNode innerTemplateTop(string name)
+        {
+            Stack<XmlElement> st;
+            if (!mName2InnerTemplate.TryGetValue(name, out st))
+            {
+                throw new Exception("innerTemplateTop(" + name + ")" + " failed");
+            }
+            else
+            {
+                return st.Peek();
+            }
+        }
+
         public delegate XmlNodeList funcFromXML(XmlNode nd, out UIWidget ui, UIWidget p);
 
         static Dictionary<string, funcFromXML> mXML2widget = new Dictionary<string, funcFromXML>();
@@ -53,11 +92,11 @@ namespace ns_behaviour
             regMethodFromXML("line", UILine.fromXML);
         }
 
-        UIWidget loadFromXMLNode(XmlNode node, UIWidget p, XmlNode pnode)
+        UIWidget loadFromXMLNode(XmlNode node, UIWidget p, XmlNode pnode, out string obtainInnerTemplateName)
         {
             UIWidget uiret = null;
             funcFromXML fromxmlFunc = null;
-
+            obtainInnerTemplateName = null;
             //attribute inherite
             if (pnode != null)
             {
@@ -71,7 +110,7 @@ namespace ns_behaviour
                         if (parts[0] == nodeAttName)
                         {
                             var name = parts.Skip(1).Aggregate("",
-                                (si, str) => (si + (si == "" ? "" : ",") + str)
+                                (si, str) => (si + (si == "" ? "" : ".") + str)
                                 );
                             var value = patt.Value;
                             (node as XmlElement).SetAttribute(name, value);
@@ -88,15 +127,22 @@ namespace ns_behaviour
             if(mXML2widget.TryGetValue(node.Name, out fromxmlFunc) )
             {
                 var uichildren = fromxmlFunc(node, out uiret, p);
+                List<string> innerTemplateNames = new List<string>();
                 foreach (XmlNode elem in uichildren)
                 {
-                    var uichild = loadFromXMLNode(elem, uiret, node);
+                    string innerTemplateName = null;
+                    var uichild = loadFromXMLNode(elem, uiret, node, out innerTemplateName);
+                    if (innerTemplateName != null) innerTemplateNames.Add(innerTemplateName);
                     //var v = elem.Attributes.GetNamedItem("height");
                     //Console.WriteLine(v==null?"":v.Value );
                     if (uichild != null)
                     {
                         uichild.paresent = uiret;
                     }
+                }
+                foreach (string e in innerTemplateNames)
+                {
+                    innerTemplatePop(e);
                 }
             }
 
@@ -133,7 +179,31 @@ namespace ns_behaviour
                 }
                 return null;
             }
-
+            else if (node.Name.ToLower() == "innertemplate")
+            {
+                var ret = node.Attributes.GetNamedItem("name");
+                if (ret != null)
+                {
+                    var templateName = ret.Value;
+                    XmlElement templateNode = null;
+                    var childrens = node.ChildNodes;
+                    if (childrens.Count < 1)
+                    {
+                        //TODO, no content for controll
+                    }
+                    else
+                    {
+                        templateNode = childrens[0] as XmlElement;
+                        innerTemplatePush(templateName, templateNode);
+                        obtainInnerTemplateName = templateName;
+                    }
+                }
+                else
+                {
+                    //exception
+                }
+                return null;
+            }
             //apply template
             else if (node.Name.ToLower() == "apply")
             {
@@ -145,11 +215,24 @@ namespace ns_behaviour
                     if (mName2Template.TryGetValue(templateName, out templateNode))
                     {
                         var applyNode = templateNode.CloneNode(true);
-                        foreach(XmlAttribute att in node.Attributes)
+                        
+                        //挂上node的子结点
+                        for (int i = 0; i < node.ChildNodes.Count; ++i)
+                        {
+                            applyNode.AppendChild(node.ChildNodes[i]);
+                        }
+
+                        foreach (XmlAttribute att in node.Attributes)
                         {
                             (applyNode as XmlElement).SetAttribute(att.Name, att.Value);
                         }
-                        return loadFromXMLNode(applyNode, p, pnode);
+                        string innerTemplateNameRet = null;
+                        var nodeRet = loadFromXMLNode(applyNode, p, pnode, out innerTemplateNameRet);
+                        if (innerTemplateNameRet != null)
+                        {
+                            innerTemplatePop(innerTemplateNameRet);
+                        }
+                        return nodeRet;
                     }
                     else
                     {
@@ -158,25 +241,54 @@ namespace ns_behaviour
                 }
                 else
                 {
-                    //Exception
+                    ret = node.Attributes.GetNamedItem("innerTemplate");
+                    if (ret != null)
+                    {
+                        var innerTemplateName = ret.Value;
+                        XmlNode innerTemplateNode = innerTemplateTop(innerTemplateName);
+                        
+                        var applyNode = innerTemplateNode.CloneNode(true);
+                        //挂上node的子结点
+                        for (int i = 0; i < node.ChildNodes.Count; ++i)
+                        {
+                            applyNode.AppendChild(node.ChildNodes[i]);
+                        }
+
+                        foreach (XmlAttribute att in node.Attributes)
+                        {
+                            (applyNode as XmlElement).SetAttribute(att.Name, att.Value);
+                        }
+                        string innerTemplateNameRet = null;
+                        var nodeRet = loadFromXMLNode(applyNode, p, pnode, out innerTemplateNameRet);
+                        if (innerTemplateNameRet != null)
+                        {
+                            innerTemplatePop(innerTemplateNameRet);
+                        }
+                        return nodeRet;
+                    }
                 }
                 return null;
             }
             return uiret;
         }
 
-        public UIWidget loadFromXML(string xml)//加上一个style默认，style可以是一个状态机
+        public UIWidget loadFromXML(string xml)
         {
-            UIWidget ret = null;
+            UIWidget nodeRet = null;
             try
             {
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(xml);
                 var node = doc.ChildNodes[0];
-                ret = loadFromXMLNode(node, null, null);
+                string innerTemplateNameRet = null;
+                nodeRet = loadFromXMLNode(node, null, null, out innerTemplateNameRet);
+                if (innerTemplateNameRet != null)
+                {
+                    innerTemplatePop(innerTemplateNameRet);
+                }
             }
             catch (Exception e){ Globals.Instance.mRepl.print(e.ToString() ); }
-            return ret;
+            return nodeRet;
         }
 
         void init()

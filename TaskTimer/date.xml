@@ -1,5 +1,5 @@
 <root>
-	<task hour="5" minute="11" week="å‘¨ä¸€äºŒ" loop="true" process="chrome" ></task>
-	<task hour="12" minute="11" week="å‘¨ä¸€äºŒ" loop="true" process="chrome1" ></task>
-	<task hour="11" minute="13" week="å‘¨ä¸€äºŒå…­" loop="false" process="chrome2" ></task>
+	<task hour="5" minute="11" week="ÖÜÒ»¶þ" loop="true" process="chrome" ></task>
+	<task hour="12" minute="11" week="ÖÜÒ»¶þ" loop="true" process="chrome1" ></task>
+	<task hour="11" minute="13" week="ÖÜÒ»¶þÁù" loop="false" process="chrome2" ></task>
 </root>
