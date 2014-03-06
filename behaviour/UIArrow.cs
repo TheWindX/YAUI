@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
     public enum EForward 
     {
@@ -168,7 +168,6 @@ namespace ns_behaviour
                             return true;
                         }
                     }
-                    break;
                 case EForward.e_right:
                     {
                         float x = _w - pos.X;
@@ -190,7 +189,6 @@ namespace ns_behaviour
                             return true;
                         }
                     }
-                    break;
                 case EForward.e_left:
                     {
                         float x = pos.X;
@@ -212,7 +210,6 @@ namespace ns_behaviour
                             return true;
                         }
                     }
-                    break;
                 case EForward.e_down:
                     {
                         float x;
@@ -234,7 +231,6 @@ namespace ns_behaviour
                             return true;
                         }
                     }
-                    break;
                 default:
                     break;
             }

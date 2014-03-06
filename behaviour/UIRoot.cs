@@ -13,9 +13,9 @@ using System.Threading.Tasks;
 using System.Drawing;
 
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
-    class UIRoot : Singleton<UIRoot>
+    public class UIRoot : Singleton<UIRoot>
     {
         UIWidget mRoot;
         public UIWidget root
@@ -25,15 +25,15 @@ namespace ns_behaviour
                 return mRoot;
             }
         }
-
         public UIRoot()
         {
-            Globals.Instance.evtOnInit += init;
+            mRoot = new UIMap();
         }
+
+        #region XML
 
         //xml
         protected Dictionary<string, XmlElement> mName2Template = new Dictionary<string, XmlElement>();
-
         protected Dictionary<string, Stack<XmlElement>> mName2InnerTemplate = new Dictionary<string, Stack<XmlElement>>();
         protected void innerTemplatePush(string name, XmlNode node)
         {
@@ -51,7 +51,7 @@ namespace ns_behaviour
             Stack<XmlElement> st;
             if (!mName2InnerTemplate.TryGetValue(name, out st))
             {
-                throw new Exception("innerTemplatePop("+name+")"+" failed");
+                throw new Exception("innerTemplatePop(" + name + ")" + " failed");
             }
             else
             {
@@ -73,23 +73,13 @@ namespace ns_behaviour
             }
         }
 
-        public delegate XmlNodeList funcFromXML(XmlNode nd, out UIWidget ui, UIWidget p);
+        internal delegate XmlNodeList funcFromXML(XmlNode nd, out UIWidget ui, UIWidget p);
 
         static Dictionary<string, funcFromXML> mXML2widget = new Dictionary<string, funcFromXML>();
 
-        public static void regMethodFromXML(string tag, funcFromXML method)
+        internal static void regMethodFromXML(string tag, funcFromXML method)
         {
             mXML2widget.Add(tag, method);
-        }
-
-        void XMLinit()
-        {
-            regMethodFromXML("stub", UIStub.fromXML);
-            regMethodFromXML("map", UIMap.fromXML);
-            regMethodFromXML("rect", UIRect.fromXML);
-            regMethodFromXML("lable", UILable.fromXML);
-            regMethodFromXML("edit", UIEdit.fromXML);
-            regMethodFromXML("line", UILine.fromXML);
         }
 
         UIWidget loadFromXMLNode(XmlNode node, UIWidget p, XmlNode pnode, out string obtainInnerTemplateName)
@@ -122,9 +112,9 @@ namespace ns_behaviour
                     }
                 }
             }
-                
+
             //xml to widget, and children
-            if(mXML2widget.TryGetValue(node.Name, out fromxmlFunc) )
+            if (mXML2widget.TryGetValue(node.Name, out fromxmlFunc))
             {
                 var uichildren = fromxmlFunc(node, out uiret, p);
                 List<string> innerTemplateNames = new List<string>();
@@ -147,7 +137,7 @@ namespace ns_behaviour
             }
 
             //read template
-            else if(node.Name.ToLower() == "template")//controller template
+            else if (node.Name.ToLower() == "template")//controller template
             {
                 var ret = node.Attributes.GetNamedItem("name");
                 if (ret != null)
@@ -156,15 +146,14 @@ namespace ns_behaviour
                     XmlElement templateNode = null;
                     if (mName2Template.TryGetValue(templateName, out templateNode))
                     {
-                        //TODO, 已经存在这个node, exception
-                        
+                        throw new Exception("templateName:" + templateName+" is duplicate");
                     }
                     else
                     {
                         var childrens = node.ChildNodes;
                         if (childrens.Count < 1)
                         {
-                            //TODO, no content for controll
+                            throw new Exception("no content in template:" + templateName);
                         }
                         else
                         {
@@ -189,7 +178,7 @@ namespace ns_behaviour
                     var childrens = node.ChildNodes;
                     if (childrens.Count < 1)
                     {
-                        //TODO, no content for controll
+                        throw new Exception("no content in template:" + templateName);
                     }
                     else
                     {
@@ -200,7 +189,7 @@ namespace ns_behaviour
                 }
                 else
                 {
-                    //exception
+                    throw new Exception("innerTemplate has no 'name' property");
                 }
                 return null;
             }
@@ -215,7 +204,7 @@ namespace ns_behaviour
                     if (mName2Template.TryGetValue(templateName, out templateNode))
                     {
                         var applyNode = templateNode.CloneNode(true);
-                        
+
                         //挂上node的子结点
                         for (int i = 0; i < node.ChildNodes.Count; ++i)
                         {
@@ -236,7 +225,7 @@ namespace ns_behaviour
                     }
                     else
                     {
-                        //TODO, template node不存在, exception
+                        throw new Exception("no template for " + templateName);
                     }
                 }
                 else
@@ -246,7 +235,11 @@ namespace ns_behaviour
                     {
                         var innerTemplateName = ret.Value;
                         XmlNode innerTemplateNode = innerTemplateTop(innerTemplateName);
-                        
+                        if(innerTemplateNode == null)
+                        {
+                            throw new Exception("no innerTemplate for " + innerTemplateName);
+                        }
+
                         var applyNode = innerTemplateNode.CloneNode(true);
                         //挂上node的子结点
                         for (int i = 0; i < node.ChildNodes.Count; ++i)
@@ -266,8 +259,11 @@ namespace ns_behaviour
                         }
                         return nodeRet;
                     }
+                    else
+                    {
+                        throw new Exception("no innerTemplate property for apply");
+                    }
                 }
-                return null;
             }
             return uiret;
         }
@@ -287,119 +283,105 @@ namespace ns_behaviour
                     innerTemplatePop(innerTemplateNameRet);
                 }
             }
-            catch (Exception e){ Globals.Instance.mRepl.print(e.ToString() ); }
+            catch (Exception e) { mLog(e.ToString()); }
             return nodeRet;
         }
+        #endregion
 
-        void init()
+        #region init
+        public UIRoot initXML()
         {
-            XMLinit();
-
-            mRoot = new UIMap();
-
-            Globals.Instance.mPainter.evtPaint += (g) =>
-            {
-                Instance.draw(g);
-            };
-            Globals.Instance.mPainter.evtMove += (x, y) =>
-            {
-                Instance.testMouseMove(x, y);
-            };
-            Globals.Instance.mPainter.evtLeftDown += (x, y) =>
-            {
-                Instance.testLMD(x, y);
-            };
-            Globals.Instance.mPainter.evtLeftUp += (x, y) =>
-            {
-                Instance.testLMU(x, y);
-            };
-            Globals.Instance.mPainter.evtRightDown += (x, y) =>
-            {
-                Instance.testRMD(x, y);
-            };
-            Globals.Instance.mPainter.evtRightUp += (x, y) =>
-            {
-                Instance.testRMU(x, y);
-            };
-            Globals.Instance.mPainter.evtMidDown += (x, y) =>
-            {
-                Instance.testMMD(x, y);
-            };
-            Globals.Instance.mPainter.evtMidUp += (x, y) =>
-            {
-                testMMU(x, y);
-            };
-            Globals.Instance.mPainter.evtDClick += (x, y) =>
-            {
-                testDClick(x, y);
-            };
-
-            //keys
-            Globals.Instance.mPainter.evtOnKey += (kc, isC, isS) =>
-                {
-                    var ui = currentWidget;
-                    while (ui != null)
-                    {
-                        if (!ui.doEvtOnChar(kc, isC, isS))
-                        {
-                            return;
-                        }
-                        ui = ui.paresent as UIWidget;
-                    }
-                };
+            regMethodFromXML("stub", UIStub.fromXML);
+            regMethodFromXML("map", UIMap.fromXML);
+            regMethodFromXML("rect", UIRect.fromXML);
+            regMethodFromXML("lable", UILable.fromXML);
+            regMethodFromXML("edit", UIEdit.fromXML);
+            regMethodFromXML("line", UILine.fromXML);
+            return this;
         }
 
-        public void draw(Graphics g)
+        Action<string> mLog;
+        public UIRoot initHandleLog(Action<string> log)
+        {
+            mLog = log;
+            return this;
+        }
+
+        public UIRoot initEvt()
+        {
+            mEvtLeftDown += testLeftDown;
+            mEvtMove += testMove;
+            mEvtLeftUp += testLeftUp;
+            mEvtRightDown += testRightDown;
+            mEvtRightUp += testRightUp;
+            mEvtMiddleDown += testMiddleDown;
+            mEvtMiddleUp += testMiddleUp;
+            mEvtDoubleClick += testDoubleClick;
+            mEvtKey += testKey;
+            return this;
+        }
+        #endregion
+
+        #region handle
+        public void handleDraw(Graphics g)
         {
             root.adjustLayout();
             root.doDraw(g);
         }
 
-        void onKeyLock(int kc, bool isControl, bool isShift)
+        public void handleLeftDown(int x, int y)
         {
-            if (kc == (int)System.Windows.Forms.Keys.Space)
-            {
-                if (lockWidget)
-                {
-                    lockWidget = false;
-                }
-                else
-                {
-                    lockWidget = true;
-                }
-            }
-        }
-        bool mLockable = false;
-        void setLock()
-        {
-            if (mLockable == true) return;
-            mLockable = true;
-            Globals.Instance.mPainter.evtOnKey += onKeyLock;
+            if(mEvtLeftDown != null)mEvtLeftDown(x, y);
         }
 
-        void unsetLock()
+        public void handleEvtMove(int x, int y)
         {
-            if (mLockable == false) return;
-            mLockable = false;
-            Globals.Instance.mPainter.evtOnKey -= onKeyLock;
+            if(mEvtMove != null)mEvtMove(x, y);
         }
 
-        public bool lockable
+        public void handleEvtLeftUp(int x, int y)
         {
-            get
-            {
-                return mLockable;
-            }
-            set
-            {
-                if (value)
-                    setLock();
-                else
-                    unsetLock();
-            }
+            if(mEvtLeftUp != null)mEvtLeftUp(x, y);
         }
 
-        public UIWidget focusWidget
+        public void handleEvtRightDown(int x, int y)
+        {
+            if(mEvtRightDown != null)mEvtRightDown(x, y);
+        }
+
+        public void handleEvtRightUp(int x, int y)
+        {
+            if(mEvtRightUp != null)mEvtRightUp(x, y);
+        }
+        
+        public void handleEvtMiddleDown(int x, int y)
+        {
+            if(mEvtMiddleDown != null)mEvtMiddleDown(x, y);
+        }
+        
+        public void handleEvtMiddleUp(int x, int y)
+        {
+            if(mEvtMiddleUp != null)mEvtMiddleUp(x, y);
+        }
+
+        public void handleEvtDoubleClick(int x, int y)
+        {
+            if(mEvtDoubleClick != null)mEvtDoubleClick(x, y);
+        }
+
+        public void handleEvtWheel(int delta)
+        {
+            if (mEvtWheel != null) mEvtWheel(delta);
+        }
+
+        public void handleEvtKey(int kc, bool iC, bool iS)
+        {
+            if(mEvtKey != null)mEvtKey(kc, iC, iS);
+        }   
+
+        #endregion
+
+        internal UIWidget focusWidget
         {
             get
             {
@@ -414,7 +396,7 @@ namespace ns_behaviour
             }
         }
 
-        public UIWidget currentWidget
+        internal UIWidget currentWidget
         {
             get
             {
@@ -429,7 +411,7 @@ namespace ns_behaviour
             }
         }
 
-        public bool lockWidget
+        internal bool lockWidget
         {
             get
             {
@@ -445,7 +427,7 @@ namespace ns_behaviour
             
         }
 
-        public void testUIEvent(int x, int y, Func<UIWidget, Func<int, int, bool>> getAction)
+        internal void testUIEvent(int x, int y, Func<UIWidget, Func<int, int, bool>> getAction)
         {
             UIWidget uiout;
             bool ret = true;
@@ -475,68 +457,109 @@ namespace ns_behaviour
             }
         }
 
-        public void testLMD(int x, int y)
-        {
-            testUIEvent(x, y, (ui) =>
-            {   
-                return (x1, y1) => { return ui.doEvtOnLMDown(x1, y1); };
-            });
-        }
-
-        public void testMouseMove(int x, int y)
+        internal Action<int, int> mEvtLeftDown;
+        void testLeftDown(int x, int y)
         {
             testUIEvent(x, y, (ui) =>
             {
-                return (x1, y1) => { return ui.doEvtOnMMove(x1, y1); };
+                return (x1, y1) => { return ui.doEvtLeftDown(x1, y1); };
             });
         }
 
-        public void testLMU(int x, int y)
+        internal Action<int, int> mEvtMove;
+        void testMove(int x, int y)
         {
             testUIEvent(x, y, (ui) =>
             {
-               return (x1, y1) => { return ui.doEvtOnLMUp(x1, y1); };
+                return (x1, y1) => { return ui.evtMove(x1, y1); };
             });
         }
 
-        public void testRMD(int x, int y)
+        internal Action<int, int> mEvtLeftUp;
+        void testLeftUp(int x, int y)
         {
             testUIEvent(x, y, (ui) =>
             {
-                return (x1, y1) => { return ui.doEvtOnRMDown(x1, y1); };
+                return (x1, y1) => { return ui.doEvtLeftUp(x1, y1); };
             });
         }
 
-        public void testRMU(int x, int y)
+
+        internal Action<int, int> mEvtRightDown;
+
+        void testRightDown(int x, int y)
         {
             testUIEvent(x, y, (ui) =>
             {
-                return (x1, y1) => { return ui.doEvtOnRMUp(x1, y1); };
+                return (x1, y1) => { return ui.doEvtRightDown(x1, y1); };
             });
         }
 
-        public void testMMD(int x, int y)
+
+        internal Action<int, int> mEvtRightUp;
+
+        void testRightUp(int x, int y)
         {
             testUIEvent(x, y, (ui) =>
             {
-                return (x1, y1) => { return ui.doEvtOnMMDown(x1, y1); };
+                return (x1, y1) => { return ui.doEvtRightUp(x1, y1); };
             });
         }
 
-        public void testMMU(int x, int y)
+
+        internal Action<int, int> mEvtMiddleDown;
+        void testMiddleDown(int x, int y)
         {
             testUIEvent(x, y, (ui) =>
             {
-                return (x1, y1) => { return ui.doEvtOnMMUp(x1, y1); };
+                return (x1, y1) => { return ui.doEvtMiddleDown(x1, y1); };
             });
         }
 
-        public void testDClick(int x, int y)
+
+        internal Action<int, int> mEvtMiddleUp;
+        void testMiddleUp(int x, int y)
         {
             testUIEvent(x, y, (ui) =>
             {
-                return (x1, y1) => { return ui.doEvtOnDClick(x1, y1); };
+                return (x1, y1) => { return ui.doEvtMiddleUp(x1, y1); };
             });
         }
+
+        internal Action<int, int> mEvtDoubleClick;
+        void testDoubleClick(int x, int y)
+        {
+            testUIEvent(x, y, (ui) =>
+            {
+                return (x1, y1) => { return ui.doEvtDoubleClick(x1, y1); };
+            });
+        }
+
+        internal Action<int, bool, bool> mEvtKey;
+        void testKey(int kc, bool isC, bool isS)
+        {
+            var ui = currentWidget;
+            while (ui != null)
+            {
+                if (!ui.doEvtOnChar(kc, isC, isS))
+                {
+                    return;
+                }
+                ui = ui.paresent as UIWidget;
+            }
+        }
+
+
+
+        internal Action<int> mEvtWheel;
+
+        internal Action<bool, int, int> mHandleInputShow;
+        public UIRoot initHandleInputShow(Action<bool, int, int> handleInputShow)
+        {
+            mHandleInputShow = handleInputShow;
+            return this;
+        }
+
+        internal Action<string> mEvtInputDone;
     }
 }

@@ -7,10 +7,10 @@ using System.Drawing.Drawing2D;
 using System.Drawing;
 
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
 
-    class Entity
+    public class Entity
     {
         protected Entity mParesent = null;
         protected List<Entity> mChildrent = new List<Entity>();//TODO, optims, 

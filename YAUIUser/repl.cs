@@ -10,7 +10,7 @@ using System.Reflection;
 using Microsoft.CSharp;
 using System.Threading;
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
     public class CSRepl
     {
@@ -20,13 +20,16 @@ namespace ns_behaviour
             mIns = this;
         }
 
-        public static CSRepl Instance()
+        public static CSRepl Instance
         {
-            if (mIns == null)
+            get
             {
-                mIns = new CSRepl();
+                if (mIns == null)
+                {
+                    mIns = new CSRepl();
+                }
+                return mIns;
             }
-            return mIns;
         }
 
         string mScript = null;

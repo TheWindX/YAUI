@@ -19,9 +19,9 @@ using ns_utils;
 
 
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
-    class UIWidget : Entity
+    public class UIWidget : Entity
     {
         #region Hierarchy
         void sortSibling()
@@ -840,7 +840,7 @@ namespace ns_behaviour
         }
 
 
-        public bool doEvtOnLMDown(int x, int y)
+        public bool doEvtLeftDown(int x, int y)
         {
             if (evtOnLMDown == null)
             {
@@ -849,7 +849,7 @@ namespace ns_behaviour
             return evtOnLMDown(this, x, y);
         }
 
-        public bool doEvtOnMMove(int x, int y)
+        public bool evtMove(int x, int y)
         {
             if (evtOnMMove == null)
             {
@@ -858,7 +858,7 @@ namespace ns_behaviour
             return evtOnMMove(this, x, y);
         }
 
-        public bool doEvtOnLMUp(int x, int y)
+        public bool doEvtLeftUp(int x, int y)
         {
             if (evtOnLMUp == null)
             {
@@ -867,7 +867,7 @@ namespace ns_behaviour
             return evtOnLMUp(this, x, y);
         }
 
-        public bool doEvtOnRMDown(int x, int y)
+        public bool doEvtRightDown(int x, int y)
         {
             if (evtOnRMDown == null)
             {
@@ -876,7 +876,7 @@ namespace ns_behaviour
             return evtOnRMDown(this, x, y);
         }
 
-        public bool doEvtOnRMUp(int x, int y)
+        public bool doEvtRightUp(int x, int y)
         {
             if (evtOnRMUp == null)
             {
@@ -885,7 +885,7 @@ namespace ns_behaviour
             return evtOnRMUp(this, x, y);
         }
 
-        public bool doEvtOnMMDown(int x, int y)
+        public bool doEvtMiddleDown(int x, int y)
         {
             if (evtOnMMDown == null)
             {
@@ -894,7 +894,7 @@ namespace ns_behaviour
             return evtOnMMDown(this, x, y);
         }
 
-        public bool doEvtOnMMUp(int x, int y)
+        public bool doEvtMiddleUp(int x, int y)
         {
             if (evtOnMMUp == null)
             {
@@ -930,7 +930,7 @@ namespace ns_behaviour
             return evtOnChar(this, kc, isControl, isShift);
         }
 
-        public bool doEvtOnDClick(int x, int y)
+        public bool doEvtDoubleClick(int x, int y)
         {
             if (evtOnDClick == null)
             {
@@ -996,15 +996,15 @@ namespace ns_behaviour
 
             this.setDepthHead();
 
-            Globals.Instance.mPainter.evtMove += onDragMove;
-            Globals.Instance.mPainter.evtLeftUp += onDragEnd;
+            UIRoot.Instance.mEvtMove += onDragMove;
+            UIRoot.Instance.mEvtLeftUp += onDragEnd;
             return false;
         }
 
         void onDragEnd(int x, int y)
         {
-            Globals.Instance.mPainter.evtMove -= onDragMove;
-            Globals.Instance.mPainter.evtLeftUp -= onDragEnd;
+            UIRoot.Instance.mEvtMove -= onDragMove;
+            UIRoot.Instance.mEvtLeftUp -= onDragEnd;
         }
 
 
@@ -1041,8 +1041,8 @@ namespace ns_behaviour
             dirRotateOrg = mDir;
             ptLocalRotateOrg = invertTransformAbs(new Point(x, y));
 
-            Globals.Instance.mPainter.evtMove += onRotateMove;
-            Globals.Instance.mPainter.evtRightUp += onRotateEnd;
+            UIRoot.Instance.mEvtMove += onRotateMove;
+            UIRoot.Instance.mEvtRightUp += onRotateEnd;
             return false;
         }
 
@@ -1064,8 +1064,8 @@ namespace ns_behaviour
 
         void onRotateEnd(int x, int y)
         {
-            Globals.Instance.mPainter.evtMove -= onRotateMove;
-            Globals.Instance.mPainter.evtRightUp -= onRotateEnd;
+            UIRoot.Instance.mEvtMove -= onRotateMove;
+            UIRoot.Instance.mEvtRightUp -= onRotateEnd;
         }
 
         /// <summary>
@@ -1085,13 +1085,12 @@ namespace ns_behaviour
                 if (mScaleAble)
                 {
                     evtOnLMDown += onScaleBegin;
-                    Globals.Instance.mPainter.evtLeftUp += onScaleEnd;
-                    //evtOnLMUp += onDragEnd;
+                    UIRoot.Instance.mEvtLeftUp += onScaleEnd;
                 }
                 else
                 {
                     evtOnLMDown -= onScaleBegin;
-                    Globals.Instance.mPainter.evtLeftUp -= onScaleEnd;
+                    UIRoot.Instance.mEvtLeftUp -= onScaleEnd;
                     onScaleEnd(0, 0);
                 }
 
@@ -1114,13 +1113,13 @@ namespace ns_behaviour
         bool onScaleBegin(UIWidget ui, int x, int y)
         {
             mWheelScaleBegin = invertTransformParesentAbs(new Point(x, y));
-            Globals.Instance.mPainter.evtOnWheel += onScaleWheel;
+            UIRoot.Instance.mEvtWheel += onScaleWheel;
             return false;
         }
 
         void onScaleEnd(int x, int y)
         {
-            Globals.Instance.mPainter.evtOnWheel -= onScaleWheel;
+            UIRoot.Instance.mEvtWheel -= onScaleWheel;
         }
         /// <summary>
         /// scaleAble end

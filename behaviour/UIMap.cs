@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Xml;
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
     class UIMap : UIWidget
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
     public static class ExtendRectangle
     {

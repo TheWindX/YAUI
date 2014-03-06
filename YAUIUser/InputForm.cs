@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
     public class InputForm : Form
     {

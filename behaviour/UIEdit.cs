@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Xml;
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
     class UIEdit : UILable
     {
@@ -32,14 +32,17 @@ namespace ns_behaviour
 
         public bool onClick(UIWidget _this, int x, int y)
         {
-            InputForm.Instance.show(true, x, y);
-            InputForm.Instance.evtInputExit = (text) =>
-                {
-                    if (mMaxCharLength < text.Length)
-                        this.text = text.Substring(0, mMaxCharLength);
-                    else
-                        this.text = text;
-                };
+            UIRoot.Instance.mHandleInputShow(true, x, y);
+            Action<string> inputDone = null;
+            inputDone = (text) =>
+            {
+                if (mMaxCharLength < text.Length)
+                    this.text = text.Substring(0, mMaxCharLength);
+                else
+                    this.text = text;
+                UIRoot.Instance.mEvtInputDone -= inputDone;
+            };
+            UIRoot.Instance.mEvtInputDone += inputDone;
             return true;
         }
 

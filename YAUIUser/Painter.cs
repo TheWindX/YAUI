@@ -17,9 +17,14 @@ using System.Runtime.InteropServices;
 
 
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
-
+    //public delegate void EvtPaint(Graphics g);
+    using EvtMouse = Action<int, int>;
+    using EvtPaint = Action<Graphics>;
+    using EvtOnKey = Action<int, bool, bool>;
+    using EvtOnWheel = Action<int>;
+    //public EvtOnKey(int kc, bool isControl, bool isShift);
     public class PaintDriver : Form
     {
         private System.Windows.Forms.Timer mTimer;
@@ -76,7 +81,7 @@ namespace ns_behaviour
         }
 
         public delegate void EvtInit();
-        public event EvtInit evtInit;
+        public EvtInit evtInit;
         void onLoad(object sender, EventArgs e)
         {
             this.SetStyle(ControlStyles.DoubleBuffer, true);
@@ -91,7 +96,8 @@ namespace ns_behaviour
         }
 
         public delegate void EvtUpdate();
-        public event EvtUpdate evtUpdate;
+        public EvtUpdate evtUpdate;
+
 
         private void onUpdate(object sender, EventArgs e)
         {
@@ -100,8 +106,8 @@ namespace ns_behaviour
             this.Invalidate();
         }
 
-        public delegate void EvtPaint(Graphics g);
-        public event EvtPaint evtPaint;
+        
+        public EvtPaint evtPaint;
         private void OnPaint(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(Color.Black);
@@ -109,11 +115,12 @@ namespace ns_behaviour
                 evtPaint(e.Graphics);
         }
 
-        public delegate void EvtMouse(int x, int y);
+        //public delegate void EvtMouse(int x, int y);
         
-        public event EvtMouse evtLeftDown;
-        public event EvtMouse evtRightDown;
-        public event EvtMouse evtMidDown;
+        
+        public EvtMouse evtLeftDown;
+        public EvtMouse evtRightDown;
+        public EvtMouse evtMidDown;
         private void PaintDriver_MouseDown(object sender, MouseEventArgs e)
         {
             switch (e.Button)
@@ -135,9 +142,9 @@ namespace ns_behaviour
             }
         }
 
-        public event EvtMouse evtLeftUp;
-        public event EvtMouse evtRightUp;
-        public event EvtMouse evtMidUp;
+        public EvtMouse evtLeftUp;
+        public EvtMouse evtRightUp;
+        public EvtMouse evtMidUp;
         private void PaintDriver_MouseUp(object sender, MouseEventArgs e)
         {
             switch (e.Button)
@@ -159,15 +166,15 @@ namespace ns_behaviour
             }
         }
 
-        public event EvtMouse evtMove;
+        public EvtMouse evtMove;
         private void PaintDriver_MouseMove(object sender, MouseEventArgs e)
         {
             if (evtMove != null)
                 evtMove(e.X, e.Y);
         }
 
-        public delegate void EvtOnKey(int kc, bool isControl, bool isShift);
-        public event EvtOnKey evtOnKey;
+        
+        public EvtOnKey evtOnKey;
         private void PaintDriver_KeyDown(object sender, KeyEventArgs e)
         {
             if (evtOnKey != null)
@@ -177,8 +184,8 @@ namespace ns_behaviour
         }
 
 
-        public delegate void EvtOnWheel(int delta);
-        public event EvtOnWheel evtOnWheel;
+
+        public EvtOnWheel evtOnWheel;
         public void PaintDriver_MouseWheel(object sender, MouseEventArgs e)
         {
             if (evtOnWheel != null)
@@ -187,7 +194,7 @@ namespace ns_behaviour
             }
         }
 
-        public event EvtMouse evtDClick;
+        public EvtMouse evtDClick;
         private void PaintDriver_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             if (evtDClick != null)

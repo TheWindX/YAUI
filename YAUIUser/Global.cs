@@ -1,4 +1,10 @@
-﻿using System;
+﻿/*
+ * author: xiaofeng.li
+ * mail: 453588006@qq.com
+ * desc: 
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +12,7 @@ using System.Threading.Tasks;
 
 using System.Windows.Forms;
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
     class Globals : Singleton<Globals>
     {
@@ -25,26 +31,30 @@ namespace ns_behaviour
         }
         static uint nowTimer()
         {
+            //Console.WriteLine(mTime);
             return mTime;
         }
 
         public void init()
         {
             mPainter = new PaintDriver();
-            mRepl = new CSRepl();
+            mRepl = CSRepl.Instance;
             
-            //repl
-            mPainter.evtInit += mRepl.start;
+//repl
+            //mPainter.evtInit += mRepl.start;
             mPainter.evtUpdate += mRepl.runOnce;
 
+            updateTimer();
+            TimerManager.Init(() => nowTimer());
             //timer
             mPainter.evtInit += () =>
                 {
-                    updateTimer();
-                    TimerManager.Init(() => nowTimer());
+                    //updateTimer();
+                    //TimerManager.Init(() => nowTimer());
                 };
             mPainter.evtUpdate += () =>
                 {
+                    updateTimer();
                     TimerManager.tickAll();
                 };
 

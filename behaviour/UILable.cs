@@ -14,7 +14,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using System.Xml;
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
     class UILable : UIWidget
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ns_behaviour
+namespace ns_YAUI
 {
     public static class ExpandString
     {
