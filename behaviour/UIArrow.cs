@@ -141,7 +141,7 @@ namespace ns_YAUI
 
         public override string typeName
         {
-            get { return "rect"; }
+            get { return "Arrow"; }
         }
 
         public override bool postTestPick(Point pos)
