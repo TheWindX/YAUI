@@ -15,7 +15,7 @@ using System.Xml;
 
 namespace ns_YAUI
 {
-    class UIRect : UIWidget
+    public class UIRect : UIWidget
     {
         int _w = 0;
         int _h = 0;
@@ -23,7 +23,7 @@ namespace ns_YAUI
         uint fcolor;
         Brush mBrush;
         Pen mPen;
-        public UIRect(float w, float h, uint stroke = 0xffffffff, uint fill = 0xff888888)
+        internal UIRect(float w, float h, uint stroke = 0xffffffff, uint fill = 0xff888888)
         {
             _w = (int)w;
             _h = (int)h;

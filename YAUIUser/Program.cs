@@ -35,10 +35,9 @@ namespace YAUIUser
 @"
     <rect dragAble=""true"" scaleAble=""true"" width=""256"" height=""256"" layout=""horizen"" paddingX=""4"" paddingY=""4"">
         <innerTemplate name=""t1"">
-            <rect width=""64"" height=""64"" marginX=""2"" marginY=""2"" layout=""horizen"">
-                <rect name=""r1"" width=""20"" height=""20"" marginX=""2"" marginY=""2"">
-                </rect>
-            </rect>
+            <round_rect width=""64"" height=""64"" radius=""20"" leftTopCorner=""false"" fillColor=""0xffff0000"" marginX=""2"" marginY=""2"" layout=""horizen"">
+
+            </round_rect>
         </innerTemplate>
         <apply innerTemplate=""t1"" height=""128"" r2.height=""55"">
                <rect name=""r2"" width=""30"" height=""20"" marginX=""2"" marginY=""2"">

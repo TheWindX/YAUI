@@ -385,15 +385,15 @@ namespace ns_YAUI
             }
         }
 
-        public Point leftButtom
+        public Point leftBottom
         {
             get
             {
-                return transform(drawRect.leftButtom());
+                return transform(drawRect.leftBottom());
             }
             set
             {
-                var pt = leftButtom;
+                var pt = leftBottom;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
                 position.X += dx;
@@ -433,15 +433,15 @@ namespace ns_YAUI
             }
         }
 
-        public Point rightButtom
+        public Point rightBottom
         {
             get
             {
-                return transform(drawRect.rightButtom());
+                return transform(drawRect.rightBottom());
             }
             set
             {
-                var pt = rightButtom;
+                var pt = rightBottom;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
                 position.X += dx;
@@ -465,15 +465,15 @@ namespace ns_YAUI
             }
         }
 
-        public Point middleButtom
+        public Point middleBottom
         {
             get
             {
-                return transform(drawRect.middleButtom());
+                return transform(drawRect.middleBottom());
             }
             set
             {
-                var pt = middleButtom;
+                var pt = middleBottom;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
                 position.X += dx;
@@ -487,12 +487,12 @@ namespace ns_YAUI
             center,
             leftTop,
             leftMiddle,
-            leftButtom,
+            leftBottom,
             rightTop,
             rightMiddle,
-            rightButtom,
+            rightBottom,
             middleTop,
-            middleButtom,
+            middleBottom,
         }
 
         EAlign mAlign = EAlign.noAlign;
@@ -576,8 +576,8 @@ namespace ns_YAUI
                     alignPos = paresent.invertTransform((paresent as UIWidget).leftMiddle);
                     alignPos.X += offsetx + pui.paddingX + marginX;
                     break;
-                case EAlign.leftButtom:
-                    alignPos = paresent.invertTransform((paresent as UIWidget).leftButtom);
+                case EAlign.leftBottom:
+                    alignPos = paresent.invertTransform((paresent as UIWidget).leftBottom);
                     alignPos.X += offsetx + pui.paddingX + marginX;
                     alignPos.Y += offsety - pui.paddingY - marginY;
                     break;
@@ -590,8 +590,8 @@ namespace ns_YAUI
                     alignPos = paresent.invertTransform((paresent as UIWidget).rightMiddle);
                     alignPos.X += offsetx - pui.paddingX - marginX;
                     break;
-                case EAlign.rightButtom:
-                    alignPos = paresent.invertTransform((paresent as UIWidget).rightButtom);
+                case EAlign.rightBottom:
+                    alignPos = paresent.invertTransform((paresent as UIWidget).rightBottom);
                     alignPos.X += offsetx - pui.paddingX - marginX;
                     alignPos.Y += offsety - pui.paddingY - marginY;
                     break;
@@ -600,8 +600,8 @@ namespace ns_YAUI
                     alignPos.X += offsetx - pui.paddingX - marginX;
                     alignPos.Y += offsety - pui.paddingY - marginY;
                     break;
-                case EAlign.middleButtom:
-                    alignPos = paresent.invertTransform((paresent as UIWidget).middleButtom);
+                case EAlign.middleBottom:
+                    alignPos = paresent.invertTransform((paresent as UIWidget).middleBottom);
                     alignPos.Y += offsety - pui.paddingY - marginY;
                     break;
                 default:
@@ -620,8 +620,8 @@ namespace ns_YAUI
                 case EAlign.leftMiddle:
                     this.leftMiddle = alignPos;
                     break;
-                case EAlign.leftButtom:
-                    this.leftButtom = alignPos;
+                case EAlign.leftBottom:
+                    this.leftBottom = alignPos;
                     break;
                 case EAlign.rightTop:
                     this.rightTop = alignPos;
@@ -629,14 +629,14 @@ namespace ns_YAUI
                 case EAlign.rightMiddle:
                     this.rightMiddle = alignPos;
                     break;
-                case EAlign.rightButtom:
-                    this.rightButtom = alignPos;
+                case EAlign.rightBottom:
+                    this.rightBottom = alignPos;
                     break;
                 case EAlign.middleTop:
                     this.middleTop = alignPos;
                     break;
-                case EAlign.middleButtom:
-                    this.middleButtom = alignPos;
+                case EAlign.middleBottom:
+                    this.middleBottom = alignPos;
                     break;
                 default:
                     break;
@@ -678,14 +678,14 @@ namespace ns_YAUI
             #region layout calc
             Point rb = new Point();
             Rectangle rc = new Rectangle(new Point(paddingX, paddingY), new Size(0, 0));
-            rb = rc.rightButtom();
+            rb = rc.rightBottom();
             int idxCount = 0;
             for (int i = mChildrent.Count - 1; i >= 0; --i)
             {
                 if (mLayout == ELayout.vertical)
                 {
                     var c = mChildrent[i] as UIWidget;
-                    var pt = rc.leftButtom();
+                    var pt = rc.leftBottom();
                     pt.X += c.marginX;
                     pt.Y += c.marginY;
                     c.leftTop = pt;

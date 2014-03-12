@@ -73,12 +73,14 @@
     <Compile Include="UIRect.cs" />
     <Compile Include="UIRoot.cs" />
     <Compile Include="UILable.cs" />
+    <Compile Include="UIRoundRect.cs" />
     <Compile Include="UIStub.cs" />
     <Compile Include="UIArrow.cs" />
     <Compile Include="UIWidget.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

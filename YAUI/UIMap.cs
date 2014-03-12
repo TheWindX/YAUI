@@ -11,7 +11,7 @@ using System.Xml;
 
 namespace ns_YAUI
 {
-    class UIMap : UIWidget
+    public class UIMap : UIWidget
     {
         public override Rectangle drawRect
         {
@@ -24,7 +24,7 @@ namespace ns_YAUI
                     if (!init)
                     {
                         init = true;
-                        ret = elem.drawRect.transform(elem.transformMatrix);
+                        ret = elem.drawRect.transform(elem.transformMatrix);//not from (0, 0, 0, 0) rect
                     }
                     else
                     {

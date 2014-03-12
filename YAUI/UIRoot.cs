@@ -297,6 +297,7 @@ namespace ns_YAUI
             regMethodFromXML("lable", UILable.fromXML);
             regMethodFromXML("edit", UIEdit.fromXML);
             regMethodFromXML("line", UILine.fromXML);
+            regMethodFromXML("round_rect", UIRoundRect.fromXML);
             return this;
         }
 
