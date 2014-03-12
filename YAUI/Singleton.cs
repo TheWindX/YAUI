@@ -6,38 +6,44 @@
 
 using System.Diagnostics;
 
-public class Singleton<T> where T: new()
+namespace ns_YAUI
 {
-    private static readonly object _lock = new object();
-    private static T instance;
 
-    protected Singleton()
+    public class Singleton<T> where T : new()
     {
-        Debug.Assert(instance == null);
-    }
+        private static readonly object _lock = new object();
+        private static T instance;
 
-	public static bool Exists
-	{
-		get
-		{
-			return instance != null;
-		}
-	}
-    
-    public static T Instance
-    {
-        get {
-            if (instance == null)
+        protected Singleton()
+        {
+            Debug.Assert(instance == null);
+        }
+
+        public static bool Exists
+        {
+            get
             {
-                lock (_lock)
+                return instance != null;
+            }
+        }
+
+        public static T Instance
+        {
+            get
+            {
+                if (instance == null)
                 {
-                    if (instance == null)
+                    lock (_lock)
                     {
-                        instance = new T();
+                        if (instance == null)
+                        {
+                            instance = new T();
+                        }
                     }
                 }
+                return instance;
             }
-            return instance;
         }
     }
+
 }
