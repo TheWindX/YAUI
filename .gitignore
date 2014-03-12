@@ -1,7 +1,7 @@
 bin/
 obj/
 /Properties/
-*.config
+--*.config
 --*.sln
 *.user
 *.suo

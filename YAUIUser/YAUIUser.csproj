@@ -64,7 +64,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\behaviour\YAUI.csproj">
+    <ProjectReference Include="..\YAUI\YAUI.csproj">
       <Project>{44a65251-f8ff-44bf-be47-40482f28e11d}</Project>
       <Name>YAUI</Name>
     </ProjectReference>
