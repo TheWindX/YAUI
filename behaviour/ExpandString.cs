@@ -20,7 +20,7 @@ namespace ns_YAUI
             try
             {
                 string str = _this;
-                if (str.StartsWith("0x")) str = str.Substring(2);
+                if (str.StartsWith("0x") || str.StartsWith("0X")) str = str.Substring(2);
                 defaultVal = uint.Parse(str, NumberStyles.AllowHexSpecifier);
             }
             catch { }
