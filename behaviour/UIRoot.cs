@@ -33,9 +33,9 @@ namespace ns_YAUI
         #region XML
 
         //xml
-        protected Dictionary<string, XmlElement> mName2Template = new Dictionary<string, XmlElement>();
-        protected Dictionary<string, Stack<XmlElement>> mName2InnerTemplate = new Dictionary<string, Stack<XmlElement>>();
-        protected void innerTemplatePush(string name, XmlNode node)
+        Dictionary<string, XmlElement> mName2Template = new Dictionary<string, XmlElement>();
+        Dictionary<string, Stack<XmlElement>> mName2InnerTemplate = new Dictionary<string, Stack<XmlElement>>();
+        void innerTemplatePush(string name, XmlNode node)
         {
             Stack<XmlElement> st;
             if (!mName2InnerTemplate.TryGetValue(name, out st))
@@ -46,7 +46,7 @@ namespace ns_YAUI
             st.Push(node as XmlElement);
         }
 
-        protected void innerTemplatePop(string name)
+        void innerTemplatePop(string name)
         {
             Stack<XmlElement> st;
             if (!mName2InnerTemplate.TryGetValue(name, out st))
@@ -561,5 +561,10 @@ namespace ns_YAUI
         }
 
         internal Action<string> mEvtInputDone;
+        public void handleInputShow(string str)
+        {
+            if (mEvtInputDone != null) mEvtInputDone(str);
+            
+        }
     }
 }

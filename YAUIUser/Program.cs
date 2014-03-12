@@ -22,6 +22,8 @@ namespace YAUIUser
                         .initEvt()
                         .initHandleLog((s) => CSRepl.Instance.print(s))
                         .initHandleInputShow(InputForm.Instance.show);
+
+                    
                         
                     p.evtPaint += UIRoot.Instance.handleDraw;
                     p.evtLeftDown += UIRoot.Instance.handleLeftDown;
