@@ -994,6 +994,7 @@ namespace ns_YAUI
             mPosBegin = position;
             mPtDragBegin = invertTransformParesentAbs(new Point(x, y));
 
+            //这个改变先后关系
             this.setDepthHead();
 
             UIRoot.Instance.mEvtMove += onDragMove;

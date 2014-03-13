@@ -298,6 +298,7 @@ namespace ns_YAUI
             regMethodFromXML("edit", UIEdit.fromXML);
             regMethodFromXML("line", UILine.fromXML);
             regMethodFromXML("round_rect", UIRoundRect.fromXML);
+            regMethodFromXML("round", UIRound.fromXML);
             return this;
         }
 
@@ -527,6 +528,7 @@ namespace ns_YAUI
             });
         }
 
+
         internal Action<int, int> mEvtDoubleClick;
         void testDoubleClick(int x, int y)
         {
@@ -535,6 +537,7 @@ namespace ns_YAUI
                 return (x1, y1) => { return ui.doEvtDoubleClick(x1, y1); };
             });
         }
+
 
         internal Action<int, bool, bool> mEvtKey;
         void testKey(int kc, bool isC, bool isS)

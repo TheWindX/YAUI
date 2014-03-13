@@ -58,6 +58,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="repl.cs" />
     <Compile Include="Singleton.cs" />
+    <Compile Include="testAll.cs" />
+    <Compile Include="testRoundRect.cs" />
     <Compile Include="timer.cs" />
   </ItemGroup>
   <ItemGroup>

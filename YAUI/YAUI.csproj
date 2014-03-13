@@ -73,6 +73,7 @@
     <Compile Include="UIRect.cs" />
     <Compile Include="UIRoot.cs" />
     <Compile Include="UILable.cs" />
+    <Compile Include="UIRound.cs" />
     <Compile Include="UIRoundRect.cs" />
     <Compile Include="UIStub.cs" />
     <Compile Include="UIArrow.cs" />

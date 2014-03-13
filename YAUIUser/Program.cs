@@ -23,30 +23,17 @@ namespace YAUIUser
                         .initHandleLog((s) => CSRepl.Instance.print(s))
                         .initHandleInputShow(InputForm.Instance.show);
 
-                    
-                        
+
+                    InputForm.Instance.evtInputExit += UIRoot.Instance.handleInputShow;
+    
                     p.evtPaint += UIRoot.Instance.handleDraw;
                     p.evtLeftDown += UIRoot.Instance.handleLeftDown;
                     p.evtLeftUp += UIRoot.Instance.handleEvtLeftUp;
                     p.evtMove += UIRoot.Instance.handleEvtMove;
                     p.evtOnWheel += UIRoot.Instance.handleEvtWheel;
 
-                    UIRoot.Instance.root.appendFromXML(
-@"
-    <rect dragAble=""true"" scaleAble=""true"" width=""256"" height=""256"" layout=""horizen"" paddingX=""4"" paddingY=""4"">
-        <innerTemplate name=""t1"">
-            <round_rect width=""64"" height=""64"" radius=""20"" leftTopCorner=""false"" fillColor=""0xffff0000"" marginX=""2"" marginY=""2"" layout=""horizen"">
 
-            </round_rect>
-        </innerTemplate>
-        <apply innerTemplate=""t1"" height=""128"" r2.height=""55"">
-               <rect name=""r2"" width=""30"" height=""20"" marginX=""2"" marginY=""2"">
-               </rect>
-        </apply>
-        <apply innerTemplate=""t1"" height=""64""></apply>
-        <apply innerTemplate=""t1"" height=""32""></apply>
-    </rect>
-");
+                    var uiTest = testAll.Instance;
 
                 };
 
