@@ -98,7 +98,7 @@ namespace ns_YAUI
                 uint c1 = 0x888888;
                 mTextBox.ForeColor = Color.FromArgb((Int32)c1);
                 this.Visible = true;
-                this.Location = Globals.Instance.mPainter.PointToScreen(new Point(x, y));
+                this.Location = PaintDriver.mIns.PointToScreen(new Point(x, y));
                 if (evtInputEnter != null)
                     evtInputEnter();
             }

@@ -30,7 +30,7 @@ namespace ns_YAUI
         private System.Windows.Forms.Timer mTimer;
         private System.ComponentModel.IContainer components;
 
-        public PaintDriver mIns = null;
+        public static PaintDriver mIns = null;
         
 
         public PaintDriver()

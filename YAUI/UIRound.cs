@@ -106,7 +106,14 @@ namespace ns_YAUI
 
         public override bool postTestPick(Point pos)
         {
-            return true;
+            float a = (float)_w / 2;
+            float b = (float)_h / 2;
+            float x = (float)(pos.X - a);
+            float y = (float)(pos.Y - b);
+
+            var d = (x / a) * (x / a) + (y / b) * (y / b);
+            if (d > 1) return false;
+            else return true;
         }
 
         internal override void onDraw(Graphics g)
