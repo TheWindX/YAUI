@@ -266,7 +266,7 @@ namespace ns_YAUI
         public void dirty()//已经脏了
         {
             UIWidget p = this.paresent as UIWidget;
-            if (p == null) { return; }
+            if (p == null) { UIRoot.Instance.dirtyRoot = null; return; }
 
             p.adjustLayout();
             p.mOccupyRect = null;
@@ -295,36 +295,37 @@ namespace ns_YAUI
         {
             get
             {
-                var drc = drawRect;
-
                 if (mOccupyRect != null)
                 {
                     return mOccupyRect.Value;
                 }
                 
-                if (clip)
-                    return drc;
-
                 Rectangle? ret = null;
                 foreach (var elem in children())
                 {
                     if (!elem.visible) continue;//not count for invisble
                     if(ret == null)
                     {
-                        ret = elem.occupyRect.transform(elem.transformMatrix);
+                        var rc = elem.occupyRect;
+                        rc = expandRect(rc, elem.drawRect);
+                        ret = rc.transform(elem.transformMatrix);
                     }
                     else
                     {
-                        var elemRc = elem.occupyRect.transform(elem.transformMatrix);
+                        var rc = elem.occupyRect;
+                        rc = expandRect(rc, elem.drawRect);
+                        var elemRc = rc.transform(elem.transformMatrix);
                         ret = expandRect(ret.Value, elemRc);
                     }
                 }
 
-                if (ret == null) return drc;
-                if (drc.Contains(ret.Value))
-                    return drc;
-                else
-                    return expandRect(drc, ret.Value);
+                if (ret == null) return drawRect;
+                if (clip)
+                {
+                    return drawRect;
+                }
+
+                else return ret.Value;
             }
         }
 
@@ -1223,6 +1224,7 @@ namespace ns_YAUI
             if (delta > 0) sc = 1.1f;
             else sc = 0.9f;
             this.scalePoint(mWheelScaleBegin, sc);
+            dirty();
         }
 
         bool onScaleBegin(UIWidget ui, int x, int y)

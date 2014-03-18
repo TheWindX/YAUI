@@ -161,6 +161,11 @@ namespace ns_YAUI
             }
         }
 
+        protected override Rectangle dirtyRect
+        {
+            get{ return new Rectangle(_r/2, _r/2, _w-_r, _h-_r*2); }// rect
+        }
+
         public override string typeName
         {
             get { return "round_rect"; }
@@ -221,6 +226,8 @@ namespace ns_YAUI
             g.FillPath(mBrush, p);
             g.DrawPath(mPen, p);
         }
+
+
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {

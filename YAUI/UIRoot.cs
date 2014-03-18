@@ -44,6 +44,7 @@ namespace ns_YAUI
             set
             {
                 mDirtyRoot = value;
+                if (mHandleDraw != null) mHandleDraw();
             }
         }
         #endregion
@@ -346,7 +347,7 @@ namespace ns_YAUI
         #region handle
         public void handleDraw(Graphics g)
         {
-            if (mDirtyRoot == null) { mDirtyRoot = root; mDirtyRoot.dirty(); }
+            if (mDirtyRoot == null) { mDirtyRoot = root;  }
             Console.WriteLine(mDirtyRoot.name);
             mDirtyRoot.doDrawAlone(g);
         }
@@ -579,6 +580,14 @@ namespace ns_YAUI
 
 
         internal Action<int> mEvtWheel;
+
+        internal Action mHandleDraw;
+        public UIRoot initHandleDraw(Action handleDraw)
+        {
+            mHandleDraw = handleDraw;
+            return this;
+        }
+
 
         internal Action<bool, int, int> mHandleInputShow;
         public UIRoot initHandleInputShow(Action<bool, int, int> handleInputShow)
