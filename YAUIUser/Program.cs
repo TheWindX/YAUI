@@ -20,6 +20,7 @@ namespace YAUIUser
 
                     UIRoot.Instance.initXML()
                         .initEvt()
+                        .initHandleDraw(p.Invalidate)
                         .initHandleLog((s) => CSRepl.Instance.print(s))
                         .initHandleInputShow(InputForm.Instance.show);
 

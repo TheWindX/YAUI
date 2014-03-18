@@ -103,17 +103,44 @@ namespace ns_YAUI
         {
             if (evtUpdate != null)
                 evtUpdate();
-            this.Invalidate();
+            //Invalidate();
         }
 
-        
+        private void updateDirty()
+        {
+            mReflush = false;
+            Invalidate();
+        }
+
+
+        bool mReflush = true;
         public EvtPaint evtPaint;
+        private Bitmap m_bmpOffscreen;
         private void OnPaint(object sender, PaintEventArgs e)
         {
-            e.Graphics.Clear(Color.Black);
+            Graphics gxOff; //Offscreen graphics
+            if (m_bmpOffscreen == null) //Bitmap for doublebuffering
+            {
+                m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+            }
+            else
+            {
+                var sz = m_bmpOffscreen.Size;
+                if (ClientSize.Width != sz.Width
+                    || ClientSize.Height != sz.Height)
+                {
+                    m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+                    UIRoot.Instance.root.dirty();
+                }
+            }
+            gxOff = Graphics.FromImage(m_bmpOffscreen);
             if (evtPaint != null)
-                evtPaint(e.Graphics);
+                evtPaint(gxOff);
+            e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);
+            mReflush = true;
         }
+
+
 
         //public delegate void EvtMouse(int x, int y);
         

@@ -58,6 +58,7 @@
     <Compile Include="repl.cs" />
     <Compile Include="Singleton.cs" />
     <Compile Include="testAll.cs" />
+    <Compile Include="testDirty.cs" />
     <Compile Include="testRoundRect.cs" />
     <Compile Include="timer.cs" />
   </ItemGroup>
@@ -69,6 +70,11 @@
       <Project>{44a65251-f8ff-44bf-be47-40482f28e11d}</Project>
       <Name>YAUI</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Painter.resx">
+      <DependentUpon>Painter.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
