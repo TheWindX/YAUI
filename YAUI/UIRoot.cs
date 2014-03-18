@@ -1,4 +1,5 @@
-﻿/*
+﻿
+/*
  * author: xiaofeng.li
  * mail: 453588006@qq.com
  * desc: 
@@ -17,7 +18,9 @@ namespace ns_YAUI
 {
     public class UIRoot : Singleton<UIRoot>
     {
+        #region root
         UIWidget mRoot;
+        
         public UIWidget root
         {
             get
@@ -29,6 +32,21 @@ namespace ns_YAUI
         {
             mRoot = new UIMap();
         }
+
+
+        UIWidget mDirtyRoot;
+        public UIWidget dirtyRoot
+        {
+            get
+            {
+                return mDirtyRoot;
+            }
+            set
+            {
+                mDirtyRoot = value;
+            }
+        }
+        #endregion
 
         #region XML
 
@@ -322,13 +340,15 @@ namespace ns_YAUI
             mEvtKey += testKey;
             return this;
         }
+
         #endregion
 
         #region handle
         public void handleDraw(Graphics g)
         {
-            root.adjustLayout();
-            root.doDraw(g);
+            if (mDirtyRoot == null) { mDirtyRoot = root; mDirtyRoot.dirty(); }
+            Console.WriteLine(mDirtyRoot.name);
+            mDirtyRoot.doDrawAlone(g);
         }
 
         public void handleLeftDown(int x, int y)
@@ -383,6 +403,7 @@ namespace ns_YAUI
 
         #endregion
 
+        #region focus
         internal UIWidget focusWidget
         {
             get
@@ -428,7 +449,9 @@ namespace ns_YAUI
             }
             
         }
+        #endregion
 
+        #region event
         internal void testUIEvent(int x, int y, Func<UIWidget, Func<int, int, bool>> getAction)
         {
             UIWidget uiout;
@@ -568,7 +591,8 @@ namespace ns_YAUI
         public void handleInputShow(string str)
         {
             if (mEvtInputDone != null) mEvtInputDone(str);
-            
+
         }
+        #endregion
     }
 }

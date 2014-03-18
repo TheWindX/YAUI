@@ -185,6 +185,45 @@ namespace ns_YAUI
         //    }
         //}
 
+        public static UIWidget commonParesent(UIWidget u1, UIWidget u2)
+        {
+            List<UIWidget> u1Plist = new List<UIWidget>();
+            UIWidget t1 = u1;
+            while (t1 != null)
+            {
+                u1Plist.Add(t1);
+                t1 = t1.mParesent as UIWidget;
+            }
+
+            List<UIWidget> u2Plist = new List<UIWidget>();
+            UIWidget t2 = u2;
+            while (t2 != null)
+            {
+                u2Plist.Add(t2);
+                t2 = t2.mParesent as UIWidget;
+            }
+
+            UIWidget c = null;
+            int i1 = u1Plist.Count - 1;
+            int i2 = u2Plist.Count - 1;
+            UIWidget sub1 = null;
+            UIWidget sub2 = null;
+            for (; i1 >= 0 && i2 >= 0; )
+            {
+                var c1 = u1Plist[i1];
+                var c2 = u2Plist[i2];
+                sub1 = c1;
+                sub2 = c2;
+
+                if (c1 == c2)
+                {
+                    c = c1;
+                }
+                i1--;
+                i2--;
+            }
+            return c;
+        }
         #endregion
 
         #region properties
@@ -212,6 +251,80 @@ namespace ns_YAUI
                 rc.Location = new Point(rc.Location.X - marginX, rc.Location.Y - marginY);
                 rc.Size = new Size(rc.Size.Width + marginX*2, rc.Size.Height + marginY*2);
                 return rc;
+            }
+        }
+
+        //遮挡矩形，如果 occupyRect 超过了 dirtyRect, 就需要向上 paresent重绘了，否则本地重绘就行
+        protected virtual Rectangle dirtyRect
+        {
+            get{return new Rectangle(); }// rect
+        }
+
+        Rectangle? mOccupyRect = null;
+        UIWidget mReDrawRootOld;
+        UIWidget mReDrawRoot;
+        public void dirty()//已经脏了
+        {
+            UIWidget p = this.paresent as UIWidget;
+            if (p == null) { return; }
+
+            p.adjustLayout();
+            p.mOccupyRect = null;
+            var newDrawRot =  p.getDirtyRoot();
+            mReDrawRoot = newDrawRot;
+            UIRoot.Instance.dirtyRoot = commonParesent(mReDrawRoot, mReDrawRootOld);
+        }
+
+        internal UIWidget getDirtyRoot()
+        {
+            if (dirtyRect.Contains(occupyRect))
+            {
+                return this;
+            }
+            else
+            {
+                if (paresent != null)
+                {
+                    return (paresent as UIWidget).getDirtyRoot();
+                }
+                return this;
+            }
+        }
+
+        protected Rectangle occupyRect
+        {
+            get
+            {
+                var drc = drawRect;
+
+                if (mOccupyRect != null)
+                {
+                    return mOccupyRect.Value;
+                }
+                
+                if (clip)
+                    return drc;
+
+                Rectangle? ret = null;
+                foreach (var elem in children())
+                {
+                    if (!elem.visible) continue;//not count for invisble
+                    if(ret == null)
+                    {
+                        ret = elem.occupyRect.transform(elem.transformMatrix);
+                    }
+                    else
+                    {
+                        var elemRc = elem.occupyRect.transform(elem.transformMatrix);
+                        ret = expandRect(ret.Value, elemRc);
+                    }
+                }
+
+                if (ret == null) return drc;
+                if (drc.Contains(ret.Value))
+                    return drc;
+                else
+                    return expandRect(drc, ret.Value);
             }
         }
 
@@ -987,6 +1100,7 @@ namespace ns_YAUI
             int dy = pt.Y - mPtDragBegin.Y;
             position.X = mPosBegin.X + dx;
             position.Y = mPosBegin.Y + dy;
+            dirty();
         }
 
         bool onDragBegin(UIWidget _this, int x, int y)
@@ -1328,9 +1442,40 @@ namespace ns_YAUI
             return true;
         }
 
-        //public static Font mDrawFont = new Font("Arial", 12, FontStyle.Bold);
+        internal void doDrawAlone(Graphics g)
+        {
+            var pList = new List<UIWidget>();
+
+            UIWidget cur = paresent as UIWidget;
+            for (; cur != null; )
+            {
+                pList.Add(cur);
+                cur = cur.paresent as UIWidget;
+            }
+            var gs = g.Save();
+            foreach(UIWidget u in pList.Reverse<UIWidget>() )
+            {
+                Matrix _mtx = g.Transform;
+                _mtx.Multiply(u.getLocalMatrix());
+                g.Transform = _mtx;
+                if (u.clip)
+                {
+                    var r = u.drawRect;
+                    //r.Offset(-1, -1);
+                    //r.Width += 1;
+                    //r.Height += 1;
+                    GraphicsPath p = new GraphicsPath();
+                    p.AddRectangle(r);
+                    g.SetClip(p, CombineMode.Intersect);
+                }
+            }
+            doDraw(g);
+            g.Restore(gs);
+        }
+
         internal void doDraw(Graphics g)
         {
+            mReDrawRootOld = mReDrawRoot;
             if (!mVisiable)
                 return;
             if (evtPreDraw != null)
@@ -1349,8 +1494,8 @@ namespace ns_YAUI
             {
                 var r = drawRect;
                 //r.Offset(-1, -1);
-                r.Width += 1;
-                r.Height += 1;
+                //r.Width += 1;
+                //r.Height += 1;
                 GraphicsPath p = new GraphicsPath();
                 p.AddRectangle(r);
                 g.SetClip(p, CombineMode.Intersect);

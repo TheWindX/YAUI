@@ -54,8 +54,10 @@ namespace ns_YAUI
             return true;
         }
 
+        static Brush mBrush = new SolidBrush(Color.Black);
         internal override void onDraw(Graphics g) 
         {
+            g.FillRectangle(mBrush, pickRect);
         }
 
 

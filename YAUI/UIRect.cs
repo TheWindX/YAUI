@@ -33,6 +33,12 @@ namespace ns_YAUI
             mPen = new Pen(Color.FromArgb((Int32)scolor));
         }
 
+
+        protected override Rectangle dirtyRect
+        {
+            get { return drawRect; }// rect
+        }
+
         protected override void setWidth(int w)
         {
             width = w;
@@ -78,6 +84,7 @@ namespace ns_YAUI
             set
             {
                 _w = value;
+                dirty();
             }
         }
 
@@ -90,6 +97,7 @@ namespace ns_YAUI
             set
             {
                 _h = value;
+                dirty();
             }
         }
 
@@ -119,10 +127,8 @@ namespace ns_YAUI
 
         internal override void onDraw(Graphics g) 
         {
-            GraphicsPath p = new GraphicsPath();
-            p.AddRectangle(new Rectangle(0, 0, _w, _h));
-            g.FillPath(mBrush, p);
-            g.DrawPath(mPen, p);
+            g.FillRectangle(mBrush, 0, 0, _w, _h);
+            g.DrawRectangle(mPen, 0, 0, _w, _h);
         }
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
