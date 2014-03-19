@@ -261,20 +261,31 @@ namespace ns_YAUI
         }
 
         Rectangle? mOccupyRect = null;
-        UIWidget mReDrawRootOld;
-        UIWidget mReDrawRoot;
-        public void dirty()//已经脏了
+        internal void invalidRect()
         {
+            mOccupyRect = null;
+        }
+        
+        public void setDirty()
+        {
+            //this.invalidRect(); //no need, children count for occupy, //occupy count for dirty
             UIWidget p = this.paresent as UIWidget;
-            if (p == null) { UIRoot.Instance.dirtyRoot = null; return; }
-
-            p.adjustLayout();
-            p.mOccupyRect = null;
-            var newDrawRot =  p.getDirtyRoot();
-            mReDrawRoot = newDrawRot;
-            UIRoot.Instance.dirtyRoot = commonParesent(mReDrawRoot, mReDrawRootOld);
+            if (p != null)
+            {
+                //if (p.name == "r3") Console.WriteLine("r3 is invalid");
+                p.invalidRect();
+                if (UIRoot.Instance.dirtyRoot == null) UIRoot.Instance.dirtyRoot = p;
+                var d = commonParesent(UIRoot.Instance.dirtyRoot, p);
+                d.invalidRect();
+                UIRoot.Instance.dirtyRoot = d;
+            }
+            else
+            {
+                UIRoot.Instance.dirtyRoot = null;
+            }
         }
 
+        //向上找到
         internal UIWidget getDirtyRoot()
         {
             if (dirtyRect.Contains(occupyRect))
@@ -285,6 +296,7 @@ namespace ns_YAUI
             {
                 if (paresent != null)
                 {
+                    (paresent as UIWidget).invalidRect();
                     return (paresent as UIWidget).getDirtyRoot();
                 }
                 return this;
@@ -299,33 +311,30 @@ namespace ns_YAUI
                 {
                     return mOccupyRect.Value;
                 }
-                
-                Rectangle? ret = null;
+
+                mOccupyRect = null;
                 foreach (var elem in children())
                 {
                     if (!elem.visible) continue;//not count for invisble
-                    if(ret == null)
+                    if (mOccupyRect == null)
                     {
                         var rc = elem.occupyRect;
                         rc = expandRect(rc, elem.drawRect);
-                        ret = rc.transform(elem.transformMatrix);
+                        mOccupyRect = rc.transform(elem.transformMatrix);
+                        //if (this.name == "r3") Console.WriteLine(elem.name + ":" + rc);
                     }
                     else
                     {
                         var rc = elem.occupyRect;
                         rc = expandRect(rc, elem.drawRect);
                         var elemRc = rc.transform(elem.transformMatrix);
-                        ret = expandRect(ret.Value, elemRc);
+                        mOccupyRect = expandRect(mOccupyRect.Value, elemRc);
                     }
                 }
 
-                if (ret == null) return drawRect;
-                if (clip)
-                {
-                    return drawRect;
-                }
-
-                else return ret.Value;
+                if (mOccupyRect == null || clip) mOccupyRect = drawRect;
+                
+                return mOccupyRect.Value;
             }
         }
 
@@ -776,6 +785,7 @@ namespace ns_YAUI
         //这个因与渲染的遍历次序不同,因此不能让到draw里
         public virtual void adjustLayout()
         {
+            mOccupyRect = null;//重新layout, 当然要重计 mOccupyRect
             for (int i = 0; i < mChildrent.Count; ++i)
             {
                 var c = mChildrent[i] as UIWidget;
@@ -885,6 +895,10 @@ namespace ns_YAUI
         #endregion
 
         #region events
+
+        public Action evtEnter;
+        public Action evtExit;
+
         public delegate bool EvtMouse(UIWidget _this, int x, int y);
         public delegate bool EvtKeyboard(UIWidget _this, int kc, bool isControl, bool isShift);
         public delegate void EvtSizeChanged(UIWidget _this, int w, int h);
@@ -1101,7 +1115,8 @@ namespace ns_YAUI
             int dy = pt.Y - mPtDragBegin.Y;
             position.X = mPosBegin.X + dx;
             position.Y = mPosBegin.Y + dy;
-            dirty();
+            setDirty();
+            UIRoot.Instance.dirtyRedraw();
         }
 
         bool onDragBegin(UIWidget _this, int x, int y)
@@ -1176,6 +1191,8 @@ namespace ns_YAUI
             int posDy = pt.Y - ptLocalRotateOrg.Y;
             //position.X += posDx;
             //position.Y += posDy;
+            setDirty();
+            UIRoot.Instance.dirtyRedraw();
         }
 
         void onRotateEnd(int x, int y)
@@ -1224,7 +1241,8 @@ namespace ns_YAUI
             if (delta > 0) sc = 1.1f;
             else sc = 0.9f;
             this.scalePoint(mWheelScaleBegin, sc);
-            dirty();
+            setDirty();
+            UIRoot.Instance.dirtyRedraw();
         }
 
         bool onScaleBegin(UIWidget ui, int x, int y)
@@ -1463,9 +1481,9 @@ namespace ns_YAUI
                 if (u.clip)
                 {
                     var r = u.drawRect;
-                    //r.Offset(-1, -1);
-                    //r.Width += 1;
-                    //r.Height += 1;
+                    r.Offset(1, 1);
+                    r.Width -= 1;
+                    r.Height -= 1;
                     GraphicsPath p = new GraphicsPath();
                     p.AddRectangle(r);
                     g.SetClip(p, CombineMode.Intersect);
@@ -1477,7 +1495,6 @@ namespace ns_YAUI
 
         internal void doDraw(Graphics g)
         {
-            mReDrawRootOld = mReDrawRoot;
             if (!mVisiable)
                 return;
             if (evtPreDraw != null)
@@ -1495,9 +1512,9 @@ namespace ns_YAUI
             if (clip)
             {
                 var r = drawRect;
-                //r.Offset(-1, -1);
-                //r.Width += 1;
-                //r.Height += 1;
+                r.Offset(1, 1);
+                r.Width -= 1;
+                r.Height -= 1;
                 GraphicsPath p = new GraphicsPath();
                 p.AddRectangle(r);
                 g.SetClip(p, CombineMode.Intersect);

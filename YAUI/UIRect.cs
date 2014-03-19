@@ -84,7 +84,7 @@ namespace ns_YAUI
             set
             {
                 _w = value;
-                dirty();
+                setDirty();
             }
         }
 
@@ -97,7 +97,7 @@ namespace ns_YAUI
             set
             {
                 _h = value;
-                dirty();
+                setDirty();
             }
         }
 

@@ -33,8 +33,9 @@ namespace ns_YAUI
             mRoot = new UIMap();
         }
 
+        UIWidget mDirtyRoot = null;
+        UIWidget mDirtyRootOld = null;//当mDirtyRoot发生变化时，off couse, mDirtyRootOld也要redraw
 
-        UIWidget mDirtyRoot;
         public UIWidget dirtyRoot
         {
             get
@@ -44,8 +45,17 @@ namespace ns_YAUI
             set
             {
                 mDirtyRoot = value;
-                if (mHandleDraw != null) mHandleDraw();
             }
+        }
+
+        public void dirtyRedraw()
+        {
+            if (mDirtyRoot == null) mDirtyRoot = root;
+            if (mDirtyRootOld == null) mDirtyRootOld = root;
+
+            mDirtyRoot = mDirtyRoot.getDirtyRoot();
+            mDirtyRootOld = UIWidget.commonParesent(mDirtyRoot, mDirtyRootOld);
+            if (mHandleDraw != null) mHandleDraw();
         }
         #endregion
 
@@ -92,11 +102,11 @@ namespace ns_YAUI
             }
         }
 
-        internal delegate XmlNodeList funcFromXML(XmlNode nd, out UIWidget ui, UIWidget p);
+        public delegate XmlNodeList funcFromXML(XmlNode nd, out UIWidget ui, UIWidget p);
 
         static Dictionary<string, funcFromXML> mXML2widget = new Dictionary<string, funcFromXML>();
 
-        internal static void regMethodFromXML(string tag, funcFromXML method)
+        public static void regMethodFromXML(string tag, funcFromXML method)
         {
             mXML2widget.Add(tag, method);
         }
@@ -347,9 +357,11 @@ namespace ns_YAUI
         #region handle
         public void handleDraw(Graphics g)
         {
-            if (mDirtyRoot == null) { mDirtyRoot = root;  }
-            Console.WriteLine(mDirtyRoot.name);
-            mDirtyRoot.doDrawAlone(g);
+            if (mDirtyRootOld == null) { mDirtyRootOld = root; }
+            //Console.WriteLine(mDirtyRootOld.name);
+            mDirtyRootOld.doDrawAlone(g);
+            mDirtyRootOld = mDirtyRoot;
+            mDirtyRoot = null;
         }
 
         public void handleLeftDown(int x, int y)
@@ -420,18 +432,28 @@ namespace ns_YAUI
             }
         }
 
+        UIWidget mCurrent = null;
         internal UIWidget currentWidget
         {
             get
             {
-                object o;
-                bool ret = root.attrs.TryGetValue("current", out o);
-                if (!ret) return null;
-                return o as UIWidget;
+                return mCurrent;
             }
             set
             {
-                root.attrs["current"] = value;
+                if (value != mCurrent)
+                {
+                    if (mCurrent != null) 
+                    {
+                        if (mCurrent.evtExit != null)mCurrent.evtExit(); 
+                    }
+                    if (value != null)
+                    {
+                        if (value.evtEnter != null) value.evtEnter(); 
+                    }
+                }
+                mCurrent = value;
+                 
             }
         }
 

@@ -130,7 +130,7 @@ namespace ns_YAUI
                     || ClientSize.Height != sz.Height)
                 {
                     m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
-                    UIRoot.Instance.root.dirty();
+                    UIRoot.Instance.root.setDirty();
                 }
             }
             gxOff = Graphics.FromImage(m_bmpOffscreen);
