@@ -32,9 +32,10 @@ namespace ColorPicker
         }
 
         public const int VK_LBUTTON = 0x01;
+        public const int VK_MBUTTON = 0x04;
         public static bool GetMouseLeftDown()
         {
-            int ks = GetKeyState(VK_LBUTTON) & 0x8000;
+            int ks = GetKeyState(VK_MBUTTON) & 0x8000;
             if (ks > 0)
             {
                 return true;

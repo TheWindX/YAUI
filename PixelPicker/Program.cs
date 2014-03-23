@@ -80,13 +80,12 @@ namespace ns_pixelPicker
                         var cl = ColorPicker.ColorPickerManager.GetColor(pt.X, pt.Y);
                         //if (oldCl != cl)
                         {
-                            ns_YAUtils.CSRepl.Instance.print(string.Format("col:{0}, at ({1}, {2})", cl, pt.X, pt.Y));
+                            ns_YAUtils.CSRepl.Instance.print(string.Format("{0}(0x{1:x}) , at ({2}, {3})", cl, cl.ToArgb(), pt.X, pt.Y));
                           //  oldCl = cl;
                         }
                     }
                     //if (System.Windows.Input.Mouse.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
-                    //{
-                        
+                    //{ 
                     //}
                 }, 100);
         }

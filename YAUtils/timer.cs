@@ -296,7 +296,7 @@ namespace ns_YAUtils
             var elem = new TimeContext(++mIDCount, mTimer(), (t, b) => { if (b) endHandler(t); else intervalHandler(t); }, duration, interval);
             mInterpolates.push(elem);
             mID2Interpolation.Add(mIDCount, elem);
-            Console.WriteLine("add timer:" + mIDCount);
+            //Console.WriteLine("add timer:" + mIDCount);
             return mIDCount;
         }
 

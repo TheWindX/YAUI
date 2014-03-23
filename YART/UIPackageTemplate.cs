@@ -12,10 +12,10 @@ namespace ns_YART
     {
         static string XML = @"
 <stub layout=""vertical"" dragAble=""true"">
-    <round_rect width=""512"" height=""48"" radius=""5"" leftBottomCorner=""false"" rightBottomCorner=""false"">
-    </round_rect>
-    <rect width=""512"" height=""512"" >
+    <rect width=""512"" height=""40"" radius=""12"" leftBottomCorner=""false"" rightBottomCorner=""false""
+     fillColor=""ff4b86d4"">
     </rect>
+    <rect width=""512"" height=""512"" fillColor=""0xffdee8f2""></rect>
 </stub>
 ";
         public static UIWidget genWidget()

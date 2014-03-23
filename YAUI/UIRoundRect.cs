@@ -39,16 +39,6 @@ namespace ns_YAUI
             if (corners != null) mCorner = corners;
         }
 
-        protected override void setWidth(int w)
-        {
-            width = w;
-        }
-
-        protected override void setHeight(int h)
-        {
-            height = h;
-        }
-
         public uint fillColor
         {
             get
@@ -75,7 +65,7 @@ namespace ns_YAUI
             }
         }
 
-        public int width
+        public override int width
         {
             get
             {
@@ -87,7 +77,7 @@ namespace ns_YAUI
             }
         }
 
-        public int height
+        public override int height
         {
             get
             {

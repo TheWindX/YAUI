@@ -243,13 +243,28 @@ namespace ns_YAUI
             get { return new Rectangle(); }
         }
 
-        protected virtual void setWidth(int width)
+        public virtual int width
         {
+            get
+            {
+                return 0;
+            }
+            set
+            {
+            }
         }
 
-        protected virtual void setHeight(int height)
+        public virtual int height
         {
+            get
+            {
+                return 0;
+            }
+            set
+            {
+            }
         }
+        
 
         public Rectangle layoutRect
         {
@@ -785,11 +800,11 @@ namespace ns_YAUI
             horizen,
         }
 
-
         public ELayout mLayout = ELayout.none;
         public bool wrap = false;
         public bool resizeAble = false;//if resizeAble, wrap is invalid
-
+        public bool expandAble = false;//if expandAble, resizeAble & wrap is invalid //expand 到它的layoutRect
+        
         //这个因与渲染的遍历次序不同,因此不能让到draw里
         public virtual void adjustLayout()
         {
@@ -800,6 +815,19 @@ namespace ns_YAUI
                 c.adjustLayout();
             }
 
+            if (this.expandAble)
+            {
+                var p = paresent as UIWidget;
+
+                if (p != null)
+                {
+                    position.X = p.paddingX;
+                    position.Y = p.paddingY;
+                    width = p.width - p.paddingX * 2;
+                    height = p.height - p.paddingY * 2;
+                }
+            }
+
             if (mLayout == ELayout.none)
             {
                 //无layout就使用align
@@ -808,6 +836,7 @@ namespace ns_YAUI
             }
 
             #region layout calc
+
             Point rb = new Point();
             Rectangle rc = new Rectangle(new Point(paddingX, paddingY), new Size(0, 0));
             rb = rc.rightBottom();
@@ -830,7 +859,8 @@ namespace ns_YAUI
                     rb.Y = max(rc.Bottom, rb.Y);
 
                     idxCount++;
-                    if (!this.resizeAble && this.wrap && rc.Bottom > this.drawRect.Height - paddingY && idxCount > 1)//只能容一个的情况
+                    //terrible rule!
+                    if ( (this.expandAble && this.wrap) || (!this.resizeAble && this.wrap) && rc.Bottom > this.drawRect.Height - paddingY && idxCount > 1)//只能容一个的情况
                     {
                         i++;
                         idxCount = 0;
@@ -855,7 +885,8 @@ namespace ns_YAUI
                     rb.Y = max(rc.Bottom, rb.Y);
 
                     idxCount++;
-                    if (!this.resizeAble && this.wrap && rc.Right > this.drawRect.Width - paddingX && idxCount > 1)//至少容一个的情况
+                    //terrible rule!
+                    if ( (this.expandAble && this.wrap) || (!this.resizeAble && this.wrap) && rc.Right > this.drawRect.Width - paddingX && idxCount > 1)//至少容一个的情况
                     {
                         i++;
                         idxCount = 0;
@@ -865,10 +896,10 @@ namespace ns_YAUI
                     }
                 }
             }
-            if (this.resizeAble)
+            if (!this.expandAble && this.resizeAble)
             {
-                setWidth(rb.X + paddingX);//right padding
-                setHeight(rb.Y + paddingY);//button padding
+                width = (rb.X + paddingX);//right padding
+                height = (rb.Y + paddingY);//button padding
             }
             #endregion
         }
@@ -1365,6 +1396,12 @@ namespace ns_YAUI
             if (ret != null)
             {
                 resizeAble = ret.Value.castBool();
+            }
+
+            ret = node.Attributes.GetNamedItem("expandAble");
+            if (ret != null)
+            {
+                expandAble = ret.Value.castBool();
             }
 
             ret = node.Attributes.GetNamedItem("marginX");

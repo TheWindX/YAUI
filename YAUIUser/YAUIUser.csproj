@@ -57,6 +57,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="testAll.cs" />
     <Compile Include="testDirty.cs" />
+    <Compile Include="testLayoutExpand.cs" />
     <Compile Include="testRoundRect.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,7 @@ namespace YAUIUser
         public testAll()
         {
             //var _1 = testRoundRect.Instance;
-            var _2 = testDir.Instance;
+            var _2 = testLayout.Instance;
         }
     }
 }
