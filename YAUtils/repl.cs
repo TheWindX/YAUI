@@ -1,16 +1,15 @@
-/*
+﻿/*
  * author: xiaofeng.li
  * mail: 453588006
  * desc: REPL for c#
  * */
-
 using System;
 using System.CodeDom.Compiler;
 using System.Reflection;
 using Microsoft.CSharp;
 using System.Threading;
 
-namespace ns_YAUI
+namespace ns_YAUtils
 {
     public class CSRepl
     {

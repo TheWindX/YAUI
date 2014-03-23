@@ -4,13 +4,28 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0A161930-181C-4757-BD94-3D3B32F47B29}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{44A65251-F8FF-44BF-BE47-40482F28E11D}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YAUIUser</RootNamespace>
-    <AssemblyName>YAUIUser</AssemblyName>
+    <RootNamespace>ns_YAUI</RootNamespace>
+    <AssemblyName>YAUI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -38,44 +53,52 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InputForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Painter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="testAll.cs" />
-    <Compile Include="testDirty.cs" />
-    <Compile Include="testRoundRect.cs" />
+    <Compile Include="array.cs" />
+    <Compile Include="ExpandString.cs" />
+    <Compile Include="ExtendRectangle.cs" />
+    <Compile Include="Entity.cs" />
+    <Compile Include="singleton.cs" />
+    <Compile Include="UIEdit.cs" />
+    <Compile Include="UILine.cs" />
+    <Compile Include="UILineLinker.cs" />
+    <Compile Include="UIMap.cs" />
+    <Compile Include="UIRect.cs" />
+    <Compile Include="UIRoot.cs" />
+    <Compile Include="UILable.cs" />
+    <Compile Include="UIStub.cs" />
+    <Compile Include="UIArrow.cs" />
+    <Compile Include="UIWidget.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\YAUI\YAUI.csproj">
-      <Project>{44a65251-f8ff-44bf-be47-40482f28e11d}</Project>
-      <Name>YAUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAUtils\YAUtils.csproj">
-      <Project>{a97ad18a-b2ee-44fb-becd-10496ec8fb1f}</Project>
-      <Name>YAUtils</Name>
-    </ProjectReference>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Painter.resx">
-      <DependentUpon>Painter.cs</DependentUpon>
-    </EmbeddedResource>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

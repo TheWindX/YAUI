@@ -4,18 +4,16 @@
  * desc: timer as in JS timer
  * */
 
-
 //一帧内不能处理完成的定时器不做累积
 #define NO_ACCUMULATE
 
-namespace ns_YAUI
+namespace ns_YAUtils
 {
-
     using System;
     using System.Linq;
     using System.Collections.Generic;
 
-    public class TimerManager 
+    public class TimerManager
     {
         public class UHeap<T> //where T : class
         {
@@ -36,7 +34,7 @@ namespace ns_YAUI
             public UHeap(Func<T, T, bool> pred, Action<T, int> move)
             {
                 m_pred = pred;
-                if(m_pred == null)
+                if (m_pred == null)
                     m_pred = (a, b) => { return true; };
                 m_move = move;
                 if (m_move == null)
@@ -166,7 +164,7 @@ namespace ns_YAUI
                 if (ret)
                 {
                     mValid = false;
-                    mIntevalHandler(now-mStartTime, true);
+                    mIntevalHandler(now - mStartTime, true);
                 }
                 return ret;
             }
@@ -188,7 +186,7 @@ namespace ns_YAUI
                 }
                 return ret;
             }
-            
+
             UInt32 mIntervalCount;
             UInt32 mEndCount;
 
@@ -201,9 +199,9 @@ namespace ns_YAUI
                 mStartTime = now;
                 mDuration = duration;
                 mInterval = interval;
-                
-                mEndCount = mStartTime+mDuration;
-                mIntervalCount = mStartTime+mInterval;
+
+                mEndCount = mStartTime + mDuration;
+                mIntervalCount = mStartTime + mInterval;
 
                 if (interval == UInt32.MaxValue)
                     mIntervalCount = UInt32.MaxValue;
@@ -331,7 +329,7 @@ namespace ns_YAUI
         {
             UInt32 now = mTimer();
 
-            for (; ;)
+            for (; ; )
             {
                 var t = mInterpolates.top();
                 if (t == null) break;

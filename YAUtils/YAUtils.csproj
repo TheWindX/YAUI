@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0A161930-181C-4757-BD94-3D3B32F47B29}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{A97AD18A-B2EE-44FB-BECD-10496EC8FB1F}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>YAUIUser</RootNamespace>
-    <AssemblyName>YAUIUser</AssemblyName>
+    <RootNamespace>YAUtils</RootNamespace>
+    <AssemblyName>YAUtils</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,15 +29,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,35 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InputForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Painter.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Program.cs" />
+    <Compile Include="array.cs" />
+    <Compile Include="repl.cs" />
+    <Compile Include="singleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="testAll.cs" />
-    <Compile Include="testDirty.cs" />
-    <Compile Include="testRoundRect.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\YAUI\YAUI.csproj">
-      <Project>{44a65251-f8ff-44bf-be47-40482f28e11d}</Project>
-      <Name>YAUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\YAUtils\YAUtils.csproj">
-      <Project>{a97ad18a-b2ee-44fb-becd-10496ec8fb1f}</Project>
-      <Name>YAUtils</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Painter.resx">
-      <DependentUpon>Painter.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="timer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

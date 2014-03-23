@@ -6,14 +6,13 @@ using System.Threading.Tasks;
 
 using ns_YAUtils;
 
-namespace YAUIUser
+namespace ns_YART
 {
     class testAll : Singleton<testAll>
     {
         public testAll()
         {
-            //var _1 = testRoundRect.Instance;
-            var _2 = testDir.Instance;
+            UIPackageTemplate.genWidget();
         }
     }
 }

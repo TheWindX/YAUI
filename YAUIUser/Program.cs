@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using ns_YAUtils;
+
 namespace YAUIUser
 {
     using ns_YAUI;
@@ -40,7 +42,7 @@ namespace YAUIUser
 
             p.evtUpdate += () =>
                 {
-                    ns_YAUI.CSRepl.Instance.runOnce();
+                    CSRepl.Instance.runOnce();
                 };
 
             p.Show();
