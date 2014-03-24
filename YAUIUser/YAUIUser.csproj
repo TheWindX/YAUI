@@ -59,6 +59,7 @@
     <Compile Include="testDirty.cs" />
     <Compile Include="testLayoutExpand.cs" />
     <Compile Include="testRoundRect.cs" />
+    <Compile Include="testWindow.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

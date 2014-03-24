@@ -834,18 +834,23 @@ namespace ns_YAUI
                 bool bAjust = adjustAlign();
                 return;
             }
+            List<UIWidget> mAligns = new List<UIWidget>();//for if layout and child align coexist
 
             #region layout calc
-
             Point rb = new Point();
             Rectangle rc = new Rectangle(new Point(paddingX, paddingY), new Size(0, 0));
             rb = rc.rightBottom();
             int idxCount = 0;
             for (int i = mChildrent.Count - 1; i >= 0; --i)
             {
-                if (mLayout == ELayout.vertical)
+                var c = mChildrent[i] as UIWidget;
+                if (c.align != EAlign.noAlign)
                 {
-                    var c = mChildrent[i] as UIWidget;
+                    mAligns.Add(c);
+                    continue;
+                }
+                if (mLayout == ELayout.vertical)
+                {   
                     var pt = rc.leftBottom();
                     pt.X += c.marginX;
                     pt.Y += c.marginY;
@@ -871,7 +876,6 @@ namespace ns_YAUI
                 }
                 else
                 {
-                    var c = mChildrent[i] as UIWidget;
                     var pt = rc.rightTop();
                     pt.X += c.marginX;
                     pt.Y += c.marginY;
@@ -900,6 +904,10 @@ namespace ns_YAUI
             {
                 width = (rb.X + paddingX);//right padding
                 height = (rb.Y + paddingY);//button padding
+                for (int i = 0; i < mAligns.Count; ++i)
+                {
+                    mAligns[i].adjustAlign();
+                }
             }
             #endregion
         }
@@ -1332,6 +1340,14 @@ namespace ns_YAUI
             ret = node.Attributes.GetNamedItem("scaley");
             if (ret != null) mScaley = ret.Value.castFloat(1);
 
+            ret = node.Attributes.GetNamedItem("scale");
+            if (ret != null)
+            {
+                mScalex = ret.Value.castFloat(1);
+                mScaley = mScalex;
+            }
+
+
             ret = node.Attributes.GetNamedItem("align");
             if (ret != null) 
             {
@@ -1349,6 +1365,14 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("offsety");
             if (ret != null) { var oy = ret.Value.castInt(); mOffsety = oy; }
+
+            ret = node.Attributes.GetNamedItem("offset");
+            if (ret != null)
+            {
+                mOffsetx = ret.Value.castInt();
+                mOffsety = mOffsetx; 
+            }
+
 
             ret = node.Attributes.GetNamedItem("clip");
             if (ret != null)
@@ -1416,6 +1440,13 @@ namespace ns_YAUI
                 marginY = ret.Value.castInt();
             }
 
+            ret = node.Attributes.GetNamedItem("margin");
+            if (ret != null)
+            {
+                marginX = ret.Value.castInt();
+                marginY = marginX;
+            }
+
             ret = node.Attributes.GetNamedItem("paddingX");
             if (ret != null)
             {
@@ -1427,6 +1458,14 @@ namespace ns_YAUI
             {
                 paddingY = ret.Value.castInt();
             }
+
+            ret = node.Attributes.GetNamedItem("padding");
+            if (ret != null)
+            {
+                paddingY = ret.Value.castInt();
+                paddingX = paddingY;
+            }
+
             return node.ChildNodes;
         }
 

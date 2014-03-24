@@ -322,6 +322,7 @@ namespace ns_YAUI
         {
             regMethodFromXML("stub", UIStub.fromXML);
             regMethodFromXML("map", UIMap.fromXML);
+            regMethodFromXML("blank", UIBlank.fromXML);
             regMethodFromXML("rect", UIRect.fromXML);
             regMethodFromXML("lable", UILable.fromXML);
             regMethodFromXML("edit", UIEdit.fromXML);

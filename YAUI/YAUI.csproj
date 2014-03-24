@@ -66,6 +66,7 @@
     <Compile Include="ExtendRectangle.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="singleton.cs" />
+    <Compile Include="UIBlank.cs" />
     <Compile Include="UIEdit.cs" />
     <Compile Include="UILine.cs" />
     <Compile Include="UILineLinker.cs" />
