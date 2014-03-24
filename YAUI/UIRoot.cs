@@ -341,9 +341,9 @@ namespace ns_YAUI
 
         public UIRoot initEvt()
         {
-            mEvtLeftDown += testLeftDown;
-            mEvtMove += testMove;
-            mEvtLeftUp += testLeftUp;
+            evtLeftDown += testLeftDown;
+            evtMove += testMove;
+            evtLeftUp += testLeftUp;
             mEvtRightDown += testRightDown;
             mEvtRightUp += testRightUp;
             mEvtMiddleDown += testMiddleDown;
@@ -367,17 +367,20 @@ namespace ns_YAUI
 
         public void handleLeftDown(int x, int y)
         {
-            if(mEvtLeftDown != null)mEvtLeftDown(x, y);
+            if(evtLeftDown != null)evtLeftDown(x, y);
         }
 
         public void handleEvtMove(int x, int y)
         {
-            if(mEvtMove != null)mEvtMove(x, y);
+            if (evtMove != null)
+            {
+                evtMove(x, y);
+            }
         }
 
         public void handleEvtLeftUp(int x, int y)
         {
-            if(mEvtLeftUp != null)mEvtLeftUp(x, y);
+            if(evtLeftUp != null)evtLeftUp(x, y);
         }
 
         public void handleEvtRightDown(int x, int y)
@@ -506,7 +509,7 @@ namespace ns_YAUI
             }
         }
 
-        internal Action<int, int> mEvtLeftDown;
+        public Action<int, int> evtLeftDown;
         void testLeftDown(int x, int y)
         {
             testUIEvent(x, y, (ui) =>
@@ -515,7 +518,7 @@ namespace ns_YAUI
             });
         }
 
-        internal Action<int, int> mEvtMove;
+        public event Action<int, int> evtMove;
         void testMove(int x, int y)
         {
             testUIEvent(x, y, (ui) =>
@@ -524,7 +527,7 @@ namespace ns_YAUI
             });
         }
 
-        internal Action<int, int> mEvtLeftUp;
+        public event Action<int, int> evtLeftUp;
         void testLeftUp(int x, int y)
         {
             testUIEvent(x, y, (ui) =>

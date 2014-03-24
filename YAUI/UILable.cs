@@ -16,7 +16,7 @@ using System.Xml;
 
 namespace ns_YAUI
 {
-    class UILable : UIWidget
+    public class UILable : UIWidget
     {
         string mText = "template";
         int mSz = 12;

@@ -75,6 +75,9 @@ namespace ns_YAUI
                     setDepthHead();
                     (paresent as UIWidget).setDirty();
                 }
+                //event
+                if(evtChangeParesent != null)
+                    evtChangeParesent(oldParesent as UIWidget, value as UIWidget);
             }
         }
         
@@ -943,6 +946,8 @@ namespace ns_YAUI
 
         #region events
 
+        public Action<UIWidget, UIWidget> evtChangeParesent;
+
         public Action evtEnter;
         public Action evtExit;
 
@@ -1002,6 +1007,7 @@ namespace ns_YAUI
         {
             evtOnDClick = null;
         }
+
         public event Action evtPreDraw;
         public void evtPreDrawClear()
         {
@@ -1014,8 +1020,7 @@ namespace ns_YAUI
             evtOnChar = null;
         }
 
-
-        public bool doEvtLeftDown(int x, int y)
+        internal bool doEvtLeftDown(int x, int y)
         {
             if (evtOnLMDown == null)
             {
@@ -1024,7 +1029,7 @@ namespace ns_YAUI
             return evtOnLMDown(this, x, y);
         }
 
-        public bool evtMove(int x, int y)
+        internal bool evtMove(int x, int y)
         {
             if (evtOnMMove == null)
             {
@@ -1033,7 +1038,7 @@ namespace ns_YAUI
             return evtOnMMove(this, x, y);
         }
 
-        public bool doEvtLeftUp(int x, int y)
+        internal bool doEvtLeftUp(int x, int y)
         {
             if (evtOnLMUp == null)
             {
@@ -1042,7 +1047,7 @@ namespace ns_YAUI
             return evtOnLMUp(this, x, y);
         }
 
-        public bool doEvtRightDown(int x, int y)
+        internal bool doEvtRightDown(int x, int y)
         {
             if (evtOnRMDown == null)
             {
@@ -1051,7 +1056,7 @@ namespace ns_YAUI
             return evtOnRMDown(this, x, y);
         }
 
-        public bool doEvtRightUp(int x, int y)
+        internal bool doEvtRightUp(int x, int y)
         {
             if (evtOnRMUp == null)
             {
@@ -1060,7 +1065,7 @@ namespace ns_YAUI
             return evtOnRMUp(this, x, y);
         }
 
-        public bool doEvtMiddleDown(int x, int y)
+        internal bool doEvtMiddleDown(int x, int y)
         {
             if (evtOnMMDown == null)
             {
@@ -1069,7 +1074,7 @@ namespace ns_YAUI
             return evtOnMMDown(this, x, y);
         }
 
-        public bool doEvtMiddleUp(int x, int y)
+        internal bool doEvtMiddleUp(int x, int y)
         {
             if (evtOnMMUp == null)
             {
@@ -1078,7 +1083,7 @@ namespace ns_YAUI
             return evtOnMMUp(this, x, y);
         }
 
-        public bool doEvtOnEnter(int x, int y)
+        internal bool doEvtOnEnter(int x, int y)
         {
             if (evtOnEnter == null)
             {
@@ -1087,7 +1092,7 @@ namespace ns_YAUI
             return evtOnEnter(this, x, y);
         }
 
-        public bool doEvtOnExit(int x, int y)
+        internal bool doEvtOnExit(int x, int y)
         {
             if (evtOnExit == null)
             {
@@ -1096,7 +1101,7 @@ namespace ns_YAUI
             return evtOnExit(this, x, y);
         }
 
-        public bool doEvtOnChar(int kc, bool isControl, bool isShift)
+        internal bool doEvtOnChar(int kc, bool isControl, bool isShift)
         {
             if (evtOnChar == null)
             {
@@ -1105,7 +1110,7 @@ namespace ns_YAUI
             return evtOnChar(this, kc, isControl, isShift);
         }
 
-        public bool doEvtDoubleClick(int x, int y)
+        internal bool doEvtDoubleClick(int x, int y)
         {
             if (evtOnDClick == null)
             {
@@ -1174,15 +1179,15 @@ namespace ns_YAUI
             //这个改变先后关系
             this.setDepthHead();
 
-            UIRoot.Instance.mEvtMove += onDragMove;
-            UIRoot.Instance.mEvtLeftUp += onDragEnd;
+            UIRoot.Instance.evtMove += onDragMove;
+            UIRoot.Instance.evtLeftUp += onDragEnd;
             return false;
         }
 
         void onDragEnd(int x, int y)
         {
-            UIRoot.Instance.mEvtMove -= onDragMove;
-            UIRoot.Instance.mEvtLeftUp -= onDragEnd;
+            UIRoot.Instance.evtMove -= onDragMove;
+            UIRoot.Instance.evtLeftUp -= onDragEnd;
         }
 
 
@@ -1219,7 +1224,7 @@ namespace ns_YAUI
             dirRotateOrg = mDir;
             ptLocalRotateOrg = invertTransformAbs(new Point(x, y));
 
-            UIRoot.Instance.mEvtMove += onRotateMove;
+            UIRoot.Instance.evtMove += onRotateMove;
             UIRoot.Instance.mEvtRightUp += onRotateEnd;
             return false;
         }
@@ -1244,7 +1249,7 @@ namespace ns_YAUI
 
         void onRotateEnd(int x, int y)
         {
-            UIRoot.Instance.mEvtMove -= onRotateMove;
+            UIRoot.Instance.evtMove -= onRotateMove;
             UIRoot.Instance.mEvtRightUp -= onRotateEnd;
         }
 
@@ -1265,12 +1270,12 @@ namespace ns_YAUI
                 if (mScaleAble)
                 {
                     evtOnLMDown += onScaleBegin;
-                    UIRoot.Instance.mEvtLeftUp += onScaleEnd;
+                    UIRoot.Instance.evtLeftUp += onScaleEnd;
                 }
                 else
                 {
                     evtOnLMDown -= onScaleBegin;
-                    UIRoot.Instance.mEvtLeftUp -= onScaleEnd;
+                    UIRoot.Instance.evtLeftUp -= onScaleEnd;
                     onScaleEnd(0, 0);
                 }
 
@@ -1352,6 +1357,7 @@ namespace ns_YAUI
             if (ret != null) 
             {
                 mAlign = (EAlign)Enum.Parse(typeof(EAlign), node.Attributes["align"].Value);
+                mAlignParesent = mAlign;
             }
             ret = node.Attributes.GetNamedItem("alignParesent");
             if (ret != null)
