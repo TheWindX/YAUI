@@ -11,7 +11,7 @@ namespace YAUIUser
     class UIWindow
     {
         const string XMLLayout = @"
-    <rect resizeAble=""true"" layout=""vertical"" padding=""5"" dragAble=""true"" fillColor=""ff1ba1e2"">
+    <rect clip=""true"" resizeAble=""true"" layout=""vertical"" padding=""5"" dragAble=""true"" fillColor=""ff1ba1e2"">
         <lable name=""lable"" text=""top"" align=""leftTop"" padding=""4"" ></lable>
         <lable name=""close"" text=""x"" align=""rightTop"" padding=""4"" ></lable>
         
@@ -71,6 +71,16 @@ namespace YAUIUser
                     UIRoot.Instance.evtMove -= moveHandle;
             };
 
+            mClose.evtOnLMDown += (ui, x, y) =>
+            {
+                return false;
+            };
+
+            mClose.evtOnLMUp += (ui, x, y) =>
+                {
+                    dettach();
+                    return false;
+                };
             
             mWindow.evtChangeParesent += (oui, nui)=>
             {
@@ -82,6 +92,12 @@ namespace YAUIUser
         public void attach()
         {
             mWindow.paresent = UIRoot.Instance.root;
+        }
+
+        public void dettach()
+        {
+            mWindow.paresent = null;
+            UIRoot.Instance.dirtyRedraw();
         }
 
         public void setLable(string name)
@@ -96,6 +112,7 @@ namespace YAUIUser
         public testWindow()
         {
             UIWindow w = new UIWindow();
+            w.setLable("lasdjfsadf");
             w.attach();
         }
     }

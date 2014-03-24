@@ -108,36 +108,37 @@ namespace ns_YAUI
 
         private void updateDirty()
         {
-            mReflush = false;
+            //mReflush = false;
             Invalidate();
         }
 
 
-        bool mReflush = true;
+        //bool mReflush = true;
         public EvtPaint evtPaint;
-        private Bitmap m_bmpOffscreen;
+        //private Bitmap m_bmpOffscreen;
         private void OnPaint(object sender, PaintEventArgs e)
         {
             Graphics gxOff; //Offscreen graphics
-            if (m_bmpOffscreen == null) //Bitmap for doublebuffering
-            {
-                m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
-            }
-            else
-            {
-                var sz = m_bmpOffscreen.Size;
-                if (ClientSize.Width != sz.Width
-                    || ClientSize.Height != sz.Height)
-                {
-                    m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
-                    UIRoot.Instance.root.setDirty();
-                }
-            }
-            gxOff = Graphics.FromImage(m_bmpOffscreen);
+            //if (m_bmpOffscreen == null) //Bitmap for doublebuffering
+            //{
+            //    m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+            //}
+            //else
+            //{
+            //    var sz = m_bmpOffscreen.Size;
+            //    if (ClientSize.Width != sz.Width
+            //        || ClientSize.Height != sz.Height)
+            //    {
+            //        m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+            //        UIRoot.Instance.root.setDirty();
+            //    }
+            //}
+            //gxOff = Graphics.FromImage(m_bmpOffscreen);
+            gxOff = e.Graphics;
             if (evtPaint != null)
                 evtPaint(gxOff);
-            e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);
-            mReflush = true;
+            //e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);
+            //mReflush = true;
         }
 
 

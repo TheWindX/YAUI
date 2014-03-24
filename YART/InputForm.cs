@@ -12,7 +12,6 @@ namespace ns_YART
     public class InputForm : Form
     {
         private TextBox mTextBox;
-        private System.ComponentModel.IContainer components;
         InputForm()
         {
             InitializeComponent();
