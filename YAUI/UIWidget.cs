@@ -292,7 +292,7 @@ namespace ns_YAUI
             mOccupyRect = null;
         }
         
-        public void setDirty()
+        public void setDirty(bool redrawImmediatly = false)
         {
             //this.invalidRect(); //no need, children count for occupy, //occupy count for dirty
             UIWidget p = this.paresent as UIWidget;
@@ -308,6 +308,10 @@ namespace ns_YAUI
             else
             {
                 UIRoot.Instance.dirtyRoot = null;
+            }
+            if (redrawImmediatly)
+            {
+                UIRoot.Instance.dirtyRedraw();
             }
         }
 
@@ -796,57 +800,57 @@ namespace ns_YAUI
         #endregion
 
         #region layout implement
+        
+        protected void adjustExpand()
+        {
+            var p = paresent as UIWidget;
+            if (this.expandAbleX)
+            {
+                if (p != null)
+                {
+                    position.X = p.paddingX + marginX;
+                    width = p.width - (p.paddingX + marginX) * 2;
+                }
+            }
+
+            if (this.expandAbleY)
+            {
+                if (p != null)
+                {
+                    position.Y = p.paddingY + marginY;
+                    height = p.height - (p.paddingY + marginY) * 2;
+                }
+            }
+        }
+
+        public bool shrinkAble = false;//if shrinkAble, wrap is invalid
+        public bool expandAbleX = false;//if expandAble, resizeAble & wrap is invalid //expand 到它的layoutRect
+        public bool expandAbleY = false;//if expandAble, resizeAble & wrap is invalid //expand 到它的layoutRect
+
         public enum ELayout
         {
             none,
             vertical,
             horizen,
         }
-
         public ELayout mLayout = ELayout.none;
         public bool wrap = false;
-        public bool resizeAble = false;//if resizeAble, wrap is invalid
-        public bool expandAbleX = false;//if expandAble, resizeAble & wrap is invalid //expand 到它的layoutRect
-        public bool expandAbleY = false;//if expandAble, resizeAble & wrap is invalid //expand 到它的layoutRect
-        //这个因与渲染的遍历次序不同,因此不能让到draw里
-        public virtual void adjustLayout()
+        public bool layoutFilled = false;//最后一个layout的，填满
+        //这个因与渲染的遍历次序不同,因此不能放到draw里
+        protected virtual void adjustLayout()
         {
+            if (!enable) return;
+
             mOccupyRect = null;//重新layout, 当然要重计 mOccupyRect
+
+            bool bAjust = adjustAlign();
+            adjustExpand();
             for (int i = 0; i < mChildrent.Count; ++i)
             {
                 var c = mChildrent[i] as UIWidget;
                 c.adjustLayout();
             }
             
-            var p = paresent as UIWidget;
-            if (this.expandAbleX)
-            {
-                if (p != null)
-                {
-                    position.X = p.paddingX;
-                    //position.Y = p.paddingY;
-                    width = p.width - p.paddingX * 2;
-                    //height = p.height - p.paddingY * 2;
-                }
-            }
-            
-            if (this.expandAbleY)
-            {
-                if (p != null)
-                {
-                    //position.X = p.paddingX;
-                    position.Y = p.paddingY;
-                    //width = p.width - p.paddingX * 2;
-                    height = p.height - p.paddingY * 2;
-                }
-            }
-
-            if (mLayout == ELayout.none)
-            {
-                //无layout就使用align
-                bool bAjust = adjustAlign();
-                return;
-            }
             List<UIWidget> noInLayout = new List<UIWidget>();//for if layout and child align coexist
 
             #region layout calc
@@ -854,16 +858,32 @@ namespace ns_YAUI
             Rectangle rc = new Rectangle(new Point(paddingX, paddingY), new Size(0, 0));
             rb = rc.rightBottom();
             int idxCount = 0;
+
+            UIWidget lastLayoutUi = null;
             for (int i = mChildrent.Count - 1; i >= 0; --i)
             {
                 var c = mChildrent[i] as UIWidget;
-                if (c.align != EAlign.noAlign || c.expandAbleX || c.expandAbleY)
+                if (!c.enable) continue;
+
+                if (c.align != EAlign.noAlign)
                 {
                     noInLayout.Add(c);
                     continue;
                 }
+                
                 if (mLayout == ELayout.vertical)
-                {   
+                {
+                    if (c.expandAbleY)
+                    {
+                        noInLayout.Add(c);
+                        continue;
+                    }
+                    else if(c.expandAbleX)
+                    {
+                        c.adjustExpand();
+                    }
+                    lastLayoutUi = c;
+
                     var pt = rc.leftBottom();
                     pt.X += c.marginX;
                     pt.Y += c.marginY;
@@ -877,7 +897,6 @@ namespace ns_YAUI
                     rb.Y = max(rc.Bottom, rb.Y);
 
                     idxCount++;
-                    //terrible rule!, now no so terrible
                     if ( this.wrap && rc.Bottom > this.drawRect.Height - paddingY && idxCount > 1)//只能容一个的情况
                     {
                         i++;
@@ -887,8 +906,19 @@ namespace ns_YAUI
                         rc.Size = new Size();
                     }
                 }
-                else
+                else if (mLayout == ELayout.horizen)
                 {
+                    if (c.expandAbleX)
+                    {
+                        noInLayout.Add(c);
+                        continue;
+                    }
+                    else if (c.expandAbleY)
+                    {
+                        c.adjustExpand();
+                    }
+                    lastLayoutUi = c;
+
                     var pt = rc.rightTop();
                     pt.X += c.marginX;
                     pt.Y += c.marginY;
@@ -902,7 +932,6 @@ namespace ns_YAUI
                     rb.Y = max(rc.Bottom, rb.Y);
 
                     idxCount++;
-                    //terrible rule!
                     if ( this.wrap && rc.Right > this.drawRect.Width - paddingX && idxCount > 1)//至少容一个的情况
                     {
                         i++;
@@ -913,14 +942,24 @@ namespace ns_YAUI
                     }
                 }
             }
-            if (!this.wrap && this.resizeAble) //有wrap不可resize， resize覆盖expand
+            if (!this.wrap && this.shrinkAble) //有wrap不可shrink， shrink覆盖expand, shrink后需要重新计算 expand和align
             {
                 width = (rb.X + paddingX);//right padding
                 height = (rb.Y + paddingY);//button padding
-                for (int i = 0; i < noInLayout.Count; ++i)
-                {
-                    noInLayout[i].adjustAlign();
-                }
+            }
+            else if(layoutFilled && lastLayoutUi != null) //layout的最后一个填满
+            {
+                lastLayoutUi.width = width - lastLayoutUi.px - paddingX - lastLayoutUi.marginX;
+                lastLayoutUi.height = height - lastLayoutUi.py - paddingY - lastLayoutUi.marginY;
+            }
+
+            for (int i = 0; i < noInLayout.Count; ++i)
+            {
+                var c = noInLayout[i];
+                if (c.align != EAlign.noAlign)
+                    c.adjustAlign();
+                if (c.expandAbleX || c.expandAbleY)
+                    c.adjustExpand();
             }
             #endregion
         }
@@ -1431,10 +1470,16 @@ namespace ns_YAUI
                 wrap = ret.Value.castBool();
             }
 
-            ret = node.Attributes.GetNamedItem("resize");
+            ret = node.Attributes.GetNamedItem("layoutFilled");
             if (ret != null)
             {
-                resizeAble = ret.Value.castBool();
+                layoutFilled = ret.Value.castBool();
+            }
+
+            ret = node.Attributes.GetNamedItem("shrink");
+            if (ret != null)
+            {
+                shrinkAble = ret.Value.castBool();
             }
 
             ret = node.Attributes.GetNamedItem("expandX");

@@ -17,9 +17,9 @@ namespace ns_YAUI
 {
     public class UIRoundRect : UIWidget
     {
-        int _w = 0;
-        int _h = 0;
-        int _r = 0;
+        int _w = 64;
+        int _h = 64;
+        int _r = 16;
         uint scolor;
         uint fcolor;
         Brush mBrush;
@@ -223,7 +223,7 @@ namespace ns_YAUI
         {
             int w = 64;
             int h = 64;
-            int r = 0;
+            int r = 8;
             bool[] corners = new bool[] { true, true, true, true };
             uint fc = 0xffaaaaaa;
             uint sc = 0xffffffff;

@@ -24,11 +24,26 @@ namespace ns_YAUI
         uint mColor = 0xffffffff;
         Brush mBrush;
         Rectangle mRect = new Rectangle();
-        public UILable(string t = "Template", int sz = 12, uint color = 0xffffffff)
+
+        public enum EStyle
         {
+            normal,
+            bold,
+            italic,
+        }
+        EStyle mStyle = EStyle.normal;
+
+        public UILable(string t = "Template", int sz = 12, EStyle st = EStyle.normal, uint color = 0xffffffff)
+        {
+            mStyle = st;
             mSz = sz;
-            mFont = new Font("Arial", sz, FontStyle.Bold);
             textColor = color;
+            if (mStyle == EStyle.normal)
+                mFont = new Font("Arial", sz, FontStyle.Regular);
+            else if (mStyle == EStyle.bold)
+                mFont = new Font("Arial", sz, FontStyle.Bold);
+            else if (mStyle == EStyle.italic)
+                mFont = new Font("Arial", sz, FontStyle.Italic);
             text = t;
             var fontsz = TextRenderer.MeasureText(t, mFont);
             mRect = new Rectangle(new Point(0, 0), fontsz);
@@ -94,6 +109,7 @@ namespace ns_YAUI
             string text = "template";
             int size = 12;
             uint color = 0xffffffff;
+            EStyle style = EStyle.bold;
 
             var ret = node.Attributes.GetNamedItem("text");
             if (ret != null) text = ret.Value;
@@ -104,7 +120,10 @@ namespace ns_YAUI
             ret = node.Attributes.GetNamedItem("color");
             if (ret != null) color = ret.Value.castHex(0xffffffff);
 
-            ui = new UILable(text, size, color);
+            ret = node.Attributes.GetNamedItem("style");
+            if (ret != null) style = (EStyle)Enum.Parse(typeof(EStyle), ret.Value);
+
+            ui = new UILable(text, size, style, color);
             ui.fromXML(node);
             ui.paresent = p;
 

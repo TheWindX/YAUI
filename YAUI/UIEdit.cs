@@ -12,7 +12,7 @@ namespace ns_YAUI
     {
         UIRect mBackGround = new UIRect(128, 22, 0xffffffff, 0);
         int mMaxCharLength;
-        public UIEdit(string t = "click to input", int maxCharLength = 16, uint color = 0xffffffff):base(t, 18, color)
+        public UIEdit(string t = "click to input", int maxCharLength = 16, uint color = 0xff444444):base(t, 18, EStyle.normal, color)
         {
             mMaxCharLength = maxCharLength;
             this.evtOnLMDown += onClick;
