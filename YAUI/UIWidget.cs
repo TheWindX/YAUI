@@ -1339,10 +1339,10 @@ namespace ns_YAUI
             ret = node.Attributes.GetNamedItem("rotate");
             if (ret != null) mDir = ret.Value.castFloat();
 
-            ret = node.Attributes.GetNamedItem("scalex");
+            ret = node.Attributes.GetNamedItem("scaleX");
             if (ret != null) mScalex = ret.Value.castFloat(1);
 
-            ret = node.Attributes.GetNamedItem("scaley");
+            ret = node.Attributes.GetNamedItem("scaleY");
             if (ret != null) mScaley = ret.Value.castFloat(1);
 
             ret = node.Attributes.GetNamedItem("scale");
@@ -1351,7 +1351,6 @@ namespace ns_YAUI
                 mScalex = ret.Value.castFloat(1);
                 mScaley = mScalex;
             }
-
 
             ret = node.Attributes.GetNamedItem("align");
             if (ret != null) 
@@ -1366,10 +1365,10 @@ namespace ns_YAUI
             }
 
             //note //offset is after align
-            ret = node.Attributes.GetNamedItem("offsetx");
+            ret = node.Attributes.GetNamedItem("offsetX");
             if (ret != null) { var ox = ret.Value.castInt(); mOffsetx = ox; }
 
-            ret = node.Attributes.GetNamedItem("offsety");
+            ret = node.Attributes.GetNamedItem("offsetY");
             if (ret != null) { var oy = ret.Value.castInt(); mOffsety = oy; }
 
             ret = node.Attributes.GetNamedItem("offset");
