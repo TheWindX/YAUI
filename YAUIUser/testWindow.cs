@@ -11,13 +11,13 @@ namespace YAUIUser
     class UIWindow
     {
         const string XMLLayout = @"
-    <rect clip=""true"" resizeAble=""true"" layout=""vertical"" padding=""5"" dragAble=""true"" fillColor=""ff1ba1e2"">
+    <rect clip=""true"" resize=""true"" layout=""vertical"" padding=""5"" dragAble=""true"" fillColor=""ff1ba1e2"">
         <lable name=""lable"" text=""top"" align=""leftTop""></lable>
         <lable name=""close"" text=""x"" align=""rightTop"" margin=""-3"" color=""ffe04343"" scaleX=""1.2""></lable>
 
         <blank width=""30"" height=""30""></blank>
         <blank name=""clientBlank"" width=""512"" height=""512"">
-            <rect name=""client"" clip=""true"" expandAble=""true"" fillColor=""0xff3e4649""></rect>
+            <rect name=""client"" clip=""true"" expand=""true"" fillColor=""0xff3e4649""></rect>
         </blank>
         
         <rect name=""resizer"" width=""30"" height=""30"" align=""rightBottom""></rect>

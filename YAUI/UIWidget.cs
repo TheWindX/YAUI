@@ -806,8 +806,8 @@ namespace ns_YAUI
         public ELayout mLayout = ELayout.none;
         public bool wrap = false;
         public bool resizeAble = false;//if resizeAble, wrap is invalid
-        public bool expandAble = false;//if expandAble, resizeAble & wrap is invalid //expand 到它的layoutRect
-        
+        public bool expandAbleX = false;//if expandAble, resizeAble & wrap is invalid //expand 到它的layoutRect
+        public bool expandAbleY = false;//if expandAble, resizeAble & wrap is invalid //expand 到它的layoutRect
         //这个因与渲染的遍历次序不同,因此不能让到draw里
         public virtual void adjustLayout()
         {
@@ -817,16 +817,26 @@ namespace ns_YAUI
                 var c = mChildrent[i] as UIWidget;
                 c.adjustLayout();
             }
-
-            if (this.expandAble)
+            
+            var p = paresent as UIWidget;
+            if (this.expandAbleX)
             {
-                var p = paresent as UIWidget;
-
                 if (p != null)
                 {
                     position.X = p.paddingX;
-                    position.Y = p.paddingY;
+                    //position.Y = p.paddingY;
                     width = p.width - p.paddingX * 2;
+                    //height = p.height - p.paddingY * 2;
+                }
+            }
+            
+            if (this.expandAbleY)
+            {
+                if (p != null)
+                {
+                    //position.X = p.paddingX;
+                    position.Y = p.paddingY;
+                    //width = p.width - p.paddingX * 2;
                     height = p.height - p.paddingY * 2;
                 }
             }
@@ -837,7 +847,7 @@ namespace ns_YAUI
                 bool bAjust = adjustAlign();
                 return;
             }
-            List<UIWidget> mAligns = new List<UIWidget>();//for if layout and child align coexist
+            List<UIWidget> noInLayout = new List<UIWidget>();//for if layout and child align coexist
 
             #region layout calc
             Point rb = new Point();
@@ -847,9 +857,9 @@ namespace ns_YAUI
             for (int i = mChildrent.Count - 1; i >= 0; --i)
             {
                 var c = mChildrent[i] as UIWidget;
-                if (c.align != EAlign.noAlign)
+                if (c.align != EAlign.noAlign || c.expandAbleX || c.expandAbleY)
                 {
-                    mAligns.Add(c);
+                    noInLayout.Add(c);
                     continue;
                 }
                 if (mLayout == ELayout.vertical)
@@ -867,8 +877,8 @@ namespace ns_YAUI
                     rb.Y = max(rc.Bottom, rb.Y);
 
                     idxCount++;
-                    //terrible rule!
-                    if ( (this.expandAble && this.wrap) || (!this.resizeAble && this.wrap) && rc.Bottom > this.drawRect.Height - paddingY && idxCount > 1)//只能容一个的情况
+                    //terrible rule!, now no so terrible
+                    if ( this.wrap && rc.Bottom > this.drawRect.Height - paddingY && idxCount > 1)//只能容一个的情况
                     {
                         i++;
                         idxCount = 0;
@@ -893,7 +903,7 @@ namespace ns_YAUI
 
                     idxCount++;
                     //terrible rule!
-                    if ( (this.expandAble && this.wrap) || (!this.resizeAble && this.wrap) && rc.Right > this.drawRect.Width - paddingX && idxCount > 1)//至少容一个的情况
+                    if ( this.wrap && rc.Right > this.drawRect.Width - paddingX && idxCount > 1)//至少容一个的情况
                     {
                         i++;
                         idxCount = 0;
@@ -903,13 +913,13 @@ namespace ns_YAUI
                     }
                 }
             }
-            if (!this.expandAble && this.resizeAble)
+            if (!this.wrap && this.resizeAble) //有wrap不可resize， resize覆盖expand
             {
                 width = (rb.X + paddingX);//right padding
                 height = (rb.Y + paddingY);//button padding
-                for (int i = 0; i < mAligns.Count; ++i)
+                for (int i = 0; i < noInLayout.Count; ++i)
                 {
-                    mAligns[i].adjustAlign();
+                    noInLayout[i].adjustAlign();
                 }
             }
             #endregion
@@ -1421,16 +1431,29 @@ namespace ns_YAUI
                 wrap = ret.Value.castBool();
             }
 
-            ret = node.Attributes.GetNamedItem("resizeAble");
+            ret = node.Attributes.GetNamedItem("resize");
             if (ret != null)
             {
                 resizeAble = ret.Value.castBool();
             }
 
-            ret = node.Attributes.GetNamedItem("expandAble");
+            ret = node.Attributes.GetNamedItem("expandX");
             if (ret != null)
             {
-                expandAble = ret.Value.castBool();
+                expandAbleX = ret.Value.castBool();
+                //expandAbleY = expandAbleX;
+            }
+
+            ret = node.Attributes.GetNamedItem("expandY");
+            if (ret != null)
+            {
+                expandAbleY = ret.Value.castBool();
+            }
+            ret = node.Attributes.GetNamedItem("expand");
+            if (ret != null)
+            {
+                expandAbleX = ret.Value.castBool();
+                expandAbleY = expandAbleX;
             }
 
             ret = node.Attributes.GetNamedItem("marginX");
