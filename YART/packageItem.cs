@@ -8,7 +8,7 @@ namespace ns_YART
 {
     public class any : InheriteBase
     {
-        public override Type[] depends()
+        public override Type[] inheritFrom()
         {
             return new Type[]{};
         }
@@ -32,7 +32,7 @@ namespace ns_YART
             return mParesents;
         }
 
-        public override Type[] depends()
+        public override Type[] inheritFrom()
         {
             return new Type[]{ typeof(any) };
         }
@@ -46,7 +46,7 @@ namespace ns_YART
             return mItems.Aggregate(p, 
                 (acc, item)=>{
                     string ret = acc + "\n";
-                    ret += item.stringForm(space + 1);
+                    ret += item.self.stringForm(space + 1);
                     return ret;
                 }
             );
@@ -81,12 +81,17 @@ namespace ns_YART
             return true;
         }
 
-        public bool addPackage(string pname)
+        public Pacakge addPackage(string pname)
         {
             var p = new Pacakge();
             var it = p.cast<PackageItem>();
             it.name = pname;
-            return addItem(it);
+            if (addItem(it))
+            {
+                return p;
+            }
+            else
+                return null;
         }
 
         public bool removePacage(string pname)
@@ -96,7 +101,7 @@ namespace ns_YART
             return removeItem(item);
         }
 
-        public override Type[] depends()
+        public override Type[] inheritFrom()
         {
             return new Type[] { typeof(PackageItem) };
         }

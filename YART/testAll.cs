@@ -12,7 +12,7 @@ namespace ns_YART
     {
         public void fo() { Console.WriteLine("fa"); }
 
-        public override Type[] depends()
+        public override Type[] inheritFrom()
         {
             return new Type[]{};
         }
@@ -22,7 +22,7 @@ namespace ns_YART
     {
         public void fo() { Console.WriteLine("fb"); }
 
-        public override Type[] depends()
+        public override Type[] inheritFrom()
         {
             return new Type[] {typeof(A) };
         }
@@ -32,7 +32,7 @@ namespace ns_YART
     {
         public void fo() { Console.WriteLine("fc"); }
 
-        public override Type[] depends()
+        public override Type[] inheritFrom()
         {
             return new Type[] { typeof(A) };
         }
@@ -42,7 +42,7 @@ namespace ns_YART
     {
         public void fo() { Console.WriteLine("fd"); }
 
-        public override Type[] depends()
+        public override Type[] inheritFrom()
         {
             return new Type[] { typeof(B), typeof(C) };
         }
@@ -61,9 +61,13 @@ namespace ns_YART
             Pacakge root = new Pacakge();
             root.cast<PackageItem>().name = "root";
             root.addPackage("itemA");
-            root.addPackage("itemB");
-            root.addPackage("itemC");
-            root.removePacage("itemB");
+            var b = root.addPackage("itemB");
+            var c = root.addPackage("itemC");
+            c.addPackage("itemCA");
+            c.addPackage("itemCB");
+            var cc = c.addPackage("itemCC");
+            cc.addItem(b.cast<PackageItem>());
+            //root.removePacage("itemB");
             Console.WriteLine(root.stringForm(0));
             
         }
