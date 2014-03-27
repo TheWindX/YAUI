@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InheriteBase.cs" />
     <Compile Include="dataType.cs" />
     <Compile Include="InputForm.cs">
       <SubType>Form</SubType>

@@ -10,13 +10,10 @@ namespace ns_YART
 {
     class runtime : Singleton<runtime>
     {
-        public CPacakge mRoot;
+        public Pacakge mRoot;
         public runtime()
         {
-            mRoot = new CPacakge();
-            (mRoot as iPackageItem).name = "root";
-
-            mRoot.addItem(CInt_t.instance);
+            
         }
     }
 }

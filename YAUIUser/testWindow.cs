@@ -13,9 +13,10 @@ namespace YAUIUser
         const string XMLLayout = @"
     <rect clip=""true"" shrink=""true"" layout=""vertical"" padding=""5"" dragAble=""true"" fillColor=""ff1ba1e2"">
         <lable name=""lable"" text=""top"" align=""leftTop""></lable>
-        <lable name=""close"" text=""x"" align=""rightTop"" margin=""-3"" color=""ffe04343"" scaleX=""1.2""></lable>
+        <rect length=""24"" strokeColor=""00000000"" fillColor=""ffe04343"" align=""rightTop"" offsetY=""-5"" >
+            <lable name=""close"" text=""x"" align=""center"" offsetX=""1"" offsetY=""-1""></lable>
+        </rect>
         <blank width=""30"" height=""30""></blank>
-        
         <blank name=""editor"" width=""512"" height=""512"" layout=""vertical"" layoutFilled=""true"">
             <rect name=""tabContainer"" layout=""horizen"" height=""30"" expandX=""true"" clip=""true"" fillColor=""0xffbfdbff"">
                 <lable name=""tabToggle"" text=""∧"" color=""ff000000"" size=""10"" margin=""8"" align=""rightMiddle""></lable>
@@ -109,7 +110,7 @@ namespace YAUIUser
                     UIRoot.Instance.evtMove -= moveHandle;
             };
 
-            mTabToggle.evtOnLMUp += (ui, x, y) =>
+            mTabCtn.evtOnLMUp += (ui, x, y) =>
                 {
                     if (mToolCtn.enable)
                     {

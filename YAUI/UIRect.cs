@@ -140,6 +140,13 @@ namespace ns_YAUI
                 h = ret.Value.castInt();
             }
 
+            ret = node.Attributes.GetNamedItem("length");
+            if (ret != null)
+            {
+                h = ret.Value.castInt();
+                w = h;
+            }
+
             ret = node.Attributes.GetNamedItem("strokeColor");
             if (ret != null)
             {

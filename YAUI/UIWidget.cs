@@ -719,6 +719,8 @@ namespace ns_YAUI
             {
                 case EAlign.center:
                     alignPos = paresent.invertTransform((paresent as UIWidget).center);
+                    alignPos.X += offsetx;
+                    alignPos.Y += offsety;
                     break;
                 case EAlign.leftTop:
                     alignPos = paresent.invertTransform((paresent as UIWidget).leftTop);

@@ -6,58 +6,99 @@ using System.Threading.Tasks;
 
 namespace ns_YART
 {
-    public interface iPackageItem
+    public class any : InheriteBase
     {
-        string name { get; set; }
-        List<CPacakge> locations();
+        public override Type[] depends()
+        {
+            return new Type[]{};
+        }
     }
 
-    public class implPackageItem
+    public class PackageItem : InheriteBase
     {
+        public override string stringForm(int space)
+        {
+            return base.stringForm(space) + name;
+        }
+
         public string name
         {
             get;
             set;
         }
-        List<CPacakge> mParesents = new List<CPacakge>();
-        public List<CPacakge> locations()
+        List<Pacakge> mParesents = new List<Pacakge>();
+        public List<Pacakge> locations()
         {
             return mParesents;
         }
+
+        public override Type[] depends()
+        {
+            return new Type[]{ typeof(any) };
+        }
     }
 
-    public class CPacakge : iPackageItem
+    public class Pacakge : InheriteBase
     {
-        #region iPackageItem impl
-        implPackageItem mImpl = new implPackageItem();
-        string iPackageItem.name
+        public override string stringForm(int space)
         {
-            get { return mImpl.name; }
-            set { mImpl.name = value; }
+            string p = cast<PackageItem>().stringForm(space);
+            return mItems.Aggregate(p, 
+                (acc, item)=>{
+                    string ret = acc + "\n";
+                    ret += item.stringForm(space + 1);
+                    return ret;
+                }
+            );
+            
         }
 
-        List<CPacakge> iPackageItem.locations()
+        List<PackageItem> mItems = new List<PackageItem>();
+        public bool addItem(PackageItem item)//if true, it is in package
         {
-            return mImpl.locations();
+            var ls = item.locations();
+            if (!ls.Contains(this))
+            {
+                mItems.Add(item);
+                ls.Add(this);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
-        #endregion
 
-        List<iPackageItem> mItems = new List<iPackageItem>();
-        public void addItem(iPackageItem item)
+        public bool removeItem(PackageItem item)
         {
-            mItems.Add(item);
-        }
-
-        public void removeItem(iPackageItem item)
-        {
+             var ls = item.locations();
+             if (!ls.Contains(this))
+             {
+                 return false;
+             }
             mItems.Remove(item);
+            ls.Remove(this);
+            return true;
         }
 
-        public void addPackage(string packageName)
+        public bool addPackage(string pname)
         {
-            CPacakge pkg = new CPacakge();
-            (pkg as iPackageItem).name = packageName;
-            addItem(pkg);
+            var p = new Pacakge();
+            var it = p.cast<PackageItem>();
+            it.name = pname;
+            return addItem(it);
+        }
+
+        public bool removePacage(string pname)
+        {
+            var item = this.mItems.First(it => it.name == pname);
+            if (item == null) return false;
+            return removeItem(item);
+        }
+
+        public override Type[] depends()
+        {
+            return new Type[] { typeof(PackageItem) };
         }
     }
 }
