@@ -1208,18 +1208,16 @@ namespace ns_YAUI
             }
         }
 
-        TransformKeeper mKeeper = null;
         void onDragMove(int x, int y)
         {
-            mKeeper.updateFixpoint(x, y);
+            updateFixpoint(x, y);
             setDirty(true);
             return;
         }
 
         bool onDragBegin(UIWidget _this, int x, int y)
         {
-            if (mKeeper == null) mKeeper = new TransformKeeper(this);
-            mKeeper.beginFixpoint(x, y);
+            beginFixpoint(x, y);
             //这个改变先后关系
             this.setDepthHead();
 
@@ -1260,8 +1258,7 @@ namespace ns_YAUI
 
         bool onRotateBegin(UIWidget _this, int x, int y)
         {
-            if (mKeeper == null) mKeeper = new TransformKeeper(this);
-            mKeeper.beginFixpoint(x, y);
+            beginFixpoint(x, y);
 
             UIRoot.Instance.mEvtWheel += onRotateMove;
             UIRoot.Instance.mEvtRightUp += onRotateEnd;
@@ -1271,7 +1268,7 @@ namespace ns_YAUI
         void onRotateMove(int delta)
         {
             mDir += delta * 0.2f;
-            mKeeper.updateFixpointStatic();
+            updateFixpointStatic();
             setDirty(true);
             return;
         }
@@ -1323,15 +1320,14 @@ namespace ns_YAUI
             else sc = 0.9f;
             mScalex += sc - 1;
             mScaley += sc - 1;
-            mKeeper.updateFixpointStatic();
+            updateFixpointStatic();
             setDirty(true);
             return;
         }
 
         bool onScaleBegin(UIWidget ui, int x, int y)
         {
-            if (mKeeper == null) mKeeper = new TransformKeeper(this);
-            mKeeper.beginFixpoint(x, y);
+            beginFixpoint(x, y);
             UIRoot.Instance.mEvtWheel += onScaleWheel;
             return false;
         }

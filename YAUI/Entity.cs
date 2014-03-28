@@ -167,16 +167,7 @@ namespace ns_YAUI
             m.Scale(mScalex, mScaley);
             return m;
         }
-    }
 
-    class TransformKeeper
-    {
-        public TransformKeeper(Entity ent)
-        {
-            mEnt = ent;
-        }
-
-        Entity mEnt;
         Point fp;
         int px;
         int py;
@@ -184,7 +175,7 @@ namespace ns_YAUI
         {
             px = x;
             py = y;
-            fp = mEnt.invertTransform(new Point(x, y));
+            fp = invertTransform(new Point(x, y));
         }
 
         public void updateFixpointStatic()
@@ -194,18 +185,15 @@ namespace ns_YAUI
 
         public void updateFixpoint(int x, int y)
         {
-            var ppt = mEnt.invertTransformParesentAbs(new Point(x, y));
+            var ppt = invertTransformParesentAbs(new Point(x, y));
             Matrix m = new Matrix();
-            m.Rotate(mEnt.mDir);
-            m.Scale(mEnt.mScalex, mEnt.mScaley);
-            //m.Invert();
+            m.Rotate(mDir);
+            m.Scale(mScalex, mScaley);
 
-            var pts = new Point[] { fp};
+            var pts = new Point[] { fp };
             m.TransformPoints(pts);
             var ppt1 = pts[0];
-            mEnt.position = new Point(ppt.X - ppt1.X, ppt.Y - ppt1.Y);
+            position = new Point(ppt.X - ppt1.X, ppt.Y - ppt1.Y);
         }
     }
-
-
 }
