@@ -1258,8 +1258,6 @@ namespace ns_YAUI
 
         bool onRotateBegin(UIWidget _this, int x, int y)
         {
-            beginFixpoint(x, y);
-
             UIRoot.Instance.mEvtWheel += onRotateMove;
             UIRoot.Instance.mEvtRightUp += onRotateEnd;
             return false;
@@ -1267,8 +1265,9 @@ namespace ns_YAUI
 
         void onRotateMove(int delta)
         {
+            beginFixpoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             mDir += delta * 0.2f;
-            updateFixpointStatic();
+            updateFixpoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             setDirty(true);
             return;
         }
@@ -1304,7 +1303,6 @@ namespace ns_YAUI
                     UIRoot.Instance.evtLeftUp -= onScaleEnd;
                     onScaleEnd(0, 0);
                 }
-
             }
 
             get
@@ -1315,19 +1313,19 @@ namespace ns_YAUI
 
         void onScaleWheel(int delta)
         {
+            beginFixpoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             float sc = 1;
             if (delta > 0) sc = 1.1f;
             else sc = 0.9f;
             mScalex += sc - 1;
             mScaley += sc - 1;
-            updateFixpointStatic();
+            updateFixpoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             setDirty(true);
             return;
         }
 
         bool onScaleBegin(UIWidget ui, int x, int y)
         {
-            beginFixpoint(x, y);
             UIRoot.Instance.mEvtWheel += onScaleWheel;
             return false;
         }

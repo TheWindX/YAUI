@@ -169,18 +169,9 @@ namespace ns_YAUI
         }
 
         Point fp;
-        int px;
-        int py;
         public void beginFixpoint(int x, int y)
         {
-            px = x;
-            py = y;
             fp = invertTransform(new Point(x, y));
-        }
-
-        public void updateFixpointStatic()
-        {
-            updateFixpoint(px, py);
         }
 
         public void updateFixpoint(int x, int y)

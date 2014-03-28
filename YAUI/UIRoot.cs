@@ -519,8 +519,12 @@ namespace ns_YAUI
         }
 
         public event Action<int, int> evtMove;
+        public int cursorX;
+        public int cursorY;
         void testMove(int x, int y)
         {
+            cursorX = x;
+            cursorY = y;
             testUIEvent(x, y, (ui) =>
             {
                 return (x1, y1) => { return ui.evtMove(x1, y1); };
