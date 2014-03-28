@@ -1193,7 +1193,6 @@ namespace ns_YAUI
                 if (mDragAble)
                 {
                     evtOnLMDown += onDragBegin;
-                    //evtOnLMUp += onDragEnd;
                 }
                 else
                 {
@@ -1209,24 +1208,18 @@ namespace ns_YAUI
             }
         }
 
-        Point mPtDragBegin;
-        Point mPosBegin;
+        TransformKeeper mKeeper = null;
         void onDragMove(int x, int y)
         {
-            var pt = invertTransformParesentAbs(new Point(x, y));
-            int dx = pt.X - mPtDragBegin.X;
-            int dy = pt.Y - mPtDragBegin.Y;
-            position.X = mPosBegin.X + dx;
-            position.Y = mPosBegin.Y + dy;
-            setDirty();
-            UIRoot.Instance.dirtyRedraw();
+            mKeeper.updateFixpoint(x, y);
+            setDirty(true);
+            return;
         }
 
         bool onDragBegin(UIWidget _this, int x, int y)
         {
-            mPosBegin = position;
-            mPtDragBegin = invertTransformParesentAbs(new Point(x, y));
-
+            if (mKeeper == null) mKeeper = new TransformKeeper(this);
+            mKeeper.beginFixpoint(x, y);
             //这个改变先后关系
             this.setDepthHead();
 
@@ -1251,7 +1244,6 @@ namespace ns_YAUI
                 if (mRotateAble)
                 {
                     evtOnRMDown += onRotateBegin;
-                    //evtOnRMUp += onRotateEnd;
                 }
                 else
                 {
@@ -1266,41 +1258,27 @@ namespace ns_YAUI
             }
         }
 
-        Point ptRotateOrg;
-        float dirRotateOrg;
-        Point ptLocalRotateOrg;
         bool onRotateBegin(UIWidget _this, int x, int y)
         {
-            ptRotateOrg = position;
-            dirRotateOrg = mDir;
-            ptLocalRotateOrg = invertTransformAbs(new Point(x, y));
+            if (mKeeper == null) mKeeper = new TransformKeeper(this);
+            mKeeper.beginFixpoint(x, y);
 
-            UIRoot.Instance.evtMove += onRotateMove;
+            UIRoot.Instance.mEvtWheel += onRotateMove;
             UIRoot.Instance.mEvtRightUp += onRotateEnd;
             return false;
         }
 
-        void onRotateMove(int x, int y)
+        void onRotateMove(int delta)
         {
-            int dx = x - ptRotateOrg.X;
-            int dy = y - ptRotateOrg.Y;
-
-            var dist = dx;
-
-            mDir = dirRotateOrg + (float)(dist * 0.2f);
-            var pt = invertTransformAbs(new Point(x, y));
-
-            int posDx = pt.X - ptLocalRotateOrg.X;
-            int posDy = pt.Y - ptLocalRotateOrg.Y;
-            //position.X += posDx;
-            //position.Y += posDy;
-            setDirty();
-            UIRoot.Instance.dirtyRedraw();
+            mDir += delta * 0.2f;
+            mKeeper.updateFixpointStatic();
+            setDirty(true);
+            return;
         }
 
         void onRotateEnd(int x, int y)
         {
-            UIRoot.Instance.evtMove -= onRotateMove;
+            UIRoot.Instance.mEvtWheel -= onRotateMove;
             UIRoot.Instance.mEvtRightUp -= onRotateEnd;
         }
 
@@ -1337,20 +1315,23 @@ namespace ns_YAUI
                 return mDragAble;
             }
         }
-        Point mWheelScaleBegin;
+
         void onScaleWheel(int delta)
         {
             float sc = 1;
             if (delta > 0) sc = 1.1f;
             else sc = 0.9f;
-            this.scalePoint(mWheelScaleBegin, sc);
-            setDirty();
-            UIRoot.Instance.dirtyRedraw();
+            mScalex += sc - 1;
+            mScaley += sc - 1;
+            mKeeper.updateFixpointStatic();
+            setDirty(true);
+            return;
         }
 
         bool onScaleBegin(UIWidget ui, int x, int y)
         {
-            mWheelScaleBegin = invertTransformParesentAbs(new Point(x, y));
+            if (mKeeper == null) mKeeper = new TransformKeeper(this);
+            mKeeper.beginFixpoint(x, y);
             UIRoot.Instance.mEvtWheel += onScaleWheel;
             return false;
         }
@@ -1454,10 +1435,16 @@ namespace ns_YAUI
                 dragAble = ret.Value.castBool();
             }
 
-            ret = node.Attributes.GetNamedItem("dragAble");
+            ret = node.Attributes.GetNamedItem("scaleAble");
             if (ret != null)
             {
                 scaleAble = ret.Value.castBool();
+            }
+
+            ret = node.Attributes.GetNamedItem("rotateAble");
+            if (ret != null)
+            {
+                rotateAble = ret.Value.castBool();
             }
 
             ret = node.Attributes.GetNamedItem("layout");
@@ -1693,4 +1680,5 @@ namespace ns_YAUI
         internal virtual void onDraw(Graphics g) { }
         #endregion
     }
+
 }

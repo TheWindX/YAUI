@@ -32,6 +32,8 @@ namespace YAUIUser
                     p.evtPaint += UIRoot.Instance.handleDraw;
                     p.evtLeftDown += UIRoot.Instance.handleLeftDown;
                     p.evtLeftUp += UIRoot.Instance.handleEvtLeftUp;
+                    p.evtRightDown += UIRoot.Instance.handleEvtRightDown;
+                    p.evtRightUp += UIRoot.Instance.handleEvtRightUp;
                     p.evtMove += UIRoot.Instance.handleEvtMove;
                     p.evtOnWheel += UIRoot.Instance.handleEvtWheel;
 

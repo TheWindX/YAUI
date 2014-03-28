@@ -167,26 +167,44 @@ namespace ns_YAUI
             m.Scale(mScalex, mScaley);
             return m;
         }
+    }
 
-        //public Point getAbsPos()
-        //{
-        //    Matrix m = getAbsMatrix();
-        //    Point p = new Point(0, 0);
-        //    Point[] myArray = {p};
-        //    m.TransformPoints(myArray);
-        //    return p;
-        //}
+    class TransformKeeper
+    {
+        public TransformKeeper(Entity ent)
+        {
+            mEnt = ent;
+        }
 
-        //public float getAbsDir()
-        //{
-        //    if(mParesent == null) return mDir;
-        //    else
-        //    {
-        //        var dir = mParesent.getAbsDir()+mDir;
-        //        if(dir >360) return dir-360;
-        //        return dir;
-        //    }
-        //}
+        Entity mEnt;
+        Point fp;
+        int px;
+        int py;
+        public void beginFixpoint(int x, int y)
+        {
+            px = x;
+            py = y;
+            fp = mEnt.invertTransform(new Point(x, y));
+        }
+
+        public void updateFixpointStatic()
+        {
+            updateFixpoint(px, py);
+        }
+
+        public void updateFixpoint(int x, int y)
+        {
+            var ppt = mEnt.invertTransformParesentAbs(new Point(x, y));
+            Matrix m = new Matrix();
+            m.Rotate(mEnt.mDir);
+            m.Scale(mEnt.mScalex, mEnt.mScaley);
+            //m.Invert();
+
+            var pts = new Point[] { fp};
+            m.TransformPoints(pts);
+            var ppt1 = pts[0];
+            mEnt.position = new Point(ppt.X - ppt1.X, ppt.Y - ppt1.Y);
+        }
     }
 
 

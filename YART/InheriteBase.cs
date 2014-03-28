@@ -24,7 +24,12 @@ namespace ns_YART
         }
 
         public abstract Type[] inheritFrom();
-        public virtual string stringForm(int space) { if (space == 0) return ""; else return Enumerable.Repeat(" ", space).Aggregate((s1, s2) => s1 + s2); }
+        public virtual string stringForm(int space) 
+        {
+            if (space == 0) return ""; 
+            else 
+                return Enumerable.Repeat(" ", space).Aggregate((s1, s2) => s1 + s2); 
+        }
 
         Dictionary<Type, InheriteBase> mInheritesInstance = new Dictionary<Type, InheriteBase>();
         public InheriteBase self;

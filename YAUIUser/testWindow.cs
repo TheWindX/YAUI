@@ -11,7 +11,7 @@ namespace YAUIUser
     class UIWindow
     {
         const string XMLLayout = @"
-    <rect clip=""true"" shrink=""true"" layout=""vertical"" padding=""5"" dragAble=""true"" fillColor=""ff1ba1e2"">
+    <rect clip=""true"" shrink=""true"" layout=""vertical"" padding=""5"" dragAble=""true"" rotateAble=""true"" scaleAble=""true"" fillColor=""ff1ba1e2"">
         <lable name=""lable"" text=""top"" align=""leftTop""></lable>
         <rect length=""24"" strokeColor=""00000000"" fillColor=""ffe04343"" align=""rightTop"" offsetY=""-5"" >
             <lable name=""close"" text=""x"" align=""center"" offsetX=""1"" offsetY=""-1""></lable>
