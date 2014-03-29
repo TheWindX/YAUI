@@ -52,24 +52,7 @@ namespace ns_YART
     {
         public testAll()
         {
-            var ains = new D();
-            ains.cast<A>().fo();
-            ains.cast<B>().fo();
-            ains.cast<C>().fo();
-            ains.cast<D>().fo();
-
-            Pacakge root = new Pacakge();
-            root.cast<PackageItem>().name = "root";
-            root.addPackage("itemA");
-            var b = root.addPackage("itemB");
-            var c = root.addPackage("itemC");
-            c.addPackage("itemCA");
-            c.addPackage("itemCB");
-            var cc = c.addPackage("itemCC");
-            cc.addItem(b.cast<PackageItem>());
-            //root.removePacage("itemB");
-            Console.WriteLine(root.stringForm(0));
-            
+            var _1 = testWindow.Instance;
         }
     }
 }

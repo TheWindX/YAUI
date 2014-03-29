@@ -88,7 +88,7 @@ namespace ns_YAUI
 
         public override string typeName
         {
-            get { return "string"; }
+            get { return "lable"; }
         }
 
         public override bool postTestPick(Point pos)

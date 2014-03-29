@@ -59,7 +59,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="runtime.cs" />
     <Compile Include="testAll.cs" />
+    <Compile Include="testWindow.cs" />
     <Compile Include="UIPackageTemplate.cs" />
+    <Compile Include="window.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

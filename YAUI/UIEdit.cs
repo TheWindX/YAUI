@@ -66,5 +66,10 @@ namespace ns_YAUI
             
             return node.ChildNodes;
         }
+
+        public override string typeName
+        {
+            get { return "edit"; }
+        }
     }
 }

@@ -23,7 +23,7 @@ namespace ns_YAUI
         uint fcolor;
         Brush mBrush;
         Pen mPen;
-        internal UIRect(float w, float h, uint stroke = 0xffffffff, uint fill = 0xff888888)
+        public UIRect(float w, float h, uint stroke = 0xffffffff, uint fill = 0xff888888)
         {
             _w = (int)w;
             _h = (int)h;

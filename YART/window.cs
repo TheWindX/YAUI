@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YAUIUser
+namespace ns_YART
 {
     using ns_YAUI;
 
@@ -140,7 +140,7 @@ namespace YAUIUser
             UIRoot.Instance.dirtyRedraw();
         }
 
-        List<Tuple<UIWidget, UIWidget, int>> mToolTabs = new List<Tuple<UIWidget, UIWidget, int>>();
+        List<Tuple<UIWidget, UIWidget, int> > mToolTabs = new List<Tuple<UIWidget, UIWidget, int>>();
         public int addTab(string name)
         {
             var tab = UIRoot.Instance.loadFromXML(XMLTab);
@@ -151,7 +151,7 @@ namespace YAUIUser
             mTabToggle.setDepthHead();
             mWindow.setDirty();
             int id = mToolTabs.Count;
-            mToolTabs.Add(Tuple.Create(tab, tool, id));
+            mToolTabs.Add(Tuple.Create(tab, tool, id) );
             return id;
         }
 
@@ -180,10 +180,10 @@ namespace YAUIUser
     }
 
 
-    class testWindow : Singleton<testWindow>
+    class  windows : Singleton<windows>
     {
         public UIWindow mMain = new UIWindow();
-        public testWindow()
+        public windows()
         {
             mMain.setWindowName("root");
             mMain.attach();

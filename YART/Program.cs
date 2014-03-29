@@ -13,8 +13,6 @@ namespace ns_YART
     {
         static void Main(string[] args)
         {
-            var _1 = testAll.Instance;
-            return;
             var p = new PaintDriver();
 
 

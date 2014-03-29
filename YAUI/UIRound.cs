@@ -101,7 +101,7 @@ namespace ns_YAUI
 
         public override string typeName
         {
-            get { return "round_rect"; }
+            get { return "round"; }
         }
 
         public override bool postTestPick(Point pos)

@@ -93,19 +93,30 @@ namespace ns_YAUI
         
         public UIWidget childOf(string name)
         {
+            List<UIWidget> noNames = new List<UIWidget>();
             foreach (var elem in children() )
             {
                 if (elem.name == name)
                 {
                     return elem;
                 }
+                else if (elem.typeName == name)
+                {
+                    return elem;
+                }
                 else if (elem.name == null || elem.name == "")
                 {
-                    var ui = elem.childOf(name);
-                    if (ui != null)
-                        return ui;
+                    noNames.Add(elem);
                 }
             }
+
+            foreach (var elem in noNames)
+            {
+                var ui = elem.childOf(name);
+                if (ui != null)
+                    return ui;
+            }
+
             return null;
         }
 
@@ -1390,18 +1401,20 @@ namespace ns_YAUI
                 mAlignParesent = (EAlign)Enum.Parse(typeof(EAlign), node.Attributes["alignParesent"].Value);
             }
 
-            //note //offset is after align
-            ret = node.Attributes.GetNamedItem("offsetX");
-            if (ret != null) { var ox = ret.Value.castInt(); mOffsetx = ox; }
-
-            ret = node.Attributes.GetNamedItem("offsetY");
-            if (ret != null) { var oy = ret.Value.castInt(); mOffsety = oy; }
-
             ret = node.Attributes.GetNamedItem("offset");
             if (ret != null)
             {
                 mOffsetx = ret.Value.castInt();
-                mOffsety = mOffsetx; 
+                mOffsety = mOffsetx;
+            }
+            else
+            {
+                //note //offset is after align
+                ret = node.Attributes.GetNamedItem("offsetX");
+                if (ret != null) { var ox = ret.Value.castInt(); mOffsetx = ox; }
+
+                ret = node.Attributes.GetNamedItem("offsetY");
+                if (ret != null) { var oy = ret.Value.castInt(); mOffsety = oy; }
             }
 
 
@@ -1465,35 +1478,27 @@ namespace ns_YAUI
                 shrinkAble = ret.Value.castBool();
             }
 
-            ret = node.Attributes.GetNamedItem("expandX");
-            if (ret != null)
-            {
-                expandAbleX = ret.Value.castBool();
-                //expandAbleY = expandAbleX;
-            }
 
-            ret = node.Attributes.GetNamedItem("expandY");
-            if (ret != null)
-            {
-                expandAbleY = ret.Value.castBool();
-            }
             ret = node.Attributes.GetNamedItem("expand");
             if (ret != null)
             {
                 expandAbleX = ret.Value.castBool();
                 expandAbleY = expandAbleX;
             }
-
-            ret = node.Attributes.GetNamedItem("marginX");
-            if (ret != null)
+            else
             {
-                marginX = ret.Value.castInt();
-            }
+                ret = node.Attributes.GetNamedItem("expandX");
+                if (ret != null)
+                {
+                    expandAbleX = ret.Value.castBool();
+                    //expandAbleY = expandAbleX;
+                }
 
-            ret = node.Attributes.GetNamedItem("marginY");
-            if (ret != null)
-            {
-                marginY = ret.Value.castInt();
+                ret = node.Attributes.GetNamedItem("expandY");
+                if (ret != null)
+                {
+                    expandAbleY = ret.Value.castBool();
+                }
             }
 
             ret = node.Attributes.GetNamedItem("margin");
@@ -1502,17 +1507,19 @@ namespace ns_YAUI
                 marginX = ret.Value.castInt();
                 marginY = marginX;
             }
-
-            ret = node.Attributes.GetNamedItem("paddingX");
-            if (ret != null)
+            else
             {
-                paddingX = ret.Value.castInt();
-            }
+                ret = node.Attributes.GetNamedItem("marginX");
+                if (ret != null)
+                {
+                    marginX = ret.Value.castInt();
+                }
 
-            ret = node.Attributes.GetNamedItem("paddingY");
-            if (ret != null)
-            {
-                paddingY = ret.Value.castInt();
+                ret = node.Attributes.GetNamedItem("marginY");
+                if (ret != null)
+                {
+                    marginY = ret.Value.castInt();
+                }
             }
 
             ret = node.Attributes.GetNamedItem("padding");
@@ -1520,6 +1527,20 @@ namespace ns_YAUI
             {
                 paddingY = ret.Value.castInt();
                 paddingX = paddingY;
+            }
+            else
+            {
+                ret = node.Attributes.GetNamedItem("paddingX");
+                if (ret != null)
+                {
+                    paddingX = ret.Value.castInt();
+                }
+
+                ret = node.Attributes.GetNamedItem("paddingY");
+                if (ret != null)
+                {
+                    paddingY = ret.Value.castInt();
+                }
             }
 
             return node.ChildNodes;
