@@ -14,9 +14,9 @@ namespace YAUIUser
         {
             UIRoot.Instance.root.appendFromXML(
 @"
-    <rect dragAble=""true"" scaleAble=""true"" width=""256"" height=""256"" layout=""horizen"" paddingX=""4"" paddingY=""4"">
+    <rect dragAble=""true"" scaleAble=""true"" width=""256"" height=""256"" layout=""horizon"" paddingX=""4"" paddingY=""4"">
         <innerTemplate name=""t1"">
-            <round dragAble=""true"" width=""64"" height=""64"" leftTopCorner=""false"" fillColor=""0xffff0000"" marginX=""2"" marginY=""2"" layout=""horizen"">
+            <round dragAble=""true"" width=""64"" height=""64"" leftTopCorner=""false"" fillColor=""0xffff0000"" marginX=""2"" marginY=""2"" layout=""horizon"">
 
             </round>
         </innerTemplate>

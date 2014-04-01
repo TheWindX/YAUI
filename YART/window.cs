@@ -18,11 +18,11 @@ namespace ns_YART
         </rect>
         <blank width=""30"" height=""30""></blank>
         <blank name=""editor"" width=""512"" height=""512"" layout=""vertical"" layoutFilled=""true"">
-            <rect name=""tabContainer"" layout=""horizen"" height=""30"" expandX=""true"" clip=""true"" fillColor=""0xffbfdbff"">
+            <rect name=""tabContainer"" layout=""horizon"" height=""30"" expandX=""true"" clip=""true"" fillColor=""0xffbfdbff"">
                 <lable name=""tabToggle"" text=""∧"" color=""ff000000"" size=""10"" margin=""8"" align=""rightMiddle""></lable>
             </rect>
-            <rect name=""toolContainer"" layout=""horizen"" height=""100"" expandX=""true"" clip=""true"" fillColor=""0xff3e4649""></rect>
-            <rect name=""clientContainer"" layout=""horizen"" expandX=""true"" clip=""true"" fillColor=""0xff3e4649""></rect>
+            <rect name=""toolContainer"" layout=""horizon"" height=""100"" expandX=""true"" clip=""true"" fillColor=""0xff3e4649""></rect>
+            <rect name=""clientContainer"" layout=""horizon"" expandX=""true"" clip=""true"" fillColor=""0xff3e4649""></rect>
         </blank>
         
         <rect name=""resizer"" width=""32"" height=""32"" align=""rightBottom""></rect>
@@ -34,7 +34,7 @@ namespace ns_YART
     </rect>
 ";
         const string XMLTool = @"
-    <rect expand=""true"" layout=""horizen"" fillColor=""0xffd7e3f2""></rect>
+    <rect expand=""true"" layout=""horizon"" fillColor=""0xffd7e3f2""></rect>
 ";
         UIWidget mWindow = null;
         UIWidget mClientBlank = null;

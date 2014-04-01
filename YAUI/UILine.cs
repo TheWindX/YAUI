@@ -17,9 +17,9 @@ namespace ns_YAUI
         uint fcolor;
         Brush mBrush;
         bool mHorizen;
-        public UILine(int length, int lineWidth, uint fillcolor = 0xffffffff, bool horizen = true)
+        public UILine(int length, int lineWidth, uint fillcolor = 0xffffffff, bool horizon = true)
         {
-            mHorizen = horizen;
+            mHorizen = horizon;
             _length = length;
             _lineWidth = lineWidth;
             fcolor = fillcolor;
@@ -89,7 +89,7 @@ namespace ns_YAUI
             int length = 16;
             uint color = 0xffffffff;
             int lineWidth = 2;
-            bool horizen = true;
+            bool horizon = true;
             var ret = node.Attributes.GetNamedItem("length");
             if (ret != null) length = ret.Value.castInt(16);
 
@@ -99,10 +99,10 @@ namespace ns_YAUI
             ret = node.Attributes.GetNamedItem("color");
             if (ret != null) color = ret.Value.castHex(0xffffffff);
 
-            ret = node.Attributes.GetNamedItem("horizen");
-            if (ret != null) horizen = ret.Value.castBool(true);
+            ret = node.Attributes.GetNamedItem("horizon");
+            if (ret != null) horizon = ret.Value.castBool(true);
 
-            ui = new UILine(length, lineWidth, color, horizen);
+            ui = new UILine(length, lineWidth, color, horizon);
             ui.fromXML(node);
             ui.paresent = p;
 

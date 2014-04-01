@@ -15,7 +15,7 @@ using System.Threading;
 using System.Runtime.InteropServices;
 
 
-using ns_YAUI;
+
 
 namespace ns_YART
 {
@@ -31,7 +31,7 @@ namespace ns_YART
         private System.ComponentModel.IContainer components;
 
         public static PaintDriver mIns = null;
-        
+
 
         public PaintDriver()
         {
@@ -108,43 +108,45 @@ namespace ns_YART
 
         private void updateDirty()
         {
-            mReflush = false;
+            //mReflush = false;
             Invalidate();
         }
 
 
-        bool mReflush = true;
+        //bool mReflush = true;
         public EvtPaint evtPaint;
-        private Bitmap m_bmpOffscreen;
+        //private Bitmap m_bmpOffscreen;
         private void OnPaint(object sender, PaintEventArgs e)
         {
             Graphics gxOff; //Offscreen graphics
-            if (m_bmpOffscreen == null) //Bitmap for doublebuffering
-            {
-                m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
-            }
-            else
-            {
-                var sz = m_bmpOffscreen.Size;
-                if (ClientSize.Width != sz.Width
-                    || ClientSize.Height != sz.Height)
-                {
-                    m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
-                    UIRoot.Instance.root.setDirty();
-                }
-            }
-            gxOff = Graphics.FromImage(m_bmpOffscreen);
+            //if (m_bmpOffscreen == null) //Bitmap for doublebuffering
+            //{
+            //    m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+            //}
+            //else
+            //{
+            //    var sz = m_bmpOffscreen.Size;
+            //    if (ClientSize.Width != sz.Width
+            //        || ClientSize.Height != sz.Height)
+            //    {
+            //        m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+            //        UIRoot.Instance.root.setDirty();
+            //    }
+            //}
+            //gxOff = Graphics.FromImage(m_bmpOffscreen);
+            gxOff = e.Graphics;
+            //gxOff.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             if (evtPaint != null)
                 evtPaint(gxOff);
-            e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);
-            mReflush = true;
+            //e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);
+            //mReflush = true;
         }
 
 
 
         //public delegate void EvtMouse(int x, int y);
-        
-        
+
+
         public EvtMouse evtLeftDown;
         public EvtMouse evtRightDown;
         public EvtMouse evtMidDown;
@@ -200,7 +202,7 @@ namespace ns_YART
                 evtMove(e.X, e.Y);
         }
 
-        
+
         public EvtOnKey evtOnKey;
         private void PaintDriver_KeyDown(object sender, KeyEventArgs e)
         {

@@ -6,4 +6,14 @@ using System.Threading.Tasks;
 
 namespace ns_YART
 {
-    }
+    //class typeBase : InheriteBase
+    //{
+
+    //}
+
+    //class int_t : typeBase
+    //{
+    //}
+
+
+}

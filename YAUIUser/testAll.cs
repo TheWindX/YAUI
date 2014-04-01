@@ -14,7 +14,8 @@ namespace YAUIUser
         {
             //var _1 = testRoundRect.Instance;
             //var _2 = testLayout.Instance;
-            var _3 = testWindow.Instance;
+            //var _3 = testWindow.Instance;
+            var _4 = testLayoutInverse.Instance;
         }
     }
 }

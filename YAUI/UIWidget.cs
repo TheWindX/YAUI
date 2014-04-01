@@ -257,6 +257,19 @@ namespace ns_YAUI
             get { return new Rectangle(); }
         }
 
+        //properties start
+        public virtual Rectangle clipRect
+        {
+            get 
+            {
+                var r = drawRect;
+                r.Offset(1, 1);
+                r.Width -= 1;
+                r.Height -= 1;
+                return r;
+            }
+        }
+
         public virtual int width
         {
             get
@@ -844,9 +857,11 @@ namespace ns_YAUI
         {
             none,
             vertical,
-            horizen,
+            horizon,
         }
         public ELayout mLayout = ELayout.none;
+        public bool mLayoutInverse = false;
+
         public bool wrap = false;
         public bool layoutFilled = false;//最后一个layout的，填满
         //这个因与渲染的遍历次序不同,因此不能放到draw里
@@ -900,14 +915,23 @@ namespace ns_YAUI
                     var pt = rc.leftBottom();
                     pt.X += c.marginX;
                     pt.Y += c.marginY;
-                    c.leftTop = pt;
-
-                    var lr = c.layoutRect;
+                    
                     var rcOld = rc;
-                    rc.Width = max(lr.Width, rc.Width);
-                    rc.Height = rc.Height + lr.Height;
+                    rc.Width = max(c.marginX*2+c.width, rc.Width);
+                    rc.Height = rc.Height + c.marginY* 2 + c.height;
                     rb.X = max(rc.Right, rb.X);
                     rb.Y = max(rc.Bottom, rb.Y);
+                    if (mLayoutInverse)
+                    {
+                        var ptInv = pt;
+                        ptInv.Y = ( (drawRect.X*2+height)-pt.Y);
+                        c.leftBottom = ptInv;
+                    }
+                    else
+                    {
+                        c.leftTop = pt;
+                    }
+
 
                     idxCount++;
                     if ( this.wrap && rc.Bottom > this.drawRect.Height - paddingY && idxCount > 1)//只能容一个的情况
@@ -919,7 +943,7 @@ namespace ns_YAUI
                         rc.Size = new Size();
                     }
                 }
-                else if (mLayout == ELayout.horizen)
+                else if (mLayout == ELayout.horizon)
                 {
                     if (c.expandAbleX)
                     {
@@ -935,14 +959,25 @@ namespace ns_YAUI
                     var pt = rc.rightTop();
                     pt.X += c.marginX;
                     pt.Y += c.marginY;
-                    c.leftTop = pt;
+                    //c.leftTop = pt;
 
-                    var lr = c.layoutRect;
+                    //var lr = c.layoutRect;
                     var rcOld = rc;
-                    rc.Height = max(lr.Height, rc.Height);
-                    rc.Width = rc.Width + lr.Width;
+                    rc.Height = max(c.marginY*2+c.height, rc.Height);
+                    rc.Width = rc.Width + c.marginX * 2 + c.width;
                     rb.X = max(rc.Right, rb.X);
                     rb.Y = max(rc.Bottom, rb.Y);
+
+                    if (mLayoutInverse)
+                    {
+                        var ptInv = pt;
+                        ptInv.X = ((drawRect.X * 2 + width) - pt.X);
+                        c.rightTop = ptInv;
+                    }
+                    else
+                    {
+                        c.leftTop = pt;
+                    }
 
                     idxCount++;
                     if ( this.wrap && rc.Right > this.drawRect.Width - paddingX && idxCount > 1)//至少容一个的情况
@@ -962,8 +997,34 @@ namespace ns_YAUI
             }
             else if(layoutFilled && lastLayoutUi != null) //layout的最后一个填满
             {
-                lastLayoutUi.width = width - lastLayoutUi.px - paddingX - lastLayoutUi.marginX;
-                lastLayoutUi.height = height - lastLayoutUi.py - paddingY - lastLayoutUi.marginY;
+                if (mLayout == ELayout.horizon)
+                {
+                    lastLayoutUi.height = height - lastLayoutUi.py - paddingY - lastLayoutUi.marginY;
+
+                    if (mLayoutInverse)
+                    {
+                        lastLayoutUi.width = lastLayoutUi.px + lastLayoutUi.width - paddingX - lastLayoutUi.marginX;
+                        lastLayoutUi.px = paddingX + lastLayoutUi.marginX;
+                    }
+                    else
+                    {
+                        lastLayoutUi.width = width - lastLayoutUi.px - paddingX - lastLayoutUi.marginX;
+                    }
+                }
+                else if (mLayout == ELayout.vertical)
+                {
+                    lastLayoutUi.width = width - lastLayoutUi.px - paddingX - lastLayoutUi.marginX;
+
+                    if (mLayoutInverse)
+                    {
+                        lastLayoutUi.height = lastLayoutUi.py + lastLayoutUi.height - paddingY - lastLayoutUi.marginY;
+                        lastLayoutUi.py = paddingY + lastLayoutUi.marginY;
+                    }
+                    else
+                    {
+                        lastLayoutUi.height = height - lastLayoutUi.py - paddingY - lastLayoutUi.marginY;
+                    }
+                }
             }
 
             for (int i = 0; i < noInLayout.Count; ++i)
@@ -1460,6 +1521,12 @@ namespace ns_YAUI
                 mLayout = (ELayout)Enum.Parse(typeof(ELayout), ret.Value);
             }
 
+            ret = node.Attributes.GetNamedItem("layoutInverse");
+            if (ret != null)
+            {
+                mLayoutInverse = ret.Value.castBool();
+            }
+
             ret = node.Attributes.GetNamedItem("wrap");
             if (ret != null)
             {
@@ -1672,10 +1739,7 @@ namespace ns_YAUI
 
             if (clip)
             {
-                var r = drawRect;
-                r.Offset(1, 1);
-                r.Width -= 1;
-                r.Height -= 1;
+                var r = clipRect;
                 GraphicsPath p = new GraphicsPath();
                 p.AddRectangle(r);
                 g.SetClip(p, CombineMode.Intersect);
@@ -1695,5 +1759,4 @@ namespace ns_YAUI
         internal virtual void onDraw(Graphics g) { }
         #endregion
     }
-
 }
