@@ -59,6 +59,7 @@
     <Compile Include="testDirty.cs" />
     <Compile Include="testLayout2.cs" />
     <Compile Include="testLayoutExpand.cs" />
+    <Compile Include="testPropertyTemplate.cs" />
     <Compile Include="testRoundRect.cs" />
     <Compile Include="testWindow.cs" />
   </ItemGroup>

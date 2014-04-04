@@ -127,36 +127,47 @@ namespace ns_YAUI
             int h = 64;
             uint fc = 0xffaaaaaa;
             uint sc = 0xffffffff;
+            string strRet = null;
 
             var ret = node.Attributes.GetNamedItem("width");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ret.Value;
+            if (strRet != null)
             {
-                w = ret.Value.castInt();
+                w = strRet.castInt();
+                UIRoot.Instance.setProperty("width", strRet);
             }
 
             ret = node.Attributes.GetNamedItem("height");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("height") : ret.Value;
+            if (strRet != null)
             {
-                h = ret.Value.castInt();
+                h = strRet.castInt();
+                UIRoot.Instance.setProperty("height", strRet);
             }
 
             ret = node.Attributes.GetNamedItem("length");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ret.Value;
+            if (strRet != null)
             {
-                h = ret.Value.castInt();
+                h = strRet.castInt();
                 w = h;
+                UIRoot.Instance.setProperty("length", strRet);
             }
 
             ret = node.Attributes.GetNamedItem("strokeColor");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("strokeColor") : ret.Value;
+            if (strRet != null)
             {
-                sc = ret.Value.castHex(0xffffffff);
+                sc = strRet.castHex(0xffffffff);
+                UIRoot.Instance.setProperty("strokeColor", strRet);
             }
 
             ret = node.Attributes.GetNamedItem("fillColor");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("fillColor") : ret.Value;
+            if (strRet != null)
             {
-                fc = ret.Value.castHex(0xff888888);
+                fc = strRet.castHex(0xff888888);
+                UIRoot.Instance.setProperty("fillColor", strRet);
             }
 
             ui = new UIRect(w, h, sc, fc);

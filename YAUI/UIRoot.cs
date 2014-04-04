@@ -64,6 +64,42 @@ namespace ns_YAUI
         //xml
         Dictionary<string, XmlElement> mName2Template = new Dictionary<string, XmlElement>();
         Dictionary<string, Stack<XmlElement>> mName2InnerTemplate = new Dictionary<string, Stack<XmlElement>>();
+
+        Stack<Dictionary<string, string>> mPropertyInnerMap = new Stack<Dictionary<string, string>>();
+
+        internal void pushProperty(Dictionary<string, string> map=null)
+        {
+            if (map == null) map = new Dictionary<string, string>();
+            mPropertyInnerMap.Push(map);
+        }
+
+        internal void setProperty(string key, string value)
+        {
+            var map = mPropertyInnerMap.Peek();
+            map[key] = value;
+        }
+
+        //继承获得属性
+        internal string getProperty(string key)
+        {
+            if (mPropertyInnerMap.Count == 0) return null;
+            var map = mPropertyInnerMap.Peek();
+            string ret = null;
+            map.TryGetValue(key, out ret);
+            if (ret == null)
+            {
+                var m = mPropertyInnerMap.Pop();
+                ret = getProperty(key);
+                pushProperty(m);
+            }
+            return ret;
+        }
+
+        internal void popProperty()
+        {
+            mPropertyInnerMap.Pop();
+        }
+
         void innerTemplatePush(string name, XmlNode node)
         {
             Stack<XmlElement> st;
@@ -147,6 +183,7 @@ namespace ns_YAUI
             {
                 var uichildren = fromxmlFunc(node, out uiret, p);
                 List<string> innerTemplateNames = new List<string>();
+                pushProperty();
                 foreach (XmlNode elem in uichildren)
                 {
                     string innerTemplateName = null;
@@ -159,6 +196,7 @@ namespace ns_YAUI
                         uichild.paresent = uiret;
                     }
                 }
+                popProperty();
                 foreach (string e in innerTemplateNames)
                 {
                     innerTemplatePop(e);
@@ -329,6 +367,7 @@ namespace ns_YAUI
             regMethodFromXML("line", UILine.fromXML);
             regMethodFromXML("round_rect", UIRoundRect.fromXML);
             regMethodFromXML("round", UIRound.fromXML);
+            pushProperty();
             return this;
         }
 
