@@ -58,8 +58,11 @@
     <Compile Include="testAll.cs" />
     <Compile Include="testDirty.cs" />
     <Compile Include="testLayout2.cs" />
-    <Compile Include="testLayoutExpand.cs" />
+    <Compile Include="testLayout.cs" />
+    <Compile Include="testLayoutShrinkExpand.cs" />
+    <Compile Include="testNewControl.cs" />
     <Compile Include="testPropertyTemplate.cs" />
+    <Compile Include="testResizer.cs" />
     <Compile Include="testRoundRect.cs" />
     <Compile Include="testWindow.cs" />
   </ItemGroup>

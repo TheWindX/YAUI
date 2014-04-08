@@ -121,12 +121,12 @@ namespace ns_YAUI
         {
             get
             {
-                return new Point(position.X + _w / 2, position.Y + _h / 2);
+                return new Point(px + _w / 2, py + _h / 2);
             }
             set
             {
-                position.X = value.X - _w / 2;
-                position.Y = value.Y - _h / 2;
+                px = value.X - _w / 2;
+                py = value.Y - _h / 2;
             }
         }
 
@@ -144,7 +144,7 @@ namespace ns_YAUI
             get { return "Arrow"; }
         }
 
-        public override bool postTestPick(Point pos)
+        public override bool testPick(Point pos)
         {
             switch (mForward)
             {
@@ -237,7 +237,7 @@ namespace ns_YAUI
             return true;
         }
 
-        internal override void onDraw(Graphics g) 
+        public override void onDraw(Graphics g) 
         {
             GraphicsPath p = new GraphicsPath();
             p.StartFigure();

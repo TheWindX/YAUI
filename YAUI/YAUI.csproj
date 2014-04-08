@@ -33,7 +33,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -66,12 +66,14 @@
     <Compile Include="ExtendRectangle.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="singleton.cs" />
+    <Compile Include="Timer.cs" />
     <Compile Include="UIBlank.cs" />
     <Compile Include="UIEdit.cs" />
     <Compile Include="UILine.cs" />
     <Compile Include="UILineLinker.cs" />
     <Compile Include="UIMap.cs" />
     <Compile Include="UIRect.cs" />
+    <Compile Include="UIResizer.cs" />
     <Compile Include="UIRoot.cs" />
     <Compile Include="UILable.cs" />
     <Compile Include="UIRound.cs" />

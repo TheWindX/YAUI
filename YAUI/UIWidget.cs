@@ -167,7 +167,7 @@ namespace ns_YAUI
 
         public void setDepthHead()
         {
-            depth = -100;
+            mDepth = -1;
             sortSibling();
         }
 
@@ -254,7 +254,7 @@ namespace ns_YAUI
         //properties start
         public virtual Rectangle drawRect
         {
-            get { return new Rectangle(); }
+            get { return new Rectangle(0, 0, width, height); }
         }
 
         //properties start
@@ -318,6 +318,7 @@ namespace ns_YAUI
         
         public void setDirty(bool redrawImmediatly = false)
         {
+#if DIRTYRECTOPTIMAS
             //this.invalidRect(); //no need, children count for occupy, //occupy count for dirty
             UIWidget p = this.paresent as UIWidget;
             if (p != null)
@@ -333,6 +334,9 @@ namespace ns_YAUI
             {
                 UIRoot.Instance.dirtyRoot = null;
             }
+#else
+            UIRoot.Instance.dirtyRoot = UIRoot.Instance.root;
+#endif
             if (redrawImmediatly)
             {
                 UIRoot.Instance.dirtyRedraw();
@@ -342,6 +346,7 @@ namespace ns_YAUI
         //向上找到
         internal UIWidget getDirtyRoot()
         {
+            #if DIRTYRECTOPTIMAS
             if (dirtyRect.Contains(occupyRect))
             {
                 return this;
@@ -355,6 +360,9 @@ namespace ns_YAUI
                 }
                 return this;
             }
+#else
+            return null;
+#endif
         }
 
         protected Rectangle occupyRect
@@ -402,13 +410,13 @@ namespace ns_YAUI
             get { return drawRect.Height; }
         }
 
-        public virtual Rectangle pickRect
-        {
-            get
-            {
-                return drawRect;
-            }
-        }
+        //public virtual Rectangle pickRect
+        //{
+        //    get
+        //    {
+        //        return drawRect;
+        //    }
+        //}
         public bool focus
         {
             set
@@ -433,31 +441,6 @@ namespace ns_YAUI
                 return false;
             }
         }
-
-        public int px
-        {
-            get
-            {
-                return position.X;
-            }
-            set
-            {
-                position.X = value;
-            }
-        }
-
-        public int py
-        {
-            get
-            {
-                return position.Y;
-            }
-            set
-            {
-                position.Y = value;
-            }
-        }
-
 
         bool mClip = false;
         public bool clip { get { return mClip; } set { mClip = value; } }
@@ -525,8 +508,8 @@ namespace ns_YAUI
                 var pt = center;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
-                position.X += dx;
-                position.Y += dy;
+                px += dx;
+                py += dy;
             }
         }
 
@@ -541,8 +524,8 @@ namespace ns_YAUI
                 var pt = leftTop;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
-                position.X += dx;
-                position.Y += dy;
+                px += dx;
+                py += dy;
             }
         }
 
@@ -557,8 +540,8 @@ namespace ns_YAUI
                 var pt = leftMiddle;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
-                position.X += dx;
-                position.Y += dy;
+                px += dx;
+                py += dy;
             }
         }
 
@@ -573,8 +556,8 @@ namespace ns_YAUI
                 var pt = leftBottom;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
-                position.X += dx;
-                position.Y += dy;
+                px += dx;
+                py += dy;
             }
         }
 
@@ -589,8 +572,8 @@ namespace ns_YAUI
                 var pt = rightTop;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
-                position.X += dx;
-                position.Y += dy;
+                px += dx;
+                py += dy;
             }
         }
 
@@ -605,8 +588,8 @@ namespace ns_YAUI
                 var pt = rightMiddle;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
-                position.X += dx;
-                position.Y += dy;
+                px += dx;
+                py += dy;
             }
         }
 
@@ -621,8 +604,8 @@ namespace ns_YAUI
                 var pt = rightBottom;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
-                position.X += dx;
-                position.Y += dy;
+                px += dx;
+                py += dy;
             }
         }
 
@@ -637,8 +620,8 @@ namespace ns_YAUI
                 var pt = middleTop;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
-                position.X += dx;
-                position.Y += dy;
+                px += dx;
+                py += dy;
             }
         }
 
@@ -653,8 +636,8 @@ namespace ns_YAUI
                 var pt = middleBottom;
                 int dx = value.X - pt.X;
                 int dy = value.Y - pt.Y;
-                position.X += dx;
-                position.Y += dy;
+                px += dx;
+                py += dy;
             }
         }
 
@@ -834,7 +817,7 @@ namespace ns_YAUI
             {
                 if (p != null)
                 {
-                    position.X = p.paddingX + marginX;
+                    px = p.paddingX + marginX;
                     width = p.width - (p.paddingX + marginX) * 2;
                 }
             }
@@ -843,7 +826,7 @@ namespace ns_YAUI
             {
                 if (p != null)
                 {
-                    position.Y = p.paddingY + marginY;
+                    py = p.paddingY + marginY;
                     height = p.height - (p.paddingY + marginY) * 2;
                 }
             }
@@ -990,10 +973,32 @@ namespace ns_YAUI
                     }
                 }
             }
-            if (!this.wrap && this.shrinkAble) //有wrap不可shrink， shrink覆盖expand, shrink后需要重新计算 expand和align
+            if (!this.wrap && this.shrinkAble && mChildrent.Count != 0) //有wrap不可shrink， shrink覆盖expand, shrink后需要重新计算 expand和align
             {
-                width = (rb.X + paddingX);//right padding
-                height = (rb.Y + paddingY);//button padding
+                int? left = null;
+                int? right = null;
+                int? top = null;
+                int? bottom = null;
+
+                for (int i = mChildrent.Count - 1; i >= 0; --i)
+                {
+                    var c = mChildrent[i] as UIWidget;
+                    var lrc = c.layoutRect.transform(c.getLocalMatrix());
+                    left = (left == null) ? (lrc.Left - paddingX) : min((lrc.Left - paddingX), left.Value);
+                    right = (right == null) ? (lrc.Right + paddingX) : max((lrc.Right + paddingX), right.Value);
+                    top = (top == null) ? (lrc.Top - paddingY) : min((lrc.Top - paddingY), top.Value);
+                    bottom = (bottom == null) ? (lrc.Bottom + paddingY) : max((lrc.Bottom + paddingY), bottom.Value);
+                }
+
+                for (int i = mChildrent.Count - 1; i >= 0; --i)
+                {
+                    var c = mChildrent[i] as UIWidget;
+                    c.px = c.px - left.Value;
+                    c.py = c.py - top.Value;
+                }
+
+                width = right.Value - left.Value;
+                height = bottom.Value - top.Value;
             }
             else if(layoutFilled && lastLayoutUi != null) //layout的最后一个填满
             {
@@ -1047,7 +1052,7 @@ namespace ns_YAUI
             get
             {
                 Matrix m = new Matrix();
-                m.Translate(position.X, position.Y);
+                m.Translate(px, py);
                 m.Rotate(mDir);
                 m.Scale(mScalex, mScaley);
                 return m;
@@ -1056,8 +1061,8 @@ namespace ns_YAUI
         
         public void translate(int dx, int dy)
         {
-            position.X += dx;
-            position.Y += dy;
+            px += dx;
+            py += dy;
         }
         #endregion
 
@@ -1426,8 +1431,15 @@ namespace ns_YAUI
         public XmlNodeList fromXML(XmlNode node)
         {
             string strRet = null;
+            UIRoot.Instance.setPropertyInheret(false);
+            var ret = node.Attributes.GetNamedItem("noInherent");
+            if (ret != null)
+            {
+                bool v = ret.Value.castBool(false);
+                UIRoot.Instance.setPropertyInheret(!v);
+            }
 
-            var ret = node.Attributes.GetNamedItem("name");
+            ret = node.Attributes.GetNamedItem("name");
             if (ret != null) name = ret.Value;
 
             ret = node.Attributes.GetNamedItem("px");
@@ -1700,27 +1712,30 @@ namespace ns_YAUI
             return node.ChildNodes;
         }
 
-        public bool appendFromXML(string xml)
+        public UIWidget appendFromXML(string xml)
         {
             var ui = UIRoot.Instance.loadFromXML(xml);
-            if (ui == null) return false;
-            else ui.paresent = this;
-            return true;
+            if (ui != null)
+                ui.paresent = this;
+            return ui;
         }
 
         #endregion
 
         #region others
 
-        public virtual bool postTestPick(Point pos)
+        public virtual bool testPick(Point pos)
         {
-            return false;
+            return true;
         }
 
 
-        public virtual bool preTestPick(Point pos)
+        public virtual bool pickRectTest
         {
-            return true;
+            get
+            {
+                return true;
+            }
         }
 
         public bool doTestPick(Point pos, out UIWidget ui, bool testEnable = true)
@@ -1737,18 +1752,14 @@ namespace ns_YAUI
             t.TransformPoints(ps);
             var newpos = ps[0];
 
-            var r = pickRect;
-            if (!r.Contains(newpos))
+            if (pickRectTest)
             {
-                ui = null;
-                return false;
-            }
-
-            bool ret = preTestPick(newpos);
-            if (!ret)
-            {
-                ui = null;
-                return false;
+                var r = drawRect;
+                if (!r.Contains(newpos))
+                {
+                    ui = null;
+                    return false;
+                }
             }
 
             UIWidget picked = null;
@@ -1767,7 +1778,7 @@ namespace ns_YAUI
                 return true;
             }
 
-            ret = postTestPick(newpos);
+            bool ret = testPick(newpos);
             if (!ret)
             {
                 ui = null;
@@ -1821,6 +1832,7 @@ namespace ns_YAUI
             _mtx.Multiply(this.getLocalMatrix());
             g.Transform = _mtx;
 
+            //Console.WriteLine("draw" + this.name + ":");
             //catch it?
             onDraw(g);
 
@@ -1843,7 +1855,7 @@ namespace ns_YAUI
             //popMatrix(g);
         }
 
-        internal virtual void onDraw(Graphics g) { }
+        public virtual void onDraw(Graphics g) { }
         #endregion
     }
 }

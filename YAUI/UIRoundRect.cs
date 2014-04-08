@@ -161,12 +161,12 @@ namespace ns_YAUI
             get { return "round_rect"; }
         }
 
-        public override bool postTestPick(Point pos)
+        public override bool testPick(Point pos)
         {
             return true;
         }
 
-        internal override void onDraw(Graphics g)
+        public override void onDraw(Graphics g)
         {
             GraphicsPath p = new GraphicsPath();
 
@@ -228,59 +228,95 @@ namespace ns_YAUI
             uint fc = 0xffaaaaaa;
             uint sc = 0xffffffff;
 
-            var ret = node.Attributes.GetNamedItem("width");
-            if (ret != null)
+            var ret = node.Attributes.GetNamedItem("length");
+            string strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
             {
-                w = ret.Value.castInt();
+                h = strRet.castInt();
+                w = h;
+                UIRoot.Instance.setProperty("length", strRet);
+            }
+
+            ret = node.Attributes.GetNamedItem("width");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
+            {
+                w = strRet.castInt();
+                UIRoot.Instance.setProperty("width", strRet);
             }
 
             ret = node.Attributes.GetNamedItem("height");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("height") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
             {
-                h = ret.Value.castInt();
+                h = strRet.castInt();
+                UIRoot.Instance.setProperty("height", strRet);
             }
 
-            ret = node.Attributes.GetNamedItem("radius");
-            if (ret != null)
+            ret = node.Attributes.GetNamedItem("color");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("color") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
             {
-                r = (int)ret.Value.castFloat()*2;
-            }
-
-            ret = node.Attributes.GetNamedItem("leftTopCorner");
-            if (ret != null)
-            {
-                corners[0] = ret.Value.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("rightTopCorner");
-            if (ret != null)
-            {
-                corners[1] = ret.Value.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("rightBottomCorner");
-            if (ret != null)
-            {
-                corners[2] = ret.Value.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("leftBottomCorner");
-            if (ret != null)
-            {
-                corners[3] = ret.Value.castBool();
+                fc = strRet.castHex(0xff888888);
+                UIRoot.Instance.setProperty("color", strRet);
             }
 
             ret = node.Attributes.GetNamedItem("strokeColor");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("strokeColor") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
             {
-                sc = ret.Value.castHex(0xffffffff);
+                sc = strRet.castHex(0xffffffff);
+                UIRoot.Instance.setProperty("strokeColor", strRet);
             }
 
             ret = node.Attributes.GetNamedItem("fillColor");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("fillColor") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
             {
-                fc = ret.Value.castHex(0xff888888);
+                fc = strRet.castHex(0xff888888);
+                UIRoot.Instance.setProperty("fillColor", strRet);
             }
+           
+            ret = node.Attributes.GetNamedItem("radius");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("radius") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
+            {
+                r = (int)strRet.castFloat() * 2;
+                UIRoot.Instance.setProperty("radius", strRet);
+            }
+
+            ret = node.Attributes.GetNamedItem("leftTopCorner");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("leftTopCorner") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
+            {
+                corners[0] = strRet.castBool();
+                UIRoot.Instance.setProperty("leftTopCorner", strRet);
+            }
+
+            ret = node.Attributes.GetNamedItem("rightTopCorner");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("rightTopCorner") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
+            {
+                corners[1] = strRet.castBool();
+                UIRoot.Instance.setProperty("rightTopCorner", strRet);
+            }
+
+            ret = node.Attributes.GetNamedItem("rightBottomCorner");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("rightBottomCorner") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
+            {
+                corners[2] = strRet.castBool();
+                UIRoot.Instance.setProperty("rightBottomCorner", strRet);
+            }
+
+            ret = node.Attributes.GetNamedItem("leftBottomCorner");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("leftBottomCorner") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
+            {
+                corners[3] = strRet.castBool();
+                UIRoot.Instance.setProperty("leftBottomCorner", strRet);
+            }
+
             ui = new UIRoundRect(w, h, r, corners, sc, fc);
             ui.fromXML(node);
             ui.paresent = p;

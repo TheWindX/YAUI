@@ -17,43 +17,23 @@ namespace ns_YAUI
 {
     class UIStub : UIWidget
     {
-        public override Rectangle drawRect
-        {
-            get
-            {
-                Rectangle ret = new Rectangle();
-                bool init = false;
-                foreach (var elem in children())
-                {
-                    if (!init)
-                    {
-                        init = true;
-                        ret = elem.drawRect.transform(elem.transformMatrix);
-                    }
-                    else
-                    {
-                        var elemRc = elem.drawRect.transform(elem.transformMatrix);
-                        ret = expandRect(ret, elemRc);
-                    }
-                }
-                return ret;
-            }
-        }
-
         public override string typeName
         {
             get { return "stub"; }
         }
 
-        public override bool postTestPick(Point pos)
+        public override bool pickRectTest
         {
-            return true;
+            get
+            {
+                return false;
+            }
         }
 
-        internal override void onDraw(Graphics g) 
+        public override bool testPick(Point pos)
         {
+            return false;
         }
-
 
         public static XmlNodeList fromXML(XmlNode nd, out UIWidget ui, UIWidget p)
         {

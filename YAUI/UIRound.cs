@@ -104,7 +104,7 @@ namespace ns_YAUI
             get { return "round"; }
         }
 
-        public override bool postTestPick(Point pos)
+        public override bool testPick(Point pos)
         {
             float a = (float)_w / 2;
             float b = (float)_h / 2;
@@ -116,7 +116,7 @@ namespace ns_YAUI
             else return true;
         }
 
-        internal override void onDraw(Graphics g)
+        public override void onDraw(Graphics g)
         {
             GraphicsPath p = new GraphicsPath();
 

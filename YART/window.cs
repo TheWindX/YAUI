@@ -11,30 +11,30 @@ namespace ns_YART
     class UIWindow
     {
         const string XMLLayout = @"
-    <rect clip=""true"" shrink=""true"" layout=""vertical"" padding=""5"" dragAble=""true"" rotateAble=""true"" scaleAble=""true"" fillColor=""ff1ba1e2"">
-        <lable text=""top"" align=""leftTop""></lable>
-        <rect length=""24"" strokeColor=""00000000"" fillColor=""ffe04343"" align=""rightTop"" offsetY=""-5"" >
-            <lable name=""close"" text=""x"" align=""center"" offsetX=""1"" offsetY=""-1""></lable>
+    <rect clip='true' shrink='true' layout='vertical' padding='5' dragAble='true' rotateAble='true' scaleAble='true' fillColor='ff1ba1e2'>
+        <lable text='top' align='leftTop'></lable>
+        <rect length='24' strokeColor='00000000' fillColor='ffe04343' align='rightTop' offsetY='-5' >
+            <lable name='close' text='x' align='center' offsetX='1' offsetY='-1'></lable>
         </rect>
-        <blank width=""30"" height=""30""></blank>
-        <blank name=""editor"" width=""512"" height=""512"" layout=""vertical"" layoutFilled=""true"">
-            <rect name=""tabContainer"" layout=""horizon"" height=""30"" expandX=""true"" clip=""true"" fillColor=""0xffbfdbff"">
-                <lable name=""tabToggle"" text=""∧"" color=""ff000000"" size=""10"" margin=""8"" align=""rightMiddle""></lable>
+        <blank width='30' height='30'></blank>
+        <blank name='editor' width='512' height='512' layout='vertical' layoutFilled='true'>
+            <rect name='tabContainer' layout='horizon' height='30' expandX='true' clip='true' fillColor='0xffbfdbff'>
+                <lable name='tabToggle' text='∧' color='ff000000' size='10' margin='8' align='rightMiddle'></lable>
             </rect>
-            <rect name=""toolContainer"" layout=""horizon"" height=""100"" expandX=""true"" clip=""true"" fillColor=""0xff3e4649""></rect>
-            <rect name=""clientContainer"" layout=""horizon"" expandX=""true"" clip=""true"" fillColor=""0xff3e4649""></rect>
+            <rect name='toolContainer' layout='horizon' height='100' expandX='true' clip='true' fillColor='0xff3e4649'></rect>
+            <rect name='clientContainer' layout='horizon' expandX='true' clip='true' fillColor='0xff3e4649'></rect>
         </blank>
         
-        <rect name=""resizer"" width=""32"" height=""32"" align=""rightBottom""></rect>
+        <rect name='resizer' width='32' height='32' align='rightBottom'></rect>
     </rect>
 ";
         const string XMLTab = @"
-    <rect clip=""true"" rightBottomCorner=""false"" leftBottomCorner=""false"" width=""64"" expandY=""true"" radius=""8"" fillColor=""0xffd7e3f2"">
-        <lable text=""name"" color=""0xff555555"" style=""normal"" align=""center""></lable>
+    <rect clip='true' rightBottomCorner='false' leftBottomCorner='false' width='64' expandY='true' radius='8' fillColor='0xffd7e3f2'>
+        <lable text='name' color='0xff555555' style='normal' align='center'></lable>
     </rect>
 ";
         const string XMLTool = @"
-    <rect expand=""true"" layout=""horizon"" fillColor=""0xffd7e3f2""></rect>
+    <rect expand='true' layout='horizon' fillColor='0xffd7e3f2'></rect>
 ";
         UIWidget mWindow = null;
         UIWidget mClientBlank = null;

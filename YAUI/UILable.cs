@@ -91,12 +91,12 @@ namespace ns_YAUI
             get { return "lable"; }
         }
 
-        public override bool postTestPick(Point pos)
+        public override bool testPick(Point pos)
         {
             return true;
         }
 
-        internal override void onDraw(Graphics g)
+        public override void onDraw(Graphics g)
         {
             //var td = g.MeasureString(mText, mFont);
             //mRect.Width = (int)td.Width;

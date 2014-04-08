@@ -24,8 +24,9 @@ namespace YAUIUser
                         .initEvt()
                         .initHandleDraw(p.Invalidate)
                         .initHandleLog((s) => CSRepl.Instance.print(s))
-                        .initHandleInputShow(InputForm.Instance.show);
-
+                        .initHandleInputShow(InputForm.Instance.show)
+                        .initTimer(() => (UInt32)((DateTime.Now.Ticks << 16 >> 16) / 10000));
+                        
 
                     InputForm.Instance.evtInputExit += UIRoot.Instance.handleInputShow;
     
@@ -45,6 +46,7 @@ namespace YAUIUser
             p.evtUpdate += () =>
                 {
                     CSRepl.Instance.runOnce();
+                    UIRoot.Instance.updateTimer();
                 };
 
             p.Show();

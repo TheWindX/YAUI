@@ -13,30 +13,29 @@ namespace ns_YAUI
 {
     public class UIMap : UIWidget
     {
-        public override Rectangle drawRect
+        Brush mBrush = null;
+        uint mColor;
+        public UIMap(uint c=0xff000000)
+        {
+            mColor = c;
+            mBrush = new SolidBrush(Color.FromArgb((int)c));
+        }
+
+
+        public uint color
         {
             get
             {
-                Rectangle ret = new Rectangle();
-                bool init = false;
-                foreach (var elem in children())
-                {
-                    if (!init)
-                    {
-                        init = true;
-                        ret = elem.drawRect.transform(elem.transformMatrix);//not from (0, 0, 0, 0) rect
-                    }
-                    else
-                    {
-                        var elemRc = elem.drawRect.transform(elem.transformMatrix);
-                        ret = expandRect(ret, elemRc);
-                    }
-                }
-                return ret;
+                return mColor;
+            }
+            set
+            {
+                mColor = value;
+                mBrush = new SolidBrush(Color.FromArgb((int)mColor));
             }
         }
 
-        public override Rectangle pickRect
+        public override Rectangle drawRect
         {
             get
             {
@@ -49,24 +48,41 @@ namespace ns_YAUI
             get { return "map"; }
         }
 
-        public override bool postTestPick(Point pos)
+        public override bool pickRectTest
+        {
+            get
+            {
+                return false;
+            }
+        }
+
+        public override bool testPick(Point pos)
         {
             return true;
         }
 
-        static Brush mBrush = new SolidBrush(Color.Black);
-        internal override void onDraw(Graphics g) 
+        public override void onDraw(Graphics g) 
         {
-            g.FillRectangle(mBrush, pickRect);
+            g.FillRectangle(mBrush, drawRect);
         }
 
-
-        public static XmlNodeList fromXML(XmlNode nd, out UIWidget ui, UIWidget p)
+        public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
-            ui = new UIMap();
-            ui.fromXML(nd);
+            uint fc = 0;
+            XmlNode ret = node.Attributes.GetNamedItem("color");
+            string strRet = (ret == null) ? UIRoot.Instance.getProperty("color") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
+            {
+                fc = strRet.castHex(0xff888888);
+                UIRoot.Instance.setProperty("color", strRet);
+            }
+
+            var m = new UIMap();
+            m.color = fc;
+            ui = m;
+            ui.fromXML(node);
             ui.paresent = p;
-            return nd.ChildNodes;
+            return node.ChildNodes;
         }
     }
 }

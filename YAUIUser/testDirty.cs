@@ -14,11 +14,11 @@ namespace YAUIUser
         {
             UIRoot.Instance.root.appendFromXML(
 @"
-    <rect name=""r1"" width=""512"" height=""512"" >
-        <round_rect clip=""true"" name=""r2"" radius=""5"" width=""256"" height=""256"" dragAble=""true"" >
-            <round_rect  name=""r3"" radius=""5"" width=""128"" height=""128"" dragAble=""true"">
-                <rect  name=""r4"" width=""22"" height=""64"" dragAble=""true"">
-                    <lable name=""r5"" dragAble=""true"" text=""LEELOO"" color=""0xffffff00""></lable>
+    <rect name='r1' length='512' dragAble='true' rotateAble='true' scaleAble='true'>
+        <round_rect name='r2' radius='5' length='256'>
+            <round_rect  name='r3' length='128'>
+                <rect name='r4' length = 'NA' width='22' height='64'>
+                    <lable name='r5' text='LEELOO' color='0xffffff00'></lable>
                 </rect>    
             </round_rect >
         </round_rect >

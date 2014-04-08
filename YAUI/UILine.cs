@@ -72,12 +72,12 @@ namespace ns_YAUI
             get { return "line"; }
         }
 
-        public override bool postTestPick(Point pos)
+        public override bool testPick(Point pos)
         {
             return true;
         }
 
-        internal override void onDraw(Graphics g)
+        public override void onDraw(Graphics g)
         {
             GraphicsPath p = new GraphicsPath();
             p.AddRectangle(drawRect);

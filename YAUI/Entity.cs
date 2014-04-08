@@ -72,7 +72,43 @@ namespace ns_YAUI
             c.mParesent = this;
         }
 
-        public Point position = new Point(0, 0);
+        protected Point mPosition = new Point();
+        public Point position
+        {
+            get
+            {
+                return mPosition;
+            }
+            set
+            {
+                mPosition = value;
+            }
+        }
+
+        public int px
+        {
+            get
+            {
+                return mPosition.X;
+            }
+            set
+            {
+                mPosition.X = value;
+            }
+        }
+
+        public int py
+        {
+            get
+            {
+                return mPosition.Y;
+            }
+            set
+            {
+                mPosition.Y = value;
+            }
+        }
+
         public float mDir = 0;//0~360
         public float mScalex = 1;
         public float mScaley = 1;
@@ -85,7 +121,7 @@ namespace ns_YAUI
 
             var pos = transform(pt);
             var offset = new Point(pos.X - center.X,  pos.Y - center.Y);
-            position = new Point(position.X-offset.X, position.Y-offset.Y);
+            position = new Point(px-offset.X, py-offset.Y);
         }
 
         public Point transform(Point pt)
@@ -109,7 +145,7 @@ namespace ns_YAUI
             Matrix m = new Matrix();
             if(mParesent != null)
                 m = mParesent.getAbsMatrix().Clone();
-            m.Translate(position.X, position.Y);
+            m.Translate(px, py);
             m.Rotate(mDir);
             m.Scale(mScalex, mScaley);
             return m;
@@ -162,7 +198,7 @@ namespace ns_YAUI
         public Matrix getLocalMatrix()
         {
             Matrix m = new Matrix();
-            m.Translate(position.X, position.Y);
+            m.Translate(px, py);
             m.Rotate(mDir);
             m.Scale(mScalex, mScaley);
             return m;
@@ -171,7 +207,7 @@ namespace ns_YAUI
         Point fp;
         public void beginFixpoint(int x, int y)
         {
-            fp = invertTransform(new Point(x, y));
+            fp = invertTransformAbs(new Point(x, y));
         }
 
         public void updateFixpoint(int x, int y)

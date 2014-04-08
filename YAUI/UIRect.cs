@@ -74,7 +74,6 @@ namespace ns_YAUI
             set
             {
                 _w = value;
-                setDirty();
             }
         }
 
@@ -87,7 +86,6 @@ namespace ns_YAUI
             set
             {
                 _h = value;
-                setDirty();
             }
         }
 
@@ -110,12 +108,12 @@ namespace ns_YAUI
             get { return "rect"; }
         }
 
-        public override bool postTestPick(Point pos)
+        public override bool testPick(Point pos)
         {
             return true;
         }
 
-        internal override void onDraw(Graphics g) 
+        public override void onDraw(Graphics g) 
         {
             g.FillRectangle(mBrush, 0, 0, _w, _h);
             g.DrawRectangle(mPen, 0, 0, _w, _h);
@@ -129,7 +127,16 @@ namespace ns_YAUI
             uint sc = 0xffffffff;
             string strRet = null;
 
-            var ret = node.Attributes.GetNamedItem("width");
+            var ret = node.Attributes.GetNamedItem("length");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
+            {
+                h = strRet.castInt();
+                w = h;
+                UIRoot.Instance.setProperty("length", strRet);
+            }
+
+            ret = node.Attributes.GetNamedItem("width");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ((ret.Value=="NA")?null:ret.Value);
             if (strRet != null)
             {
@@ -144,14 +151,13 @@ namespace ns_YAUI
                 h = strRet.castInt();
                 UIRoot.Instance.setProperty("height", strRet);
             }
-
-            ret = node.Attributes.GetNamedItem("length");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value=="NA")?null:ret.Value);
+            
+            ret = node.Attributes.GetNamedItem("color");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("color") : ((ret.Value == "NA") ? null : ret.Value);
             if (strRet != null)
             {
-                h = strRet.castInt();
-                w = h;
-                UIRoot.Instance.setProperty("length", strRet);
+                fc = strRet.castHex(0xff888888);
+                UIRoot.Instance.setProperty("color", strRet);
             }
 
             ret = node.Attributes.GetNamedItem("strokeColor");
@@ -168,14 +174,6 @@ namespace ns_YAUI
             {
                 fc = strRet.castHex(0xff888888);
                 UIRoot.Instance.setProperty("fillColor", strRet);
-            }
-
-            ret = node.Attributes.GetNamedItem("color");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("color") : ((ret.Value=="NA")?null:ret.Value);
-            if (strRet != null)
-            {
-                fc = strRet.castHex(0xff888888);
-                UIRoot.Instance.setProperty("color", strRet);
             }
 
             ui = new UIRect(w, h, sc, fc);

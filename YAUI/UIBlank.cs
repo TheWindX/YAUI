@@ -15,7 +15,7 @@ using System.Xml;
 
 namespace ns_YAUI
 {
-    class UIBlank : UIWidget
+    public class UIBlank : UIWidget
     {
         int _w = 20;
         int _h = 20;
@@ -41,7 +41,6 @@ namespace ns_YAUI
             set
             {
                 _w = value;
-                setDirty();
             }
         }
 
@@ -54,7 +53,6 @@ namespace ns_YAUI
             set
             {
                 _h = value;
-                setDirty();
             }
         }
 
@@ -63,15 +61,29 @@ namespace ns_YAUI
             ui = new UIBlank();
             ui.fromXML(node);
 
-            var ret = node.Attributes.GetNamedItem("height");
-            if (ret != null)
+            var ret = node.Attributes.GetNamedItem("length");
+            string strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
             {
-                ui.height = ret.Value.castInt();
+                ui.width = strRet.castInt();
+                ui.height = ui.width;
+                UIRoot.Instance.setProperty("length", strRet);
             }
+
             ret = node.Attributes.GetNamedItem("width");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
             {
-                ui.width = ret.Value.castInt();
+                ui.width = strRet.castInt();
+                UIRoot.Instance.setProperty("width", strRet);
+            }
+
+            ret = node.Attributes.GetNamedItem("height");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("height") : ((ret.Value == "NA") ? null : ret.Value);
+            if (strRet != null)
+            {
+                ui.height = strRet.castInt();
+                UIRoot.Instance.setProperty("height", strRet);
             }
 
             ui.paresent = p;

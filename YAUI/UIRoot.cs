@@ -66,14 +66,22 @@ namespace ns_YAUI
         Dictionary<string, Stack<XmlElement>> mName2InnerTemplate = new Dictionary<string, Stack<XmlElement>>();
 
         Stack<Dictionary<string, string>> mPropertyInnerMap = new Stack<Dictionary<string, string>>();
+        Stack<Boolean> mPropertyInheret = new Stack<Boolean>();
 
         internal void pushProperty(Dictionary<string, string> map = null)
         {
             if (map == null) map = new Dictionary<string, string>();
             mPropertyInnerMap.Push(map);
+            mPropertyInheret.Push(true);
         }
 
-        internal void setProperty(string key, string value)
+        public void setPropertyInheret(bool inheret)
+        {
+            var b = mPropertyInheret.Peek();
+            b = inheret;
+        }
+
+        public void setProperty(string key, string value)
         {
             var map = mPropertyInnerMap.Peek();
             if (value == null)
@@ -83,8 +91,12 @@ namespace ns_YAUI
         }
 
         //继承获得属性
-        internal string getProperty(string key)
+        public string getProperty(string key)
         {
+            if (mPropertyInheret.Peek())
+            {
+                return null;
+            }
             if (mPropertyInnerMap.Count == 0) return null;
             var map = mPropertyInnerMap.Peek();
             string ret = null;
@@ -106,6 +118,7 @@ namespace ns_YAUI
         internal void popProperty()
         {
             mPropertyInnerMap.Pop();
+            mPropertyInheret.Pop();
         }
 
         void innerTemplatePush(string name, XmlNode node)
@@ -198,7 +211,7 @@ namespace ns_YAUI
                     var uichild = loadFromXMLNode(elem, uiret, node, out innerTemplateName);
                     if (innerTemplateName != null) innerTemplateNames.Add(innerTemplateName);
                     //var v = elem.Attributes.GetNamedItem("height");
-                    //Console.WriteLine(v==null?"":v.Value );
+                    //Console.WriteLine(v==null?':v.Value );
                     if (uichild != null)
                     {
                         uichild.paresent = uiret;
@@ -375,7 +388,14 @@ namespace ns_YAUI
             regMethodFromXML("line", UILine.fromXML);
             regMethodFromXML("round_rect", UIRoundRect.fromXML);
             regMethodFromXML("round", UIRound.fromXML);
+            regMethodFromXML("resizer", UIResizer.fromXML);
             pushProperty();
+            return this;
+        }
+
+        public UIRoot initXMLWidget(string tagName, funcFromXML xmlConstruct)
+        {
+            regMethodFromXML(tagName, xmlConstruct);
             return this;
         }
 
@@ -384,6 +404,17 @@ namespace ns_YAUI
         {
             mLog = log;
             return this;
+        }
+
+        public UIRoot initTimer(Func<UInt32> timer)
+        {
+            TimerManager.Init(timer);
+            return this;
+        }
+
+        public void updateTimer()
+        {
+            TimerManager.tickAll();
         }
 
         public UIRoot initEvt()

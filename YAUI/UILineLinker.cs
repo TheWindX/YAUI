@@ -92,41 +92,7 @@ namespace ns_YAUI
             }
         }
 
-        public override Rectangle pickRect
-        {
-            get
-            {
-                int pickLineWidth = lineWidth * 5;
-                if (mDir == EDIR.e_ver)
-                {
-                    int left = -pickLineWidth;
-                    int width = pickLineWidth * 2;
-                    int top = 0;
-                    int height = mLength;
-                    if (mLength < 0)
-                    {
-                        top = mLength;
-                        height = -mLength;
-                    }
-                    return new Rectangle(left, top, width, height);
-                }
-                else
-                {
-                    int left = 0;
-                    int width = mLength;
-                    int top = -pickLineWidth;
-                    int height = pickLineWidth * 2;
-                    if (mLength < 0)
-                    {
-                        left = mLength;
-                        width = -mLength;
-                    }
-                    return new Rectangle(left, top, width, height);
-                }
-            }
-        }
-
-        public Rectangle drawRect
+        public override Rectangle drawRect
         {
             get
             {
@@ -164,12 +130,12 @@ namespace ns_YAUI
             get { return "UILineNode"; }
         }
 
-        public override bool postTestPick(Point pos)
+        public override bool testPick(Point pos)
         {
             return true;
         }
 
-        internal override void onDraw(Graphics g)
+        public override void onDraw(Graphics g)
         {
             if (mParesent != null)
             {
@@ -236,11 +202,11 @@ namespace ns_YAUI
             {
                 if (mDir == EDIR.e_hor)
                 {
-                    return new Point(position.X + mLength, position.Y);
+                    return new Point(px + mLength, py);
                 }
                 else //if(mDir == EDIR.e_ver)
                 {
-                    return new Point(position.X, position.Y + mLength);
+                    return new Point(px, py + mLength);
                 }
             }
             set
@@ -248,7 +214,7 @@ namespace ns_YAUI
                 var tp = endPos;
                 int dx = value.X - tp.X;
                 int dy = value.Y - tp.Y;
-                position = new Point(position.X + dx, position.Y + dy);
+                position = new Point(px + dx, py + dy);
             }
         }
 
@@ -268,7 +234,7 @@ namespace ns_YAUI
                 if (dy == 0) return true;
                 //else if (mNext == null)
                 //{
-                //    position.Y += dy;
+                //    py += dy;
                 //    if(mPre != null)
                 //        mPre.adjustFromEndStable(beginPos);
                 //}
@@ -282,7 +248,7 @@ namespace ns_YAUI
                 if (dx == 0) return true;
                 //else if (mNext == null)
                 //{
-                //    position.X += dx;
+                //    px += dx;
                 //    if (mPre != null)
                 //        mPre.adjustFromEndStable(beginPos);
                 //}
@@ -303,12 +269,12 @@ namespace ns_YAUI
                 int dx = hpos.X - hPos1.X;
                 int dy = hpos.Y - hPos1.Y;
 
-                position.X += dx;
+                px += dx;
                 mLength -= dx;
                 if (dy == 0) return true;
                 //else if (mPre == null)
                 //{
-                //    position.Y += dy;
+                //    py += dy;
                 //    if (mNext != null)
                 //        mNext.adjustFromFrontStable(endPos);
                 //}
@@ -318,7 +284,7 @@ namespace ns_YAUI
                 int dx = hpos.X - hPos1.X;
                 int dy = hpos.Y - hPos1.Y;
 
-                position.Y += dy;
+                py += dy;
                 mLength -= dy;
                 if (dx == 0)
                 {
@@ -326,7 +292,7 @@ namespace ns_YAUI
                 }
                 //else if (mPre == null)
                 //{
-                //    position.X += dx;
+                //    px += dx;
                 //    if (mNext != null)
                 //        mNext.adjustFromFrontStable(endPos);
                 //}
@@ -382,11 +348,11 @@ namespace ns_YAUI
             //{
             //    if (mDir == EDIR.e_hor)
             //    {
-            //        pt.X = position.X;
+            //        pt.X = px;
             //    }
             //    else if (mDir == EDIR.e_ver)
             //    {
-            //        pt.Y = position.Y;
+            //        pt.Y = py;
             //    }   
             //}
 
@@ -565,12 +531,12 @@ namespace ns_YAUI
             get { return "lineList"; }
         }
 
-        public override bool postTestPick(Point pos)
+        public override bool testPick(Point pos)
         {
             return true;
         }
 
-        internal override void onDraw(Graphics g)
+        public override void onDraw(Graphics g)
         {
             //set up sign end
             if (mFirst == null)
@@ -580,8 +546,8 @@ namespace ns_YAUI
                     mStartRect = new UIRect(4, 4, 0xffff0000);
                     mStartRect.paresent = this;
                     mStartRect.position = beginPos;
-                    mStartRect.position.X -= 2;
-                    mStartRect.position.Y -= 2;
+                    mStartRect.px -= 2;
+                    mStartRect.py -= 2;
                 }
             }
             else
@@ -618,8 +584,8 @@ namespace ns_YAUI
             public void tryLineTo(Point pt)
             {
                 pt = mParesent.invertTransformAbs(pt);
-                int dx = pt.X - mLinker.last.position.X;
-                int dy = pt.Y - mLinker.last.position.Y;
+                int dx = pt.X - mLinker.last.px;
+                int dy = pt.Y - mLinker.last.py;
 
                 if (Math.Abs(dy) > Math.Abs(dx))
                 {
