@@ -20,7 +20,7 @@ namespace ns_YAUI
     {
         #region root
         UIWidget mRoot;
-        
+
         public UIWidget root
         {
             get
@@ -67,7 +67,7 @@ namespace ns_YAUI
 
         Stack<Dictionary<string, string>> mPropertyInnerMap = new Stack<Dictionary<string, string>>();
 
-        internal void pushProperty(Dictionary<string, string> map=null)
+        internal void pushProperty(Dictionary<string, string> map = null)
         {
             if (map == null) map = new Dictionary<string, string>();
             mPropertyInnerMap.Push(map);
@@ -76,7 +76,10 @@ namespace ns_YAUI
         internal void setProperty(string key, string value)
         {
             var map = mPropertyInnerMap.Peek();
-            map[key] = value;
+            if (value == null)
+                map[key] = "NA";
+            else
+                map[key] = value;
         }
 
         //继承获得属性
@@ -86,11 +89,16 @@ namespace ns_YAUI
             var map = mPropertyInnerMap.Peek();
             string ret = null;
             map.TryGetValue(key, out ret);
+            //向上继承
             if (ret == null)
             {
                 var m = mPropertyInnerMap.Pop();
                 ret = getProperty(key);
                 pushProperty(m);
+            }
+            else if (ret == "NA")
+            {
+                return null;
             }
             return ret;
         }
@@ -213,7 +221,7 @@ namespace ns_YAUI
                     XmlElement templateNode = null;
                     if (mName2Template.TryGetValue(templateName, out templateNode))
                     {
-                        throw new Exception("templateName:" + templateName+" is duplicate");
+                        throw new Exception("templateName:" + templateName + " is duplicate");
                     }
                     else
                     {
@@ -302,7 +310,7 @@ namespace ns_YAUI
                     {
                         var innerTemplateName = ret.Value;
                         XmlNode innerTemplateNode = innerTemplateTop(innerTemplateName);
-                        if(innerTemplateNode == null)
+                        if (innerTemplateNode == null)
                         {
                             throw new Exception("no innerTemplate for " + innerTemplateName);
                         }
@@ -406,7 +414,7 @@ namespace ns_YAUI
 
         public void handleLeftDown(int x, int y)
         {
-            if(evtLeftDown != null)evtLeftDown(x, y);
+            if (evtLeftDown != null) evtLeftDown(x, y);
         }
 
         public void handleEvtMove(int x, int y)
@@ -419,32 +427,32 @@ namespace ns_YAUI
 
         public void handleEvtLeftUp(int x, int y)
         {
-            if(evtLeftUp != null)evtLeftUp(x, y);
+            if (evtLeftUp != null) evtLeftUp(x, y);
         }
 
         public void handleEvtRightDown(int x, int y)
         {
-            if(mEvtRightDown != null)mEvtRightDown(x, y);
+            if (mEvtRightDown != null) mEvtRightDown(x, y);
         }
 
         public void handleEvtRightUp(int x, int y)
         {
-            if(mEvtRightUp != null)mEvtRightUp(x, y);
+            if (mEvtRightUp != null) mEvtRightUp(x, y);
         }
-        
+
         public void handleEvtMiddleDown(int x, int y)
         {
-            if(mEvtMiddleDown != null)mEvtMiddleDown(x, y);
+            if (mEvtMiddleDown != null) mEvtMiddleDown(x, y);
         }
-        
+
         public void handleEvtMiddleUp(int x, int y)
         {
-            if(mEvtMiddleUp != null)mEvtMiddleUp(x, y);
+            if (mEvtMiddleUp != null) mEvtMiddleUp(x, y);
         }
 
         public void handleEvtDoubleClick(int x, int y)
         {
-            if(mEvtDoubleClick != null)mEvtDoubleClick(x, y);
+            if (mEvtDoubleClick != null) mEvtDoubleClick(x, y);
         }
 
         public void handleEvtWheel(int delta)
@@ -454,8 +462,8 @@ namespace ns_YAUI
 
         public void handleEvtKey(int kc, bool iC, bool iS)
         {
-            if(mEvtKey != null)mEvtKey(kc, iC, iS);
-        }   
+            if (mEvtKey != null) mEvtKey(kc, iC, iS);
+        }
 
         #endregion
 
@@ -486,17 +494,17 @@ namespace ns_YAUI
             {
                 if (value != mCurrent)
                 {
-                    if (mCurrent != null) 
+                    if (mCurrent != null)
                     {
-                        if (mCurrent.evtExit != null)mCurrent.evtExit(); 
+                        if (mCurrent.evtExit != null) mCurrent.evtExit();
                     }
                     if (value != null)
                     {
-                        if (value.evtEnter != null) value.evtEnter(); 
+                        if (value.evtEnter != null) value.evtEnter();
                     }
                 }
                 mCurrent = value;
-                 
+
             }
         }
 
@@ -513,7 +521,7 @@ namespace ns_YAUI
                 else
                     focusWidget = null;
             }
-            
+
         }
         #endregion
 
@@ -523,8 +531,8 @@ namespace ns_YAUI
             UIWidget uiout;
             bool ret = true;
             uiout = focusWidget;
-            if(uiout == null)
-                ret  = root.doTestPick(new Point(x, y), out uiout);
+            if (uiout == null)
+                ret = root.doTestPick(new Point(x, y), out uiout);
             if (ret)
             {
                 currentWidget = uiout;
@@ -533,7 +541,7 @@ namespace ns_YAUI
                     var act = getAction(uiout);
                     if (act != null)
                     {
-                        if (!act(x, y) )
+                        if (!act(x, y))
                         {
                             break;//consumed
                         }
