@@ -63,27 +63,27 @@ namespace ns_YAUI
 
             var ret = node.Attributes.GetNamedItem("length");
             string strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("length", ref strRet);
             if (strRet != null)
             {
                 ui.width = strRet.castInt();
                 ui.height = ui.width;
-                UIRoot.Instance.setProperty("length", strRet);
             }
 
             ret = node.Attributes.GetNamedItem("width");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("width", ref strRet);
             if (strRet != null)
             {
                 ui.width = strRet.castInt();
-                UIRoot.Instance.setProperty("width", strRet);
             }
 
             ret = node.Attributes.GetNamedItem("height");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("height") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("height", ref strRet);
             if (strRet != null)
             {
                 ui.height = strRet.castInt();
-                UIRoot.Instance.setProperty("height", strRet);
             }
 
             ui.paresent = p;

@@ -1432,11 +1432,11 @@ namespace ns_YAUI
         {
             string strRet = null;
             UIRoot.Instance.setPropertyInheret(false);
-            var ret = node.Attributes.GetNamedItem("noInherent");
+            var ret = node.Attributes.GetNamedItem("inherent");
             if (ret != null)
             {
                 bool v = ret.Value.castBool(false);
-                UIRoot.Instance.setPropertyInheret(!v);
+                UIRoot.Instance.setPropertyInheret(v);
             }
 
             ret = node.Attributes.GetNamedItem("name");
@@ -1444,7 +1444,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("px");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("px") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("px", strRet);
+            UIRoot.Instance.setProperty("px", ref strRet);
             if (strRet != null)
             {
                 px = strRet.castInt();
@@ -1452,7 +1452,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("py");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("py") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("py", strRet);
+            UIRoot.Instance.setProperty("py", ref strRet);
             if (strRet != null)
             {
                 py = strRet.castInt();
@@ -1461,7 +1461,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("rotate");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("rotate") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("rotate", strRet);
+            UIRoot.Instance.setProperty("rotate", ref strRet);
             if (strRet != null)
             {
                 mDir = strRet.castFloat();
@@ -1470,7 +1470,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("scaleX");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("scaleX") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("scaleX", strRet);
+            UIRoot.Instance.setProperty("scaleX", ref strRet);
             if (strRet != null)
             {
                 mScalex = strRet.castFloat(1);
@@ -1478,7 +1478,7 @@ namespace ns_YAUI
             
             ret = node.Attributes.GetNamedItem("scaleY");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("scaleY") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("scaleY", strRet);
+            UIRoot.Instance.setProperty("scaleY", ref strRet);
             if (strRet != null)
             {
                 mScaley = strRet.castFloat(1);
@@ -1486,7 +1486,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("scale");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("scale") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("scale", strRet);
+            UIRoot.Instance.setProperty("scale", ref strRet);
             if (strRet != null)
             {
                 mScalex = strRet.castFloat(1);
@@ -1495,7 +1495,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("align");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("align") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("align", strRet);
+            UIRoot.Instance.setProperty("align", ref strRet);
             if (strRet != null) 
             {
                 mAlign = (EAlign)Enum.Parse(typeof(EAlign), strRet);
@@ -1504,7 +1504,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("alignParesent");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("alignParesent") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("alignParesent", strRet);
+            UIRoot.Instance.setProperty("alignParesent", ref strRet);
             if (strRet != null)
             {
                 mAlignParesent = (EAlign)Enum.Parse(typeof(EAlign), strRet);
@@ -1512,7 +1512,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("offset");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("offset") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("offset", strRet);
+            UIRoot.Instance.setProperty("offset", ref strRet);
             if (strRet != null)
             {
                 mOffsetx = ret.Value.castInt();
@@ -1523,7 +1523,7 @@ namespace ns_YAUI
                 //note //offset is after align
                 ret = node.Attributes.GetNamedItem("offsetX");
                 strRet = (ret == null) ? UIRoot.Instance.getProperty("offsetX") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("offsetX", strRet);
+                UIRoot.Instance.setProperty("offsetX", ref strRet);
                 if (strRet != null) 
                 {
                     var ox = strRet.castInt(); mOffsetx = ox;
@@ -1531,7 +1531,7 @@ namespace ns_YAUI
 
                 ret = node.Attributes.GetNamedItem("offsetY");
                 strRet = (ret == null) ? UIRoot.Instance.getProperty("offsetY") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("offsetY", strRet);
+                UIRoot.Instance.setProperty("offsetY", ref strRet);
                 if (strRet != null) 
                 {
                     var oy = strRet.castInt(); mOffsety = oy;
@@ -1541,7 +1541,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("clip");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("clip") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("clip", strRet);
+            UIRoot.Instance.setProperty("clip", ref strRet);
             if (strRet != null)
             {
                 clip = strRet.castBool();
@@ -1549,7 +1549,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("enable");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("enable") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("enable", strRet);
+            UIRoot.Instance.setProperty("enable", ref strRet);
             if (strRet != null)
             {
                 enable = strRet.castBool();
@@ -1557,7 +1557,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("visible");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("visible") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("visible", strRet);
+            UIRoot.Instance.setProperty("visible", ref strRet);
             if (strRet != null)
             {
                 visible = strRet.castBool();
@@ -1565,7 +1565,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("dragAble");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("dragAble") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("dragAble", strRet);
+            UIRoot.Instance.setProperty("dragAble", ref strRet);
             if (strRet != null)
             {
                 dragAble = strRet.castBool();
@@ -1573,7 +1573,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("scaleAble");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("scaleAble") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("scaleAble", strRet);
+            UIRoot.Instance.setProperty("scaleAble", ref strRet);
             if (strRet != null)
             {
                 scaleAble = strRet.castBool();
@@ -1581,7 +1581,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("rotateAble");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("rotateAble") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("rotateAble", strRet);
+            UIRoot.Instance.setProperty("rotateAble", ref strRet);
             if (strRet != null)
             {
                 rotateAble = strRet.castBool();
@@ -1589,7 +1589,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("layout");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("layout") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("layout", strRet);
+            UIRoot.Instance.setProperty("layout", ref strRet);
             if (strRet != null)
             {
                 mLayout = (ELayout)Enum.Parse(typeof(ELayout), strRet);
@@ -1597,7 +1597,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("layoutInverse");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("layoutInverse") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("layoutInverse", strRet);
+            UIRoot.Instance.setProperty("layoutInverse", ref strRet);
             if (strRet != null)
             {
                 mLayoutInverse = strRet.castBool();
@@ -1605,7 +1605,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("wrap");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("wrap") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("wrap", strRet);
+            UIRoot.Instance.setProperty("wrap", ref strRet);
             if (strRet != null)
             {
                 wrap = strRet.castBool();
@@ -1613,7 +1613,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("layoutFilled");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("layoutFilled") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("layoutFilled", strRet);
+            UIRoot.Instance.setProperty("layoutFilled", ref strRet);
             if (strRet != null)
             {
                 layoutFilled = strRet.castBool();
@@ -1621,7 +1621,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("shrink");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("shrink") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("shrink", strRet);
+            UIRoot.Instance.setProperty("shrink", ref strRet);
             if (strRet != null)
             {
                 shrinkAble = strRet.castBool();
@@ -1630,7 +1630,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("expand");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("expand") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("expand", strRet);
+            UIRoot.Instance.setProperty("expand", ref strRet);
             if (strRet != null)
             {
                 expandAbleX = strRet.castBool();
@@ -1640,7 +1640,7 @@ namespace ns_YAUI
             {
                 ret = node.Attributes.GetNamedItem("expandX");
                 strRet = (ret == null) ? UIRoot.Instance.getProperty("expandX") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("expandX", strRet);
+                UIRoot.Instance.setProperty("expandX", ref strRet);
                 if (strRet != null)
                 {
                     expandAbleX = strRet.castBool();
@@ -1648,7 +1648,7 @@ namespace ns_YAUI
 
                 ret = node.Attributes.GetNamedItem("expandY");
                 strRet = (ret == null) ? UIRoot.Instance.getProperty("expandY") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("expandY", strRet);
+                UIRoot.Instance.setProperty("expandY", ref strRet);
                 if (strRet != null)
                 {
                     expandAbleY = strRet.castBool();
@@ -1657,7 +1657,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("margin");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("margin") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("margin", strRet);
+            UIRoot.Instance.setProperty("margin", ref strRet);
             if (strRet != null)
             {
                 marginX = strRet.castInt();
@@ -1667,7 +1667,7 @@ namespace ns_YAUI
             {
                 ret = node.Attributes.GetNamedItem("marginX");
                 strRet = (ret == null) ? UIRoot.Instance.getProperty("marginX") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("marginX", strRet);
+                UIRoot.Instance.setProperty("marginX", ref strRet);
                 if (strRet != null)
                 {
                     marginX = strRet.castInt();
@@ -1675,7 +1675,7 @@ namespace ns_YAUI
 
                 ret = node.Attributes.GetNamedItem("marginY");
                 strRet = (ret == null) ? UIRoot.Instance.getProperty("marginY") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("marginY", strRet);
+                UIRoot.Instance.setProperty("marginY", ref strRet);
                 if (strRet != null)
                 {
                     marginY = strRet.castInt();
@@ -1684,7 +1684,7 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("padding");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("padding") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("padding", strRet);
+            UIRoot.Instance.setProperty("padding", ref strRet);
             if (strRet != null)
             {
                 paddingY = strRet.castInt();
@@ -1694,7 +1694,7 @@ namespace ns_YAUI
             {
                 ret = node.Attributes.GetNamedItem("paddingX");
                 strRet = (ret == null) ? UIRoot.Instance.getProperty("paddingX") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("paddingX", strRet);
+                UIRoot.Instance.setProperty("paddingX", ref strRet);
                 if (strRet != null)
                 {
                     paddingX = strRet.castInt();
@@ -1702,7 +1702,7 @@ namespace ns_YAUI
 
                 ret = node.Attributes.GetNamedItem("paddingY");
                 strRet = (ret == null) ? UIRoot.Instance.getProperty("paddingY") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("paddingY", strRet);
+                UIRoot.Instance.setProperty("paddingY", ref strRet);
                 if (strRet != null)
                 {
                     paddingY = strRet.castInt();

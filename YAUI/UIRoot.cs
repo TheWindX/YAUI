@@ -81,10 +81,16 @@ namespace ns_YAUI
             b = inheret;
         }
 
-        public void setProperty(string key, string value)
+        public void setProperty(string key, ref string value)
         {
+            var b = mPropertyInheret.Peek();
+            if (!b) return;
+            if (value == "") return;
+            if (value == null) return;
+            if (value[0] == '*') value = value.Substring(1);
+            else return;
             var map = mPropertyInnerMap.Peek();
-            if (value == null)
+            if (value == "")
                 map[key] = "NA";
             else
                 map[key] = value;
@@ -93,7 +99,7 @@ namespace ns_YAUI
         //继承获得属性
         public string getProperty(string key)
         {
-            if (mPropertyInheret.Peek())
+            if (!mPropertyInheret.Peek())
             {
                 return null;
             }
@@ -203,24 +209,9 @@ namespace ns_YAUI
             if (mXML2widget.TryGetValue(node.Name, out fromxmlFunc))
             {
                 var uichildren = fromxmlFunc(node, out uiret, p);
-                List<string> innerTemplateNames = new List<string>();
-                pushProperty();
-                foreach (XmlNode elem in uichildren)
+                if (uichildren != null)
                 {
-                    string innerTemplateName = null;
-                    var uichild = loadFromXMLNode(elem, uiret, node, out innerTemplateName);
-                    if (innerTemplateName != null) innerTemplateNames.Add(innerTemplateName);
-                    //var v = elem.Attributes.GetNamedItem("height");
-                    //Console.WriteLine(v==null?':v.Value );
-                    if (uichild != null)
-                    {
-                        uichild.paresent = uiret;
-                    }
-                }
-                popProperty();
-                foreach (string e in innerTemplateNames)
-                {
-                    innerTemplatePop(e);
+                    loadXMLChildren(uichildren, uiret, node);
                 }
             }
 
@@ -356,11 +347,35 @@ namespace ns_YAUI
             return uiret;
         }
 
+        internal void loadXMLChildren(XmlNodeList uichildren, UIWidget p, XmlNode pnode)
+        {
+            List<string> innerTemplateNames = new List<string>();
+            pushProperty();
+            foreach (XmlNode elem in uichildren)
+            {
+                string innerTemplateName = null;
+                var uichild = loadFromXMLNode(elem, p, pnode, out innerTemplateName);
+                if (innerTemplateName != null) innerTemplateNames.Add(innerTemplateName);
+                //var v = elem.Attributes.GetNamedItem("height");
+                //Console.WriteLine(v==null?':v.Value );
+                if (uichild != null)
+                {
+                    uichild.paresent = p;
+                }
+            }
+            popProperty();
+            foreach (string e in innerTemplateNames)
+            {
+                innerTemplatePop(e);
+            }
+        }
+
         public UIWidget loadFromXML(string xml)
         {
             UIWidget nodeRet = null;
+            pushProperty();
             try
-            {
+            {   
                 XmlDocument doc = new XmlDocument();
                 doc.LoadXml(xml);
                 var node = doc.ChildNodes[0];
@@ -372,6 +387,7 @@ namespace ns_YAUI
                 }
             }
             catch (Exception e) { mLog(e.ToString()); }
+            popProperty();
             return nodeRet;
         }
         #endregion

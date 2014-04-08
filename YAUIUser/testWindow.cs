@@ -11,21 +11,19 @@ namespace YAUIUser
     class UIWindow
     {
         const string XMLLayout = @"
-    <rect clip='true' shrink='true' layout='vertical' padding='5' dragAble='true' rotateAble='true' scaleAble='true' fillColor='ff1ba1e2'>
-        <lable text='top' align='leftTop'></lable>
-        <rect length='24' strokeColor='00000000' fillColor='ffe04343' align='rightTop' offsetY='-5' >
+    <rect length='512' clip='*true' layout='vertical' layoutFilled='true' padding='5' dragAble='true' rotateAble='true' scaleAble='true' strokeColor='*33ff0000' color='ff1ba1e2'>
+        <lable  text='top' align='leftTop'></lable>
+        <rect length='24' fillColor='ffe04343' align='rightTop' offsetY='-5' >
             <lable name='close' text='x' align='center' offsetX='1' offsetY='-1'></lable>
         </rect>
-        <blank width='30' height='30'></blank>
-        <blank name='editor' width='512' height='512' layout='vertical' layoutFilled='true'>
-            <rect name='tabContainer' layout='horizon' height='30' expandX='true' clip='true' fillColor='0xffbfdbff'>
-                <lable name='tabToggle' text='∧' color='ff000000' size='10' margin='8' align='rightMiddle'></lable>
-            </rect>
-            <rect name='toolContainer' layout='horizon' height='100' expandX='true' clip='true' fillColor='0xff3e4649'></rect>
-            <rect name='clientContainer' layout='horizon' expandX='true' clip='true' fillColor='0xff3e4649'></rect>
-        </blank>
+        <blank length='30'></blank>
+        <rect name='tabContainer' layout='horizon' height='30' expandX='true' clip='true' color='0xffbfdbff'>
+        <lable name='tabToggle' text='∧' color='ff000000' size='10' margin='8' align='rightMiddle'></lable>
+        </rect>
+        <rect name='toolContainer' layout='horizon' height='100' expandX='true' fillColor='*0xff3e4649'></rect>
+        <rect name='clientContainer' clip='true'></rect>
         
-        <rect name='resizer' width='32' height='32' align='rightBottom'></rect>
+        <rect name='resizer' length='32' align='rightBottom' fillColor='*'></rect>
     </rect>
 ";
         const string XMLTab = @"
@@ -58,30 +56,31 @@ namespace YAUIUser
             mClose = mWindow.childOfPath("close");
             mResizer = mWindow.childOfPath("resizer");
             mLable = mWindow.childOfPath("lable");
-            mClientCtn = mWindow.childOfPath("editor/clientContainer");
-            mTabCtn = mWindow.childOfPath("editor/tabContainer");
-            mToolCtn = mWindow.childOfPath("editor/toolContainer");
-            mTabToggle = mWindow.childOfPath("editor/tabContainer/tabToggle");
+            mClientCtn = mWindow.childOfPath("clientContainer");
+            mTabCtn = mWindow.childOfPath("tabContainer");
+            mToolCtn = mWindow.childOfPath("toolContainer");
+            mTabToggle = mWindow.childOfPath("tabContainer/tabToggle");
 
             Action<int, int> moveHandle = (x, y) =>
             {
-                var newpt = mClientBlank.invertTransformParesentAbs(new System.Drawing.Point(x, y));
-                var oldpt = mClientBlank.invertTransformParesentAbs(new System.Drawing.Point(mResizerStartX, mResizerStartY));
-                var dx = newpt.X - oldpt.X;
-                var dy = newpt.Y - oldpt.Y;
-                mClientBlank.width = mClientWidth + dx;
-                mClientBlank.height = mClientHeight + dy;
-                mClientBlank.setDirty(true);
+                mResizer.updateFixpoint(x, y);
+                int mResizerX = mResizer.px;
+                int mResizerY = mResizer.py;
+                var dx = mResizerX - mResizerStartX;
+                var dy = mResizerY - mResizerStartY;
+                mWindow.width = mClientWidth + dx;
+                mWindow.height = mClientHeight + dy;
+                mWindow.setDirty(true);
             };
 
             mResizer.evtOnLMDown += (ui, x, y) =>
             {
                 //var np = mResizer.transform(new System.Drawing.Point(x, y));
-                mResizerStartX = x;
-                mResizerStartY = y;
-
-                mClientWidth = mClientBlank.width;
-                mClientHeight = mClientBlank.height;
+                mResizer.beginFixpoint(x, y);
+                mResizerStartX = mResizer.px;
+                mResizerStartY = mResizer.py;
+                mClientWidth = mWindow.width;
+                mClientHeight = mWindow.height;
                 UIRoot.Instance.evtMove += moveHandle;
                 return false;
             };

@@ -133,37 +133,63 @@ namespace ns_YAUI
             uint fc = 0xffaaaaaa;
             uint sc = 0xffffffff;
 
-            var ret = node.Attributes.GetNamedItem("width");
-            if (ret != null)
+            var ret = node.Attributes.GetNamedItem("length");
+            string strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("length", ref strRet);
+            if (strRet != null)
             {
-                w = ret.Value.castInt();
+                h = strRet.castInt();
+                w = h;
+            }
+
+            ret = node.Attributes.GetNamedItem("width");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("width", ref strRet);
+            if (strRet != null)
+            {
+                w = strRet.castInt();
             }
 
             ret = node.Attributes.GetNamedItem("height");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("height") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("height", ref strRet);
+            if (strRet != null)
             {
-                h = ret.Value.castInt();
+                h = strRet.castInt();
             }
 
-            ret = node.Attributes.GetNamedItem("radius");
-            if (ret != null)
+            ret = node.Attributes.GetNamedItem("color");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("color") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("color", ref strRet);
+            if (strRet != null)
             {
-                r = (int)ret.Value.castFloat() * 2;
-                w = r;
-                h = r;
+                fc = strRet.castHex(0xff888888);
             }
 
             ret = node.Attributes.GetNamedItem("strokeColor");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("strokeColor") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("strokeColor", ref strRet);
+            if (strRet != null)
             {
-                sc = ret.Value.castHex(0xffffffff);
+                sc = strRet.castHex(0xffffffff);
             }
 
             ret = node.Attributes.GetNamedItem("fillColor");
-            if (ret != null)
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("fillColor") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("fillColor", ref strRet);
+            if (strRet != null)
             {
-                fc = ret.Value.castHex(0xff888888);
+                fc = strRet.castHex(0xff888888);
             }
+
+            ret = node.Attributes.GetNamedItem("radius");
+            strRet = (ret == null) ? UIRoot.Instance.getProperty("radius") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("radius", ref strRet);
+            if (strRet != null)
+            {
+                r = (int)strRet.castFloat() * 2;
+            }
+
             ui = new UIRound(w, h, sc, fc);
             ui.fromXML(node);
             ui.paresent = p;

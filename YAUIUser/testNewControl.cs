@@ -61,7 +61,7 @@ namespace YAUIUser
             if (strRet != null)
             {
                 w = strRet.castInt();
-                UIRoot.Instance.setProperty("width", strRet);
+                UIRoot.Instance.setProperty("width", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("height");
@@ -69,7 +69,7 @@ namespace YAUIUser
             if (strRet != null)
             {
                 h = strRet.castInt();
-                UIRoot.Instance.setProperty("height", strRet);
+                UIRoot.Instance.setProperty("height", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("length");
@@ -78,7 +78,7 @@ namespace YAUIUser
             {
                 h = strRet.castInt();
                 w = h;
-                UIRoot.Instance.setProperty("length", strRet);
+                UIRoot.Instance.setProperty("length", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("strokeColor");
@@ -86,7 +86,7 @@ namespace YAUIUser
             if (strRet != null)
             {
                 sc = strRet.castHex(0xffffffff);
-                UIRoot.Instance.setProperty("strokeColor", strRet);
+                UIRoot.Instance.setProperty("strokeColor", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("fillColor");
@@ -94,7 +94,7 @@ namespace YAUIUser
             if (strRet != null)
             {
                 fc = strRet.castHex(0xff888888);
-                UIRoot.Instance.setProperty("fillColor", strRet);
+                UIRoot.Instance.setProperty("fillColor", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("color");
@@ -102,7 +102,7 @@ namespace YAUIUser
             if (strRet != null)
             {
                 fc = strRet.castHex(0xff888888);
-                UIRoot.Instance.setProperty("color", strRet);
+                UIRoot.Instance.setProperty("color", ref strRet);
             }
 
             ui = new newRect(w, h, sc, fc);

@@ -74,7 +74,7 @@ namespace ns_YAUI
             if (strRet != null)
             {
                 fc = strRet.castHex(0xff888888);
-                UIRoot.Instance.setProperty("color", strRet);
+                UIRoot.Instance.setProperty("color", ref strRet);
             }
 
             var m = new UIMap();

@@ -80,7 +80,7 @@ namespace ns_YAUI
             {
                 ui.width = strRet.castInt();
                 ui.height = ui.width;
-                UIRoot.Instance.setProperty("length", strRet);
+                UIRoot.Instance.setProperty("length", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("width");
@@ -88,7 +88,7 @@ namespace ns_YAUI
             if (strRet != null)
             {
                 ui.width = strRet.castInt();
-                UIRoot.Instance.setProperty("width", strRet);
+                UIRoot.Instance.setProperty("width", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("height");
@@ -96,7 +96,7 @@ namespace ns_YAUI
             if (strRet != null)
             {
                 ui.height = strRet.castInt();
-                UIRoot.Instance.setProperty("height", strRet);
+                UIRoot.Instance.setProperty("height", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("color");
@@ -104,11 +104,13 @@ namespace ns_YAUI
             if (strRet != null)
             {
                 (ui as UIResizer).mClient.fillColor = (uint)strRet.castHex();
-                UIRoot.Instance.setProperty("color", strRet);
+                UIRoot.Instance.setProperty("color", ref strRet);
             }
 
+            UIRoot.Instance.loadXMLChildren(node.ChildNodes, (ui as UIResizer).mClient, null);
+
             ui.paresent = p;
-            return node.ChildNodes;
+            return null;
         }
         
     }
