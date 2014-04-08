@@ -854,8 +854,8 @@ namespace ns_YAUI
 
             mOccupyRect = null;//重新layout, 当然要重计 mOccupyRect
 
-            bool bAjust = adjustAlign();
             adjustExpand();
+            bool bAjust = adjustAlign();
             for (int i = 0; i < mChildrent.Count; ++i)
             {
                 var c = mChildrent[i] as UIWidget;
@@ -983,6 +983,7 @@ namespace ns_YAUI
                 for (int i = mChildrent.Count - 1; i >= 0; --i)
                 {
                     var c = mChildrent[i] as UIWidget;
+                    if (c.align != EAlign.noAlign) continue;
                     var lrc = c.layoutRect.transform(c.getLocalMatrix());
                     left = (left == null) ? (lrc.Left - paddingX) : min((lrc.Left - paddingX), left.Value);
                     right = (right == null) ? (lrc.Right + paddingX) : max((lrc.Right + paddingX), right.Value);

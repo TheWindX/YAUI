@@ -119,6 +119,7 @@ namespace ns_YAUI
         private void OnPaint(object sender, PaintEventArgs e)
         {
             Graphics gxOff; //Offscreen graphics
+#if DIRTYRECTOPTIMAS
             if (m_bmpOffscreen == null) //Bitmap for doublebuffering
             {
                 m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
@@ -134,10 +135,14 @@ namespace ns_YAUI
                 }
             }
             gxOff = Graphics.FromImage(m_bmpOffscreen);
-            //gxOff = e.Graphics;
+#else
+            gxOff = e.Graphics;
+#endif
             if (evtPaint != null)
                 evtPaint(gxOff);
+#if DIRTYRECTOPTIMAS
             e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);
+#endif
             //mReflush = true;
         }
 

@@ -16,16 +16,14 @@ namespace ns_YAUI
         {
             width = 512;
             height = 512;
-            appendFromXML(@"
-<rect noInherent='true' length='512' name='client' expand='true'>
+            mClient = appendFromXML(@"
+<rect noInherent='true' length='512' expand='true'>
 </rect>
-");
-            appendFromXML(@"
-<rect noInherent='true' name='sizer' length='32' align='rightBottom'>
+") as UIRect;
+            mResizer = appendFromXML(@"
+<rect noInherent='true' length='32' align='rightBottom'>
 </rect>
-");
-            mClient = childOf("client") as UIRect;
-            mResizer = childOf("sizer") as UIRect;
+") as UIRect;
             int spx = 0;
             int spy = 0;
             int sw = 0;
@@ -76,27 +74,27 @@ namespace ns_YAUI
 
             var ret = node.Attributes.GetNamedItem("length");
             string strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("length", ref strRet);
             if (strRet != null)
             {
                 ui.width = strRet.castInt();
                 ui.height = ui.width;
-                UIRoot.Instance.setProperty("length", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("width");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("width", ref strRet);
             if (strRet != null)
             {
                 ui.width = strRet.castInt();
-                UIRoot.Instance.setProperty("width", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("height");
             strRet = (ret == null) ? UIRoot.Instance.getProperty("height") : ((ret.Value == "NA") ? null : ret.Value);
+            UIRoot.Instance.setProperty("height", ref strRet);
             if (strRet != null)
             {
                 ui.height = strRet.castInt();
-                UIRoot.Instance.setProperty("height", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("color");
