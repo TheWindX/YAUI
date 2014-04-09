@@ -14,9 +14,10 @@ namespace YAUIUser
         {
             UIRoot.Instance.root.appendFromXML(
 @"
-    <rect dragAble='true' scaleAble='true' width='512' height='512' layout='horizon' layoutInverse='true' layoutFilled='true' paddingX='4' paddingY='4'>
-        <rect width='64' height='64' margin='8' expandY='true'></rect>
-        <rect width='64' height='64' margin='8' ></rect>
+    <rect dragAble='true' scaleAble='true' length='512' shrink='true' layout='horizon' layoutInverse='true' margin='*6'>
+        <rect margin='3' width='*64' height='*64' padding='3' expandY='true'></rect>
+        <rect ></rect>
+        <rect ></rect>
     </rect>
 ");
         }

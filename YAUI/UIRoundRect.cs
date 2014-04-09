@@ -248,12 +248,12 @@ namespace ns_YAUI
                     {
                         fc = getAttr(node, "fillColor", (uint)(EColorUtil.silver), out br);
                     }
-                    sc = (uint)getAttr<EColorUtil>(node, "strokeColor", EColorUtil.white, out br);
-                    if (!br)
-                    {
-                        sc = getAttr(node, "strokeColor", (uint)(EColorUtil.white), out br);
-                    }
                 }
+            }
+            sc = (uint)getAttr<EColorUtil>(node, "strokeColor", EColorUtil.white, out br);
+            if (!br)
+            {
+                sc = getAttr(node, "strokeColor", (uint)(EColorUtil.white), out br);
             }
             
             r = getAttr(node, "radius", 6, out br)*2;

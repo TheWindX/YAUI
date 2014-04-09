@@ -146,13 +146,13 @@ namespace ns_YAUI
                     {
                         fc = getAttr(node, "fillColor", (uint)(EColorUtil.silver), out br);
                     }
-                    sc = (uint)getAttr<EColorUtil>(node, "strokeColor", EColorUtil.white, out br);
-                    if (!br)
-                    {
-                        sc = getAttr(node, "strokeColor", (uint)(EColorUtil.white), out br);
-                    } 
                 }
             }
+            sc = (uint)getAttr<EColorUtil>(node, "strokeColor", EColorUtil.white, out br);
+            if (!br)
+            {
+                sc = getAttr(node, "strokeColor", (uint)(EColorUtil.white), out br);
+            } 
             
             ui = new UIRect(w, h, sc, fc);
             ui.fromXML(node);

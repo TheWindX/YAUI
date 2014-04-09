@@ -14,7 +14,7 @@ namespace YAUIUser
         {
             UIRoot.Instance.root.appendFromXML(
 @"
-    <rect name='r1' shrink='true' length='512' padding='3' clip='true' layout='vertical' layoutInverse='true'>
+    <rect name='r1' shrink='true' length='512' padding='3' clip='true' layout='vertical' layoutInverse='*true'>
         <rect shrink='false' height='128' expandX='true' layout='horizon' padding='6' margin='3' layoutFilled='true'>
             <rect expandX='NA' expandY='true' length='64' margin='2'></rect>
             <rect text='5678'></rect>
