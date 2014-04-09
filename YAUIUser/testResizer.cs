@@ -15,11 +15,11 @@ namespace YAUIUser
             UIRoot.Instance.root.dragAble = true;
             UIRoot.Instance.root.scaleAble = true;
             UIResizer r = UIRoot.Instance.root.appendFromXML(@"
-<rect shrink='true' clip='*true' padding='5' strokeColor='*teal' fillColor='red' layout='vertical'>
+<rect shrink='true' clip='*true' padding='5' fillColor='red' layout='vertical'>
     <lable align='leftTop'></lable>
     <lable align='rightTop' text='x'></lable>
     <blank length='30'></blank>
-    <resizer color='blue' length='512' clip='true'></resizer>
+    <resizer length='256' clip='true'></resizer>
 </rect>
 ") as UIResizer;
         }

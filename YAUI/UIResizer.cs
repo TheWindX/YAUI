@@ -14,8 +14,8 @@ namespace ns_YAUI
         internal UIRect mResizer = null;
         public UIResizer()
         {
-            width = 512;
-            height = 512;
+            width = 256;
+            height = 256;
             mClient = appendFromXML(@"
 <rect noInherent='true' length='512' expand='true'>
 </rect>
@@ -33,8 +33,8 @@ namespace ns_YAUI
                 mResizer.updateFixpoint(nx, ny);
                 var dspx = mResizer.px - spx;
                 var dspy = mResizer.py - spy;
-                width = sw + dspx;
-                height = sh + dspy;
+                width = max(sw + dspx, 0);
+                height = max(sh + dspy, 0);
                 this.setDirty(true);
             };
 
@@ -91,9 +91,11 @@ namespace ns_YAUI
                 fc = getAttr(node, "color", (uint)(EColorUtil.silver), out br);
             }
 
-            (ui as UIResizer).mClient.fillColor = fc;
-
             UIRoot.Instance.loadXMLChildren(node.ChildNodes, (ui as UIResizer).mClient, null);
+            var rsz = (ui as UIResizer);
+            rsz.mClient.fillColor = fc;
+            ui.width = w;
+            ui.height = h;
 
             ui.paresent = p;
             return null;
