@@ -1,5 +1,0 @@
-<root>
-	<task hour="5" minute="11" week="周一二" loop="true" process="chrome" ></task>
-	<task hour="12" minute="11" week="周一二" loop="true" process="chrome1" ></task>
-	<task hour="11" minute="13" week="周一二六" loop="false" process="chrome2" ></task>
-</root>
