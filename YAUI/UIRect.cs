@@ -125,57 +125,35 @@ namespace ns_YAUI
             int h = 64;
             uint fc = 0xffaaaaaa;
             uint sc = 0xffffffff;
-            string strRet = null;
-
-            var ret = node.Attributes.GetNamedItem("length");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value == "NA") ? null : ret.Value);
-            UIRoot.Instance.setProperty("length", ref strRet);
-            if (strRet != null)
+            bool br = true;
+            
+            h = w = getAttr<int>(node, "length", 64, out br);
+            if (!br)
             {
-                h = strRet.castInt();
-                w = h;
+                w = getAttr<int>(node, "width", 64, out br);
+                h = getAttr<int>(node, "height", 64, out br);
             }
 
-            ret = node.Attributes.GetNamedItem("width");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("width", ref strRet);
-            if (strRet != null)
+            fc = (uint)getAttr<EColorUtil>(node, "color", EColorUtil.silver, out br);
+            if (!br)
             {
-                w = strRet.castInt();
-            }
+                fc = getAttr(node, "color", (uint)(EColorUtil.silver), out br);
+                if (!br)
+                {
 
-            ret = node.Attributes.GetNamedItem("height");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("height") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("height", ref strRet);
-            if (strRet != null)
-            {
-                h = strRet.castInt();
+                    fc = (uint)getAttr<EColorUtil>(node, "fillColor", EColorUtil.silver, out br);
+                    if (!br)
+                    {
+                        fc = getAttr(node, "fillColor", (uint)(EColorUtil.silver), out br);
+                    }
+                    sc = (uint)getAttr<EColorUtil>(node, "strokeColor", EColorUtil.white, out br);
+                    if (!br)
+                    {
+                        sc = getAttr(node, "strokeColor", (uint)(EColorUtil.white), out br);
+                    } 
+                }
             }
             
-            ret = node.Attributes.GetNamedItem("color");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("color") : ((ret.Value == "NA") ? null : ret.Value);
-            UIRoot.Instance.setProperty("color", ref strRet);
-            if (strRet != null)
-            {
-                fc = strRet.castHex(0xff888888);
-            }
-
-            ret = node.Attributes.GetNamedItem("strokeColor");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("strokeColor") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("strokeColor", ref strRet);
-            if (strRet != null)
-            {
-                sc = strRet.castHex(0xffffffff);
-            }
-
-            ret = node.Attributes.GetNamedItem("fillColor");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("fillColor") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("fillColor", ref strRet);
-            if (strRet != null)
-            {
-                fc = strRet.castHex(0xff888888);
-            }
-
             ui = new UIRect(w, h, sc, fc);
             ui.fromXML(node);
             ui.paresent = p;

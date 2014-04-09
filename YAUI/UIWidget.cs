@@ -1429,9 +1429,68 @@ namespace ns_YAUI
             return new Rectangle(left, top, right - left, buttom - top);
         }
 
+        internal static T getAttr<T>(XmlNode node, string attName, T defaultVal, out bool valid) where T : IConvertible
+        {
+            valid = true;
+            var ret = node.Attributes.GetNamedItem(attName);
+            string strRet = (ret == null) ? UIRoot.Instance.getProperty(attName) : ((ret.Value=="NA")?null:ret.Value);
+            UIRoot.Instance.setProperty(attName, ref strRet);
+            if (strRet != null)
+            {
+                if (typeof(T) == typeof(int))
+                {
+                    int di = (int)Convert.ChangeType(defaultVal, typeof(int)); //strRet.castInt();
+                    return (T)Convert.ChangeType(strRet.castInt(di), typeof(T)); //strRet.castInt();
+                }
+                else if (typeof(T) == typeof(uint))
+                {
+                    uint dui = (uint)Convert.ChangeType(defaultVal, typeof(uint)); //strRet.castInt();
+                    return (T)Convert.ChangeType(strRet.castHex(dui), typeof(T)); //strRet.castInt();
+                }
+                else if (typeof(T) == typeof(bool))
+                {
+                    bool db = (bool)Convert.ChangeType(defaultVal, typeof(bool)); //strRet.castInt();
+                    return (T)Convert.ChangeType(strRet.castBool(db), typeof(T)); //strRet.castInt();
+                }
+                else if (typeof(T) == typeof(float))
+                {
+                    float df = (int)Convert.ChangeType(defaultVal, typeof(float)); //strRet.castInt();
+                    return (T)Convert.ChangeType(strRet.castFloat(df), typeof(T)); //strRet.castInt();
+                }
+                else if (typeof(T) == typeof(string))
+                {
+                    return (T)Convert.ChangeType(strRet, typeof(T)); //strRet.castInt();
+                }
+                else if (typeof(T) == typeof(EColorUtil))
+                {
+                    EColorUtil col;
+                    bool br = Enum.TryParse<EColorUtil>(strRet, out col);
+                    if(br)
+                        return (T)Convert.ChangeType(col, typeof(T)); //strRet.castInt();
+                }
+                else if (typeof(T) == typeof(EAlign))
+                {
+                    EAlign align;
+                    var br = Enum.TryParse(strRet, true, out align); //(typeof(EAlign), strRet);
+                    if(br)
+                        return (T)Convert.ChangeType(align, typeof(T)); //strRet.castInt();
+                }
+                else if (typeof(T) == typeof(ELayout))
+                {
+                    ELayout layout;
+                    var br = Enum.TryParse(strRet, true, out layout); //(typeof(EAlign), strRet);
+                    if(br)
+                        return (T)Convert.ChangeType(layout, typeof(T)); //strRet.castInt();
+                }
+            }
+            valid = false;
+            return defaultVal; //strRet.castInt();
+        }
+
         public XmlNodeList fromXML(XmlNode node)
         {
             string strRet = null;
+            bool br = true;
             UIRoot.Instance.setPropertyInheret(false);
             var ret = node.Attributes.GetNamedItem("inherent");
             if (ret != null)
@@ -1443,271 +1502,61 @@ namespace ns_YAUI
             ret = node.Attributes.GetNamedItem("name");
             if (ret != null) name = ret.Value;
 
-            ret = node.Attributes.GetNamedItem("px");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("px") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("px", ref strRet);
-            if (strRet != null)
+            px = getAttr(node, "px", 0, out br);
+            py = getAttr(node, "py", 0, out br);
+            mDir = getAttr(node, "py", 0.0f, out br);
+            
+            mScaley = mScalex = getAttr(node, "scale", 1.0f, out br);
+            if (!br)
             {
-                px = strRet.castInt();
-            }
-
-            ret = node.Attributes.GetNamedItem("py");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("py") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("py", ref strRet);
-            if (strRet != null)
-            {
-                py = strRet.castInt();
+                mScalex = getAttr(node, "scaleX", 1.0f, out br);
+                mScaley = getAttr(node, "scaleY", 1.0f, out br);
             }
             
-
-            ret = node.Attributes.GetNamedItem("rotate");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("rotate") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("rotate", ref strRet);
-            if (strRet != null)
+            alignParesent = mAlign = getAttr(node, "align", EAlign.noAlign, out br);
+            var alignRet = getAttr(node, "alignParesent", EAlign.noAlign, out br);
+            if (br)
             {
-                mDir = strRet.castFloat();
-            }
-            
-
-            ret = node.Attributes.GetNamedItem("scaleX");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("scaleX") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("scaleX", ref strRet);
-            if (strRet != null)
-            {
-                mScalex = strRet.castFloat(1);
-            }
-            
-            ret = node.Attributes.GetNamedItem("scaleY");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("scaleY") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("scaleY", ref strRet);
-            if (strRet != null)
-            {
-                mScaley = strRet.castFloat(1);
+                alignParesent = alignRet;
             }
 
-            ret = node.Attributes.GetNamedItem("scale");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("scale") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("scale", ref strRet);
-            if (strRet != null)
+            mOffsety = mOffsetx = getAttr(node, "offset", 0, out br);
+            if (!br)
             {
-                mScalex = strRet.castFloat(1);
-                mScaley = mScalex;
+                mOffsetx = getAttr(node, "offsetX", 0, out br);
+                mOffsety = getAttr(node, "offsetY", 0, out br);
             }
 
-            ret = node.Attributes.GetNamedItem("align");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("align") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("align", ref strRet);
-            if (strRet != null) 
+            clip = getAttr(node, "clip", false, out br);
+            enable = getAttr(node, "enable", true, out br);
+            visible = getAttr(node, "visible", true, out br);
+
+            dragAble = getAttr(node, "dragAble", false, out br);
+            scaleAble = getAttr(node, "scaleAble", false, out br);
+            rotateAble = getAttr(node, "rotateAble", false, out br);
+
+            mLayout = getAttr(node, "layout", ELayout.none, out br);
+            mLayoutInverse = getAttr(node, "layoutInverse", false, out br);
+            wrap = getAttr(node, "wrap", false, out br);
+            layoutFilled = getAttr(node, "layoutFilled", false, out br);
+            shrinkAble = getAttr(node, "shrink", false, out br);
+            expandAbleY = expandAbleX = getAttr(node, "expand", false, out br);
+            if (!br)
             {
-                mAlign = (EAlign)Enum.Parse(typeof(EAlign), strRet);
-                mAlignParesent = mAlign;
+                expandAbleX = getAttr(node, "expandX", false, out br);
+                expandAbleY = getAttr(node, "expandY", false, out br);
             }
-
-            ret = node.Attributes.GetNamedItem("alignParesent");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("alignParesent") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("alignParesent", ref strRet);
-            if (strRet != null)
+            marginY = marginX = getAttr(node, "margin", 0, out br);
+            if (!br)
             {
-                mAlignParesent = (EAlign)Enum.Parse(typeof(EAlign), strRet);
+                marginX = getAttr(node, "marginX", 0, out br);
+                marginY = getAttr(node, "marginY", 0, out br);
             }
-
-            ret = node.Attributes.GetNamedItem("offset");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("offset") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("offset", ref strRet);
-            if (strRet != null)
+            paddingY = paddingX = getAttr(node, "padding", 0, out br);
+            if (!br)
             {
-                mOffsetx = ret.Value.castInt();
-                mOffsety = mOffsetx;
-            }
-            else
-            {
-                //note //offset is after align
-                ret = node.Attributes.GetNamedItem("offsetX");
-                strRet = (ret == null) ? UIRoot.Instance.getProperty("offsetX") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("offsetX", ref strRet);
-                if (strRet != null) 
-                {
-                    var ox = strRet.castInt(); mOffsetx = ox;
-                }
-
-                ret = node.Attributes.GetNamedItem("offsetY");
-                strRet = (ret == null) ? UIRoot.Instance.getProperty("offsetY") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("offsetY", ref strRet);
-                if (strRet != null) 
-                {
-                    var oy = strRet.castInt(); mOffsety = oy;
-                }
-            }
-
-
-            ret = node.Attributes.GetNamedItem("clip");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("clip") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("clip", ref strRet);
-            if (strRet != null)
-            {
-                clip = strRet.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("enable");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("enable") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("enable", ref strRet);
-            if (strRet != null)
-            {
-                enable = strRet.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("visible");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("visible") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("visible", ref strRet);
-            if (strRet != null)
-            {
-                visible = strRet.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("dragAble");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("dragAble") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("dragAble", ref strRet);
-            if (strRet != null)
-            {
-                dragAble = strRet.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("scaleAble");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("scaleAble") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("scaleAble", ref strRet);
-            if (strRet != null)
-            {
-                scaleAble = strRet.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("rotateAble");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("rotateAble") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("rotateAble", ref strRet);
-            if (strRet != null)
-            {
-                rotateAble = strRet.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("layout");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("layout") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("layout", ref strRet);
-            if (strRet != null)
-            {
-                mLayout = (ELayout)Enum.Parse(typeof(ELayout), strRet);
-            }
-
-            ret = node.Attributes.GetNamedItem("layoutInverse");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("layoutInverse") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("layoutInverse", ref strRet);
-            if (strRet != null)
-            {
-                mLayoutInverse = strRet.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("wrap");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("wrap") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("wrap", ref strRet);
-            if (strRet != null)
-            {
-                wrap = strRet.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("layoutFilled");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("layoutFilled") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("layoutFilled", ref strRet);
-            if (strRet != null)
-            {
-                layoutFilled = strRet.castBool();
-            }
-
-            ret = node.Attributes.GetNamedItem("shrink");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("shrink") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("shrink", ref strRet);
-            if (strRet != null)
-            {
-                shrinkAble = strRet.castBool();
-            }
-
-
-            ret = node.Attributes.GetNamedItem("expand");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("expand") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("expand", ref strRet);
-            if (strRet != null)
-            {
-                expandAbleX = strRet.castBool();
-                expandAbleY = expandAbleX;
-            }
-            else
-            {
-                ret = node.Attributes.GetNamedItem("expandX");
-                strRet = (ret == null) ? UIRoot.Instance.getProperty("expandX") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("expandX", ref strRet);
-                if (strRet != null)
-                {
-                    expandAbleX = strRet.castBool();
-                }
-
-                ret = node.Attributes.GetNamedItem("expandY");
-                strRet = (ret == null) ? UIRoot.Instance.getProperty("expandY") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("expandY", ref strRet);
-                if (strRet != null)
-                {
-                    expandAbleY = strRet.castBool();
-                }
-            }
-
-            ret = node.Attributes.GetNamedItem("margin");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("margin") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("margin", ref strRet);
-            if (strRet != null)
-            {
-                marginX = strRet.castInt();
-                marginY = marginX;
-            }
-            else
-            {
-                ret = node.Attributes.GetNamedItem("marginX");
-                strRet = (ret == null) ? UIRoot.Instance.getProperty("marginX") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("marginX", ref strRet);
-                if (strRet != null)
-                {
-                    marginX = strRet.castInt();
-                }
-
-                ret = node.Attributes.GetNamedItem("marginY");
-                strRet = (ret == null) ? UIRoot.Instance.getProperty("marginY") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("marginY", ref strRet);
-                if (strRet != null)
-                {
-                    marginY = strRet.castInt();
-                }
-            }
-
-            ret = node.Attributes.GetNamedItem("padding");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("padding") : ((ret.Value=="NA")?null:ret.Value);
-            UIRoot.Instance.setProperty("padding", ref strRet);
-            if (strRet != null)
-            {
-                paddingY = strRet.castInt();
-                paddingX = paddingY;
-            }
-            else
-            {
-                ret = node.Attributes.GetNamedItem("paddingX");
-                strRet = (ret == null) ? UIRoot.Instance.getProperty("paddingX") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("paddingX", ref strRet);
-                if (strRet != null)
-                {
-                    paddingX = strRet.castInt();
-                }
-
-                ret = node.Attributes.GetNamedItem("paddingY");
-                strRet = (ret == null) ? UIRoot.Instance.getProperty("paddingY") : ((ret.Value=="NA")?null:ret.Value);
-                UIRoot.Instance.setProperty("paddingY", ref strRet);
-                if (strRet != null)
-                {
-                    paddingY = strRet.castInt();
-                }
+                paddingX = getAttr(node, "paddingX", 0, out br);
+                paddingY = getAttr(node, "paddingY", 0, out br);
             }
 
             return node.ChildNodes;

@@ -60,31 +60,18 @@ namespace ns_YAUI
         {
             ui = new UIBlank();
             ui.fromXML(node);
+            int w, h;
+            bool br = true;
 
-            var ret = node.Attributes.GetNamedItem("length");
-            string strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value == "NA") ? null : ret.Value);
-            UIRoot.Instance.setProperty("length", ref strRet);
-            if (strRet != null)
+            h = w = getAttr<int>(node, "length", 64, out br);
+            if (!br)
             {
-                ui.width = strRet.castInt();
-                ui.height = ui.width;
+                w = getAttr<int>(node, "width", 64, out br);
+                h = getAttr<int>(node, "height", 64, out br);
             }
 
-            ret = node.Attributes.GetNamedItem("width");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ((ret.Value == "NA") ? null : ret.Value);
-            UIRoot.Instance.setProperty("width", ref strRet);
-            if (strRet != null)
-            {
-                ui.width = strRet.castInt();
-            }
-
-            ret = node.Attributes.GetNamedItem("height");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("height") : ((ret.Value == "NA") ? null : ret.Value);
-            UIRoot.Instance.setProperty("height", ref strRet);
-            if (strRet != null)
-            {
-                ui.height = strRet.castInt();
-            }
+            ui.width = w;
+            ui.height = h;
 
             ui.paresent = p;
             return node.ChildNodes;

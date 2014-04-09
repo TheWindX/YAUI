@@ -72,38 +72,26 @@ namespace ns_YAUI
             ui = new UIResizer();
             ui.fromXML(node);
 
-            var ret = node.Attributes.GetNamedItem("length");
-            string strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value == "NA") ? null : ret.Value);
-            UIRoot.Instance.setProperty("length", ref strRet);
-            if (strRet != null)
+            int w = 64;
+            int h = 64;
+            uint fc = 0xffaaaaaa;
+            uint sc = 0xffffffff;
+            bool br = true;
+
+            h = w = getAttr<int>(node, "length", 64, out br);
+            if (!br)
             {
-                ui.width = strRet.castInt();
-                ui.height = ui.width;
+                w = getAttr<int>(node, "width", 64, out br);
+                h = getAttr<int>(node, "height", 64, out br);
             }
 
-            ret = node.Attributes.GetNamedItem("width");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ((ret.Value == "NA") ? null : ret.Value);
-            UIRoot.Instance.setProperty("width", ref strRet);
-            if (strRet != null)
+            fc = (uint)getAttr<EColorUtil>(node, "color", EColorUtil.silver, out br);
+            if (!br)
             {
-                ui.width = strRet.castInt();
+                fc = getAttr(node, "color", (uint)(EColorUtil.silver), out br);
             }
 
-            ret = node.Attributes.GetNamedItem("height");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("height") : ((ret.Value == "NA") ? null : ret.Value);
-            UIRoot.Instance.setProperty("height", ref strRet);
-            if (strRet != null)
-            {
-                ui.height = strRet.castInt();
-            }
-
-            ret = node.Attributes.GetNamedItem("color");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("color") : ((ret.Value == "NA") ? null : ret.Value);
-            if (strRet != null)
-            {
-                (ui as UIResizer).mClient.fillColor = (uint)strRet.castHex();
-                UIRoot.Instance.setProperty("color", ref strRet);
-            }
+            (ui as UIResizer).mClient.fillColor = fc;
 
             UIRoot.Instance.loadXMLChildren(node.ChildNodes, (ui as UIResizer).mClient, null);
 

@@ -68,11 +68,11 @@ namespace ns_YAUI
         Stack<Dictionary<string, string>> mPropertyInnerMap = new Stack<Dictionary<string, string>>();
         Stack<Boolean> mPropertyInheret = new Stack<Boolean>();
 
-        internal void pushProperty(Dictionary<string, string> map = null)
+        internal void pushProperty(Dictionary<string, string> map = null, bool inherent = true)
         {
             if (map == null) map = new Dictionary<string, string>();
             mPropertyInnerMap.Push(map);
-            mPropertyInheret.Push(true);
+            mPropertyInheret.Push(inherent);
         }
 
         public void setPropertyInheret(bool inheret)
@@ -99,6 +99,7 @@ namespace ns_YAUI
         //继承获得属性
         public string getProperty(string key)
         {
+            if (mPropertyInheret.Count == 0) return null;
             if (!mPropertyInheret.Peek())
             {
                 return null;
@@ -111,8 +112,9 @@ namespace ns_YAUI
             if (ret == null)
             {
                 var m = mPropertyInnerMap.Pop();
+                var inherent = mPropertyInheret.Pop();
                 ret = getProperty(key);
-                pushProperty(m);
+                pushProperty(m, inherent);
             }
             else if (ret == "NA")
             {
