@@ -375,7 +375,7 @@ namespace ns_YAUI
         public UIWidget loadFromXML(string xml)
         {
             UIWidget nodeRet = null;
-            pushProperty();
+            //pushProperty();
             try
             {   
                 XmlDocument doc = new XmlDocument();
@@ -389,7 +389,7 @@ namespace ns_YAUI
                 }
             }
             catch (Exception e) { mLog(e.ToString()); }
-            popProperty();
+            //popProperty();
             return nodeRet;
         }
         #endregion
