@@ -72,7 +72,7 @@ namespace ns_YAUI
             get { return "line"; }
         }
 
-        public override bool testPick(Point pos)
+        public override bool testSelfPick(Point pos)
         {
             return true;
         }

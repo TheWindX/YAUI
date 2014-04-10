@@ -16,6 +16,13 @@ using System.Xml;
 
 namespace ns_YAUI
 {
+    public enum EStyle
+    {
+        normal,
+        bold,
+        italic,
+    }
+
     public class UILable : UIWidget
     {
         string mText = "template";
@@ -24,13 +31,7 @@ namespace ns_YAUI
         uint mColor = 0xffffffff;
         Brush mBrush;
         Rectangle mRect = new Rectangle();
-
-        public enum EStyle
-        {
-            normal,
-            bold,
-            italic,
-        }
+        
         EStyle mStyle = EStyle.normal;
 
         public UILable(string t = "Template", int sz = 12, EStyle st = EStyle.normal, uint color = 0xffffffff)
@@ -91,7 +92,7 @@ namespace ns_YAUI
             get { return "lable"; }
         }
 
-        public override bool testPick(Point pos)
+        public override bool testSelfPick(Point pos)
         {
             return true;
         }
@@ -109,19 +110,17 @@ namespace ns_YAUI
             string text = "template";
             int size = 12;
             uint color = 0xffffffff;
-            EStyle style = EStyle.bold;
+            EStyle style = EStyle.normal;
+            bool br = false;
 
-            var ret = node.Attributes.GetNamedItem("text");
-            if (ret != null) text = ret.Value;
-
-            ret = node.Attributes.GetNamedItem("size");
-            if (ret != null) size = ret.Value.castInt(12);
-
-            ret = node.Attributes.GetNamedItem("color");
-            if (ret != null) color = ret.Value.castHex(0xffffffff);
-
-            ret = node.Attributes.GetNamedItem("style");
-            if (ret != null) style = (EStyle)Enum.Parse(typeof(EStyle), ret.Value);
+            text = getAttr(node, "text", "template", out br);
+            size = getAttr(node, "size", 12, out br);
+            color = (uint)getAttr<EColorUtil>(node, "color", EColorUtil.silver, out br);
+            if (!br)
+            {
+                color = getAttr(node, "color", (uint)(EColorUtil.silver), out br);
+            }
+            style = getAttr(node, "color", EStyle.normal, out br);
 
             ui = new UILable(text, size, style, color);
             ui.fromXML(node);

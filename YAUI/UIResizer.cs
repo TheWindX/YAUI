@@ -17,11 +17,11 @@ namespace ns_YAUI
             width = 256;
             height = 256;
             mClient = appendFromXML(@"
-<rect noInherent='true' length='512' expand='true'>
+<rect derived='true' length='512' expand='true'>
 </rect>
 ") as UIRect;
             mResizer = appendFromXML(@"
-<rect noInherent='true' length='32' align='rightBottom'>
+<rect derived='true' length='32' align='rightBottom'>
 </rect>
 ") as UIRect;
             int spx = 0;

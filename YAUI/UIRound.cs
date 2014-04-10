@@ -104,7 +104,7 @@ namespace ns_YAUI
             get { return "round"; }
         }
 
-        public override bool testPick(Point pos)
+        public override bool testSelfPick(Point pos)
         {
             float a = (float)_w / 2;
             float b = (float)_h / 2;

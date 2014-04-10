@@ -22,7 +22,7 @@ namespace ns_YAUI
             get { return "stub"; }
         }
 
-        public override bool pickRectTest
+        public override bool testRectPick
         {
             get
             {
@@ -30,7 +30,7 @@ namespace ns_YAUI
             }
         }
 
-        public override bool testPick(Point pos)
+        public override bool testSelfPick(Point pos)
         {
             return false;
         }

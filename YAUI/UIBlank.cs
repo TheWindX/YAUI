@@ -27,6 +27,15 @@ namespace ns_YAUI
             }
         }
 
+        //test children directly
+        public override bool testRectPick
+        {
+            get
+            {
+                return false;
+            }
+        }
+
         public override string typeName
         {
             get { return "blank"; }

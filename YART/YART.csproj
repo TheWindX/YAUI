@@ -7,7 +7,7 @@
     <ProjectGuid>{ED3D8A8C-6B4E-4804-9392-7F772953B437}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ns_YAUI</RootNamespace>
+    <RootNamespace>ns_YART</RootNamespace>
     <AssemblyName>YART</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -59,8 +59,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="runtime.cs" />
     <Compile Include="testAll.cs" />
+    <Compile Include="testPackage.cs" />
+    <Compile Include="testPackageItem_package.cs" />
     <Compile Include="testWindow.cs" />
-    <Compile Include="UIPackageTemplate.cs" />
+    <Compile Include="UIPackage.cs" />
+    <Compile Include="UIPackageItem_package.cs" />
     <Compile Include="window.cs" />
   </ItemGroup>
   <ItemGroup>

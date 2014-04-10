@@ -144,7 +144,7 @@ namespace ns_YAUI
             get { return "Arrow"; }
         }
 
-        public override bool testPick(Point pos)
+        public override bool testSelfPick(Point pos)
         {
             switch (mForward)
             {

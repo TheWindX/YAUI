@@ -1,4 +1,9 @@
-﻿using System;
+﻿/* author: xiaofeng.li
+ * mail: 453588006@qq.com
+ * desc: 
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +11,11 @@ using System.Threading.Tasks;
 
 namespace ns_YART
 {
-    public class any : InheriteBase
+    using ns_YAUI;
+    //any type
+    public class nullType : InheriteBase
     {
-        public override Type[] inheritFrom()
+        public override Type[] deriveFrom()
         {
             return new Type[]{};
         }
@@ -21,25 +28,35 @@ namespace ns_YART
             return base.stringForm(space) + name;
         }
 
+        public override Type[] deriveFrom()
+        {
+            return new Type[]{ typeof(nullType) };
+        }
+
+        /// methods
         public string name
         {
             get;
             set;
         }
-        List<Pacakge> mParesents = new List<Pacakge>();
-        public List<Pacakge> locations()
+        List<Packge> mParesents = new List<Packge>();
+        public List<Packge> locations()
         {
             return mParesents;
         }
 
-        public override Type[] inheritFrom()
-        {
-            return new Type[]{ typeof(any) };
-        }
+        //to be overrided
+        //ui in package
+        public Func<UIWidget> funcGetUiWidget = () => null;
     }
 
-    public class Pacakge : InheriteBase
+    public class Packge : InheriteBase
     {
+        public override Type[] deriveFrom()
+        {
+            return new Type[] { typeof(PackageItem) };
+        }
+
         public override string stringForm(int space)
         {
             string p = cast<PackageItem>().stringForm(space);
@@ -54,6 +71,24 @@ namespace ns_YART
         }
 
         List<PackageItem> mItems = new List<PackageItem>();
+
+
+        public Packge()
+        {
+            var pkg = cast<PackageItem>();
+            pkg.funcGetUiWidget = () =>
+            {
+                return new UIPackageItem_package(this);
+            };
+        }
+
+        public Packge(string name):this()
+        {
+            var selfItem = cast<PackageItem>();
+            selfItem.name = name;
+        }
+
+        /// methods
         public bool addItem(PackageItem item)//if true, it is in package
         {
             var ls = item.locations();
@@ -81,9 +116,9 @@ namespace ns_YART
             return true;
         }
 
-        public Pacakge addPackage(string pname)
+        public Packge addPackage(string pname)
         {
-            var p = new Pacakge();
+            var p = new Packge();
             var it = p.cast<PackageItem>();
             it.name = pname;
             if (addItem(it))
@@ -101,9 +136,14 @@ namespace ns_YART
             return removeItem(item);
         }
 
-        public override Type[] inheritFrom()
+        public List<PackageItem> getItems()
         {
-            return new Type[] { typeof(PackageItem) };
+            return mItems;
+        }
+
+        UIWidget getUI()
+        {
+            return new UIPackage(this);
         }
     }
 }

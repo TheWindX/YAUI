@@ -1,4 +1,9 @@
-﻿using System;
+﻿/* author: xiaofeng.li
+ * mail: 453588006@qq.com
+ * desc: multi inherent base
+ * */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +28,7 @@ namespace ns_YART
             }
         }
 
-        public abstract Type[] inheritFrom();
+        public abstract Type[] deriveFrom();
         public virtual string stringForm(int space) 
         {
             if (space == 0) return ""; 
@@ -44,7 +49,7 @@ namespace ns_YART
             {
                 return true;
             }
-            var ls = inheritFrom();
+            var ls = deriveFrom();
             foreach (Type elem in ls)
             {
                 if (elem == t)

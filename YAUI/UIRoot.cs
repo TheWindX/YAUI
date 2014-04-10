@@ -66,24 +66,24 @@ namespace ns_YAUI
         Dictionary<string, Stack<XmlElement>> mName2InnerTemplate = new Dictionary<string, Stack<XmlElement>>();
 
         Stack<Dictionary<string, string>> mPropertyInnerMap = new Stack<Dictionary<string, string>>();
-        Stack<Boolean> mPropertyInheret = new Stack<Boolean>();
+        Stack<Boolean> mPropertyderived = new Stack<Boolean>();
 
-        internal void pushProperty(Dictionary<string, string> map = null, bool inherent = true)
+        internal void pushProperty(Dictionary<string, string> map = null, bool derived = true)
         {
             if (map == null) map = new Dictionary<string, string>();
             mPropertyInnerMap.Push(map);
-            mPropertyInheret.Push(inherent);
+            mPropertyderived.Push(derived);
         }
 
-        public void setPropertyInheret(bool inheret)
+        public void setPropertyderived(bool derived)
         {
-            var b = mPropertyInheret.Peek();
-            b = inheret;
+            var b = mPropertyderived.Peek();
+            b = derived;
         }
 
         public void setProperty(string key, ref string value)
         {
-            var b = mPropertyInheret.Peek();
+            var b = mPropertyderived.Peek();
             if (!b) return;
             if (value == "") return;
             if (value == null) return;
@@ -99,8 +99,8 @@ namespace ns_YAUI
         //继承获得属性
         public string getProperty(string key)
         {
-            if (mPropertyInheret.Count == 0) return null;
-            if (!mPropertyInheret.Peek())
+            if (mPropertyderived.Count == 0) return null;
+            if (!mPropertyderived.Peek())
             {
                 return null;
             }
@@ -112,9 +112,9 @@ namespace ns_YAUI
             if (ret == null)
             {
                 var m = mPropertyInnerMap.Pop();
-                var inherent = mPropertyInheret.Pop();
+                var derived = mPropertyderived.Pop();
                 ret = getProperty(key);
-                pushProperty(m, inherent);
+                pushProperty(m, derived);
             }
             else if (ret == "NA")
             {
@@ -126,7 +126,7 @@ namespace ns_YAUI
         internal void popProperty()
         {
             mPropertyInnerMap.Pop();
-            mPropertyInheret.Pop();
+            mPropertyderived.Pop();
         }
 
         void innerTemplatePush(string name, XmlNode node)

@@ -108,7 +108,7 @@ namespace ns_YAUI
             get { return "rect"; }
         }
 
-        public override bool testPick(Point pos)
+        public override bool testSelfPick(Point pos)
         {
             return true;
         }

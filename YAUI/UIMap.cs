@@ -48,7 +48,7 @@ namespace ns_YAUI
             get { return "map"; }
         }
 
-        public override bool pickRectTest
+        public override bool testRectPick
         {
             get
             {
@@ -56,7 +56,7 @@ namespace ns_YAUI
             }
         }
 
-        public override bool testPick(Point pos)
+        public override bool testSelfPick(Point pos)
         {
             return true;
         }

@@ -842,7 +842,7 @@ namespace ns_YAUI
             vertical,
             horizon,
         }
-        public ELayout mLayout = ELayout.none;
+        public ELayout layout = ELayout.none;
         public bool mLayoutInverse = false;
 
         public bool wrap = false;
@@ -882,7 +882,7 @@ namespace ns_YAUI
                     continue;
                 }
                 
-                if (mLayout == ELayout.vertical)
+                if (layout == ELayout.vertical)
                 {
                     if (c.expandAbleY)
                     {
@@ -926,7 +926,7 @@ namespace ns_YAUI
                         rc.Size = new Size();
                     }
                 }
-                else if (mLayout == ELayout.horizon)
+                else if (layout == ELayout.horizon)
                 {
                     if (c.expandAbleX)
                     {
@@ -994,16 +994,20 @@ namespace ns_YAUI
                 for (int i = mChildrent.Count - 1; i >= 0; --i)
                 {
                     var c = mChildrent[i] as UIWidget;
+                    if (c.align != EAlign.noAlign) continue;
                     c.px = c.px - left.Value;
                     c.py = c.py - top.Value;
                 }
-
-                width = right.Value - left.Value;
-                height = bottom.Value - top.Value;
+                if (left != null || right != null)
+                {
+                    width = right.Value - left.Value;
+                    height = bottom.Value - top.Value;
+                }
+                adjustAlign();
             }
             else if(layoutFilled && lastLayoutUi != null) //layout的最后一个填满
             {
-                if (mLayout == ELayout.horizon)
+                if (layout == ELayout.horizon)
                 {
                     lastLayoutUi.height = height - lastLayoutUi.py - paddingY - lastLayoutUi.marginY;
 
@@ -1017,7 +1021,7 @@ namespace ns_YAUI
                         lastLayoutUi.width = width - lastLayoutUi.px - paddingX - lastLayoutUi.marginX;
                     }
                 }
-                else if (mLayout == ELayout.vertical)
+                else if (layout == ELayout.vertical)
                 {
                     lastLayoutUi.width = width - lastLayoutUi.px - paddingX - lastLayoutUi.marginX;
 
@@ -1482,21 +1486,28 @@ namespace ns_YAUI
                     if(br)
                         return (T)Convert.ChangeType(layout, typeof(T)); //strRet.castInt();
                 }
+                else if(typeof(T) == typeof(EStyle))
+                {
+                    EStyle style;
+                    var br = Enum.TryParse(strRet, true, out style); //(typeof(EAlign), strRet);
+                    if (br)
+                        return (T)Convert.ChangeType(style, typeof(T)); //strRet.castInt();
+                }
             }
             valid = false;
-            return defaultVal; //strRet.castInt();
+            return defaultVal; 
         }
 
         public XmlNodeList fromXML(XmlNode node)
         {
             string strRet = null;
             bool br = true;
-            UIRoot.Instance.setPropertyInheret(false);
-            var ret = node.Attributes.GetNamedItem("inherent");
+            UIRoot.Instance.setPropertyderived(false);
+            var ret = node.Attributes.GetNamedItem("derived");
             if (ret != null)
             {
                 bool v = ret.Value.castBool(false);
-                UIRoot.Instance.setPropertyInheret(v);
+                UIRoot.Instance.setPropertyderived(v);
             }
 
             ret = node.Attributes.GetNamedItem("name");
@@ -1535,7 +1546,7 @@ namespace ns_YAUI
             scaleAble = getAttr(node, "scaleAble", false, out br);
             rotateAble = getAttr(node, "rotateAble", false, out br);
 
-            mLayout = getAttr(node, "layout", ELayout.none, out br);
+            layout = getAttr(node, "layout", ELayout.none, out br);
             mLayoutInverse = getAttr(node, "layoutInverse", false, out br);
             wrap = getAttr(node, "wrap", false, out br);
             layoutFilled = getAttr(node, "layoutFilled", false, out br);
@@ -1574,13 +1585,13 @@ namespace ns_YAUI
 
         #region others
 
-        public virtual bool testPick(Point pos)
+        public virtual bool testSelfPick(Point pos)
         {
             return true;
         }
 
 
-        public virtual bool pickRectTest
+        public virtual bool testRectPick
         {
             get
             {
@@ -1602,7 +1613,7 @@ namespace ns_YAUI
             t.TransformPoints(ps);
             var newpos = ps[0];
 
-            if (pickRectTest)
+            if (testRectPick)
             {
                 var r = drawRect;
                 if (!r.Contains(newpos))
@@ -1628,7 +1639,7 @@ namespace ns_YAUI
                 return true;
             }
 
-            bool ret = testPick(newpos);
+            bool ret = testSelfPick(newpos);
             if (!ret)
             {
                 ui = null;

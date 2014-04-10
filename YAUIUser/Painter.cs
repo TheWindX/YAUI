@@ -1,7 +1,7 @@
 /*
  * author: xiaofeng.li
  * mail: 453588006@qq.com
- * desc: driver for paint and client IO
+ * desc: main painter window, driver for paint and client IO
  * */
 
 using System;
@@ -13,8 +13,6 @@ using Microsoft.CSharp;
 using System.Threading;
 
 using System.Runtime.InteropServices;
-
-
 
 
 namespace ns_YAUI
@@ -137,6 +135,7 @@ namespace ns_YAUI
             gxOff = Graphics.FromImage(m_bmpOffscreen);
 #else
             gxOff = e.Graphics;
+            gxOff.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
 #endif
             if (evtPaint != null)
                 evtPaint(gxOff);

@@ -12,7 +12,7 @@ namespace ns_YART
     {
         public void fo() { Console.WriteLine("fa"); }
 
-        public override Type[] inheritFrom()
+        public override Type[] deriveFrom()
         {
             return new Type[]{};
         }
@@ -22,7 +22,7 @@ namespace ns_YART
     {
         public void fo() { Console.WriteLine("fb"); }
 
-        public override Type[] inheritFrom()
+        public override Type[] deriveFrom()
         {
             return new Type[] {typeof(A) };
         }
@@ -32,7 +32,7 @@ namespace ns_YART
     {
         public void fo() { Console.WriteLine("fc"); }
 
-        public override Type[] inheritFrom()
+        public override Type[] deriveFrom()
         {
             return new Type[] { typeof(A) };
         }
@@ -42,7 +42,7 @@ namespace ns_YART
     {
         public void fo() { Console.WriteLine("fd"); }
 
-        public override Type[] inheritFrom()
+        public override Type[] deriveFrom()
         {
             return new Type[] { typeof(B), typeof(C) };
         }
@@ -52,7 +52,9 @@ namespace ns_YART
     {
         public testAll()
         {
-            var _1 = testWindow.Instance;
+            //var _1 = testWindow.Instance;
+            //var _2 = testPackageItem_package.Instance;
+            var _3 = testPackage.Instance;
         }
     }
 }

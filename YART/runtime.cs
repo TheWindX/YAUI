@@ -10,7 +10,7 @@ namespace ns_YART
 {
     class runtime : Singleton<runtime>
     {
-        public Pacakge mRoot;
+        public Packge mRoot;
         public runtime()
         {
             
