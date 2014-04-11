@@ -62,6 +62,8 @@
     <Compile Include="testPackage.cs" />
     <Compile Include="testPackageItem_package.cs" />
     <Compile Include="testWindow.cs" />
+    <Compile Include="test_UIEditor.cs" />
+    <Compile Include="UIEditor.cs" />
     <Compile Include="UIPackage.cs" />
     <Compile Include="UIPackageItem_package.cs" />
     <Compile Include="window.cs" />

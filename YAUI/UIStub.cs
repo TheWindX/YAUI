@@ -15,7 +15,7 @@ using System.Xml;
 
 namespace ns_YAUI
 {
-    class UIStub : UIWidget
+    public class UIStub : UIWidget
     {
         public override string typeName
         {

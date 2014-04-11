@@ -22,16 +22,17 @@ namespace ns_YART
             marginX = 5;
             marginY = 5;
             layout = ELayout.horizon;
+            
+            mTypeRect = appendFromXML(@"
+            <rect padding='2' clip='true' shrink='true'>
+                <lable size='12' text='dir' color='yellow'></lable>
+            </rect>") as UIRect;
+
             mNameRect = appendFromXML(@"
             <rect padding='2' clip='true' shrink='true'></rect>
             ") as UIRect;
             mName = mNameRect.appendFromXML(@"
             <lable size='12' color='black'></lable>") as UILable;
-
-            mTypeRect = appendFromXML(@"
-            <rect padding='2' clip='true' shrink='true'>
-                <lable size='12' text='dir' color='yellow'></lable>
-            </rect>") as UIRect;
             setName(pkg.cast<PackageItem>().name);
         }
 

@@ -213,6 +213,12 @@ namespace ns_YAUI
 
         public void updateFixpoint(int x, int y)
         {
+            var delta = updateFixpointDelta(x, y);
+            position = new Point(px + delta.X, py + delta.Y);
+        }
+
+        public Point updateFixpointDelta(int x, int y)
+        {
             var ppt = invertTransformParesentAbs(new Point(x, y));
             Matrix m = new Matrix();
             m.Rotate(mDir);
@@ -221,7 +227,7 @@ namespace ns_YAUI
             var pts = new Point[] { fp };
             m.TransformPoints(pts);
             var ppt1 = pts[0];
-            position = new Point(ppt.X - ppt1.X, ppt.Y - ppt1.Y);
+            return new Point(ppt.X - ppt1.X-px, ppt.Y - ppt1.Y-py);
         }
     }
 }

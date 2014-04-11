@@ -118,7 +118,7 @@ namespace ns_YAUI
             color = (uint)getAttr<EColorUtil>(node, "color", EColorUtil.silver, out br);
             if (!br)
             {
-                color = getAttr(node, "color", (uint)(EColorUtil.silver), out br);
+                color = getAttr(node, "color", (uint)(EColorUtil.white), out br);
             }
             style = getAttr(node, "color", EStyle.normal, out br);
 

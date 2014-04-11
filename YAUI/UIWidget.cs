@@ -90,11 +90,12 @@ namespace ns_YAUI
                 yield return mChildrent[i] as UIWidget;
             }
         }
-        
+
         public UIWidget childOf(string name)
         {
             List<UIWidget> noNames = new List<UIWidget>();
-            foreach (var elem in children() )
+            var clist = children().ToList();
+            foreach (var elem in clist)
             {
                 if (elem.name == name)
                 {
@@ -131,6 +132,7 @@ namespace ns_YAUI
             }
             return p;
         }
+
 
         public UIWidget topParesent
         {
@@ -274,7 +276,7 @@ namespace ns_YAUI
         {
             get
             {
-                return 0;
+                return drawRect.Width;
             }
             set
             {
@@ -285,7 +287,7 @@ namespace ns_YAUI
         {
             get
             {
-                return 0;
+                return drawRect.Height;
             }
             set
             {
@@ -453,6 +455,13 @@ namespace ns_YAUI
         {
             get { return mName; }
             set {mName = value;}
+        }
+
+        string mDeubgName;
+        public string debugName
+        {
+            get { return mDeubgName; }
+            set { mDeubgName = value; }
         }
 
         protected bool mVisiable = true;
@@ -848,7 +857,7 @@ namespace ns_YAUI
         public bool wrap = false;
         public bool layoutFilled = false;//最后一个layout的，填满
         //这个因与渲染的遍历次序不同,因此不能放到draw里
-        protected virtual void adjustLayout()
+        public virtual void adjustLayout()
         {
             if (!enable) return;
 
@@ -1035,6 +1044,8 @@ namespace ns_YAUI
                         lastLayoutUi.height = height - lastLayoutUi.py - paddingY - lastLayoutUi.marginY;
                     }
                 }
+                //size 调整后应重新adjustLayout
+                lastLayoutUi.adjustLayout();
             }
 
             for (int i = 0; i < noInLayout.Count; ++i)
@@ -1437,7 +1448,8 @@ namespace ns_YAUI
         {
             valid = true;
             var ret = node.Attributes.GetNamedItem(attName);
-            string strRet = (ret == null) ? UIRoot.Instance.getProperty(attName) : ((ret.Value=="NA")?null:ret.Value);
+            string strRet = (ret == null) ? UIRoot.Instance.getProperty(attName) : ((ret.Value.ToLower()=="na")?null:ret.Value);
+            if(strRet != null)strRet = strRet.ToLower();
             UIRoot.Instance.setProperty(attName, ref strRet);
             if (strRet != null)
             {
@@ -1500,6 +1512,7 @@ namespace ns_YAUI
 
         public XmlNodeList fromXML(XmlNode node)
         {
+            //在UI*.fromXML之前调用?
             string strRet = null;
             bool br = true;
             UIRoot.Instance.setPropertyderived(false);
@@ -1512,62 +1525,64 @@ namespace ns_YAUI
 
             ret = node.Attributes.GetNamedItem("name");
             if (ret != null) name = ret.Value;
+            ret = node.Attributes.GetNamedItem("debugName");
+            if (ret != null) debugName = ret.Value;
 
-            px = getAttr(node, "px", 0, out br);
-            py = getAttr(node, "py", 0, out br);
-            mDir = getAttr(node, "py", 0.0f, out br);
-            
-            mScaley = mScalex = getAttr(node, "scale", 1.0f, out br);
+            px = getAttr(node, "px", px, out br);
+            py = getAttr(node, "py", py, out br);
+            mDir = getAttr(node, "dir", mDir, out br);
+
+            mScaley = mScalex = getAttr(node, "scale", mScalex, out br);
             if (!br)
             {
-                mScalex = getAttr(node, "scaleX", 1.0f, out br);
-                mScaley = getAttr(node, "scaleY", 1.0f, out br);
+                mScalex = getAttr(node, "scaleX", mScalex, out br);
+                mScaley = getAttr(node, "scaleY", mScaley, out br);
             }
-            
-            alignParesent = mAlign = getAttr(node, "align", EAlign.noAlign, out br);
-            var alignRet = getAttr(node, "alignParesent", EAlign.noAlign, out br);
+
+            alignParesent = mAlign = getAttr(node, "align", mAlign, out br);
+            var alignRet = getAttr(node, "alignParesent", alignParesent, out br);
             if (br)
             {
                 alignParesent = alignRet;
             }
 
-            mOffsety = mOffsetx = getAttr(node, "offset", 0, out br);
+            mOffsety = mOffsetx = getAttr(node, "offset", mOffsetx, out br);
             if (!br)
             {
-                mOffsetx = getAttr(node, "offsetX", 0, out br);
-                mOffsety = getAttr(node, "offsetY", 0, out br);
+                mOffsetx = getAttr(node, "mOffsetx", mOffsetx, out br);
+                mOffsety = getAttr(node, "offsetY", mOffsety, out br);
             }
 
-            clip = getAttr(node, "clip", false, out br);
-            enable = getAttr(node, "enable", true, out br);
-            visible = getAttr(node, "visible", true, out br);
+            clip = getAttr(node, "clip", clip, out br);
+            enable = getAttr(node, "enable", enable, out br);
+            visible = getAttr(node, "visible", visible, out br);
 
-            dragAble = getAttr(node, "dragAble", false, out br);
-            scaleAble = getAttr(node, "scaleAble", false, out br);
-            rotateAble = getAttr(node, "rotateAble", false, out br);
+            dragAble = getAttr(node, "dragAble", dragAble, out br);
+            scaleAble = getAttr(node, "scaleAble", scaleAble, out br);
+            rotateAble = getAttr(node, "rotateAble", rotateAble, out br);
 
-            layout = getAttr(node, "layout", ELayout.none, out br);
-            mLayoutInverse = getAttr(node, "layoutInverse", false, out br);
-            wrap = getAttr(node, "wrap", false, out br);
-            layoutFilled = getAttr(node, "layoutFilled", false, out br);
-            shrinkAble = getAttr(node, "shrink", false, out br);
-            expandAbleY = expandAbleX = getAttr(node, "expand", false, out br);
+            layout = getAttr(node, "layout", layout, out br);
+            mLayoutInverse = getAttr(node, "layoutInverse", mLayoutInverse, out br);
+            wrap = getAttr(node, "wrap", wrap, out br);
+            layoutFilled = getAttr(node, "layoutFilled", layoutFilled, out br);
+            shrinkAble = getAttr(node, "shrink", shrinkAble, out br);
+            expandAbleY = expandAbleX = getAttr(node, "expand", expandAbleX, out br);
             if (!br)
             {
-                expandAbleX = getAttr(node, "expandX", false, out br);
-                expandAbleY = getAttr(node, "expandY", false, out br);
+                expandAbleX = getAttr(node, "expandX", expandAbleX, out br);
+                expandAbleY = getAttr(node, "expandY", expandAbleY, out br);
             }
-            marginY = marginX = getAttr(node, "margin", 0, out br);
+            marginY = marginX = getAttr(node, "margin", marginX, out br);
             if (!br)
             {
-                marginX = getAttr(node, "marginX", 0, out br);
-                marginY = getAttr(node, "marginY", 0, out br);
+                marginX = getAttr(node, "marginX", marginX, out br);
+                marginY = getAttr(node, "marginY", marginY, out br);
             }
-            paddingY = paddingX = getAttr(node, "padding", 0, out br);
+            paddingY = paddingX = getAttr(node, "padding", paddingX, out br);
             if (!br)
             {
-                paddingX = getAttr(node, "paddingX", 0, out br);
-                paddingY = getAttr(node, "paddingY", 0, out br);
+                paddingX = getAttr(node, "paddingX", paddingX, out br);
+                paddingY = getAttr(node, "paddingY", paddingY, out br);
             }
 
             return node.ChildNodes;

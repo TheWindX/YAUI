@@ -10,20 +10,20 @@ namespace YAUIUser
 
     class testLayout : Singleton<testLayout>
     {
+        const string XMLPAGE = @"
+<resizer name='root' length='256' layout='horizon' layoutInverse='true' layoutFilled='true' expandY='true'>
+    <rect name='split' width='8' expandY='true' color='red'></rect>
+    <rect layout='vertical' layoutFilled='true' color='yellow'>
+        <rect name='tab' color='orange' width='128' height='24'>
+            <lable name='tabName' text='tab' align='center'></lable>
+        </rect>
+        <rect name='client' color='blue'></rect>
+    </rect>
+</resizer>
+";
         public testLayout()
         {
-            UIRoot.Instance.root.appendFromXML(
-@"
-    <rect name='r1' length='512' layout='vertical' padding='12' clip='true'>
-        <rect height='128' layout='horizon' padding='6' margin='3'>
-            <rect length='64' margin='2'></rect>
-            <rect text='5678'></rect>
-        </rect>
-        <rect height='60' layout='horizon'></rect>
-        <rect></rect>
-        <rect></rect>
-    </rect>
-");
+            UIRoot.Instance.root.appendFromXML(XMLPAGE);
 
         }
     }

@@ -54,7 +54,8 @@ namespace ns_YART
         {
             //var _1 = testWindow.Instance;
             //var _2 = testPackageItem_package.Instance;
-            var _3 = testPackage.Instance;
+            //var _3 = testPackage.Instance;
+            var _4 = test_UIEditor.Instance;
         }
     }
 }

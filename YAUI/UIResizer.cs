@@ -17,11 +17,11 @@ namespace ns_YAUI
             width = 256;
             height = 256;
             mClient = appendFromXML(@"
-<rect derived='true' length='512' expand='true'>
+<rect debugName='UIResizer_client' derived='true' length='512' clip='true' expand='true'>
 </rect>
 ") as UIRect;
             mResizer = appendFromXML(@"
-<rect derived='true' length='32' align='rightBottom'>
+<rect debugName='UIResizer_resizer' derived='true' length='32' align='rightBottom'>
 </rect>
 ") as UIRect;
             int spx = 0;
@@ -67,10 +67,18 @@ namespace ns_YAUI
             ui.paresent = mClient;
         }
 
+        public UIWidget getClient()
+        {
+            return mClient;
+        }
+
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
             ui = new UIResizer();
-            ui.fromXML(node);
+            //var stubNode = node.OwnerDocument.CreateNode(XmlNodeType.Element, "nouse", "");//TODO, how to remove
+            //ui.fromXML(stubNode);
+            var ret = node.Attributes.GetNamedItem("name");
+            if (ret != null) ui.name = ret.Value;
 
             int w = 64;
             int h = 64;
@@ -93,6 +101,9 @@ namespace ns_YAUI
 
             UIRoot.Instance.loadXMLChildren(node.ChildNodes, (ui as UIResizer).mClient, null);
             var rsz = (ui as UIResizer);
+            rsz.mClient.fromXML(node);//属性属于client
+            rsz.mClient.name = null;//name 是 resizer的属性
+
             rsz.mClient.fillColor = fc;
             ui.width = w;
             ui.height = h;
