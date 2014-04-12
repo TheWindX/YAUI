@@ -17,10 +17,9 @@ namespace ns_YART
         public void init()
         {
             var editor = new UIEditor();
-            editor.pushPage("asdf");
-            editor.pushPage("asdf1");
-            editor.pushPage("asdf2");
-            editor.pushPage("asdf3");
+            editor.pushPage("main");
+            editor.pushPage("sub");
+            
             editor.paresent = UIRoot.Instance.root;
         }
     }

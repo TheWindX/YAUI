@@ -77,28 +77,27 @@ namespace ns_YAUI
 
         public void setPropertyderived(bool derived)
         {
-            var b = mPropertyderived.Peek();
-            b = derived;
+            mPropertyderived.Pop();
+            mPropertyderived.Push(derived);
         }
 
         public void setProperty(string key, ref string value)
         {
-            var b = mPropertyderived.Peek();
-            if (!b) return;
             if (value == "") return;
             if (value == null) return;
-            if (value[0] == '*') value = value.Substring(1);
-            else return;
-            var map = mPropertyInnerMap.Peek();
-            if (value == "")
-                map[key] = "NA";
-            else
+            value = value.ToLower();
+            if (value[0] == '*')
+            {
+                value = value.Substring(1);
+                var map = mPropertyInnerMap.Peek();
                 map[key] = value;
+            }
         }
 
         //继承获得属性
         public string getProperty(string key)
         {
+            if (key == null && key.Count() == 0) return null;
             if (mPropertyderived.Count == 0) return null;
             if (!mPropertyderived.Peek())
             {
@@ -116,7 +115,7 @@ namespace ns_YAUI
                 ret = getProperty(key);
                 pushProperty(m, derived);
             }
-            else if (ret == "NA")
+            else if (ret == "")//no invalid
             {
                 return null;
             }

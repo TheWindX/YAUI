@@ -1448,8 +1448,15 @@ namespace ns_YAUI
         {
             valid = true;
             var ret = node.Attributes.GetNamedItem(attName);
-            string strRet = (ret == null) ? UIRoot.Instance.getProperty(attName) : ((ret.Value.ToLower()=="na")?null:ret.Value);
-            if(strRet != null)strRet = strRet.ToLower();
+            string strRet = null;
+            if(ret == null)
+            {
+                strRet = UIRoot.Instance.getProperty(attName);
+            }
+            else
+            {
+                strRet = ret.Value;
+            }
             UIRoot.Instance.setProperty(attName, ref strRet);
             if (strRet != null)
             {
@@ -1515,7 +1522,7 @@ namespace ns_YAUI
             //在UI*.fromXML之前调用?
             string strRet = null;
             bool br = true;
-            UIRoot.Instance.setPropertyderived(false);
+            UIRoot.Instance.setPropertyderived(true);
             var ret = node.Attributes.GetNamedItem("derived");
             if (ret != null)
             {

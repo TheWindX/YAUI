@@ -10,18 +10,18 @@ namespace ns_YAUI
 {
     public class UIResizer : UIBlank
     {
-        internal UIRect mClient = null;
+        internal UIBlank mClient = null;
         internal UIRect mResizer = null;
         public UIResizer()
         {
             width = 256;
             height = 256;
             mClient = appendFromXML(@"
-<rect debugName='UIResizer_client' derived='true' length='512' clip='true' expand='true'>
-</rect>
-") as UIRect;
+<blank debugName='UIResizer_client' length='512' clip='true' expand='true'>
+</blank>
+") as UIBlank;
             mResizer = appendFromXML(@"
-<rect debugName='UIResizer_resizer' derived='true' length='32' align='rightBottom'>
+<rect debugName='UIResizer_resizer' length='32' align='rightBottom'>
 </rect>
 ") as UIRect;
             int spx = 0;
@@ -104,7 +104,7 @@ namespace ns_YAUI
             rsz.mClient.fromXML(node);//属性属于client
             rsz.mClient.name = null;//name 是 resizer的属性
 
-            rsz.mClient.fillColor = fc;
+            //rsz.mClient.fillColor = fc;
             ui.width = w;
             ui.height = h;
 

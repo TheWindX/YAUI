@@ -10,10 +10,17 @@ namespace ns_YART
     class UIEditor : UIStub
     {
         const string XMLLAYOUT = @"
-<rect clip='true' shrink='true' color='DarkGoldenrod' layout='vertical' padding='5' dragAble='true' rotateAble='true' scaleAble='true' >
-    <blank name='tabs' length='32' layout='horizon'></blank>
-    <lable text='template' align='leftTop' size='12'></lable>
+<rect clip='true' shrink='true' color='DarkGoldenrod' layout='vertical' padding='5' dragAble='true' rotateAble='true' scaleAble='true'>
     <resizer name='client' length='512' layout='horizon' layoutFilled='true'>
+        <blank name='tabs' length='32' layout='horizon' layoutInverse='true'>
+            <lable text='x'></lable>
+            <blank expand='true' layout='horizon'>
+                <lable text='template' size='12'></lable>
+                <blank name='tabs'>
+                    <rect width='*128' marginX='*true'></rect>
+                </blank>
+            </blank>
+        </blank>
     </resizer>
 </rect>
 ";
