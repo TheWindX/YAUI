@@ -1,6 +1,3 @@
-Yeah Another implement of gUI, for data model visualization
-
-
 YAUI(Yeah Another implement of gUI)
 的实现了一套类似于html的 UI系统，但有着更好的排版系统(advance layout)，和简单性，提倡通过简单的矢量图形与排版系统构造可用的GUI——（不特意实现复杂控件)
 
