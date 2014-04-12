@@ -1,6 +1,5 @@
 Yeah Another implement of gUI, for data model visualization
 
-构造了一种“类型”数据模型，不容易对应普遍的编程语言(缺少algebraic data type,  在haskell和ML是类型基础),所以在正在进行的YAUI的基础上图形化表示，
 
 YAUI的实现了一套类似于html的 UI系统，但有着更好的排版系统(advance layout)，和简单性，提倡通过简单的矢量图形与排版系统构造可用的GUI——（不特意实现复杂控件)
 
@@ -25,4 +24,5 @@ root.childOfPath("button").evtOnLeftDown
 表示一个UI上可捡拖拽的圆
 
 
-
+YART
+目标是构造类型系统，不容易对应普遍的编程语言(缺少algebraic data type,  但在haskell和ML是类型基础),可在正在进行的YAUI的基础上图形化表示
