@@ -2,7 +2,7 @@ YAUI(Yeah Another implement of gUI)
 的实现了一套类似于html的 UI系统，但有着更好的排版系统(advance layout)，和简单性，提倡通过简单的矢量图形与排版系统构造可用的GUI——（不特意实现复杂控件)
 
 如：
-<rect shrink='true' clip='*true' padding='5' fillColor='blue' layout='vertical'>
+&lt;rect shrink='true' clip='*true' padding='5' fillColor='blue' layout='vertical'&gt;
     <lable align='leftTop' text='标题'></lable>
     <lable align='rightTop' text='x'></lable>
     <blank length='30'></blank>
