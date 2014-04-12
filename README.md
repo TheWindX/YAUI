@@ -25,4 +25,4 @@ root.childOfPath("button").evtOnLeftDown
 
 
 YART
-目标是构造类型系统，不容易对应普遍的编程语言(缺少algebraic data type,  但在haskell和ML是类型基础),可在正在进行的YAUI的基础上图形化表示
+目标是构造类型系统，在正在进行的YAUI的基础上图形化表示
