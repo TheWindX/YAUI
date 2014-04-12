@@ -3,11 +3,11 @@ YAUI(Yeah Another implement of gUI)
 
 如：
 &lt;rect shrink='true' clip='*true' padding='5' fillColor='blue' layout='vertical'&gt;
-    <lable align='leftTop' text='标题'></lable>
-    <lable align='rightTop' text='x'></lable>
-    <blank length='30'></blank>
-    <resizer length='512' clip='true'></resizer>
-</rect>
+    &lt;able align='leftTop' text='标题'&gt;lt;lable&gt;
+    &lt;able align='rightTop' text='x'&gt;lt;lable&gt;
+    &lt;lank length='30'&gt;lt;blank&gt;
+    &lt;esizer length='512' clip='true'&gt;lt;resizer&gt;
+&lt;rect&gt;
 模拟绘制一个windows上标准的工具窗口.
 
 query & 事件绑定：
