@@ -11,29 +11,34 @@ namespace ns_YART
     {
         const string XMLLAYOUT = @"
 <rect clip='true' shrink='true' color='DarkGoldenrod' layout='vertical' padding='5' dragAble='true' rotateAble='true' scaleAble='true'>
-    <resizer name='client' length='512' layout='horizon' layoutFilled='true'>
-        <blank name='tabs' length='32' layout='horizon' layoutInverse='true'>
+    <resizer length='512' layout='vertical' layoutFilled='true'>
+        <blank length='32' layout='horizon' layoutFilled='true' layoutInverse='true' expandX='true'>
             <lable text='x'></lable>
-            <blank expand='true' layout='horizon'>
+            <blank layout='horizon' layoutFilled='true'>
                 <lable text='template' size='12'></lable>
-                <blank name='tabs'>
-                    <rect width='*128' marginX='*true'></rect>
+                <blank name='tabs' expandY='true' layout='horizon'>
+                    <rect width='*128' marginX='*1' expandY='*true'>
+                        <lable derived='false' text='tools' align='center' ></lable>
+                    </rect>
+                    <rect>
+                        <lable derived='false' text='tools2' align='center'></lable>
+                    </rect>
                 </blank>
             </blank>
         </blank>
+        <rect expandX='true' height='128'></rect>
+        <blank name='clients' layout='horizon' layoutFilled='true'></blank>
     </resizer>
 </rect>
 ";
 
-        UIResizer mResizer = null;
-        UIBlank mTabs = null;
+        UIWidget mPages = null;
         public UIEditor()
         {
             appendFromXML(XMLLAYOUT);
-            mResizer = childOfPath("client") as UIResizer;
-            mResizer.name = "";//no name polution
-            mTabs = childOfPath("tabs") as UIBlank;
-            mTabs.name = "";//no name polution
+            mPages = childOfPath("clients");
+            mPages.name = "";//no name polution
+            this.adjustLayout();
         }
         
 
@@ -102,7 +107,7 @@ namespace ns_YART
         {
             CPage cur = mPageMain;
             int c = cur.getIter().Count();
-            int pageWidth = (int)((float)mResizer.getClient().width / c);
+            int pageWidth = (int)((float)mPages.width / c);
             foreach (var elem in cur.getIter())
             {
                 elem.mRoot.width = pageWidth;
@@ -114,7 +119,7 @@ namespace ns_YART
             CPage ret = null;
             if (mPageMain == null)
             {
-                mPageMain = new CPage(name, mResizer.getClient() );
+                mPageMain = new CPage(name, mPages );
                 mPageMain.mPre = mPageMain;
                 mPageMain.mNext = mPageMain;
                 mPageLast = mPageMain;
@@ -123,7 +128,7 @@ namespace ns_YART
             }
             else
             {
-                mPageCurrent = new CPage(name, mResizer.getClient());
+                mPageCurrent = new CPage(name, mPages);
                 mPageCurrent.mPre = mPageLast;
                 mPageLast.mNext = mPageCurrent;
                 mPageCurrent.mNext = mPageMain;
