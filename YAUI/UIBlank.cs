@@ -36,6 +36,12 @@ namespace ns_YAUI
             }
         }
 
+        //blank 只用于排版不用于捡选
+        //public override bool testSelfPick(Point pos)
+        //{
+        //    return false;
+        //}
+
         public override string typeName
         {
             get { return "blank"; }

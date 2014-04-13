@@ -11,12 +11,14 @@ namespace YAUIUser
     class testUse : Singleton<testUse>
     {
         const string XMLPAGE = @"
-                <blank name='tabs' height='48' layout='horizon'>
-                    <rect width='*128' marginX='*1' expandY='*true'>
-                    </rect>
-                    <rect>
-                    </rect>
-                </blank>
+
+    <rect length='512' layout='vertical' layoutFilled='true'>
+        <blank debugName='tab' length='32' layout='horizon' layoutFilled='true' layoutInverse='true' expandX='true'>
+        </blank>
+        <rect debugName='cmd' name='commandCtn' expandX='true' height='64'></rect>
+        <blank debugName='client' name='clients' layout='horizon' layoutFilled='true'></blank>
+    </rect>
+
 ";
         public testUse()
         {

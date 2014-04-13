@@ -16,32 +16,185 @@ namespace ns_YART
             <lable text='x'></lable>
             <blank layout='horizon' layoutFilled='true'>
                 <lable text='template' size='12'></lable>
-                <blank name='tabs' expandY='true' layout='horizon'>
-                    <rect width='*128' marginX='*1' expandY='*true'>
-                        <lable derived='false' text='tools' align='center' ></lable>
-                    </rect>
-                    <rect>
-                        <lable derived='false' text='tools2' align='center'></lable>
-                    </rect>
+                <blank name='tabCtn' expandY='true' shrink='true' layout='horizon'>
                 </blank>
+                <lable name='toggleCommandCtr' text='∧' style='bold' offsetY='5'></lable>
             </blank>
         </blank>
-        <rect expandX='true' height='128'></rect>
+        <rect name='commandCtn' expandX='true' height='64'></rect>
         <blank name='clients' layout='horizon' layoutFilled='true'></blank>
     </resizer>
 </rect>
 ";
 
         UIWidget mPages = null;
+        public UIWidget mTabCtn = null;
+        public UIWidget mCommandCtn = null;
+        public UILable mToggleCommandCtr = null;
         public UIEditor()
         {
             appendFromXML(XMLLAYOUT);
             mPages = childOfPath("clients");
             mPages.name = "";//no name polution
+
+            mTabCtn = childOfPath("tabCtn");
+            mTabCtn.name = "";
+            mCommandCtn = childOfPath("commandCtn");
+            mCommandCtn.name = "";
+
+            mToggleCommandCtr = childOfPath("toggleCommandCtr") as UILable;
+            mToggleCommandCtr.evtOnLMUp += (ui, x, y) =>
+                {
+                    toggleMenu();
+                    return false;
+                };
             this.adjustLayout();
         }
-        
 
+        #region
+        public class CMenu
+        {
+            const string xmltabCtn = @"
+                    <rect derived='false' width='128' expandY='true'>
+                        <lable name='tabName' text='tools' align='center' ></lable>
+                    </rect>
+";
+            const string xmlcommandCtn = @"
+                    <rect derived='false' expand='true'>
+                        <lable name='cmdName' align='center'></lable>
+                    </rect>
+";
+            public string mMenuName;
+            public UIEditor mEditor;
+            public CMenu(UIEditor edt, string menuName)
+            {
+                mMenuName = menuName;
+                mEditor = edt;
+
+                mTab = UIRoot.Instance.loadFromXML(xmltabCtn);
+                var lb = mTab.childOf("tabName") as UILable;
+                lb.text = menuName;
+                mCommands = UIRoot.Instance.loadFromXML(xmlcommandCtn);
+                lb = mCommands.childOfPath("cmdName") as UILable;
+                lb.text = menuName;
+
+                mTab.paresent = edt.mTabCtn;
+                mCommands.paresent = edt.mCommandCtn;
+
+                mTab.evtOnLMDown += (ui, x, y) =>
+                {
+                    return false;
+                };
+                mTab.evtOnLMUp += (ui, x, y) =>
+                    {
+                        mEditor.setCurrentMenu(mMenuName);
+                        return false;
+                    };
+            }
+
+            public void show(bool bshow)
+            {
+                mCommands.visible = bshow;
+            }
+
+            public void select(bool bSelect)
+            {
+                if (bSelect)
+                {
+                    (mTab as UIRect).fillColor = (uint)EColorUtil.red;
+                    show(true);
+                }
+                else
+                {
+                    (mTab as UIRect).fillColor = (uint)EColorUtil.silver;
+                    show(false);
+                }
+            }
+
+            const string xmlItem = @"
+                    <rect width='64' expandY='true' rotateAble='false'>
+                        <lable name='itemName' align='center'></lable>
+                    </rect>
+";
+            public void addItem(string itemName, Action act)
+            {
+                var item = UIRoot.Instance.loadFromXML(xmlItem);
+                var lb = item.childOf("itemName") as UILable;
+                lb.text = itemName;
+                item.evtOnLMDown += (ui, x, y) =>
+                {
+                    if (act != null) act();
+                    return false;
+                };
+
+                item.paresent = mCommands;
+            }
+
+            public UIWidget mTab = null;
+            public UIWidget mCommands = null;
+        }
+
+        Dictionary<string, CMenu> mMenus = new Dictionary<string, CMenu>();
+        public CMenu currentMenu = null;
+
+        public void toggleMenu()
+        {
+            mCommandCtn.visible = !mCommandCtn.visible;
+            if (mCommandCtn.visible)
+                mToggleCommandCtr.text = "∧";
+            else
+                mToggleCommandCtr.text = "∨";
+            setDirty(true);
+        }
+
+        public void addMenu(string menuName)
+        {
+            var m = new CMenu(this, menuName);
+            mMenus.Add(menuName, m);
+            setCurrentMenu(menuName);
+        }
+
+        CMenu getMenu(string mName)
+        {
+            CMenu ret;
+            mMenus.TryGetValue(mName, out ret);
+            return ret;
+        }
+
+        public void addMenuItem(string menuName, string itemName, Action cmd)
+        {
+            var m = getMenu(menuName);
+            if (m != null)
+            {
+                m.addItem(itemName, cmd);
+            }
+
+        }
+
+        public void setCurrentMenu(string menuName)
+        {
+            if (currentMenu != null && currentMenu.mMenuName == menuName)
+            {
+                return;
+            }
+            CMenu m;
+            if (mMenus.TryGetValue(menuName, out m))
+            {
+                m.select(true);
+            }
+            else return;
+
+            if (currentMenu != null)
+            {
+                currentMenu.select(false);
+            }
+            currentMenu = m;
+            setDirty(true);
+        }
+
+        #endregion
+
+        #region page
         public class CPage
         {
             const string XMLPAGE = @"
@@ -97,6 +250,9 @@ namespace ns_YART
                 mRoot.paresent = null;
             }
         }
+
+
+
 
 
         CPage mPageMain = null;
@@ -221,5 +377,6 @@ namespace ns_YART
             var oldPage = mPageCurrent;
             removePage(mPageCurrent);
         }
+        #endregion
     }
 }

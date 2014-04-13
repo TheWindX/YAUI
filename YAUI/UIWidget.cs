@@ -883,7 +883,7 @@ namespace ns_YAUI
             for (int i = mChildrent.Count - 1; i >= 0; --i)
             {
                 var c = mChildrent[i] as UIWidget;
-                if (!c.enable) continue;
+                if (!c.visible) continue;
 
                 if (c.align != EAlign.noAlign)
                 {
@@ -909,6 +909,7 @@ namespace ns_YAUI
                     pt.Y += c.marginY;
                     
                     var rcOld = rc;
+                    //计算新的对齐位置
                     rc.Width = max(c.marginX*2+c.width, rc.Width);
                     rc.Height = rc.Height + c.marginY* 2 + c.height;
                     rb.X = max(rc.Right, rb.X);
@@ -918,10 +919,12 @@ namespace ns_YAUI
                         var ptInv = pt;
                         ptInv.Y = ( (drawRect.X*2+height)-pt.Y);
                         c.leftBottom = ptInv;
+                        c.translate(c.offsetx, c.offsety);//note:考虑offset
                     }
                     else
                     {
                         c.leftTop = pt;
+                        c.translate(c.offsetx, c.offsety);//note:考虑offset
                     }
 
 
@@ -965,10 +968,12 @@ namespace ns_YAUI
                         var ptInv = pt;
                         ptInv.X = ((drawRect.X * 2 + width) - pt.X);
                         c.rightTop = ptInv;
+                        c.translate(c.offsetx, c.offsety);//note:考虑offset
                     }
                     else
                     {
                         c.leftTop = pt;
+                        c.translate(c.offsetx, c.offsety);//note:考虑offset
                     }
 
                     idxCount++;
@@ -1556,7 +1561,7 @@ namespace ns_YAUI
             mOffsety = mOffsetx = getAttr(node, "offset", mOffsetx, out br);
             if (!br)
             {
-                mOffsetx = getAttr(node, "mOffsetx", mOffsetx, out br);
+                mOffsetx = getAttr(node, "offsetX", mOffsetx, out br);
                 mOffsety = getAttr(node, "offsetY", mOffsety, out br);
             }
 
@@ -1609,7 +1614,10 @@ namespace ns_YAUI
 
         public virtual bool testSelfPick(Point pos)
         {
-            return true;
+            if (testRectPick)
+                return true;
+            else
+                return false;//除非被改写
         }
 
 

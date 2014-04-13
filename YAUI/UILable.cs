@@ -120,7 +120,7 @@ namespace ns_YAUI
             {
                 color = getAttr(node, "color", (uint)(EColorUtil.white), out br);
             }
-            style = getAttr(node, "color", EStyle.normal, out br);
+            style = getAttr(node, "style", EStyle.normal, out br);
 
             ui = new UILable(text, size, style, color);
             ui.fromXML(node);

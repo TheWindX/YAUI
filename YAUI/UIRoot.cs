@@ -572,7 +572,7 @@ namespace ns_YAUI
 
         }
         #endregion
-
+        static int count = 0;
         #region event
         internal void testUIEvent(int x, int y, Func<UIWidget, Func<int, int, bool>> getAction)
         {
@@ -583,7 +583,10 @@ namespace ns_YAUI
                 ret = root.doTestPick(new Point(x, y), out uiout);
             if (ret)
             {
-                currentWidget = uiout;
+                if (currentWidget != uiout) 
+                    currentWidget = uiout;
+                
+                count++;
                 while (uiout != null)
                 {
                     var act = getAction(uiout);

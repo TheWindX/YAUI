@@ -8,7 +8,7 @@ namespace ns_YAUI
 {
     //http://en.wikipedia.org/wiki/Web_colors
     //CSS 1–2.0 / HTML 3.2–4 / VGA color names
-    enum EColorUtil : uint
+    public enum EColorUtil : uint
     {
         //invalid = 0xCDCDCDCD,
         //white = 0xffffffff,
