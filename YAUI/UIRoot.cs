@@ -387,7 +387,7 @@ namespace ns_YAUI
                     innerTemplatePop(innerTemplateNameRet);
                 }
             }
-            catch (Exception e) { mLog(e.ToString()); }
+            catch (Exception e) { mLog(e.Message ); }
             //popProperty();
             return nodeRet;
         }

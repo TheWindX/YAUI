@@ -181,9 +181,10 @@ namespace YAUIUser
 
     class testWindow : Singleton<testWindow>
     {
-        public UIWindow mMain = new UIWindow();
+        
         public testWindow()
         {
+            UIWindow mMain = new UIWindow();
             mMain.setWindowName("root");
             mMain.attach();
             mMain.addTab("tools");

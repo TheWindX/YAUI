@@ -208,6 +208,9 @@ namespace ns_YART
     </rect>
 </rect>
 ";
+            static int idCount = 0;
+
+            public int id = 0;
             public UIWidget mRoot = null;
             public UIRect mSplit = null;
             public UIWidget mTab = null;
@@ -231,6 +234,7 @@ namespace ns_YART
 
             public CPage(string name, UIWidget p)
             {
+                id = idCount++;
                 mRoot = UIRoot.Instance.loadFromXML(XMLPAGE);
                 mRoot.name = "";
                 mSplit = mRoot.childOfPath("split") as UIRect;
@@ -377,6 +381,13 @@ namespace ns_YART
             var oldPage = mPageCurrent;
             removePage(mPageCurrent);
         }
+
+        public UIWidget getPageClient(int id)
+        {
+            var pg = getMainPage().getIter().First(page => page.id == id);
+            return (pg == null) ? null : pg.mClient;
+        }
+
         #endregion
     }
 }

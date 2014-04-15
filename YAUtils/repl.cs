@@ -45,7 +45,7 @@ namespace ns_YAUtils
         String mCodeFrame = @"
 using System;
 using System.Collections.Generic;
-using ns_behaviour;
+using ns_YAUtils;//note: 这个随namespace改
 public static class Wrapper
 {{
     public static void print(Object o)

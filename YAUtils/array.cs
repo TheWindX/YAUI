@@ -2,7 +2,10 @@
  * author: xiaofeng.li
  * mail: 453588006@qq.com
  * desc: general array use for quene, list 
- * */
+ * 
+ * TODO: 因为gc的缘故，需要有shrink!
+ */
+
 
 using System;
 using System.Collections.Generic;
