@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAUtils", "YAUtils\YAUtils.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAUIUser", "YAUIUser\YAUIUser.csproj", "{0A161930-181C-4757-BD94-3D3B32F47B29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YART", "YART\YART.csproj", "{ED3D8A8C-6B4E-4804-9392-7F772953B437}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,14 +61,6 @@ Global
 		{0A161930-181C-4757-BD94-3D3B32F47B29}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A161930-181C-4757-BD94-3D3B32F47B29}.Release|x64.ActiveCfg = Release|Any CPU
 		{0A161930-181C-4757-BD94-3D3B32F47B29}.Release|x86.ActiveCfg = Release|Any CPU
-		{ED3D8A8C-6B4E-4804-9392-7F772953B437}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED3D8A8C-6B4E-4804-9392-7F772953B437}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED3D8A8C-6B4E-4804-9392-7F772953B437}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{ED3D8A8C-6B4E-4804-9392-7F772953B437}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{ED3D8A8C-6B4E-4804-9392-7F772953B437}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED3D8A8C-6B4E-4804-9392-7F772953B437}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED3D8A8C-6B4E-4804-9392-7F772953B437}.Release|x64.ActiveCfg = Release|Any CPU
-		{ED3D8A8C-6B4E-4804-9392-7F772953B437}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

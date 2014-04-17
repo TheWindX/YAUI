@@ -67,8 +67,15 @@
     <Compile Include="ExpandString.cs" />
     <Compile Include="ExtendRectangle.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="UIInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UIPainterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="singleton.cs" />
     <Compile Include="Timer.cs" />
+    <Compile Include="UI.cs" />
     <Compile Include="UIBlank.cs" />
     <Compile Include="UIEdit.cs" />
     <Compile Include="UILine.cs" />
@@ -106,6 +113,17 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\YAUtils\YAUtils.csproj">
+      <Project>{a97ad18a-b2ee-44fb-becd-10496ec8fb1f}</Project>
+      <Name>YAUtils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UIPainterForm.resx">
+      <DependentUpon>UIPainterForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

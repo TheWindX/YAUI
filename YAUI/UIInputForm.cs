@@ -9,16 +9,16 @@ using System.Windows.Forms;
 
 namespace ns_YAUI
 {
-    public class InputForm : Form
+    public class UIInputForm : Form
     {
         private TextBox mTextBox;
         private System.ComponentModel.IContainer components;
-        InputForm()
+        UIInputForm()
         {
             InitializeComponent();
         }
 
-        public static InputForm Instance = new InputForm();
+        public static UIInputForm Instance = new UIInputForm();
 
         void InitializeComponent()
         {
@@ -98,7 +98,7 @@ namespace ns_YAUI
                 uint c1 = 0x888888;
                 mTextBox.ForeColor = Color.FromArgb((Int32)c1);
                 this.Visible = true;
-                this.Location = PaintDriver.mIns.PointToScreen(new Point(x, y));
+                this.Location = UIPainterForm.mIns.PointToScreen(new Point(x, y));
                 if (evtInputEnter != null)
                     evtInputEnter();
             }

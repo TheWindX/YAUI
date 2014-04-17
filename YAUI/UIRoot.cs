@@ -60,8 +60,6 @@ namespace ns_YAUI
         #endregion
 
         #region XML
-
-        //xml
         Dictionary<string, XmlElement> mName2Template = new Dictionary<string, XmlElement>();
         Dictionary<string, Stack<XmlElement>> mName2InnerTemplate = new Dictionary<string, Stack<XmlElement>>();
 
@@ -572,8 +570,9 @@ namespace ns_YAUI
 
         }
         #endregion
-        static int count = 0;
+        
         #region event
+        static int count = 0;
         internal void testUIEvent(int x, int y, Func<UIWidget, Func<int, int, bool>> getAction)
         {
             UIWidget uiout;
@@ -730,6 +729,30 @@ namespace ns_YAUI
             if (mEvtInputDone != null) mEvtInputDone(str);
 
         }
+        #endregion
+
+        #region manager
+        //ID manager
+        Dictionary<string, UIWidget> mName2Widget = new Dictionary<string, UIWidget>();
+        internal UIWidget getIDWidget(string strID)
+        {
+            UIWidget ret = null;
+            mName2Widget.TryGetValue(strID, out ret);
+            return ret;
+        }
+
+        internal void setIDWidget(string name, UIWidget ui)
+        {
+            var w = getIDWidget(name);
+            if (w != null) throw new Exception("already has UI with ID:" + name + " ," + w.typeName);
+            mName2Widget.Add(name, ui);
+        }
+
+        internal void clearIDMap()
+        {
+            mName2Widget.Clear();
+        }
+
         #endregion
     }
 }

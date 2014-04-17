@@ -1,7 +1,7 @@
 /*
  * author: xiaofeng.li
  * mail: 453588006@qq.com
- * desc: main painter window, driver for paint and client IO
+ * desc: driver for paint and client IO
  * */
 
 using System;
@@ -23,15 +23,15 @@ namespace ns_YAUI
     using EvtOnKey = Action<int, bool, bool>;
     using EvtOnWheel = Action<int>;
     //public EvtOnKey(int kc, bool isControl, bool isShift);
-    public class PaintDriver : Form
+    public class UIPainterForm : Form
     {
         private System.Windows.Forms.Timer mTimer;
         private System.ComponentModel.IContainer components;
 
-        public static PaintDriver mIns = null;
-        
+        public static UIPainterForm mIns = null;
 
-        public PaintDriver()
+
+        public UIPainterForm()
         {
             InitializeComponent();
         }
@@ -48,11 +48,10 @@ namespace ns_YAUI
             this.mTimer.Interval = 10;
             this.mTimer.Tick += new System.EventHandler(this.onUpdate);
             // 
-            // PaintDriver
+            // UIPainterForm
             // 
-            this.ClientSize = new System.Drawing.Size(585, 523);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
-            this.Name = "PaintDriver";
+            this.ClientSize = new System.Drawing.Size(578, 544);
+            this.Name = "UIPainterForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.onLoad);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.OnPaint);
@@ -113,43 +112,38 @@ namespace ns_YAUI
 
         //bool mReflush = true;
         public EvtPaint evtPaint;
-        private Bitmap m_bmpOffscreen;
+        //private Bitmap m_bmpOffscreen;
         private void OnPaint(object sender, PaintEventArgs e)
         {
             Graphics gxOff; //Offscreen graphics
-#if DIRTYRECTOPTIMAS
-            if (m_bmpOffscreen == null) //Bitmap for doublebuffering
-            {
-                m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
-            }
-            else
-            {
-                var sz = m_bmpOffscreen.Size;
-                if (ClientSize.Width != sz.Width
-                    || ClientSize.Height != sz.Height)
-                {
-                    m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
-                    UIRoot.Instance.root.setDirty();
-                }
-            }
-            gxOff = Graphics.FromImage(m_bmpOffscreen);
-#else
+            //if (m_bmpOffscreen == null) //Bitmap for doublebuffering
+            //{
+            //    m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+            //}
+            //else
+            //{
+            //    var sz = m_bmpOffscreen.Size;
+            //    if (ClientSize.Width != sz.Width
+            //        || ClientSize.Height != sz.Height)
+            //    {
+            //        m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+            //        UIRoot.Instance.root.setDirty();
+            //    }
+            //}
+            //gxOff = Graphics.FromImage(m_bmpOffscreen);
             gxOff = e.Graphics;
-            gxOff.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-#endif
+            //gxOff.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             if (evtPaint != null)
                 evtPaint(gxOff);
-#if DIRTYRECTOPTIMAS
-            e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);
-#endif
+            //e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);
             //mReflush = true;
         }
 
 
 
         //public delegate void EvtMouse(int x, int y);
-        
-        
+
+
         public EvtMouse evtLeftDown;
         public EvtMouse evtRightDown;
         public EvtMouse evtMidDown;
@@ -205,7 +199,7 @@ namespace ns_YAUI
                 evtMove(e.X, e.Y);
         }
 
-        
+
         public EvtOnKey evtOnKey;
         private void PaintDriver_KeyDown(object sender, KeyEventArgs e)
         {

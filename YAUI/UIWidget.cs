@@ -133,6 +133,10 @@ namespace ns_YAUI
             return p;
         }
 
+        public UIWidget WidgetOfID(string id)
+        {
+            return UIRoot.Instance.getIDWidget(id);
+        }
 
         public UIWidget topParesent
         {
@@ -251,8 +255,10 @@ namespace ns_YAUI
         #endregion
 
         #region properties
+        //TODO, is it too big properties for a tiny widget? 
+        //may be i can use proto inherent and table look up.
         public int ID = -1;
-
+        public string StringID = "";
         //properties start
         public virtual Rectangle drawRect
         {
@@ -1090,7 +1096,18 @@ namespace ns_YAUI
         #region methods
         public UIWidget(){}
 
+        public void attach(UIWidget ui)
+        {
+            if (ui == null) return;
+            ui.paresent = this;
+        }
 
+        public void dettach(UIWidget ui)
+        {
+            if (ui == null) return;
+            if (ui.paresent != this) return;
+            ui.paresent = null;
+        }
         #endregion
 
         #region events
@@ -1539,6 +1556,11 @@ namespace ns_YAUI
             if (ret != null) name = ret.Value;
             ret = node.Attributes.GetNamedItem("debugName");
             if (ret != null) debugName = ret.Value;
+            ret = node.Attributes.GetNamedItem("id");
+            if (ret != null)
+            {
+                UIRoot.Instance.setIDWidget(ret.Value, this);
+            }
 
             px = getAttr(node, "px", px, out br);
             py = getAttr(node, "py", py, out br);
