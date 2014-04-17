@@ -56,9 +56,11 @@
     <Compile Include="testLayout3.cs" />
     <Compile Include="testLayoutShrinkExpand.cs" />
     <Compile Include="testNewControl.cs" />
+    <Compile Include="testPrimarys.cs" />
     <Compile Include="testPropertyTemplate.cs" />
     <Compile Include="testResizer.cs" />
     <Compile Include="testRoundRect.cs" />
+    <Compile Include="testTranform.cs" />
     <Compile Include="testUse.cs" />
     <Compile Include="testWindow.cs" />
   </ItemGroup>

@@ -1338,6 +1338,7 @@ namespace ns_YAUI
 
             UIRoot.Instance.evtMove += onDragMove;
             UIRoot.Instance.evtLeftUp += onDragEnd;
+            setDirty(true);
             return false;
         }
 
@@ -1534,6 +1535,14 @@ namespace ns_YAUI
                     if (br)
                         return (T)Convert.ChangeType(style, typeof(T)); //strRet.castInt();
                 }
+                else if (typeof(T) == typeof(EForward))
+                {
+                    EForward forward;
+                    var br = Enum.TryParse(strRet, true, out forward); //(typeof(EAlign), strRet);
+                    if (br)
+                        return (T)Convert.ChangeType(forward, typeof(T)); //strRet.castInt();
+                }
+                
             }
             valid = false;
             return defaultVal; 

@@ -14,9 +14,6 @@ namespace YAUIUser
         static void Main(string[] args)
         {
             UI.Instance.init();
-            var ui = UI.Instance.fromXML(@"
-<rect></rect>
-");
             var tall = testAll.Instance;
             UI.Instance.run();
         }
