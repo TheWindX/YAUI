@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using System.Xml;
 
-namespace YAUIUser
+namespace ns_YAUIUser
 {
     using ns_YAUI;
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 
 
-namespace YAUIUser
+namespace ns_YAUIUser
 {
     using ns_YAUI;
     using System.Xml;

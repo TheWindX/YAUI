@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace YAUIUser
+namespace ns_YAUIUser
 {
     using ns_YAUI;
     class testResizer : ns_YAUI.Singleton<testResizer>

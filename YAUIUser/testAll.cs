@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 using ns_YAUtils;
 
-namespace YAUIUser
+namespace ns_YAUIUser
 {
     class testAll : Singleton<testAll>
     {
         public testAll()
         {
             //var test = testPrimarys.Instance; 
-            var test = testTransform.Instance; 
+            //var test = testTransform.Instance;
+            var test = testHierarchy.Instance;
             
             //var _m1 = testUse.Instance;
             //var _0 =  testDir.Instance;

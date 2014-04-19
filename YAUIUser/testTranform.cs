@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ns_YAUI;
-namespace YAUIUser
+namespace ns_YAUIUser
 {
     class testTransform : Singleton<testTransform>
     {
