@@ -30,7 +30,7 @@ namespace ns_YAUI
         }
         public UIRoot()
         {
-            mRoot = new UIMap();
+            mRoot = new UIMap();//map
         }
 
         UIWidget mDirtyRoot = null;
@@ -543,11 +543,11 @@ namespace ns_YAUI
                 {
                     if (mCurrent != null)
                     {
-                        if (mCurrent.evtExit != null) mCurrent.evtExit();
+                        mCurrent.doExit();
                     }
                     if (value != null)
                     {
-                        if (value.evtEnter != null) value.evtEnter();
+                        value.doEnter();
                     }
                 }
                 mCurrent = value;

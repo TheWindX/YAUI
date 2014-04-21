@@ -39,14 +39,18 @@ namespace ns_YAUI
             mStyle = st;
             mSz = sz;
             textColor = color;
-            if (mStyle == EStyle.normal)
-                mFont = new Font("Arial", sz, FontStyle.Regular);
-            else if (mStyle == EStyle.bold)
-                mFont = new Font("Arial", sz, FontStyle.Bold);
-            else if (mStyle == EStyle.italic)
-                mFont = new Font("Arial", sz, FontStyle.Italic);
             text = t;
-            var fontsz = TextRenderer.MeasureText(t, mFont);
+        }
+
+        public void updateFont()
+        {
+            if (mStyle == EStyle.normal)
+                mFont = new Font("Arial", mSz, FontStyle.Regular);
+            else if (mStyle == EStyle.bold)
+                mFont = new Font("Arial", mSz, FontStyle.Bold);
+            else if (mStyle == EStyle.italic)
+                mFont = new Font("Arial", mSz, FontStyle.Italic);
+            var fontsz = TextRenderer.MeasureText(text, mFont);
             mRect = new Rectangle(new Point(0, 0), fontsz);
         }
 
@@ -63,6 +67,20 @@ namespace ns_YAUI
             }
         }
 
+        public int textSize
+        {
+            get
+            {
+                return mSz;
+            }
+
+            set
+            {
+                mSz = value;
+                updateFont();
+            }
+        }
+
         public string text
         {
             get
@@ -73,9 +91,7 @@ namespace ns_YAUI
             set
             {
                 mText = value;
-                var fontsz = TextRenderer.MeasureText(mText, mFont);
-                mRect = new Rectangle(new Point(0, 0), fontsz);
-                adjustAlign();
+                updateFont();
             }
         }
 

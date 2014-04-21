@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+
 
 using ns_YAUtils;
 
 namespace ns_YAUI
 {
+    #region trival
     class TimerProvide : Singleton<TimerProvide>
     {
         uint mTime;
@@ -23,26 +26,78 @@ namespace ns_YAUI
             return mTime;
         }
     };
+    #endregion
 
     public class UI : Singleton<UI>
     {
+        #region trival
         UIPainterForm mPainter = null;
+        UITips mTips;
+        #endregion
+
+        #region methods
+        public UIWidget fromXML(string strXML, bool attachRoot = true)
+        {
+            var ui = UIRoot.Instance.loadFromXML(strXML);
+            if(ui == null)return null;//? exception
+            if(attachRoot)
+            {
+                ui.paresent = UIRoot.Instance.root;
+            }
+            return ui;
+        }
+
+        public void reflush()
+        {
+            if (mTips.paresent == root)
+            {
+                mTips.setDepthHead();
+            }
+            root.setDirty(true);
+        }
+
+        public UIWidget root
+        {
+            get
+            {
+                return UIRoot.Instance.root;
+            }
+        }
+
+        public Point getCursorPosition()
+        {
+            return new Point(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
+        }
+
+        public void run()
+        {
+            System.Windows.Forms.Application.Run();
+        }
+        #endregion
+
+        #region init & setting
         public UI init()
         {
             mPainter = new UIPainterForm();
 
             mPainter.evtInit += () =>
             {
+                //
                 CSRepl.Instance.start();
                 TimerManager.Init(TimerProvide.Instance.nowTimer);
+                TimerProvide.Instance.updateTimer();
 
+                //xml init
                 UIRoot.Instance.initXML()
                     .initEvt()
                     .initHandleDraw(mPainter.Invalidate)
                     .initHandleLog((s) => CSRepl.Instance.print(s))
                     .initHandleInputShow(UIInputForm.Instance.show);
 
+                //tip init
+                mTips = new UITips();
 
+                //event init
                 UIInputForm.Instance.evtInputExit += UIRoot.Instance.handleInputShow;
 
                 mPainter.evtPaint += UIRoot.Instance.handleDraw;
@@ -65,31 +120,40 @@ namespace ns_YAUI
             mPainter.Show();
             return this;
         }
-
-        public UIWidget fromXML(string strXML, bool attachRoot = true)
-        {
-            var ui = UIRoot.Instance.loadFromXML(strXML);
-            if(ui == null)return null;//? exception
-            if(attachRoot)
-            {
-                ui.paresent = UIRoot.Instance.root;
-            }
-            return ui;
-        }
-
-        public UIWidget root
-        {
-            get
-            {
-                return UIRoot.Instance.root;
-            }
-        }
-
-        public void run()
-        {
-            System.Windows.Forms.Application.Run();
-        }
-
         //TODO, setting...
+        public UI setAntiAliasing(bool enable)
+        {
+            mPainter.antiAliasing = enable;
+            return this;
+        }
+        #endregion
+
+        #region tips
+        void moveTipHandle(int x, int y)
+        {
+            mTips.position = new Point(x+10, y);
+            root.setDirty(true);
+        }
+        public UITips setTip(string text = null)
+        {
+            if(text != null)
+            {
+                mTips.text = text;
+                mTips.paresent = root;
+                UIRoot.Instance.evtMove += moveTipHandle;
+            }
+            else
+            {
+                mTips.paresent = null;
+                UIRoot.Instance.evtMove -= moveTipHandle;
+            }
+            return mTips;
+        }
+
+        public UITips getTip()
+        {
+            return mTips;
+        }
+        #endregion
     }
 }

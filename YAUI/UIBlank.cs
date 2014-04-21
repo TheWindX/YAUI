@@ -1,7 +1,7 @@
 ﻿/*
  * author: xiaofeng.li
  * mail: 453588006@qq.com
- * desc: 
+ * desc: a rect container for UIs, can handler event & trasform, but cannot be seen
  * */
 
 using System;

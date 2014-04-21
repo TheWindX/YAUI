@@ -91,17 +91,13 @@ namespace ns_YAUI
             }
         }
 
-        public UIWidget childOf(string name)
+        public UIWidget childOfTag(string name)
         {
             List<UIWidget> noNames = new List<UIWidget>();
             var clist = children().ToList();
             foreach (var elem in clist)
             {
-                if (elem.name == name)
-                {
-                    return elem;
-                }
-                else if (elem.typeName == name)
+                if (elem.typeName == name)
                 {
                     return elem;
                 }
@@ -113,7 +109,33 @@ namespace ns_YAUI
 
             foreach (var elem in noNames)
             {
-                var ui = elem.childOf(name);
+                var ui = elem.childOfTag(name);
+                if (ui != null)
+                    return ui;
+            }
+
+            return null;
+        }
+
+        public UIWidget childOfName(string name)
+        {
+            List<UIWidget> noNames = new List<UIWidget>();
+            var clist = children().ToList();
+            foreach (var elem in clist)
+            {
+                if (elem.name == name)
+                {
+                    return elem;
+                }
+                else if (elem.name == null || elem.name == "")
+                {
+                    noNames.Add(elem);
+                }
+            }
+
+            foreach (var elem in noNames)
+            {
+                var ui = elem.childOfName(name);
                 if (ui != null)
                     return ui;
             }
@@ -127,7 +149,19 @@ namespace ns_YAUI
             UIWidget p = this;
             foreach (var elem in pathItems)
             {
-                p = p.childOf(elem);
+                p = p.childOfName(elem);
+                if (p == null) break;
+            }
+            return p;
+        }
+
+        public UIWidget findByTag(string path)
+        {
+            string[] pathItems = path.Split('/');
+            UIWidget p = this;
+            foreach (var elem in pathItems)
+            {
+                p = p.childOfTag(elem);
                 if (p == null) break;
             }
             return p;
@@ -282,7 +316,7 @@ namespace ns_YAUI
         {
             get
             {
-                return drawRect.Width;
+                return 64;
             }
             set
             {
@@ -293,7 +327,7 @@ namespace ns_YAUI
         {
             get
             {
-                return drawRect.Height;
+                return 64;
             }
             set
             {
@@ -865,7 +899,7 @@ namespace ns_YAUI
         //这个因与渲染的遍历次序不同,因此不能放到draw里
         public virtual void adjustLayout()
         {
-            if (!enable) return;
+            if (!visible) return;
 
             mOccupyRect = null;//重新layout, 当然要重计 mOccupyRect
 
@@ -1114,9 +1148,7 @@ namespace ns_YAUI
 
         public Action<UIWidget, UIWidget> evtChangeParesent;
 
-        public Action evtEnter;
-        public Action evtExit;
-
+        
         public delegate bool EvtMouse(UIWidget _this, int x, int y);
         public delegate bool EvtKeyboard(UIWidget _this, int kc, bool isControl, bool isShift);
         public delegate void EvtSizeChanged(UIWidget _this, int w, int h);
@@ -1158,16 +1190,28 @@ namespace ns_YAUI
         {
             evtOnMMUp = null;
         }
-        public event EvtMouse evtOnEnter;
+        public event Action evtOnEnter;
         public void evtOnEnterClear()
         {
             evtOnEnter = null;
         }
-        public event EvtMouse evtOnExit;
+        internal void doEnter()
+        {
+            if (evtOnEnter != null)
+                evtOnEnter();
+        }
+
+        public event Action evtOnExit;
         public void evtOnExitClear()
         {
             evtOnExit = null;
         }
+        internal void doExit()
+        {
+            if (evtOnExit != null)
+                evtOnExit();
+        }
+
         public event EvtMouse evtOnDClick;
         public void evtOnDClickClear()
         {
@@ -1247,24 +1291,6 @@ namespace ns_YAUI
                 return true;
             }
             return evtOnMMUp(this, x, y);
-        }
-
-        internal bool doEvtOnEnter(int x, int y)
-        {
-            if (evtOnEnter == null)
-            {
-                return true;
-            }
-            return evtOnEnter(this, x, y);
-        }
-
-        internal bool doEvtOnExit(int x, int y)
-        {
-            if (evtOnExit == null)
-            {
-                return true;
-            }
-            return evtOnExit(this, x, y);
         }
 
         internal bool doEvtOnChar(int kc, bool isControl, bool isShift)

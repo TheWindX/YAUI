@@ -16,9 +16,10 @@ namespace ns_YAUIUser
         {
             try
             {
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml(@"
-<a></b>
+                UI.Instance.fromXML(@"
+<round_rect shrink='true' paddingX='5' paddingY='2' dragAble='true'>
+    <lable text='asdf' style='normal'></lable>
+</round_rect>
 ");
             }
             catch (XmlException e)

@@ -1,7 +1,7 @@
 ﻿/*
  * author: xiaofeng.li
  * mail: 453588006@qq.com
- * desc: 
+ * desc: null use container of UIs, cannot handler event & trasform
  * */
 
 using System;

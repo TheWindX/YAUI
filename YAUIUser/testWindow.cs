@@ -110,16 +110,14 @@ namespace ns_YAUIUser
 
             mTabCtn.evtOnLMUp += (ui, x, y) =>
             {
-                if (mToolCtn.enable)
+                if (mToolCtn.visible)
                 {
-                    mToolCtn.enable = false;
                     mToolCtn.visible = false;
                     (mTabToggle as UILable).text = "∨";
                 }
                 else
                 {
                     mToolCtn.visible = true;
-                    mToolCtn.enable = true;
                     (mTabToggle as UILable).text = "∧";
                 }
                 mToolCtn.setDirty(true);

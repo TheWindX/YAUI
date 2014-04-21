@@ -25,8 +25,8 @@ namespace ns_YAUIUser
     </rect>
 ");
             var r3 = UIRoot.Instance.root.findByPath("r1/r2/r3");
-            r3.evtEnter += ()=>{Console.WriteLine("r3 enter!");};
-            r3.evtExit += () => { Console.WriteLine("r3 exit!"); };
+            r3.evtOnEnter += ()=>{Console.WriteLine("r3 enter!");};
+            r3.evtOnExit += () => { Console.WriteLine("r3 exit!"); };
 
         }
     }

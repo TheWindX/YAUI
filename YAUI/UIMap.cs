@@ -1,4 +1,8 @@
-﻿
+﻿/*
+ * author: xiaofeng.li
+ * mail: 453588006@qq.com
+ * desc: an infinite space for UIs, can handler event & trasform, but no seen
+ * */
 
 using System;
 using System.Collections.Generic;

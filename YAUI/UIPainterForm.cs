@@ -111,6 +111,7 @@ namespace ns_YAUI
 
 
         //bool mReflush = true;
+        public bool antiAliasing = false;
         public EvtPaint evtPaint;
         //private Bitmap m_bmpOffscreen;
         private void OnPaint(object sender, PaintEventArgs e)
@@ -132,7 +133,10 @@ namespace ns_YAUI
             //}
             //gxOff = Graphics.FromImage(m_bmpOffscreen);
             gxOff = e.Graphics;
-            //gxOff.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+            if (antiAliasing)
+                gxOff.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+            else
+                gxOff.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
             if (evtPaint != null)
                 evtPaint(gxOff);
             //e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);

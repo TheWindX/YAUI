@@ -71,6 +71,7 @@
     <Compile Include="UIInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UIMenu.cs" />
     <Compile Include="UIPainterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +91,7 @@
     <Compile Include="UIRoundRect.cs" />
     <Compile Include="UIStub.cs" />
     <Compile Include="UIArrow.cs" />
+    <Compile Include="UITips.cs" />
     <Compile Include="UIWidget.cs" />
   </ItemGroup>
   <ItemGroup>
