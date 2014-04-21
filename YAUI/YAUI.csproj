@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="array.cs" />
     <Compile Include="colorUtil.cs" />
+    <Compile Include="ExpandPoint.cs" />
     <Compile Include="ExpandString.cs" />
     <Compile Include="ExtendRectangle.cs" />
     <Compile Include="Entity.cs" />

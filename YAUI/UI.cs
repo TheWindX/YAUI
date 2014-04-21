@@ -8,6 +8,22 @@ using ns_YAUtils;
 
 namespace ns_YAUI
 {
+    class TimerProvide : Singleton<TimerProvide>
+    {
+        uint mTime;
+        public void updateTimer()
+        {
+            var tmp = (uint)(System.DateTime.Now.Ticks / 10000 << 4 >> 4);
+            if (tmp > mTime)
+                mTime = tmp;
+        }
+
+        public uint nowTimer()
+        {
+            return mTime;
+        }
+    };
+
     public class UI : Singleton<UI>
     {
         UIPainterForm mPainter = null;
@@ -18,6 +34,7 @@ namespace ns_YAUI
             mPainter.evtInit += () =>
             {
                 CSRepl.Instance.start();
+                TimerManager.Init(TimerProvide.Instance.nowTimer);
 
                 UIRoot.Instance.initXML()
                     .initEvt()
@@ -40,6 +57,8 @@ namespace ns_YAUI
             mPainter.evtUpdate += () =>
             {
                 CSRepl.Instance.runOnce();
+                TimerProvide.Instance.updateTimer();
+                TimerManager.tickAll();
                 UIRoot.Instance.updateTimer();
             };
 

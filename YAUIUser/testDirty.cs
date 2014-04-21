@@ -24,7 +24,7 @@ namespace ns_YAUIUser
         </round_rect >
     </rect>
 ");
-            var r3 = UIRoot.Instance.root.childOfPath("r1/r2/r3");
+            var r3 = UIRoot.Instance.root.findByPath("r1/r2/r3");
             r3.evtEnter += ()=>{Console.WriteLine("r3 enter!");};
             r3.evtExit += () => { Console.WriteLine("r3 exit!"); };
 

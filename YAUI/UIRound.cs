@@ -61,7 +61,7 @@ namespace ns_YAUI
             }
         }
 
-        public int width
+        public override int width
         {
             get
             {
@@ -73,7 +73,7 @@ namespace ns_YAUI
             }
         }
 
-        public int height
+        public override int height
         {
             get
             {
@@ -95,7 +95,7 @@ namespace ns_YAUI
         {
             get
             {
-                return new Rectangle(0, 0, _w, _h);
+                return new Rectangle(-_w / 2, -_h / 2, _w , _h);
             }
         }
 
@@ -106,6 +106,8 @@ namespace ns_YAUI
 
         public override bool testSelfPick(Point pos)
         {
+            pos.X = pos.X + _w / 2;
+            pos.Y = pos.Y + _h / 2;
             float a = (float)_w / 2;
             float b = (float)_h / 2;
             float x = (float)(pos.X - a);
@@ -118,10 +120,13 @@ namespace ns_YAUI
 
         public override void onDraw(Graphics g)
         {
-            GraphicsPath p = new GraphicsPath();
-
+            var gs = g.Save();
+            var m = g.Transform;
+            m.Translate(-_w / 2.0f, -_h / 2.0f);
+            g.Transform = m;
             g.FillEllipse(mBrush, new Rectangle(0, 0, _w, _h));
             g.DrawEllipse(mPen, new Rectangle(0, 0, _w, _h));
+            g.Restore(gs);
         }
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
@@ -135,7 +140,7 @@ namespace ns_YAUI
 
             bool br = true;
 
-            w = h = getAttr(node, "radius", 6, out br) * 2;
+            w = h = getAttr(node, "radius", 64, out br) * 2;
             if (!br)
             {
                 h = w = getAttr<int>(node, "length", 64, out br);

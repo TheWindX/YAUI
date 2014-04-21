@@ -52,14 +52,14 @@ namespace ns_YAUIUser
         public UIWindow()
         {
             mWindow = UIRoot.Instance.loadFromXML(XMLLayout);
-            mClientBlank = mWindow.childOfPath("editor");
-            mClose = mWindow.childOfPath("close");
-            mResizer = mWindow.childOfPath("resizer");
-            mLable = mWindow.childOfPath("lable");
-            mClientCtn = mWindow.childOfPath("clientContainer");
-            mTabCtn = mWindow.childOfPath("tabContainer");
-            mToolCtn = mWindow.childOfPath("toolContainer");
-            mTabToggle = mWindow.childOfPath("tabContainer/tabToggle");
+            mClientBlank = mWindow.findByPath("editor");
+            mClose = mWindow.findByPath("close");
+            mResizer = mWindow.findByPath("resizer");
+            mLable = mWindow.findByPath("lable");
+            mClientCtn = mWindow.findByPath("clientContainer");
+            mTabCtn = mWindow.findByPath("tabContainer");
+            mToolCtn = mWindow.findByPath("toolContainer");
+            mTabToggle = mWindow.findByPath("tabContainer/tabToggle");
 
             Action<int, int> moveHandle = (x, y) =>
             {
@@ -143,7 +143,7 @@ namespace ns_YAUIUser
         public int addTab(string name)
         {
             var tab = UIRoot.Instance.loadFromXML(XMLTab);
-            (tab.childOfPath("lable") as UILable).text = name;
+            (tab.findByPath("lable") as UILable).text = name;
             var tool = UIRoot.Instance.loadFromXML(XMLTool);
             tab.paresent = mTabCtn;
             tool.paresent = mToolCtn;
@@ -158,7 +158,7 @@ namespace ns_YAUIUser
         {
             if (id >= mToolTabs.Count) return false;
             var tab = mToolTabs[id];
-            (tab.Item1.childOfPath("lable") as UILable).text = name;
+            (tab.Item1.findByPath("lable") as UILable).text = name;
             tab.Item1.setDirty(true);
             return true;
         }

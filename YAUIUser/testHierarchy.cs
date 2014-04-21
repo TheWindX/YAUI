@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
 
 namespace ns_YAUIUser
 {
@@ -11,14 +12,25 @@ namespace ns_YAUIUser
     {
         public testHierarchy()
         {
-            UI.Instance.fromXML(@"
-<rect length='512' dragAble='*true' clip='*true' color='0xff87ceeb'>
-    <round_rect length='256' color='0xffafeeee'>
-        <round length='128' color='0xff6b8e23'>
+            var sun = UI.Instance.fromXML(@"
+    <round px='256' py='256' dragAble='*true' id='sun' radius='64'  color='yellow'>
+        <round id='earth' radius='12'  px='128' color='green'>
+            <round id='moon' radius='6' px='32' color='silver'>
+            </round>
         </round>
-    </round_rect>
-</rect>
+    </round>
 ");
+            var earth = sun.findByID("earth");
+            var moon = sun.findByID("moon");
+
+            TimerManager.get().setInterval(
+                t =>
+                {
+                    sun.rotate(1);
+                    earth.rotate(3);
+                    moon.setDirty(true);
+                }, 20);
+            
         }
     }
 }

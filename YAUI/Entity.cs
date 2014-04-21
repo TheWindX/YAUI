@@ -110,18 +110,55 @@ namespace ns_YAUI
         }
 
         public float mDir = 0;//0~360
+        public void rotate(float dir)
+        {
+            mDir += dir;
+            mDir = mDir % 360;
+        }
+
+        public void rotatePoint(Point center/* abs position */, float dir)
+        {
+            var fp = invertTransformAbs(center);
+            mDir += dir;
+            mDir = mDir % 360;
+
+            var ppt = invertTransformParesentAbs(center);
+
+            Matrix m = new Matrix();
+            m.Rotate(mDir);
+            m.Scale(mScalex, mScaley);
+
+            var ppt1 = fp.transform(m);
+
+            px = ppt.X - ppt1.X;
+            py = ppt.Y - ppt1.Y;
+        }
+
+
         public float mScalex = 1;
         public float mScaley = 1;
 
+        public void scale(float sx, float sy)
+        {
+            mScalex = mScalex * sx;
+            mScaley = mScaley * sy;
+        }
         public void scalePoint(Point center, float scaleR)
         {
-            var pt = invertTransform(center);
+            var fp = invertTransformAbs(center);
             mScalex += scaleR - 1;
             mScaley += scaleR - 1;
 
-            var pos = transform(pt);
-            var offset = new Point(pos.X - center.X,  pos.Y - center.Y);
-            position = new Point(px-offset.X, py-offset.Y);
+            var ppt = invertTransformParesentAbs(center);
+
+            Matrix m = new Matrix();
+            m.Rotate(mDir);
+            m.Scale(mScalex, mScaley);
+
+            var ppt1 = fp.transform(m);
+
+            px = ppt.X - ppt1.X;
+            py = ppt.Y - ppt1.Y;
         }
 
         public Point transform(Point pt)

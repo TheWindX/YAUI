@@ -121,7 +121,7 @@ namespace ns_YAUI
             return null;
         }
 
-        public UIWidget childOfPath(string path)
+        public UIWidget findByPath(string path)
         {
             string[] pathItems = path.Split('/');
             UIWidget p = this;
@@ -133,7 +133,7 @@ namespace ns_YAUI
             return p;
         }
 
-        public UIWidget WidgetOfID(string id)
+        public UIWidget findByID(string id)
         {
             return UIRoot.Instance.getIDWidget(id);
         }
