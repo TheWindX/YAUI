@@ -11,7 +11,7 @@ namespace ns_YAUIUser
     class testLayout : Singleton<testLayout>
     {
         const string XMLPAGE = @"
-<resizer name='root' length='256' layout='horizon' layoutInverse='true' layoutFilled='true' expandY='true'>
+<resizer name='root' size='256' layout='horizon' layoutInverse='true' layoutFilled='true' expandY='true'>
     <rect name='split' width='8' expandY='true' color='red'></rect>
     <rect layout='vertical' layoutFilled='true' color='yellow'>
         <rect name='tab' color='orange' width='128' height='24'>

@@ -17,7 +17,8 @@ namespace ns_YAUIUser
             //var test = testTransform.Instance;
             //var test = testHierarchy.Instance;
             //var test = testTips.Instance;
-            var test = testMenu.Instance; 
+            //var test = testMenu.Instance; 
+            var test = testAlign.Instance;
             //var _0 =  testDir.Instance;
             //var _1 = testRoundRect.Instance;
             //var _2 = testLayout.Instance;

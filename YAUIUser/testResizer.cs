@@ -18,8 +18,8 @@ namespace ns_YAUIUser
 <rect shrink='true' clip='*true' padding='5' fillColor='red' layout='vertical'>
     <lable align='leftTop'></lable>
     <lable align='rightTop' text='x'></lable>
-    <blank length='30'></blank>
-    <resizer length='256' clip='true'></resizer>
+    <blank size='30'></blank>
+    <resizer size='256' clip='true'></resizer>
 </rect>
 ") as UIResizer;
         }

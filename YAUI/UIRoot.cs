@@ -83,7 +83,7 @@ namespace ns_YAUI
         {
             if (value == "") return;
             if (value == null) return;
-            value = value.ToLower();
+            //value = value.ToLower();
             if (value[0] == '*')
             {
                 value = value.Substring(1);

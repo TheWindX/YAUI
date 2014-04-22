@@ -11,19 +11,19 @@ namespace ns_YAUIUser
     class UIWindow
     {
         const string XMLLayout = @"
-    <rect name='root' length='512' clip='true' layout='vertical' layoutFilled='true' padding='5' dragAble='true' rotateAble='true' scaleAble='true' strokeColor='*red' color='ff1ba1e2'>
+    <rect name='root' size='512' clip='true' layout='vertical' layoutFilled='true' padding='5' dragAble='true' rotateAble='true' scaleAble='true' strokeColor='*red' color='ff1ba1e2'>
         <lable  text='top' align='leftTop'></lable>
-        <rect length='24' fillColor='ffe04343' align='rightTop' offsetY='-5' >
+        <rect size='24' fillColor='ffe04343' align='rightTop' offsetY='-5' >
             <lable name='close' text='x' align='center' offsetX='1' offsetY='-1'></lable>
         </rect>
-        <blank length='30'></blank>
+        <blank size='30'></blank>
         <rect name='tabContainer' layout='horizon' height='30' expandX='true' clip='true' color='0xffbfdbff'>
         <lable name='tabToggle' text='∧' color='ff000000' size='10' margin='8' align='rightMiddle'></lable>
         </rect>
         <rect name='toolContainer' layout='horizon' height='100' expandX='true' fillColor='*0xff3e4649'></rect>
         <rect name='clientContainer' clip='true'></rect>
         
-        <rect name='resizer' length='32' align='rightBottom' fillColor='*'></rect>
+        <rect name='resizer' size='32' align='rightBottom' fillColor='*'></rect>
     </rect>
 ";
         const string XMLTab = @"

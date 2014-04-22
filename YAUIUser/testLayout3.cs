@@ -12,8 +12,8 @@ namespace ns_YAUIUser
     {
         const string XMLPAGE = @"
 <rect clip='true' shrink='true' color='DarkGoldenrod' layout='vertical' padding='5' dragAble='true' rotateAble='true' scaleAble='true'>
-    <resizer name='client' length='512' layout='vertical' layoutFilled='true'>
-        <blank length='32' layout='horizon' layoutFilled='true' layoutInverse='true' expandX='true'>
+    <resizer name='client' size='512' layout='vertical' layoutFilled='true'>
+        <blank size='32' layout='horizon' layoutFilled='true' layoutInverse='true' expandX='true'>
             <lable text='x'></lable>
             <blank layout='horizon' layoutFilled='true'>
                 <lable text='template' size='12'></lable>
@@ -34,8 +34,8 @@ namespace ns_YAUIUser
 ";
         const string XMLPAGE2 = @"
 <rect clip='true' shrink='true' color='DarkGoldenrod' layout='vertical' padding='5' dragAble='true' rotateAble='true' scaleAble='true'>
-    <resizer name='client' length='512' layout='vertical' >
-        <rect paddingX='13' length='32' layout='horizon' layoutInverse='true' expandX='true'>
+    <resizer name='client' size='512' layout='vertical' >
+        <rect paddingX='13' size='32' layout='horizon' layoutInverse='true' expandX='true'>
             <lable text='x'></lable>
             <rect expand='true' layout='horizon'>
                 <lable text='template' size='12'></lable>

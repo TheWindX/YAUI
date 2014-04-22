@@ -14,9 +14,9 @@ namespace ns_YAUIUser
         {
             UIRoot.Instance.root.appendFromXML(
 @"
-    <rect name='r1' length='512' dragAble='true' rotateAble='true' scaleAble='true'>
-        <round_rect name='r2' radius='5' length='256'>
-            <round_rect  name='r3' length='128'>
+    <rect name='r1' size='512' dragAble='true' rotateAble='true' scaleAble='true'>
+        <round_rect name='r2' radius='5' size='256'>
+            <round_rect  name='r3' size='128'>
                 <rect name='r4' length = 'NA' width='22' height='64'>
                     <lable name='r5' text='LEELOO' color='0xffffff00'></lable>
                 </rect>    

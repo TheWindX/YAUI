@@ -695,13 +695,13 @@ namespace ns_YAUI
             noAlign,
             center,
             leftTop,
-            leftMiddle,
+            left,
             leftBottom,
             rightTop,
-            rightMiddle,
+            right,
             rightBottom,
-            middleTop,
-            middleBottom,
+            top,
+            bottom,
         }
 
         EAlign mAlign = EAlign.noAlign;
@@ -783,7 +783,7 @@ namespace ns_YAUI
                     alignPos.X += offsetx + pui.paddingX + marginX;
                     alignPos.Y += offsety + pui.paddingY + marginY;
                     break;
-                case EAlign.leftMiddle:
+                case EAlign.left:
                     alignPos = paresent.invertTransform((paresent as UIWidget).leftMiddle);
                     alignPos.X += offsetx + pui.paddingX + marginX;
                     break;
@@ -797,7 +797,7 @@ namespace ns_YAUI
                     alignPos.X += offsetx - pui.paddingX - marginX;
                     alignPos.Y += offsety + pui.paddingY + marginY;
                     break;
-                case EAlign.rightMiddle:
+                case EAlign.right:
                     alignPos = paresent.invertTransform((paresent as UIWidget).rightMiddle);
                     alignPos.X += offsetx - pui.paddingX - marginX;
                     break;
@@ -806,12 +806,11 @@ namespace ns_YAUI
                     alignPos.X += offsetx - pui.paddingX - marginX;
                     alignPos.Y += offsety - pui.paddingY - marginY;
                     break;
-                case EAlign.middleTop:
+                case EAlign.top:
                     alignPos = paresent.invertTransform((paresent as UIWidget).middleTop);
-                    alignPos.X += offsetx - pui.paddingX - marginX;
-                    alignPos.Y += offsety - pui.paddingY - marginY;
+                    alignPos.Y += offsety + pui.paddingY - marginY;
                     break;
-                case EAlign.middleBottom:
+                case EAlign.bottom:
                     alignPos = paresent.invertTransform((paresent as UIWidget).middleBottom);
                     alignPos.Y += offsety - pui.paddingY - marginY;
                     break;
@@ -828,7 +827,7 @@ namespace ns_YAUI
                 case EAlign.leftTop:
                     this.leftTop = alignPos;
                     break;
-                case EAlign.leftMiddle:
+                case EAlign.left:
                     this.leftMiddle = alignPos;
                     break;
                 case EAlign.leftBottom:
@@ -837,16 +836,16 @@ namespace ns_YAUI
                 case EAlign.rightTop:
                     this.rightTop = alignPos;
                     break;
-                case EAlign.rightMiddle:
+                case EAlign.right:
                     this.rightMiddle = alignPos;
                     break;
                 case EAlign.rightBottom:
                     this.rightBottom = alignPos;
                     break;
-                case EAlign.middleTop:
+                case EAlign.top:
                     this.middleTop = alignPos;
                     break;
-                case EAlign.middleBottom:
+                case EAlign.bottom:
                     this.middleBottom = alignPos;
                     break;
                 default:
@@ -1330,6 +1329,7 @@ namespace ns_YAUI
         {
             set
             {
+                if (mDragAble == value) return;
                 mDragAble = value;
                 if (mDragAble)
                 {
@@ -1380,6 +1380,7 @@ namespace ns_YAUI
         {
             set
             {
+                if (mDragAble == value) return;
                 mRotateAble = value;
                 if (mRotateAble)
                 {
@@ -1433,6 +1434,7 @@ namespace ns_YAUI
         {
             set
             {
+                if (mDragAble == value) return;
                 mScaleAble = value;
                 if (mScaleAble)
                 {
@@ -1595,6 +1597,58 @@ namespace ns_YAUI
             if (ret != null)
             {
                 UIRoot.Instance.setIDWidget(ret.Value, this);
+            }
+
+            ret = node.Attributes.GetNamedItem("location");
+            if (ret != null)
+            {
+                var strs = ret.Value.Split(',').ToList();
+                strs.ForEach(str => str.Trim());
+                int c = strs.Count();
+                if(c>0)
+                {
+                    px = strs[0].castFloat();
+                }
+                if (c > 1)
+                {
+                    py = strs[1].castFloat();
+                }
+            }
+
+            ret = node.Attributes.GetNamedItem("size");
+            if (ret != null)
+            {
+                var strs = ret.Value.Split(',').ToList();
+                strs.ForEach(str => str.Trim());
+                int c = strs.Count();
+                if (c > 0)
+                {
+                    height = width = strs[0].castFloat();
+                }
+                if (c > 1)
+                {
+                    height = strs[1].castFloat();
+                }
+            }
+
+            ret = node.Attributes.GetNamedItem("editMode");
+            if (ret != null)
+            {
+                var strs = ret.Value.Split(',').ToList();
+                strs.ForEach(str => str.Trim());
+
+                if (strs.Contains("dragAble"))
+                {
+                    dragAble = true;
+                }
+                if (strs.Contains("rotateAble"))
+                {
+                    rotateAble = true;
+                }
+                if (strs.Contains("scaleAble"))
+                {
+                    scaleAble = true;
+                }
             }
 
             px = getAttr(node, "px", px, out br);

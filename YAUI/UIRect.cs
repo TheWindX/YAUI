@@ -127,13 +127,6 @@ namespace ns_YAUI
             uint sc = (uint)schemes.strokeColor;
             bool br = true;
 
-            h = w = getAttr<int>(node, "length", schemes.width, out br);
-            if (!br)
-            {
-                w = getAttr<int>(node, "width", schemes.width, out br);
-                h = getAttr<int>(node, "height", schemes.height, out br);
-            }
-
             fc = (uint)getAttr<EColorUtil>(node, "color", schemes.fillColor, out br);
             if (!br)
             {

@@ -141,16 +141,7 @@ namespace ns_YAUI
             bool br = true;
 
             w = h = getAttr(node, "radius", schemes.width/2, out br) * 2;
-            if (!br)
-            {
-                h = w = getAttr<int>(node, "length", schemes.width, out br);
-                if (!br)
-                {
-                    w = getAttr<int>(node, "width", schemes.width, out br);
-                    h = getAttr<int>(node, "height", schemes.height, out br);
-                }
-            }
-
+            
             fc = (uint)getAttr<EColorUtil>(node, "color", schemes.fillColor, out br);
             if (!br)
             {
