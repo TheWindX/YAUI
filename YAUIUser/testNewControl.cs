@@ -50,10 +50,10 @@ namespace ns_YAUIUser
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
-            int w = 64;
-            int h = 64;
-            uint fc = 0xffaaaaaa;
-            uint sc = 0xffffffff;
+            int w = schemes.width;
+            int h = schemes.height;
+            uint fc = (uint)schemes.fillColor;
+            uint sc = (uint)schemes.strokeColor;
             string strRet = null;
 
             var ret = node.Attributes.GetNamedItem("width");

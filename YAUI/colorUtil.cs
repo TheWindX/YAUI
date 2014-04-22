@@ -179,5 +179,8 @@ namespace ns_YAUI
         slategray = 0xff708090,
         darkslategray = 0xff2f4f4f,
         black = 0xff000000,
+
+        //
+        transparent = 0x00000000,
     }
 }

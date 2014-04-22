@@ -202,9 +202,9 @@ namespace ns_YAUI
             return selectIndex(mSelectItem+1);
         }
 
-        uint mFColor = (uint)EColorUtil.white;
-        uint mBColor = (uint)EColorUtil.black;
-        uint mSelectColor = (uint)EColorUtil.brown;
+        uint mFColor = (uint)schemes.foregroundColor;
+        uint mBColor = (uint)schemes.backgroundColor;
+        uint mSelectColor = (uint)schemes.selectColor;
         public uint foreground
         {
             set

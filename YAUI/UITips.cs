@@ -19,6 +19,7 @@ namespace ns_YAUI
         {
             appendFromXML(XMLLayout);
             mRR = this.findByTag("round_rect") as UIRoundRect;
+            mRR.fillColor = (uint)schemes.backgroundColor;
             mText = this.findByTag("round_rect/lable") as UILable;
         }
 

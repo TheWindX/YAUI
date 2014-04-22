@@ -80,23 +80,23 @@ namespace ns_YAUI
             var ret = node.Attributes.GetNamedItem("name");
             if (ret != null) ui.name = ret.Value;
 
-            int w = 64;
-            int h = 64;
-            uint fc = 0xffaaaaaa;
-            uint sc = 0xffffffff;
+            int w = schemes.width;
+            int h = schemes.height;
+            uint fc = (uint)schemes.fillColor;
+            uint sc = (uint)schemes.strokeColor;
             bool br = true;
 
-            h = w = getAttr<int>(node, "length", 64, out br);
+            h = w = getAttr<int>(node, "length", schemes.width, out br);
             if (!br)
             {
-                w = getAttr<int>(node, "width", 64, out br);
-                h = getAttr<int>(node, "height", 64, out br);
+                w = getAttr<int>(node, "width", schemes.width, out br);
+                h = getAttr<int>(node, "height", schemes.height, out br);
             }
 
-            fc = (uint)getAttr<EColorUtil>(node, "color", EColorUtil.silver, out br);
+            fc = (uint)getAttr<EColorUtil>(node, "color", schemes.fillColor, out br);
             if (!br)
             {
-                fc = getAttr(node, "color", (uint)(EColorUtil.silver), out br);
+                fc = getAttr(node, "color", (uint)(schemes.fillColor), out br);
             }
 
             UIRoot.Instance.loadXMLChildren(node.ChildNodes, (ui as UIResizer).mClient, null);

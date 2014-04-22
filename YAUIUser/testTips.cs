@@ -11,9 +11,9 @@ namespace ns_YAUIUser
     {
         public testTips()
         {
-            UI.Instance.getTip().foreground = (uint)EColorUtil.red;
-            UI.Instance.getTip().background = (uint)EColorUtil.black;
-            UI.Instance.getTip().size = 20;
+            //UI.Instance.getTip().foreground = (uint)EColorUtil.red;
+            //UI.Instance.getTip().background = (uint)EColorUtil.black;
+            //UI.Instance.getTip().size = 20;
             var id = TimerManager.get().setInterval(t =>
                 {
                     UI.Instance.setTips("leave time is:" + (15000 - t));

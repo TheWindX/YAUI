@@ -131,10 +131,10 @@ namespace ns_YAUI
 
             text = getAttr(node, "text", "template", out br);
             size = getAttr(node, "size", 12, out br);
-            color = (uint)getAttr<EColorUtil>(node, "color", EColorUtil.silver, out br);
+            color = (uint)getAttr<EColorUtil>(node, "color", schemes.textColor, out br);
             if (!br)
             {
-                color = getAttr(node, "color", (uint)(EColorUtil.white), out br);
+                color = getAttr(node, "color", (uint)(schemes.textColor), out br);
             }
             style = getAttr(node, "style", EStyle.normal, out br);
 

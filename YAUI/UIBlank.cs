@@ -78,11 +78,11 @@ namespace ns_YAUI
             int w, h;
             bool br = true;
 
-            h = w = getAttr<int>(node, "length", 64, out br);
+            h = w = getAttr<int>(node, "length", schemes.width, out br);
             if (!br)
             {
-                w = getAttr<int>(node, "width", 64, out br);
-                h = getAttr<int>(node, "height", 64, out br);
+                w = getAttr<int>(node, "width", schemes.width, out br);
+                h = getAttr<int>(node, "height", schemes.height, out br);
             }
 
             ui.width = w;

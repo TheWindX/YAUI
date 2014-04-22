@@ -68,6 +68,7 @@
     <Compile Include="ExpandString.cs" />
     <Compile Include="ExtendRectangle.cs" />
     <Compile Include="Entity.cs" />
+    <Compile Include="schemes.cs" />
     <Compile Include="UIInputForm.cs">
       <SubType>Form</SubType>
     </Compile>

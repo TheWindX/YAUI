@@ -269,39 +269,39 @@ namespace ns_YAUI
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
-            int w = 64;
-            int h = 64;
+            int w = schemes.width;
+            int h = schemes.height;
             int r = 8;
             bool[] corners = new bool[] { true, true, true, true };
-            uint fc = 0xffaaaaaa;
-            uint sc = 0xffffffff;
+            uint fc = (uint)schemes.fillColor;
+            uint sc = (uint)schemes.strokeColor;
             bool br = true;
 
-            h = w = getAttr<int>(node, "length", 64, out br);
+            h = w = getAttr<int>(node, "length", schemes.width, out br);
             if (!br)
             {
-                w = getAttr<int>(node, "width", 64, out br);
-                h = getAttr<int>(node, "height", 64, out br);
+                w = getAttr<int>(node, "width", schemes.width, out br);
+                h = getAttr<int>(node, "height", schemes.height, out br);
             }
 
-            fc = (uint)getAttr<EColorUtil>(node, "color", EColorUtil.silver, out br);
+            fc = (uint)getAttr<EColorUtil>(node, "color", schemes.fillColor, out br);
             if (!br)
             {
-                fc = getAttr(node, "color", (uint)(EColorUtil.silver), out br);
+                fc = getAttr(node, "color", (uint)(schemes.fillColor), out br);
                 if (!br)
                 {
 
-                    fc = (uint)getAttr<EColorUtil>(node, "fillColor", EColorUtil.silver, out br);
+                    fc = (uint)getAttr<EColorUtil>(node, "fillColor", schemes.fillColor, out br);
                     if (!br)
                     {
-                        fc = getAttr(node, "fillColor", (uint)(EColorUtil.silver), out br);
+                        fc = getAttr(node, "fillColor", (uint)(schemes.fillColor), out br);
                     }
                 }
             }
-            sc = (uint)getAttr<EColorUtil>(node, "strokeColor", EColorUtil.white, out br);
+            sc = (uint)getAttr<EColorUtil>(node, "strokeColor", schemes.strokeColor, out br);
             if (!br)
             {
-                sc = getAttr(node, "strokeColor", (uint)(EColorUtil.white), out br);
+                sc = getAttr(node, "strokeColor", (uint)(schemes.strokeColor), out br);
             }
 
             EForward fw = getAttr<EForward>(node, "forward", EForward.e_up, out br);
