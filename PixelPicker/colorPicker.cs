@@ -16,7 +16,7 @@ namespace ColorPicker
     {
         #region 得到光标在屏幕上的位置
         [DllImport("user32")]
-        private static extern bool GetCursorPos(out Point lpPoint);
+        private static extern bool GetCursorPos(out PointF lpPoint);
 
         [DllImport("user32")]
         public static extern short GetKeyState(int nVirtKey);
@@ -24,9 +24,9 @@ namespace ColorPicker
         /// 获取光标相对于显示器的位置
         /// </summary>
         /// <returns></returns>
-        public static Point GetCursorPosition()
+        public static PointF GetCursorPosition()
         {
-            Point showPoint = new Point();
+            PointF showPoint = new PointF();
             GetCursorPos(out showPoint);
             return showPoint;
         }

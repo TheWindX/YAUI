@@ -60,24 +60,24 @@ namespace ns_YAUI
             mPen = new Pen(Color.FromArgb((Int32)scolor));
         }
 
-        public Point pivotPos
+        public PointF pivotPos
         {
             get
             {
                 switch (mForward)
                 {
                     case EForward.e_up:
-                        return transform(new Point(_w / 2, 0));
+                        return transform(new PointF(_w / 2, 0));
                     case EForward.e_down:
-                        return transform(new Point(_w / 2, _h));
+                        return transform(new PointF(_w / 2, _h));
                     case EForward.e_left:
-                        return transform(new Point(0, _h / 2));
+                        return transform(new PointF(0, _h / 2));
                     case EForward.e_right:
-                        return transform(new Point(_w, _h / 2));
+                        return transform(new PointF(_w, _h / 2));
                     default:
                         break;
                 }
-                return new Point();
+                return new PointF();
             }
         }
 
@@ -119,11 +119,11 @@ namespace ns_YAUI
             }
         }
 
-        public Point center
+        public PointF center
         {
             get
             {
-                return new Point(px + _w / 2, py + _h / 2);
+                return new PointF(px + _w / 2, py + _h / 2);
             }
             set
             {
@@ -132,11 +132,11 @@ namespace ns_YAUI
             }
         }
 
-        public override Rectangle drawRect
+        public override RectangleF drawRect
         {
             get
             {
-                return new Rectangle(0, 0, _w, _h);
+                return new RectangleF(0, 0, _w, _h);
             }
         }
 
@@ -146,7 +146,7 @@ namespace ns_YAUI
             get { return "Arrow"; }
         }
 
-        public override bool testSelfPick(Point pos)
+        public override bool testSelfPick(PointF pos)
         {
             switch (mForward)
             {
@@ -247,16 +247,16 @@ namespace ns_YAUI
             switch (mForward)
             {
                 case EForward.e_up:
-                    p.AddLines(new Point[] { new Point(_w / 2, 0), new Point(_w, _h), new Point(0, _h) });
+                    p.AddLines(new PointF[] { new PointF(_w / 2, 0), new PointF(_w, _h), new PointF(0, _h) });
                     break;
                 case EForward.e_right:
-                    p.AddLines(new Point[] { new Point(0, 0), new Point(0, _h), new Point(_w, _h/2) });
+                    p.AddLines(new PointF[] { new PointF(0, 0), new PointF(0, _h), new PointF(_w, _h/2) });
                     break;
                 case EForward.e_left:
-                    p.AddLines(new Point[] { new Point(0, _h/2), new Point(_w, 0), new Point(_w, _h) });
+                    p.AddLines(new PointF[] { new PointF(0, _h/2), new PointF(_w, 0), new PointF(_w, _h) });
                     break;
                 case EForward.e_down:
-                    p.AddLines(new Point[] { new Point(0, 0), new Point(_w, 0), new Point(_w/2, _h) });
+                    p.AddLines(new PointF[] { new PointF(0, 0), new PointF(_w, 0), new PointF(_w/2, _h) });
                     break;
                 default:
                     break;

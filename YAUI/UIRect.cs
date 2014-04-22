@@ -17,8 +17,8 @@ namespace ns_YAUI
 {
     public class UIRect : UIWidget
     {
-        int _w = 0;
-        int _h = 0;
+        float _w = 0;
+        float _h = 0;
         uint scolor;
         uint fcolor;
         Brush mBrush;
@@ -34,7 +34,7 @@ namespace ns_YAUI
         }
 
 
-        protected override Rectangle dirtyRect
+        protected override RectangleF dirtyRect
         {
             get { return drawRect; }// rect
         }
@@ -65,7 +65,7 @@ namespace ns_YAUI
             }
         }
 
-        public override int width
+        public override float width
         {
             get
             {
@@ -77,7 +77,7 @@ namespace ns_YAUI
             }
         }
 
-        public override int height
+        public override float height
         {
             get
             {
@@ -95,11 +95,11 @@ namespace ns_YAUI
             _h = h;
         }
 
-        public override Rectangle drawRect
+        public override RectangleF drawRect
         {
             get
             {
-                return new Rectangle(0, 0, _w, _h);
+                return new RectangleF(0, 0, _w, _h);
             }
         }
 
@@ -108,7 +108,7 @@ namespace ns_YAUI
             get { return "rect"; }
         }
 
-        public override bool testSelfPick(Point pos)
+        public override bool testSelfPick(PointF pos)
         {
             return true;
         }

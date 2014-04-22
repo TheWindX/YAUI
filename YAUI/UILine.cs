@@ -56,14 +56,14 @@ namespace ns_YAUI
             }
         }
 
-        public override Rectangle drawRect
+        public override RectangleF drawRect
         {
             get
             {
                 if(mHorizen)
-                    return new Rectangle(0, -_lineWidth, _length, _lineWidth*2);
+                    return new RectangleF(0, -_lineWidth, _length, _lineWidth*2);
                 else
-                    return new Rectangle(-_lineWidth, 0, _lineWidth*2, _length);
+                    return new RectangleF(-_lineWidth, 0, _lineWidth*2, _length);
             }
         }
 
@@ -72,7 +72,7 @@ namespace ns_YAUI
             get { return "line"; }
         }
 
-        public override bool testSelfPick(Point pos)
+        public override bool testSelfPick(PointF pos)
         {
             return true;
         }

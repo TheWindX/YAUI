@@ -580,7 +580,7 @@ namespace ns_YAUI
             bool ret = true;
             uiout = focusWidget;
             if (uiout == null)
-                ret = root.doTestPick(new Point(x, y), out uiout);
+                ret = root.doTestPick(new PointF(x, y), out uiout);
             if (ret)
             {
                 if (currentWidget != uiout) 

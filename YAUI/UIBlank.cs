@@ -17,13 +17,13 @@ namespace ns_YAUI
 {
     public class UIBlank : UIWidget
     {
-        int _w = 20;
-        int _h = 20;
-        public override Rectangle drawRect
+        float _w = 20;
+        float _h = 20;
+        public override RectangleF drawRect
         {
             get
             {
-                return new Rectangle(0, 0, _w, _h);
+                return new RectangleF(0, 0, _w, _h);
             }
         }
 
@@ -37,7 +37,7 @@ namespace ns_YAUI
         }
 
         //blank 只用于排版不用于捡选
-        //public override bool testSelfPick(Point pos)
+        //public override bool testSelfPick(PointF pos)
         //{
         //    return false;
         //}
@@ -47,7 +47,7 @@ namespace ns_YAUI
             get { return "blank"; }
         }
 
-        public override int width
+        public override float width
         {
             get
             {
@@ -59,7 +59,7 @@ namespace ns_YAUI
             }
         }
 
-        public override int height
+        public override float height
         {
             get
             {

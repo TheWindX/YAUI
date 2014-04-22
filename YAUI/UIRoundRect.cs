@@ -17,9 +17,9 @@ namespace ns_YAUI
 {
     public class UIRoundRect : UIWidget
     {
-        int _w = 64;
-        int _h = 64;
-        int _r = 16;
+        float _w = 64;
+        float _h = 64;
+        float _r = 16;
         uint scolor;
         uint fcolor;
         Brush mBrush;
@@ -65,7 +65,7 @@ namespace ns_YAUI
             }
         }
 
-        public override int width
+        public override float width
         {
             get
             {
@@ -77,7 +77,7 @@ namespace ns_YAUI
             }
         }
 
-        public override int height
+        public override float height
         {
             get
             {
@@ -143,17 +143,17 @@ namespace ns_YAUI
             _h = h;
         }
 
-        public override Rectangle drawRect
+        public override RectangleF drawRect
         {
             get
             {
-                return new Rectangle(0, 0, _w, _h);
+                return new RectangleF(0, 0, _w, _h);
             }
         }
 
-        protected override Rectangle dirtyRect
+        protected override RectangleF dirtyRect
         {
-            get{ return new Rectangle(_r/2, _r/2, _w-_r, _h-_r*2); }// rect
+            get{ return new RectangleF(_r/2, _r/2, _w-_r, _h-_r*2); }// rect
         }
 
         public override string typeName
@@ -161,7 +161,7 @@ namespace ns_YAUI
             get { return "round_rect"; }
         }
 
-        public override bool testSelfPick(Point pos)
+        public override bool testSelfPick(PointF pos)
         {
             return true;
         }

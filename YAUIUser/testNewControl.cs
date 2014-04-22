@@ -24,7 +24,7 @@ namespace ns_YAUIUser
             ns_YAUI.TimerManager.get().setInterval(t => { mRect.width = (int)(Math.Abs(Math.Sin(t / 1000.0)) * (double)wpreserver); setDirty(true); }, 10);
         }
 
-        public override int width
+        public override float width
         {
             get
             {
@@ -36,7 +36,7 @@ namespace ns_YAUIUser
             }
         }
 
-        public override int height
+        public override float height
         {
             get
             {

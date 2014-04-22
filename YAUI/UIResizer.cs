@@ -24,15 +24,15 @@ namespace ns_YAUI
 <rect debugName='UIResizer_resizer' length='32' align='rightBottom'>
 </rect>
 ") as UIRect;
-            int spx = 0;
-            int spy = 0;
-            int sw = 0;
-            int sh = 0;
+            float spx = 0;
+            float spy = 0;
+            float sw = 0;
+            float sh = 0;
             Action<int, int> moveHandle = (nx, ny) =>
             {
-                mResizer.updateFixpoint(nx, ny);
-                var dspx = mResizer.px - spx;
-                var dspy = mResizer.py - spy;
+                mResizer.updateFixPoint(nx, ny);
+                var dspx = (float)(mResizer.px - spx);
+                var dspy = (float)(mResizer.py - spy);
                 width = max(sw + dspx, 0);
                 height = max(sh + dspy, 0);
                 this.setDirty(true);
@@ -46,7 +46,7 @@ namespace ns_YAUI
                 };
             mResizer.evtOnLMDown += (ui, x, y) =>
                 {
-                    mResizer.beginFixpoint(x, y);
+                    mResizer.beginFixPoint((float)x, (float)y);
                     spx = mResizer.px;
                     spy = mResizer.py;
                     sw = width;

@@ -77,7 +77,7 @@ namespace ns_pixelPicker
                     if (ColorPicker.CursorPointManager.GetMouseLeftDown() )
                     {
                         var pt = ColorPicker.CursorPointManager.GetCursorPosition();
-                        var cl = ColorPicker.ColorPickerManager.GetColor(pt.X, pt.Y);
+                        var cl = ColorPicker.ColorPickerManager.GetColor((int)pt.X, (int)pt.Y);
                         //if (oldCl != cl)
                         {
                             ns_YAUtils.CSRepl.Instance.print(string.Format("{0}(0x{1:x}) , at ({2}, {3})", cl, cl.ToArgb(), pt.X, pt.Y));

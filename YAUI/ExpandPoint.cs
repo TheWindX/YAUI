@@ -10,9 +10,9 @@ namespace ns_YAUI
 {
     public static class ExpandPoint
     {
-        public static Point transform(this Point _this, Matrix m)
+        public static PointF transform(this PointF _this, Matrix m)
         {
-            var pts = new Point[] { _this };
+            var pts = new PointF[] { _this };
             m.TransformPoints(pts);
             return pts[0];
         }

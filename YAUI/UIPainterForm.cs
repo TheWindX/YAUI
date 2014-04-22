@@ -233,7 +233,7 @@ namespace ns_YAUI
             }
         }
 
-        public Point getMousePosition()
+        public PointF getMousePosition()
         {
             return PointToClient(Control.MousePosition);
         }

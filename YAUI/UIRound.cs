@@ -17,8 +17,8 @@ namespace ns_YAUI
 {
     public class UIRound : UIWidget
     {
-        int _w;
-        int _h;
+        float _w;
+        float _h;
         uint scolor;
         uint fcolor;
         Brush mBrush;
@@ -61,7 +61,7 @@ namespace ns_YAUI
             }
         }
 
-        public override int width
+        public override float width
         {
             get
             {
@@ -73,7 +73,7 @@ namespace ns_YAUI
             }
         }
 
-        public override int height
+        public override float height
         {
             get
             {
@@ -91,11 +91,11 @@ namespace ns_YAUI
             _h = h;
         }
 
-        public override Rectangle drawRect
+        public override RectangleF drawRect
         {
             get
             {
-                return new Rectangle(-_w / 2, -_h / 2, _w , _h);
+                return new RectangleF(-_w / 2, -_h / 2, _w , _h);
             }
         }
 
@@ -104,7 +104,7 @@ namespace ns_YAUI
             get { return "round"; }
         }
 
-        public override bool testSelfPick(Point pos)
+        public override bool testSelfPick(PointF pos)
         {
             pos.X = pos.X + _w / 2;
             pos.Y = pos.Y + _h / 2;
@@ -124,8 +124,8 @@ namespace ns_YAUI
             var m = g.Transform;
             m.Translate(-_w / 2.0f, -_h / 2.0f);
             g.Transform = m;
-            g.FillEllipse(mBrush, new Rectangle(0, 0, _w, _h));
-            g.DrawEllipse(mPen, new Rectangle(0, 0, _w, _h));
+            g.FillEllipse(mBrush, new RectangleF(0, 0, _w, _h));
+            g.DrawEllipse(mPen, new RectangleF(0, 0, _w, _h));
             g.Restore(gs);
         }
 

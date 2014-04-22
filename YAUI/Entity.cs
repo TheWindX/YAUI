@@ -72,8 +72,8 @@ namespace ns_YAUI
             c.mParesent = this;
         }
 
-        protected Point mPosition = new Point();
-        public Point position
+        protected PointF mPosition = new PointF();
+        public PointF position
         {
             get
             {
@@ -85,7 +85,7 @@ namespace ns_YAUI
             }
         }
 
-        public int px
+        public float px
         {
             get
             {
@@ -97,7 +97,7 @@ namespace ns_YAUI
             }
         }
 
-        public int py
+        public float py
         {
             get
             {
@@ -110,13 +110,25 @@ namespace ns_YAUI
         }
 
         public float mDir = 0;//0~360
-        public void rotate(float dir)
+        public void rotateSelf(float dir)
         {
             mDir += dir;
             mDir = mDir % 360;
         }
 
-        public void rotatePoint(Point center/* abs position */, float dir)
+        public void rotate(float dir)
+        {
+            var m = new Matrix();
+            m.RotateAt(dir, new PointF(-px, -py));
+
+            mDir = mDir + dir;
+            mDir = mDir % 360;
+
+            px = px + m.OffsetX;
+            py = py + m.OffsetY;
+        }
+
+        public void rotatePointF(PointF center/* abs position */, float dir)
         {
             var fp = invertTransformAbs(center);
             mDir += dir;
@@ -143,7 +155,7 @@ namespace ns_YAUI
             mScalex = mScalex * sx;
             mScaley = mScaley * sy;
         }
-        public void scalePoint(Point center, float scaleR)
+        public void scalePointF(PointF center, float scaleR)
         {
             var fp = invertTransformAbs(center);
             mScalex += scaleR - 1;
@@ -161,18 +173,18 @@ namespace ns_YAUI
             py = ppt.Y - ppt1.Y;
         }
 
-        public Point transform(Point pt)
+        public PointF transform(PointF pt)
         {
-            var pts = new Point[] { pt };
+            var pts = new PointF[] { pt };
             getLocalMatrix().TransformPoints(pts);
             return pts[0];
         }
 
-        public Point invertTransform(Point pt)
+        public PointF invertTransform(PointF pt)
         {
             var t = getLocalMatrix();
             t.Invert();
-            var pts = new Point[] { pt };
+            var pts = new PointF[] { pt };
             t.TransformPoints(pts);
             return pts[0];
         }
@@ -188,45 +200,46 @@ namespace ns_YAUI
             return m;
         }
 
-        public Point transformAbs(Point pt)
+        public PointF transformAbs(PointF pt)
         {
             var t = getAbsMatrix();
-            var pts = new Point[] { pt };
+            var pts = new PointF[] { pt };
             t.TransformPoints(pts);
             pt = pts[0];
             return pt;
         }
 
-        public Point invertTransformAbs(Point pt)
+        public PointF invertTransformAbs(PointF pt)
         {
             var t = getAbsMatrix();
             t.Invert();
-            var pts = new Point[] { pt };
+            var pts = new PointF[] { pt };
+            var m = new Matrix();
             t.TransformPoints(pts);
             pt = pts[0];
             return pt;
         }
 
-        public Point transformParesentAbs(Point pt)
+        public PointF transformParesentAbs(PointF pt)
         {
             Matrix t;
             if (mParesent != null)
                 t = mParesent.getAbsMatrix();
             else t = new Matrix();//ID
-            var pts = new Point[] { pt };
+            var pts = new PointF[] { pt };
             t.TransformPoints(pts);
             pt = pts[0];
             return pt;
         }
 
-        public Point invertTransformParesentAbs(Point pt)
+        public PointF invertTransformParesentAbs(PointF pt)
         {
             Matrix t;
             if (mParesent != null)
                 t = mParesent.getAbsMatrix();
             else t = new Matrix();//ID
             t.Invert();
-            var pts = new Point[] { pt };
+            var pts = new PointF[] { pt };
             t.TransformPoints(pts);
             pt = pts[0];
             return pt;
@@ -242,29 +255,29 @@ namespace ns_YAUI
             return m;
         }
 
-        Point fp;
-        public void beginFixpoint(int x, int y)
+        PointF fp;
+        public void beginFixPoint(float x, float y)
         {
-            fp = invertTransformAbs(new Point(x, y));
+            fp = invertTransformAbs(new PointF(x, y));
         }
 
-        public void updateFixpoint(int x, int y)
+        public void updateFixPoint(float x, float y)
         {
-            var delta = updateFixpointDelta(x, y);
-            position = new Point(px + delta.X, py + delta.Y);
+            var delta = updateFixPointDelta(x, y);
+            position = new PointF(px + delta.X, py + delta.Y);
         }
 
-        public Point updateFixpointDelta(int x, int y)
+        public PointF updateFixPointDelta(float x, float y)
         {
-            var ppt = invertTransformParesentAbs(new Point(x, y));
+            var ppt = invertTransformParesentAbs(new PointF(x, y));
             Matrix m = new Matrix();
             m.Rotate(mDir);
             m.Scale(mScalex, mScaley);
 
-            var pts = new Point[] { fp };
+            var pts = new PointF[] { fp };
             m.TransformPoints(pts);
             var ppt1 = pts[0];
-            return new Point(ppt.X - ppt1.X-px, ppt.Y - ppt1.Y-py);
+            return new PointF(ppt.X - ppt1.X-px, ppt.Y - ppt1.Y-py);
         }
     }
 }

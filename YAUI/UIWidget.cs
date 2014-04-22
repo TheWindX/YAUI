@@ -294,13 +294,13 @@ namespace ns_YAUI
         public int ID = -1;
         public string StringID = "";
         //properties start
-        public virtual Rectangle drawRect
+        public virtual RectangleF drawRect
         {
-            get { return new Rectangle(0, 0, width, height); }
+            get { return new RectangleF(0, 0, width, height); }
         }
 
         //properties start
-        public virtual Rectangle clipRect
+        public virtual RectangleF clipRect
         {
             get 
             {
@@ -312,7 +312,7 @@ namespace ns_YAUI
             }
         }
 
-        public virtual int width
+        public virtual float width
         {
             get
             {
@@ -323,7 +323,7 @@ namespace ns_YAUI
             }
         }
 
-        public virtual int height
+        public virtual float height
         {
             get
             {
@@ -335,24 +335,24 @@ namespace ns_YAUI
         }
         
 
-        public Rectangle layoutRect
+        public RectangleF layoutRect
         {
             get
             {
                 var rc = drawRect;
-                rc.Location = new Point(rc.Location.X - marginX, rc.Location.Y - marginY);
-                rc.Size = new Size(rc.Size.Width + marginX*2, rc.Size.Height + marginY*2);
+                rc.Location = new PointF(rc.Location.X - marginX, rc.Location.Y - marginY);
+                rc.Size = new SizeF(rc.Size.Width + marginX*2, rc.Size.Height + marginY*2);
                 return rc;
             }
         }
 
         //遮挡矩形，如果 occupyRect 超过了 dirtyRect, 就需要向上 paresent重绘了，否则本地重绘就行
-        protected virtual Rectangle dirtyRect
+        protected virtual RectangleF dirtyRect
         {
-            get{return new Rectangle(); }// rect
+            get{return new RectangleF(); }// rect
         }
 
-        Rectangle? mOccupyRect = null;
+        RectangleF? mOccupyRect = null;
         internal void invalidRect()
         {
             mOccupyRect = null;
@@ -407,7 +407,7 @@ namespace ns_YAUI
 #endif
         }
 
-        protected Rectangle occupyRect
+        protected RectangleF occupyRect
         {
             get
             {
@@ -442,17 +442,17 @@ namespace ns_YAUI
             }
         }
 
-        public int borderX
+        public float borderX
         {
             get { return drawRect.Width; }
         }
 
-        public int borderY
+        public float borderY
         {
             get { return drawRect.Height; }
         }
 
-        //public virtual Rectangle pickRect
+        //public virtual RectangleF pickRect
         //{
         //    get
         //    {
@@ -545,7 +545,7 @@ namespace ns_YAUI
 
         #region layout
         #region align
-        public Point center
+        public PointF center
         {
             get
             {
@@ -555,14 +555,14 @@ namespace ns_YAUI
             set
             {
                 var pt = center;
-                int dx = value.X - pt.X;
-                int dy = value.Y - pt.Y;
+                float dx = value.X - pt.X;
+                float dy = value.Y - pt.Y;
                 px += dx;
                 py += dy;
             }
         }
 
-        public Point leftTop
+        public PointF leftTop
         {
             get
             {
@@ -571,14 +571,14 @@ namespace ns_YAUI
             set
             {
                 var pt = leftTop;
-                int dx = value.X - pt.X;
-                int dy = value.Y - pt.Y;
+                float dx = value.X - pt.X;
+                float dy = value.Y - pt.Y;
                 px += dx;
                 py += dy;
             }
         }
 
-        public Point leftMiddle
+        public PointF leftMiddle
         {
             get
             {
@@ -587,14 +587,14 @@ namespace ns_YAUI
             set
             {
                 var pt = leftMiddle;
-                int dx = value.X - pt.X;
-                int dy = value.Y - pt.Y;
+                float dx = value.X - pt.X;
+                float dy = value.Y - pt.Y;
                 px += dx;
                 py += dy;
             }
         }
 
-        public Point leftBottom
+        public PointF leftBottom
         {
             get
             {
@@ -603,14 +603,14 @@ namespace ns_YAUI
             set
             {
                 var pt = leftBottom;
-                int dx = value.X - pt.X;
-                int dy = value.Y - pt.Y;
+                float dx = value.X - pt.X;
+                float dy = value.Y - pt.Y;
                 px += dx;
                 py += dy;
             }
         }
 
-        public Point rightTop
+        public PointF rightTop
         {
             get
             {
@@ -619,14 +619,14 @@ namespace ns_YAUI
             set
             {
                 var pt = rightTop;
-                int dx = value.X - pt.X;
-                int dy = value.Y - pt.Y;
+                float dx = value.X - pt.X;
+                float dy = value.Y - pt.Y;
                 px += dx;
                 py += dy;
             }
         }
 
-        public Point rightMiddle
+        public PointF rightMiddle
         {
             get
             {
@@ -635,14 +635,14 @@ namespace ns_YAUI
             set
             {
                 var pt = rightMiddle;
-                int dx = value.X - pt.X;
-                int dy = value.Y - pt.Y;
+                float dx = value.X - pt.X;
+                float dy = value.Y - pt.Y;
                 px += dx;
                 py += dy;
             }
         }
 
-        public Point rightBottom
+        public PointF rightBottom
         {
             get
             {
@@ -651,14 +651,14 @@ namespace ns_YAUI
             set
             {
                 var pt = rightBottom;
-                int dx = value.X - pt.X;
-                int dy = value.Y - pt.Y;
+                float dx = value.X - pt.X;
+                float dy = value.Y - pt.Y;
                 px += dx;
                 py += dy;
             }
         }
 
-        public Point middleTop
+        public PointF middleTop
         {
             get
             {
@@ -667,14 +667,14 @@ namespace ns_YAUI
             set
             {
                 var pt = middleTop;
-                int dx = value.X - pt.X;
-                int dy = value.Y - pt.Y;
+                float dx = value.X - pt.X;
+                float dy = value.Y - pt.Y;
                 px += dx;
                 py += dy;
             }
         }
 
-        public Point middleBottom
+        public PointF middleBottom
         {
             get
             {
@@ -683,8 +683,8 @@ namespace ns_YAUI
             set
             {
                 var pt = middleBottom;
-                int dx = value.X - pt.X;
-                int dy = value.Y - pt.Y;
+                float dx = value.X - pt.X;
+                float dy = value.Y - pt.Y;
                 px += dx;
                 py += dy;
             }
@@ -770,7 +770,7 @@ namespace ns_YAUI
 
             var pui = (paresent as UIWidget);
 
-            Point alignPos = new Point();
+            PointF alignPos = new PointF();
             switch (mAlignParesent)
             {
                 case EAlign.center:
@@ -914,8 +914,8 @@ namespace ns_YAUI
             List<UIWidget> noInLayout = new List<UIWidget>();//for if layout and child align coexist
 
             #region layout calc
-            Point rb = new Point();
-            Rectangle rc = new Rectangle(new Point(paddingX, paddingY), new Size(0, 0));
+            PointF rb = new PointF();
+            RectangleF rc = new RectangleF(new PointF(paddingX, paddingY), new Size(0, 0));
             rb = rc.rightBottom();
             int idxCount = 0;
 
@@ -974,7 +974,7 @@ namespace ns_YAUI
                         i++;
                         idxCount = 0;
                         rc = rcOld;
-                        rc.Location = new Point(rc.Location.X + rc.Width, paddingY);
+                        rc.Location = new PointF(rc.Location.X + rc.Width, paddingY);
                         rc.Size = new Size();
                     }
                 }
@@ -1022,17 +1022,17 @@ namespace ns_YAUI
                         i++;
                         idxCount = 0;
                         rc = rcOld;
-                        rc.Location = new Point(paddingX, rc.Location.Y + rc.Height);
+                        rc.Location = new PointF(paddingX, rc.Location.Y + rc.Height);
                         rc.Size = new Size();
                     }
                 }
             }
             if (!this.wrap && this.shrinkAble && mChildrent.Count != 0) //有wrap不可shrink， shrink覆盖expand, shrink后需要重新计算 expand和align
             {
-                int? left = null;
-                int? right = null;
-                int? top = null;
-                int? bottom = null;
+                float? left = null;
+                float? right = null;
+                float? top = null;
+                float? bottom = null;
 
                 for (int i = mChildrent.Count - 1; i >= 0; --i)
                 {
@@ -1351,14 +1351,14 @@ namespace ns_YAUI
 
         void onDragMove(int x, int y)
         {
-            updateFixpoint(x, y);
+            updateFixPoint(x, y);
             setDirty(true);
             return;
         }
 
         bool onDragBegin(UIWidget _this, int x, int y)
         {
-            beginFixpoint(x, y);
+            beginFixPoint((float)x, (float)y);
             //这个改变先后关系
             this.setDepthHead();
 
@@ -1407,9 +1407,9 @@ namespace ns_YAUI
 
         void onRotateMove(int delta)
         {
-            beginFixpoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
+            beginFixPoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             mDir += delta * 0.2f;
-            updateFixpoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
+            updateFixPoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             setDirty(true);
             return;
         }
@@ -1455,13 +1455,13 @@ namespace ns_YAUI
 
         void onScaleWheel(int delta)
         {
-            beginFixpoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
+            beginFixPoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             float sc = 1;
             if (delta > 0) sc = 1.1f;
             else sc = 0.9f;
             mScalex += sc - 1;
             mScaley += sc - 1;
-            updateFixpoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
+            updateFixPoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             setDirty(true);
             return;
         }
@@ -1481,16 +1481,16 @@ namespace ns_YAUI
         /// </summary>
 
         //utils
-        protected static int min(int a, int b) { if (a < b)return a; else return b; }
-        protected static int max(int a, int b) { if (a > b)return a; else return b; }
-        protected static Rectangle expandRect(Rectangle r1, Rectangle r2)
+        protected static float min(float a, float b) { if (a < b)return a; else return b; }
+        protected static float max(float a, float b) { if (a > b)return a; else return b; }
+        protected static RectangleF expandRect(RectangleF r1, RectangleF r2)
         {
-            int left = min(r1.Left, r2.Left);
-            int top = min(r1.Top, r2.Top);
-            int right = max(r1.Right, r2.Right);
-            int buttom = max(r1.Bottom, r2.Bottom);
+            float left = min(r1.Left, r2.Left);
+            float top = min(r1.Top, r2.Top);
+            float right = max(r1.Right, r2.Right);
+            float buttom = max(r1.Bottom, r2.Bottom);
 
-            return new Rectangle(left, top, right - left, buttom - top);
+            return new RectangleF(left, top, right - left, buttom - top);
         }
 
         internal static T getAttr<T>(XmlNode node, string attName, T defaultVal, out bool valid) where T : IConvertible
@@ -1526,7 +1526,7 @@ namespace ns_YAUI
                 }
                 else if (typeof(T) == typeof(float))
                 {
-                    float df = (int)Convert.ChangeType(defaultVal, typeof(float)); //strRet.castInt();
+                    float df = (float)Convert.ChangeType(defaultVal, typeof(float)); //strRet.castInt();
                     return (T)Convert.ChangeType(strRet.castFloat(df), typeof(T)); //strRet.castInt();
                 }
                 else if (typeof(T) == typeof(string))
@@ -1669,7 +1669,7 @@ namespace ns_YAUI
 
         #region others
 
-        public virtual bool testSelfPick(Point pos)
+        public virtual bool testSelfPick(PointF pos)
         {
             if (testRectPick)
                 return true;
@@ -1686,7 +1686,7 @@ namespace ns_YAUI
             }
         }
 
-        public bool doTestPick(Point pos, out UIWidget ui, bool testEnable = true)
+        public bool doTestPick(PointF pos, out UIWidget ui, bool testEnable = true)
         {
             if (testEnable && !enable)
             {
@@ -1696,7 +1696,7 @@ namespace ns_YAUI
 
             var t = transformMatrix.Clone();
             t.Invert();
-            var ps = new Point[] { pos };
+            var ps = new PointF[] { pos };
             t.TransformPoints(ps);
             var newpos = ps[0];
 

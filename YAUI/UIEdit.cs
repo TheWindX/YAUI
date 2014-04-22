@@ -16,13 +16,13 @@ namespace ns_YAUI
         {
             mMaxCharLength = maxCharLength;
             this.evtOnLMDown += onClick;
-            mBackGround.position = new Point(-2, -2);
+            mBackGround.position = new PointF(-2, -2);
             mBackGround.paresent = this;
             mBackGround.depth = -1;
             mBackGround.width = (maxCharLength+1) * 18/2+2;
         }
 
-        public override Rectangle drawRect
+        public override RectangleF drawRect
         {
             get
             {

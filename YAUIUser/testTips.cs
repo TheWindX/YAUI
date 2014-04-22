@@ -16,13 +16,13 @@ namespace ns_YAUIUser
             UI.Instance.getTip().size = 20;
             var id = TimerManager.get().setInterval(t =>
                 {
-                    UI.Instance.setTip("leave time is:" + (15000 - t));
-                    UI.Instance.reflush();
+                    UI.Instance.setTips("leave time is:" + (15000 - t));
+                    UI.Instance.flush();
                 }, 500);
             TimerManager.get().setTimeout(t =>
                 {
-                    UI.Instance.setTip();
-                    UI.Instance.reflush();
+                    UI.Instance.setTips();
+                    UI.Instance.flush();
                     TimerManager.get().clearTimer(id);
                 }, 15000);
 

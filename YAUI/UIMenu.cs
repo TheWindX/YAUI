@@ -18,6 +18,20 @@ namespace ns_YAUI
         {
             mRR = appendFromXML(XMLLayout) as UIRect;
             mRR.fillColor = mBColor;
+
+            evtOnChar += (ui, kc, iC, iS) =>
+            {
+                //Console.WriteLine((int)kc);
+                if (kc == 38)
+                {
+                    selectIndex(mSelectItem - 1);
+                }
+                else if (kc == 40)
+                {
+                    selectIndex(mSelectItem + 1);
+                }
+                return false;
+            };
         }
 
 
@@ -27,12 +41,17 @@ namespace ns_YAUI
     <lable enable='false' align='center'></lable>
 </rect>
 ";
-        Dictionary<string, UIRect> mItems = new Dictionary<string, UIRect>();
-        UIRect mSelect = null;
-        public void addItem(string cmdName, Action act)
+        Dictionary<string, UIRect> mNameItems = new Dictionary<string, UIRect>();
+        List<UIRect> mItems = new List<UIRect>();
+        int mSelectItem = -1;
+        public void addItem(string cmdName, Action act, Action selecAct = null)
         {
             var rc = UIRoot.Instance.loadFromXML(XMLItem) as UIRect;
-            mItems.Add(cmdName, rc);
+            rc.attrs["name"] = cmdName;
+            rc.attrs["action"] = act;
+            rc.attrs["selectAction"] = selecAct;
+            mItems.Add(rc);
+            mNameItems.Add(cmdName, rc);
             rc.paresent = mRR;
 
             var lb = rc.findByTag("lable") as UILable;
@@ -43,41 +62,144 @@ namespace ns_YAUI
             lb.text = cmdName;
             rc.evtOnLMUp += (ui, x, y) =>
             {
-                act();
+                enterCurrent();
                 return false;
             };
 
             rc.evtOnEnter += () =>
                 {
-                    if (mSelect != null)
+                    int c = -1;
+                    var item = mItems.First(elem =>
+                        {
+                            c++;
+                            return elem == rc;
+                        });
+                    if (item != null)
                     {
-                        mSelect.fillColor = mBColor;
+                        selectIndex(c);
                     }
-
-                    mSelect = rc;
-                    rc.fillColor = mSelectColor;
-                    setDirty(true);
                 };
 
             rc.evtOnExit += () =>
             {
-                rc.fillColor = mBColor;
-                setDirty(true);
+                int c = -1;
+                var item = mItems.First(elem =>
+                {
+                    c++;
+                    return elem == rc;
+                });
+                if (item != null)
+                {
+                    selectIndex(-1);
+                }
             };
 
+            
             this.setDirty(true);
         }
 
         public void removeItem(string cmdName)
         {
             UIRect ret;
-            if (mItems.TryGetValue(cmdName, out ret))
+            if (mNameItems.TryGetValue(cmdName, out ret))
             {
                 ret.evtOnLMUpClear();
                 ret.paresent = null;
-                mItems.Remove(cmdName);
+                mNameItems.Remove(cmdName);
+                ret.attrs.Remove("name");
+                ret.attrs.Remove("action");
+                ret.attrs.Remove("selectAction");
+                mItems.Remove(ret);
                 this.setDirty(true);
             }
+        }
+
+        public string current()
+        {
+            if (mSelectItem >= 0 && mSelectItem < mItems.Count())
+            {
+                UIRect rc = mItems[mSelectItem];
+                object oname = "";
+                rc.attrs.TryGetValue("name", out oname);
+                return (string)name;
+            }
+            return "";
+        }
+
+        public UIRect currentRect()
+        {
+            if (mSelectItem >= 0 && mSelectItem < mItems.Count())
+            {
+                UIRect rc = mItems[mSelectItem];
+                return rc;
+            }
+            return null;
+        }
+
+        public void enterCurrent()
+        {
+            if (mSelectItem >= 0 && mSelectItem < mItems.Count())
+            {
+                UIRect rc = mItems[mSelectItem];
+                object oaction = null;
+                if (rc.attrs.TryGetValue("action", out oaction))
+                {
+                    ((Action)oaction)();
+                }
+            }
+        }
+
+        public bool setItem(int idx, bool select, out UIRect orc)
+        {
+            if (idx >= 0 && idx < mItems.Count())
+            {
+                UIRect rc = mItems[idx];
+                if(select)
+                    rc.fillColor = mSelectColor;
+                else
+                    rc.fillColor = mBColor;
+                orc = rc;
+                return true;
+            }
+            orc = null;
+            return false;
+        }
+
+        public bool selectIndex(int idx)
+        {
+            UIRect rc;
+            setItem(mSelectItem, false, out rc);
+            mSelectItem = idx;
+            var ret = setItem(mSelectItem, true, out rc);
+            if (!ret) mSelectItem = -1;
+            setDirty(true);
+            return ret;
+        }
+
+        public bool selectName(string name)
+        {
+            int c = -1;
+            mItems.First(elem=>
+                {
+                    c++;
+                    object oname = null;
+                    if(elem.attrs.TryGetValue("name", out oname) )
+                    {
+                        return (string)oname == name;
+                    }
+                    return false;
+                });
+            return selectIndex(c);
+        }
+
+        public bool selectFirst()
+        {
+            return selectIndex(0);
+        }
+
+        public bool selectNext()
+        {
+            return selectIndex(mSelectItem+1);
         }
 
         uint mFColor = (uint)EColorUtil.white;
@@ -88,7 +210,7 @@ namespace ns_YAUI
             set
             {
                 mFColor = value;
-                foreach (UIRect item in mItems.Values)
+                foreach (UIRect item in mNameItems.Values)
                 {
                     var lb = item.findByTag("rect/lable") as UILable;
                     lb.textColor = mFColor;
@@ -103,7 +225,7 @@ namespace ns_YAUI
             {
                 mBColor = value;
                 mRR.fillColor = mBColor;
-                foreach (UIRect item in mItems.Values)
+                foreach (UIRect item in mNameItems.Values)
                 {
                     item.fillColor = mBColor;
                 }
@@ -129,7 +251,7 @@ namespace ns_YAUI
             set
             {
                 mItemWidth = value;
-                foreach (UIRect item in mItems.Values)
+                foreach (UIRect item in mNameItems.Values)
                 {
                     item.width = mItemWidth;
                 }
@@ -147,14 +269,12 @@ namespace ns_YAUI
             set
             {
                 mItemHeight = value;
-                foreach (UIRect item in mItems.Values)
+                foreach (UIRect item in mNameItems.Values)
                 {
                     item.height = mItemHeight;
                 }
                 this.setDirty(true);
             }
         }
-
-
     }
 }

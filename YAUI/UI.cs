@@ -47,7 +47,7 @@ namespace ns_YAUI
             return ui;
         }
 
-        public void reflush()
+        public void flush()
         {
             if (mTips.paresent == root)
             {
@@ -64,9 +64,9 @@ namespace ns_YAUI
             }
         }
 
-        public Point getCursorPosition()
+        public PointF getCursorPosition()
         {
-            return new Point(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
+            return new PointF(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
         }
 
         public void run()
@@ -107,6 +107,7 @@ namespace ns_YAUI
                 mPainter.evtRightUp += UIRoot.Instance.handleEvtRightUp;
                 mPainter.evtMove += UIRoot.Instance.handleEvtMove;
                 mPainter.evtOnWheel += UIRoot.Instance.handleEvtWheel;
+                mPainter.evtOnKey += UIRoot.Instance.handleEvtKey;
             };
 
             mPainter.evtUpdate += () =>
@@ -131,10 +132,10 @@ namespace ns_YAUI
         #region tips
         void moveTipHandle(int x, int y)
         {
-            mTips.position = new Point(x+10, y);
+            mTips.position = new PointF(x+10, y);
             root.setDirty(true);
         }
-        public UITips setTip(string text = null)
+        public UITips setTips(string text = null)
         {
             if(text != null)
             {

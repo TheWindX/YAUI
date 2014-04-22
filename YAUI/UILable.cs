@@ -30,7 +30,7 @@ namespace ns_YAUI
         Font mFont;//todo, in font manager;
         uint mColor = 0xffffffff;
         Brush mBrush;
-        Rectangle mRect = new Rectangle();
+        RectangleF mRect = new RectangleF();
         
         EStyle mStyle = EStyle.normal;
 
@@ -51,7 +51,7 @@ namespace ns_YAUI
             else if (mStyle == EStyle.italic)
                 mFont = new Font("Arial", mSz, FontStyle.Italic);
             var fontsz = TextRenderer.MeasureText(text, mFont);
-            mRect = new Rectangle(new Point(0, 0), fontsz);
+            mRect = new RectangleF(new PointF(0, 0), fontsz);
         }
 
         public uint textColor
@@ -95,7 +95,7 @@ namespace ns_YAUI
             }
         }
 
-        public override Rectangle drawRect
+        public override RectangleF drawRect
         {
             get
             {
@@ -108,7 +108,7 @@ namespace ns_YAUI
             get { return "lable"; }
         }
 
-        public override bool testSelfPick(Point pos)
+        public override bool testSelfPick(PointF pos)
         {
             return true;
         }

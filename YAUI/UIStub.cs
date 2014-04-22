@@ -30,7 +30,7 @@ namespace ns_YAUI
             }
         }
 
-        public override bool testSelfPick(Point pos)
+        public override bool testSelfPick(PointF pos)
         {
             return false;
         }

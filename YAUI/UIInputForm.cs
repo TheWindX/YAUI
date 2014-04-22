@@ -98,7 +98,7 @@ namespace ns_YAUI
                 uint c1 = 0x888888;
                 mTextBox.ForeColor = Color.FromArgb((Int32)c1);
                 this.Visible = true;
-                this.Location = UIPainterForm.mIns.PointToScreen(new Point(x, y));
+                this.Location = UIPainterForm.mIns.PointToScreen(new Point((int)x, (int)y));
                 if (evtInputEnter != null)
                     evtInputEnter();
             }

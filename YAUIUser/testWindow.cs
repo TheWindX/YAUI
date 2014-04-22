@@ -45,10 +45,10 @@ namespace ns_YAUIUser
         UIWidget mClientCtn = null;
         UIWidget mTabToggle = null;
 
-        int mResizerStartX = 0;
-        int mResizerStartY = 0;
-        int mClientWidth = 0;
-        int mClientHeight = 0;
+        float mResizerStartX = 0;
+        float mResizerStartY = 0;
+        float mClientWidth = 0;
+        float mClientHeight = 0;
         public UIWindow()
         {
             mWindow = UIRoot.Instance.loadFromXML(XMLLayout);
@@ -63,9 +63,9 @@ namespace ns_YAUIUser
 
             Action<int, int> moveHandle = (x, y) =>
             {
-                mResizer.updateFixpoint(x, y);
-                int mResizerX = mResizer.px;
-                int mResizerY = mResizer.py;
+                mResizer.updateFixPoint(x, y);
+                float mResizerX = mResizer.px;
+                float mResizerY = mResizer.py;
                 var dx = mResizerX - mResizerStartX;
                 var dy = mResizerY - mResizerStartY;
                 mWindow.width = mClientWidth + dx;
@@ -75,8 +75,8 @@ namespace ns_YAUIUser
 
             mResizer.evtOnLMDown += (ui, x, y) =>
             {
-                //var np = mResizer.transform(new System.Drawing.Point(x, y));
-                mResizer.beginFixpoint(x, y);
+                //var np = mResizer.transform(new System.Drawing.PointF(x, y));
+                mResizer.beginFixPoint((float)x, (float)y);
                 mResizerStartX = mResizer.px;
                 mResizerStartY = mResizer.py;
                 mClientWidth = mWindow.width;

@@ -39,11 +39,11 @@ namespace ns_YAUI
             }
         }
 
-        public override Rectangle drawRect
+        public override RectangleF drawRect
         {
             get
             {
-                return new Rectangle(-1000000, -1000000, 2000000, 2000000);
+                return new RectangleF(-1000000, -1000000, 2000000, 2000000);
             }
         }
 
@@ -60,7 +60,7 @@ namespace ns_YAUI
             }
         }
 
-        public override bool testSelfPick(Point pos)
+        public override bool testSelfPick(PointF pos)
         {
             return true;
         }

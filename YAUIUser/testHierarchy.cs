@@ -26,10 +26,10 @@ namespace ns_YAUIUser
             TimerManager.get().setInterval(
                 t =>
                 {
-                    sun.rotate(0.5f);
-                    earth.rotate(2);
-                    moon.setDirty(true);
-                }, 10);
+                    earth.rotate(0.3f);
+                    moon.rotate(0.2f);
+                    UI.Instance.flush();
+                }, 5);
         }
     }
 }
