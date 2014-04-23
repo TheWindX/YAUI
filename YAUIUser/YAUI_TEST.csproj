@@ -63,6 +63,7 @@
     <Compile Include="testPropertyTemplate.cs" />
     <Compile Include="testResizer.cs" />
     <Compile Include="testRoundRect.cs" />
+    <Compile Include="testScrolledMap.cs" />
     <Compile Include="testTips.cs" />
     <Compile Include="testTranform.cs" />
     <Compile Include="testUse.cs" />

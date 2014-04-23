@@ -14,17 +14,30 @@ namespace ns_YAUIUser
             //UI.Instance.getTip().foreground = (uint)EColorUtil.red;
             //UI.Instance.getTip().background = (uint)EColorUtil.black;
             //UI.Instance.getTip().size = 20;
-            var id = TimerManager.get().setInterval(t =>
+            UI.Instance.setTitle("Left click to toggle tips");
+
+            Func<UIWidget, int, int, bool> mh = (ui, x, y)=>
                 {
-                    UI.Instance.setTips("leave time is:" + (15000 - t));
-                    UI.Instance.flush();
-                }, 500);
-            TimerManager.get().setTimeout(t =>
+                    UI.Instance.setTips("position at:"+UI.Instance.getCursorPosition() );
+                    return false;
+                };
+            bool toggleState = false;
+            UI.Instance.root.evtOnLMUp += (ui, x, y) =>
                 {
-                    UI.Instance.setTips();
-                    UI.Instance.flush();
-                    TimerManager.get().clearTimer(id);
-                }, 15000);
+                    toggleState = !toggleState;
+                    if(toggleState)
+                    {
+                        mh(null, 0, 0);
+                        UI.Instance.root.evtOnMMove += mh;
+                    }
+                    else
+                    {
+                        UI.Instance.setTips(null);
+                        UI.Instance.flush();
+                        UI.Instance.root.evtOnMMove -= mh;
+                    }
+                    return false;
+                };
 
         }
     }

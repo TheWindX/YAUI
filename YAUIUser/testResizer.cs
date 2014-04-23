@@ -19,7 +19,7 @@ namespace ns_YAUIUser
     <lable align='leftTop'></lable>
     <lable align='rightTop' text='x'></lable>
     <blank size='30'></blank>
-    <resizer size='256' clip='true'></resizer>
+    <resizer size='256'> </resizer>
 </rect>
 ") as UIResizer;
         }

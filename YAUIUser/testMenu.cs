@@ -22,7 +22,9 @@ namespace ns_YAUIUser
                 {
                     m.visible = true;
                     m.setDirty(true);
-                    m.position = UI.Instance.getCursorPosition();
+                    var pos = UI.Instance.getCursorPosition();
+                    m.px = pos.X;
+                    m.py = pos.Y;
                     m.selectName("item2");
                     return false;
                 };

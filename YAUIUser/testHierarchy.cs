@@ -12,8 +12,10 @@ namespace ns_YAUIUser
     {
         public testHierarchy()
         {
+            UI.Instance.setTitle(@"test of hierarchy");
+
             var sun = UI.Instance.fromXML(@"
-    <round px='256' py='256' dragAble='*true' id='sun' radius='64'  color='yellow'>
+    <round location='256' dragAble='*true' id='sun' radius='64'  color='yellow'>
         <round id='earth' radius='12'  px='128' color='green'>
             <round id='moon' radius='6' px='32' color='silver'>
             </round>

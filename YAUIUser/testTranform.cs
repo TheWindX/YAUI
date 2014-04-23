@@ -11,8 +11,13 @@ namespace ns_YAUIUser
     {
         public testTransform()
         {
+            UI.Instance.setTitle(@"1. drag all these
+2. left botton down and scrollwheel to scale
+3. right botton down and scrollwheel to rotate
+");
+
             UI.Instance.fromXML(@"
-<map dragAble='*true' rotateAble='*true' scaleAble='*true'>
+<map location='256' dragAble='*true' rotateAble='*true' scaleAble='*true'>
     <rect color='red'></rect>
     <round color='green'></round>
     <round_rect color='blue'></round_rect>

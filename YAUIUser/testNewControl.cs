@@ -50,8 +50,8 @@ namespace ns_YAUIUser
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
-            int w = schemes.width;
-            int h = schemes.height;
+            float w = schemes.widgetWidth;
+            float h = schemes.widgetHeight;
             uint fc = (uint)schemes.fillColor;
             uint sc = (uint)schemes.strokeColor;
             string strRet = null;
