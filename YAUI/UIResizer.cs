@@ -80,18 +80,18 @@ namespace ns_YAUI
             var ret = node.Attributes.GetNamedItem("name");
             if (ret != null) ui.name = ret.Value;
 
-            int w = schemes.width;
-            int h = schemes.height;
+            float w = schemes.widgetWidth;
+            float h = schemes.widgetHeight;
             uint fc = (uint)schemes.fillColor;
             uint sc = (uint)schemes.strokeColor;
             bool br = true;
 
-            h = w = getAttr<int>(node, "length", schemes.width, out br);
-            if (!br)
-            {
-                w = getAttr<int>(node, "width", schemes.width, out br);
-                h = getAttr<int>(node, "height", schemes.height, out br);
-            }
+            //h = w = getAttr<float>(node, "length", schemes.frameWidth, out br);
+            //if (!br)
+            //{
+            //    w = getAttr<float>(node, "width", schemes.frameWidth, out br);
+            //    h = getAttr<float>(node, "height", schemes.frameHeight, out br);
+            //}
 
             fc = (uint)getAttr<EColorUtil>(node, "color", schemes.fillColor, out br);
             if (!br)
@@ -99,20 +99,42 @@ namespace ns_YAUI
                 fc = getAttr(node, "color", (uint)(schemes.fillColor), out br);
             }
 
-            ui.width = w;
-            ui.height = h;
-
+            
+            
             UIRoot.Instance.loadXMLChildren(node.ChildNodes, (ui as UIResizer).mClient, null);
             
             var rsz = (ui as UIResizer);
             rsz.fromXML(node);//属性属于client
             rsz.mClient.fromXML(node);//属性属于client
             rsz.mClient.name = null;//name 是 resizer的属性
+            rsz.mClient.fillColor = fc;
+            ////resizer 属性不能覆盖的属性
+            rsz.layout = ELayout.none;
+            rsz.layoutInverse = false;
+            rsz.layoutFilled = false;
+            rsz.wrap = false;
+            //rsz.expandAbleY = rsz.expandAbleX = false;
+            rsz.shrinkAble = false;
+            
+            //rsz.dragAble = false;
+            //rsz.rotateAble = false;
+            //rsz.scaleAble = false;
 
-            //edit 不能设置到client里
+
+            //client 不能覆盖的属性
+            //rsz.mClient.layout = ELayout.none;
+            //rsz.mClient.layoutInverse = false;
+            //rsz.mClient.layoutFilled = false;
+            //rsz.mClient.wrap = false;
+            rsz.mClient.expandAbleY = rsz.mClient.expandAbleX = true;
+            rsz.mClient.shrinkAble = false;
+
             rsz.mClient.dragAble = false;
             rsz.mClient.rotateAble = false;
             rsz.mClient.scaleAble = false;
+
+            
+            
 
             ui.paresent = p;
             return null;

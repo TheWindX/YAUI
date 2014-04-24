@@ -138,9 +138,11 @@ namespace ns_YAUI
         #region tips
         void moveTipHandle(int x, int y)
         {
-            mTips.position = new PointF(x+10, y);
+            mTips.px = x + 10;
+            mTips.py = y;
             root.setDirty(true);
         }
+
         public UITips setTips(string text = null)
         {
             if(text != null)
@@ -163,6 +165,19 @@ namespace ns_YAUI
         }
         #endregion
 
-        
+        #region debug
+        static UILable mTitle = null;
+        public void setTitle(string str)
+        {
+            if (mTitle == null)
+            {
+                string content = @"<lable text=''></lable>";
+                mTitle = root.appendFromXML(string.Format(content, str)) as UILable;
+            }
+
+            mTitle.text = str;
+            flush();
+        }
+        #endregion
     }
 }

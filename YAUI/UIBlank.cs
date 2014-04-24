@@ -74,19 +74,19 @@ namespace ns_YAUI
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
             ui = new UIBlank();
+            //int w, h;
+            //bool br = true;
+
+            //h = w = getAttr<float>(node, "length", schemes.width, out br);
+            //if (!br)
+            //{
+            //    w = getAttr<float>(node, "width", schemes.width, out br);
+            //    h = getAttr<float>(node, "height", schemes.height, out br);
+            //}
+
+            //ui.width = w;
+            //ui.height = h;
             ui.fromXML(node);
-            int w, h;
-            bool br = true;
-
-            h = w = getAttr<int>(node, "length", schemes.width, out br);
-            if (!br)
-            {
-                w = getAttr<int>(node, "width", schemes.width, out br);
-                h = getAttr<int>(node, "height", schemes.height, out br);
-            }
-
-            ui.width = w;
-            ui.height = h;
 
             ui.paresent = p;
             return node.ChildNodes;

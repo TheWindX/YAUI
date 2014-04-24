@@ -269,19 +269,19 @@ namespace ns_YAUI
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
-            int w = schemes.width;
-            int h = schemes.height;
-            int r = 8;
+            float w = schemes.widgetWidth;
+            float h = schemes.widgetHeight;
+            float r = 8;
             bool[] corners = new bool[] { true, true, true, true };
             uint fc = (uint)schemes.fillColor;
             uint sc = (uint)schemes.strokeColor;
             bool br = true;
 
-            h = w = getAttr<int>(node, "length", schemes.width, out br);
+            h = w = getAttr<float>(node, "length", schemes.widgetWidth, out br);
             if (!br)
             {
-                w = getAttr<int>(node, "width", schemes.width, out br);
-                h = getAttr<int>(node, "height", schemes.height, out br);
+                w = getAttr<float>(node, "width", schemes.widgetWidth, out br);
+                h = getAttr<float>(node, "height", schemes.widgetHeight, out br);
             }
 
             fc = (uint)getAttr<EColorUtil>(node, "color", schemes.fillColor, out br);

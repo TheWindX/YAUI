@@ -16,7 +16,8 @@ namespace ns_YAUI
         {
             mMaxCharLength = maxCharLength;
             this.evtOnLMDown += onClick;
-            mBackGround.position = new PointF(-2, -2);
+            mBackGround.px = -2;
+            mBackGround.py = -2;
             mBackGround.paresent = this;
             mBackGround.depth = -1;
             mBackGround.width = (maxCharLength+1) * 18/2+2;

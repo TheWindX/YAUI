@@ -14,14 +14,14 @@ namespace ns_YAUIUser
             UIRoot.Instance.root.rotateAble = true;
             UIRoot.Instance.root.dragAble = true;
             UIRoot.Instance.root.scaleAble = true;
-            UIResizer r = UIRoot.Instance.root.appendFromXML(@"
-<rect shrink='true' clip='*true' padding='5' fillColor='red' layout='vertical'>
+            UIRoot.Instance.root.appendFromXML(@"
+<rect shrink='true' clip='*true' padding='5' fillColor='0xff3e4649' layout='vertical'>
     <lable align='leftTop'></lable>
     <lable align='rightTop' text='x'></lable>
     <blank size='30'></blank>
     <resizer size='256'> </resizer>
 </rect>
-") as UIResizer;
+");
         }
     }
 }

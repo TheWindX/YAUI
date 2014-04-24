@@ -30,7 +30,9 @@ namespace ns_YAUI
         Font mFont;//todo, in font manager;
         uint mColor = 0xffffffff;
         Brush mBrush;
-        RectangleF mRect = new RectangleF();
+
+        float mWidth = 0;
+        float mHeight = 0;
         
         EStyle mStyle = EStyle.normal;
 
@@ -51,7 +53,8 @@ namespace ns_YAUI
             else if (mStyle == EStyle.italic)
                 mFont = new Font("Arial", mSz, FontStyle.Italic);
             var fontsz = TextRenderer.MeasureText(text, mFont);
-            mRect = new RectangleF(new PointF(0, 0), fontsz);
+            mWidth = fontsz.Width;
+            mHeight = fontsz.Height;
         }
 
         public uint textColor
@@ -95,11 +98,19 @@ namespace ns_YAUI
             }
         }
 
-        public override RectangleF drawRect
+        public override float width
         {
             get
             {
-                return mRect;
+                return mWidth;
+            }
+        }
+
+        public override float height
+        {
+            get
+            {
+                return mHeight;
             }
         }
 

@@ -221,8 +221,8 @@ namespace ns_YAUI
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
-            int w = schemes.width;
-            int h = schemes.height;
+            float w = schemes.widgetWidth;
+            float h = schemes.widgetHeight;
             int r = 8;
             bool[] corners = new bool[] { true, true, true, true };
             uint fc = (uint)schemes.fillColor;

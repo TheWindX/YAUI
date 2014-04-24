@@ -72,27 +72,29 @@ namespace ns_YAUI
             c.mParesent = this;
         }
 
-        protected PointF mPosition = new PointF();
-        public PointF position
-        {
-            get
-            {
-                return mPosition;
-            }
-            set
-            {
-                mPosition = value;
-            }
-        }
+        PointF mPosition = new PointF();
+        //public PointF position
+        //{
+        //    get
+        //    {
+        //        return mPosition;
+        //    }
+        //    set
+        //    {
+        //        mPosition = value;
+        //    }
+        //}
 
         public float px
         {
             get
             {
+                //if (this.GetType() == typeof(UIMap)) { int i = 0; }
                 return mPosition.X;
             }
             set
             {
+                //if(this.GetType() == typeof(UIMap) ) {int i = 0;}
                 mPosition.X = value;
             }
         }
@@ -147,14 +149,15 @@ namespace ns_YAUI
         }
 
 
-        public float mScalex = 1;
-        public float mScaley = 1;
+        protected  float mScalex = 1;
+        protected float mScaley = 1;
 
-        public void scale(float sx, float sy)
+        public void setScale(float sx, float sy)
         {
-            mScalex = mScalex * sx;
-            mScaley = mScaley * sy;
+            mScalex = sx;
+            mScaley = sy;
         }
+
         public void scalePointF(PointF center, float scaleR)
         {
             var fp = invertTransformAbs(center);
@@ -264,7 +267,8 @@ namespace ns_YAUI
         public void updateFixPoint(float x, float y)
         {
             var delta = updateFixPointDelta(x, y);
-            position = new PointF(px + delta.X, py + delta.Y);
+            px = px + delta.X;
+            py = py + delta.Y;
         }
 
         public PointF updateFixPointDelta(float x, float y)

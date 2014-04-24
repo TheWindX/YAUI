@@ -131,8 +131,8 @@ namespace ns_YAUI
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
-            int w = schemes.width;
-            int h = schemes.height;
+            float w = schemes.widgetWidth;
+            float h = schemes.widgetHeight;
             int r = 0;
             bool[] corners = new bool[] { true, true, true, true };
             uint fc = (uint)schemes.fillColor;
@@ -140,7 +140,7 @@ namespace ns_YAUI
 
             bool br = true;
 
-            w = h = getAttr(node, "radius", schemes.width/2, out br) * 2;
+            w = h = getAttr(node, "radius", schemes.widgetWidth/2, out br) * 2;
             
             fc = (uint)getAttr<EColorUtil>(node, "color", schemes.fillColor, out br);
             if (!br)

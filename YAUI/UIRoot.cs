@@ -405,6 +405,7 @@ namespace ns_YAUI
             regMethodFromXML("round_rect", UIRoundRect.fromXML);
             regMethodFromXML("round", UIRound.fromXML);
             regMethodFromXML("resizer", UIResizer.fromXML);
+            regMethodFromXML("scrolledMap", UIScrolledMap.fromXML);
             pushProperty();
             return this;
         }
@@ -438,7 +439,7 @@ namespace ns_YAUI
             evtLeftDown += testLeftDown;
             evtMove += testMove;
             evtLeftUp += testLeftUp;
-            mEvtRightDown += testRightDown;
+            evtRightDown += testRightDown;
             mEvtRightUp += testRightUp;
             mEvtMiddleDown += testMiddleDown;
             mEvtMiddleUp += testMiddleUp;
@@ -479,7 +480,7 @@ namespace ns_YAUI
 
         public void handleEvtRightDown(int x, int y)
         {
-            if (mEvtRightDown != null) mEvtRightDown(x, y);
+            if (evtRightDown != null) evtRightDown(x, y);
         }
 
         public void handleEvtRightUp(int x, int y)
@@ -639,7 +640,7 @@ namespace ns_YAUI
         }
 
 
-        internal Action<int, int> mEvtRightDown;
+        internal Action<int, int> evtRightDown;
 
         void testRightDown(int x, int y)
         {

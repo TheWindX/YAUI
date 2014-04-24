@@ -64,14 +64,14 @@
   <ItemGroup>
     <Compile Include="array.cs" />
     <Compile Include="colorUtil.cs" />
-    <Compile Include="ExpandPoint.cs" />
-    <Compile Include="ExpandString.cs" />
-    <Compile Include="ExtendRectangle.cs" />
+    <Compile Include="ExtendGeo.cs" />
+    <Compile Include="ExtendString.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="schemes.cs" />
     <Compile Include="UIInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="UIScrollMap.cs" />
     <Compile Include="UIMenu.cs" />
     <Compile Include="UIPainterForm.cs">
       <SubType>Form</SubType>

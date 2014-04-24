@@ -69,6 +69,13 @@ namespace ns_YAUI
 
             var childrenUi = mMiniMap.appendFromXML(xmlChildren);
             var windowUI = mMiniMap.appendFromXML(xmlWindow);
+
+            //show mini of chindren
+        }
+
+        public override void onDraw(Graphics g)
+        {
+
         }
 
         public void appendUI(UIWidget ui)

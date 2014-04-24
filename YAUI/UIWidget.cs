@@ -21,6 +21,9 @@ using ns_utils;
 
 namespace ns_YAUI
 {
+    using EvtMouse = Func<UIWidget, int, int, bool>;
+    using EvtKeyboard = Func<UIWidget, int, bool, bool, bool>;
+    using EvtSizeChanged = Func<UIWidget, int, int, bool>;
     public class UIWidget : Entity
     {
         #region Hierarchy
@@ -891,7 +894,7 @@ namespace ns_YAUI
             horizon,
         }
         public ELayout layout = ELayout.none;
-        public bool mLayoutInverse = false;
+        public bool layoutInverse = false;
 
         public bool wrap = false;
         public bool layoutFilled = false;//最后一个layout的，填满
@@ -953,7 +956,7 @@ namespace ns_YAUI
                     rc.Height = rc.Height + c.marginY* 2 + c.height;
                     rb.X = max(rc.Right, rb.X);
                     rb.Y = max(rc.Bottom, rb.Y);
-                    if (mLayoutInverse)
+                    if (layoutInverse)
                     {
                         var ptInv = pt;
                         ptInv.Y = ( (drawRect.X*2+height)-pt.Y);
@@ -1002,7 +1005,7 @@ namespace ns_YAUI
                     rb.X = max(rc.Right, rb.X);
                     rb.Y = max(rc.Bottom, rb.Y);
 
-                    if (mLayoutInverse)
+                    if (layoutInverse)
                     {
                         var ptInv = pt;
                         ptInv.X = ((drawRect.X * 2 + width) - pt.X);
@@ -1028,33 +1031,19 @@ namespace ns_YAUI
             }
             if (!this.wrap && this.shrinkAble && mChildrent.Count != 0) //有wrap不可shrink， shrink覆盖expand, shrink后需要重新计算 expand和align
             {
-                float? left = null;
-                float? right = null;
-                float? top = null;
-                float? bottom = null;
+                var childrentRect = getChildrenOccupy();
 
                 for (int i = mChildrent.Count - 1; i >= 0; --i)
                 {
                     var c = mChildrent[i] as UIWidget;
                     if (c.align != EAlign.noAlign) continue;
-                    var lrc = c.layoutRect.transform(c.getLocalMatrix());
-                    left = (left == null) ? (lrc.Left - paddingX) : min((lrc.Left - paddingX), left.Value);
-                    right = (right == null) ? (lrc.Right + paddingX) : max((lrc.Right + paddingX), right.Value);
-                    top = (top == null) ? (lrc.Top - paddingY) : min((lrc.Top - paddingY), top.Value);
-                    bottom = (bottom == null) ? (lrc.Bottom + paddingY) : max((lrc.Bottom + paddingY), bottom.Value);
+                    c.px = c.px - childrentRect.Value.Left;
+                    c.py = c.py - childrentRect.Value.Top;
                 }
-
-                for (int i = mChildrent.Count - 1; i >= 0; --i)
+                if (childrentRect.HasValue)
                 {
-                    var c = mChildrent[i] as UIWidget;
-                    if (c.align != EAlign.noAlign) continue;
-                    c.px = c.px - left.Value;
-                    c.py = c.py - top.Value;
-                }
-                if (left != null || right != null)
-                {
-                    width = right.Value - left.Value;
-                    height = bottom.Value - top.Value;
+                    width = childrentRect.Value.Right - childrentRect.Value.Left;
+                    height = childrentRect.Value.Bottom - childrentRect.Value.Top;
                 }
                 adjustAlign();
             }
@@ -1064,7 +1053,7 @@ namespace ns_YAUI
                 {
                     lastLayoutUi.height = height - lastLayoutUi.py - paddingY - lastLayoutUi.marginY;
 
-                    if (mLayoutInverse)
+                    if (layoutInverse)
                     {
                         lastLayoutUi.width = lastLayoutUi.px + lastLayoutUi.width - paddingX - lastLayoutUi.marginX;
                         lastLayoutUi.px = paddingX + lastLayoutUi.marginX;
@@ -1078,7 +1067,7 @@ namespace ns_YAUI
                 {
                     lastLayoutUi.width = width - lastLayoutUi.px - paddingX - lastLayoutUi.marginX;
 
-                    if (mLayoutInverse)
+                    if (layoutInverse)
                     {
                         lastLayoutUi.height = lastLayoutUi.py + lastLayoutUi.height - paddingY - lastLayoutUi.marginY;
                         lastLayoutUi.py = paddingY + lastLayoutUi.marginY;
@@ -1102,6 +1091,35 @@ namespace ns_YAUI
             }
             #endregion
         }
+
+        internal RectangleF? getChildrenOccupy()
+        {
+            RectangleF? ret = null;
+            for (int i = mChildrent.Count - 1; i >= 0; --i)
+            {
+                var c = mChildrent[i] as UIWidget;
+                if (c.align != EAlign.noAlign) continue;
+                var lrc = c.layoutRect.transform(c.getLocalMatrix());
+                if (!ret.HasValue)
+                {
+                    var left = lrc.Left - paddingX;
+                    var top = lrc.Top - paddingY;
+                    var width = lrc.Width + 2*paddingX;
+                    var height = lrc.Height + 2*paddingY;
+                    ret = new RectangleF(left, top, width, height);
+                }
+                else
+                {
+                    var left = min((lrc.Left - paddingX), ret.Value.Left);;
+                    var top = min((lrc.Top - paddingY), ret.Value.Top);
+                    var right = max((lrc.Right + paddingX), ret.Value.Right);;
+                    var bottom = max((lrc.Bottom + paddingY), ret.Value.Bottom);;
+                    ret = new RectangleF(left, top, right-left, bottom-top);
+                }
+            }
+            return ret;
+        }
+
         #endregion
 
         #endregion
@@ -1148,7 +1166,7 @@ namespace ns_YAUI
         public Action<UIWidget, UIWidget> evtChangeParesent;
 
         
-        public delegate bool EvtMouse(UIWidget _this, int x, int y);
+        //public delegate bool EvtMouse(UIWidget _this, int x, int y);
         public delegate bool EvtKeyboard(UIWidget _this, int kc, bool isControl, bool isShift);
         public delegate void EvtSizeChanged(UIWidget _this, int w, int h);
 
@@ -1324,6 +1342,18 @@ namespace ns_YAUI
         /// <summary>
         /// dragable
         /// </summary>
+        /// 
+        public event Action<int, int> evtOnDragMove;
+        public void evtOnDragMoveClear()
+        {
+            evtOnDragMove = null;
+        }
+        public event Action<int, int> evtOnDragEnd;
+        public void evtOnDragEndClear()
+        {
+            evtOnDragEnd = null;
+        }
+
         bool mDragAble = false;
         public bool dragAble
         {
@@ -1352,6 +1382,7 @@ namespace ns_YAUI
         void onDragMove(int x, int y)
         {
             updateFixPoint(x, y);
+            if (evtOnDragMove != null) evtOnDragMove(x, y);
             setDirty(true);
             return;
         }
@@ -1372,6 +1403,8 @@ namespace ns_YAUI
         {
             UIRoot.Instance.evtMove -= onDragMove;
             UIRoot.Instance.evtLeftUp -= onDragEnd;
+            if(evtOnDragEnd != null) evtOnDragEnd(x, y);
+            setDirty(true);
         }
 
 
@@ -1380,7 +1413,7 @@ namespace ns_YAUI
         {
             set
             {
-                if (mDragAble == value) return;
+                if (mRotateAble == value) return;
                 mRotateAble = value;
                 if (mRotateAble)
                 {
@@ -1434,7 +1467,7 @@ namespace ns_YAUI
         {
             set
             {
-                if (mDragAble == value) return;
+                if (mScaleAble == value) return;
                 mScaleAble = value;
                 if (mScaleAble)
                 {
@@ -1576,6 +1609,97 @@ namespace ns_YAUI
             return defaultVal; 
         }
 
+        void parseLayout(XmlNode node)
+        {
+            var ret = node.Attributes.GetNamedItem("layout");
+            if (ret == null) return;
+            string str = ret.Value;
+            var propList = str.Split(',');
+            var newProps = new List<string>();
+            for (int i = 0; i < propList.Count(); ++i)
+            {
+                var item = propList[i];
+                newProps.Add(item.Trim());
+            }
+
+            //vertical/horizon
+            if (newProps.Contains("vertical") )
+            {
+                layout = ELayout.vertical;
+            }
+            else if (newProps.Contains("horizon") )
+            {
+                layout = ELayout.horizon;
+            }
+            else
+            {
+                layout = ELayout.none;
+            }
+
+            //inverse
+            if (newProps.Contains("inverse") )
+            {
+                layoutInverse = true;
+            }
+            else
+            {
+                layoutInverse = false;
+            }
+
+            if (newProps.Contains("wrap"))
+            {
+                wrap = true;
+            }
+            else
+            {
+                wrap = false;
+            }
+
+            if (newProps.Contains("filled"))
+            {
+                layoutFilled = true;
+            }
+            else
+            {
+                wrap = false;
+            }
+
+            if (newProps.Contains("expand"))
+            {
+                expandAbleY = expandAbleX = true;
+            }
+            else
+            {
+                if (newProps.Contains("expandX"))
+                {
+                    expandAbleX = true;
+                }
+                else
+                {
+                    expandAbleX = false;
+                }
+
+                if(newProps.Contains("expandY"))
+                {
+                    expandAbleY = true;
+                }
+                else
+                {
+                    expandAbleY = false;
+                }
+
+                if (newProps.Contains("shrink"))
+                {
+                    shrinkAble = true;
+                }
+                else
+                {
+                    shrinkAble = false;
+                }
+            }
+
+        }
+
         public XmlNodeList fromXML(XmlNode node)
         {
             //在UI*.fromXML之前调用?
@@ -1597,21 +1721,23 @@ namespace ns_YAUI
             if (ret != null)
             {
                 UIRoot.Instance.setIDWidget(ret.Value, this);
+                StringID = ret.Value;
             }
 
             ret = node.Attributes.GetNamedItem("location");
             if (ret != null)
             {
                 var strs = ret.Value.Split(',').ToList();
-                strs.ForEach(str => str.Trim());
-                int c = strs.Count();
+                var strs1 = new List<string>();
+                strs.ForEach(str => strs1.Add(str.Trim()));
+                int c = strs1.Count();
                 if(c>0)
                 {
-                    px = strs[0].castFloat();
+                    py = px = strs1[0].castFloat();
                 }
                 if (c > 1)
                 {
-                    py = strs[1].castFloat();
+                    py = strs1[1].castFloat();
                 }
             }
 
@@ -1619,33 +1745,43 @@ namespace ns_YAUI
             if (ret != null)
             {
                 var strs = ret.Value.Split(',').ToList();
-                strs.ForEach(str => str.Trim());
-                int c = strs.Count();
+                var strs1 = new List<string>();
+                strs.ForEach(str => strs1.Add(str.Trim()));
+                int c = strs1.Count();
                 if (c > 0)
                 {
-                    height = width = strs[0].castFloat();
+                    height = width = strs1[0].castFloat();
                 }
                 if (c > 1)
                 {
-                    height = strs[1].castFloat();
+                    height = strs1[1].castFloat();
                 }
+            }
+            width = getAttr(node, "length", width, out br);
+            if (br)
+                height = width;
+            else
+            {
+                width = getAttr(node, "width", width, out br);
+                height = getAttr(node, "height", height, out br);
             }
 
             ret = node.Attributes.GetNamedItem("editMode");
             if (ret != null)
             {
                 var strs = ret.Value.Split(',').ToList();
-                strs.ForEach(str => str.Trim());
+                var strs1 = new List<string>();
+                strs.ForEach(str => strs1.Add(str.Trim()) );
 
-                if (strs.Contains("dragAble"))
+                if (strs1.Contains("dragAble"))
                 {
                     dragAble = true;
                 }
-                if (strs.Contains("rotateAble"))
+                if (strs1.Contains("rotateAble"))
                 {
                     rotateAble = true;
                 }
-                if (strs.Contains("scaleAble"))
+                if (strs1.Contains("scaleAble"))
                 {
                     scaleAble = true;
                 }
@@ -1684,25 +1820,35 @@ namespace ns_YAUI
             scaleAble = getAttr(node, "scaleAble", scaleAble, out br);
             rotateAble = getAttr(node, "rotateAble", rotateAble, out br);
 
-            layout = getAttr(node, "layout", layout, out br);
-            mLayoutInverse = getAttr(node, "layoutInverse", mLayoutInverse, out br);
+
+            parseLayout(node);
+            //layout = getAttr(node, "layout", layout, out br);
+            layoutInverse = getAttr(node, "layoutInverse", layoutInverse, out br);
             wrap = getAttr(node, "wrap", wrap, out br);
             layoutFilled = getAttr(node, "layoutFilled", layoutFilled, out br);
             shrinkAble = getAttr(node, "shrink", shrinkAble, out br);
-            expandAbleY = expandAbleX = getAttr(node, "expand", expandAbleX, out br);
-            if (!br)
+            expandAbleX = getAttr(node, "expand", expandAbleX, out br);
+            if (br)
+                expandAbleY = expandAbleX;
+            else
             {
                 expandAbleX = getAttr(node, "expandX", expandAbleX, out br);
                 expandAbleY = getAttr(node, "expandY", expandAbleY, out br);
             }
-            marginY = marginX = getAttr(node, "margin", marginX, out br);
-            if (!br)
+
+            marginX = getAttr(node, "margin", marginX, out br);
+            if (br)
+                marginY = marginX;
+            else
             {
                 marginX = getAttr(node, "marginX", marginX, out br);
                 marginY = getAttr(node, "marginY", marginY, out br);
             }
-            paddingY = paddingX = getAttr(node, "padding", paddingX, out br);
-            if (!br)
+
+            paddingX = getAttr(node, "padding", paddingX, out br);
+            if (br)
+                paddingY = paddingX;
+            else
             {
                 paddingX = getAttr(node, "paddingX", paddingX, out br);
                 paddingY = getAttr(node, "paddingY", paddingY, out br);

@@ -121,8 +121,8 @@ namespace ns_YAUI
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
-            int w = schemes.width;
-            int h = schemes.height;
+            float w = schemes.widgetWidth;
+            float h = schemes.widgetHeight;
             uint fc = (uint)schemes.fillColor;
             uint sc = (uint)schemes.strokeColor;
             bool br = true;
@@ -149,7 +149,8 @@ namespace ns_YAUI
             
             ui = new UIRect(w, h, sc, fc);
             ui.fromXML(node);
-            ui.paresent = p;
+            if(p != null)
+                ui.paresent = p;
             return node.ChildNodes;
         }
     }

@@ -19,10 +19,10 @@ namespace ns_YAUIUser
             //var test = testTips.Instance;
             //var test = testMenu.Instance; 
             //var test = testAlign.Instance;
-            var test = testScrolledMap.Instance;
+            //var test = testScrolledMap.Instance;
             //var _0 =  testDir.Instance;
             //var _1 = testRoundRect.Instance;
-            //var _2 = testLayout.Instance;
+            var _2 = testLayout.Instance;
             //var _2_3 = testLayout3.Instance;
             //var _21 = testLayoutShrinkExpand.Instance;
             //var _3 = testWindow.Instance;

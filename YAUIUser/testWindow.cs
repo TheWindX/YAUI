@@ -16,7 +16,7 @@ namespace ns_YAUIUser
         <rect size='24' fillColor='ffe04343' align='rightTop' offsetY='-5' >
             <lable name='close' text='x' align='center' offsetX='1' offsetY='-1'></lable>
         </rect>
-        <blank size='30'></blank>
+        <blank name='' size='30'></blank>
         <rect name='tabContainer' layout='horizon' height='30' expandX='true' clip='true' color='0xffbfdbff'>
         <lable name='tabToggle' text='∧' color='ff000000' size='10' margin='8' align='rightMiddle'></lable>
         </rect>
