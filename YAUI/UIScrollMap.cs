@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace ns_YAUI
 {
@@ -41,6 +42,11 @@ namespace ns_YAUI
             mMiniMap = mMiniMapRect.findByTag("map") as UIMap;
             mMiniMapRect.height = mMiniMapRect.width = mMiniMapSize;
             mMiniMapRect.alignParesent = EAlign.rightTop;
+
+            mMiniMap.evtOnPostDraw += g =>
+                {
+                    mMapClient.doDraw(g);
+                };
         }
 
         public void showMini()
@@ -73,9 +79,24 @@ namespace ns_YAUI
             //show mini of chindren
         }
 
-        public override void onDraw(Graphics g)
+        public override bool onDraw(Graphics g)
         {
+            if (clip)
+            {
+                var r = clipRect;
+                GraphicsPath p = new GraphicsPath();
+                p.AddRectangle(r);
+                g.SetClip(p, CombineMode.Intersect);
+            }
 
+            for (int i = mChildrent.Count - 1; i >= 0; --i)
+            {
+                (mChildrent[i] as UIWidget).doDraw(g);
+            }
+
+            //mMapClient.doDraw(g);
+
+            return false;
         }
 
         public void appendUI(UIWidget ui)

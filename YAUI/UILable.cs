@@ -124,12 +124,13 @@ namespace ns_YAUI
             return true;
         }
 
-        public override void onDraw(Graphics g)
+        public override bool onDraw(Graphics g)
         {
             //var td = g.MeasureString(mText, mFont);
             //mRect.Width = (int)td.Width;
             //mRect.Height = (int)td.Height;
             g.DrawString(mText, mFont, mBrush, new PointF());
+            return true;
         }
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)

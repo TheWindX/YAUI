@@ -113,10 +113,11 @@ namespace ns_YAUI
             return true;
         }
 
-        public override void onDraw(Graphics g) 
+        public override bool onDraw(Graphics g) 
         {
             g.FillRectangle(mBrush, 0, 0, _w, _h);
             g.DrawRectangle(mPen, 0, 0, _w, _h);
+            return true;
         }
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)

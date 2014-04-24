@@ -1982,7 +1982,13 @@ namespace ns_YAUI
 
             //Console.WriteLine("draw" + this.name + ":");
             //catch it?
-            onDraw(g);
+            if (!onDraw(g))
+            {
+                g.Restore(gs);
+                return;
+            }
+
+            if (evtOnPostDraw != null) evtOnPostDraw(g);
 
             if (clip)
             {
@@ -2003,7 +2009,13 @@ namespace ns_YAUI
             //popMatrix(g);
         }
 
-        public virtual void onDraw(Graphics g) { }
+        public event Action<Graphics> evtOnPostDraw;
+        public void evtOnPostDrawClear() 
+        {
+            evtOnPostDraw = null;
+        }
+
+        public virtual bool onDraw(Graphics g) { return true; }
         #endregion
     }
 }

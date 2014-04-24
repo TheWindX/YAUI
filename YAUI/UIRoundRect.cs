@@ -166,7 +166,7 @@ namespace ns_YAUI
             return true;
         }
 
-        public override void onDraw(Graphics g)
+        public override bool onDraw(Graphics g)
         {
             GraphicsPath p = new GraphicsPath();
 
@@ -215,6 +215,7 @@ namespace ns_YAUI
             p.AddLine(0, _h - _r, 0, _r/2);
             g.FillPath(mBrush, p);
             g.DrawPath(mPen, p);
+            return true;
         }
 
 

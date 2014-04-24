@@ -118,7 +118,7 @@ namespace ns_YAUI
             else return true;
         }
 
-        public override void onDraw(Graphics g)
+        public override bool onDraw(Graphics g)
         {
             var gs = g.Save();
             var m = g.Transform;
@@ -127,6 +127,7 @@ namespace ns_YAUI
             g.FillEllipse(mBrush, new RectangleF(0, 0, _w, _h));
             g.DrawEllipse(mPen, new RectangleF(0, 0, _w, _h));
             g.Restore(gs);
+            return true;
         }
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)

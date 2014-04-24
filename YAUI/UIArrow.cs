@@ -239,7 +239,7 @@ namespace ns_YAUI
             return true;
         }
 
-        public override void onDraw(Graphics g) 
+        public override bool onDraw(Graphics g) 
         {
             GraphicsPath p = new GraphicsPath();
             p.StartFigure();
@@ -265,6 +265,7 @@ namespace ns_YAUI
             p.CloseFigure();
             g.FillPath(mBrush, p);
             g.DrawPath(mPen, p);
+            return true;
         }
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)

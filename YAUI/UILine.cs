@@ -77,11 +77,12 @@ namespace ns_YAUI
             return true;
         }
 
-        public override void onDraw(Graphics g)
+        public override bool onDraw(Graphics g)
         {
             GraphicsPath p = new GraphicsPath();
             p.AddRectangle(drawRect);
             g.FillPath(mBrush, p);
+            return true;
         }
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)

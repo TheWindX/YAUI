@@ -23,7 +23,6 @@ namespace ns_YAUIUser
         <lable text='bottom' align='bottom'></lable>
         <lable text='rightBottom' align='rightBottom'></lable>
     </resizer>
-
 ");
         }
     }
