@@ -1,7 +1,7 @@
 ﻿/* author: xiaofeng.li
  * mail: 453588006@qq.com
  * desc: multi inherent base
- *       (there is no "trait"(as in scala) in c#, so it is trivial work to implement the same interface for many class,
+ *       (there is no "trait"(as in scala) in c#, so it is trivial work to implement the same interface for sub classes,
  *       i design this "trait" in c# by look up type infos
  *       
  * */

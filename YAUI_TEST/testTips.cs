@@ -21,7 +21,8 @@ namespace ns_YAUIUser
                     UI.Instance.setTips("position at:"+UI.Instance.getCursorPosition() );
                     return false;
                 };
-            bool toggleState = false;
+            bool toggleState = true;
+            mh(null, 0, 0);
             UI.Instance.root.evtOnLMUp += (ui, x, y) =>
                 {
                     toggleState = !toggleState;

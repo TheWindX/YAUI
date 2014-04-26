@@ -27,7 +27,9 @@ namespace ns_YAUI
         {
             width = schemes.frameWidth;
             height = schemes.frameHeight;
-            mMapClient = appendFromXML(@"<map dragAble='true'></map>") as UIMap;
+            
+            dragAble = true;//默认只有dragAble
+            mMapClient = appendFromXML(@"<map></map>") as UIMap;
             
             UIRoot.Instance.evtLeftUp += (x, y) =>
                 {
@@ -36,8 +38,8 @@ namespace ns_YAUI
                 };
 
             mMiniMapRect = appendFromXML(@"
-<blank clip='true' padding='16' shrink='true' fillColor='transparent' align='rightTop'>
-<rect size='128' strokeColor='transparent' fillColor='transparent'><map>
+<blank clip='true' padding='16' shrink='true' align='rightTop'>
+<rect size='128' strokeColor='transparent'><map>
 </map></rect></blank>").findByTag("rect") as UIRect;
             mMiniMap = mMiniMapRect.findByTag("map") as UIMap;
             mMiniMapRect.height = mMiniMapRect.width = mMiniMapSize;
@@ -70,10 +72,10 @@ namespace ns_YAUI
             mMiniMap.py -= rcInMap.Top;
 
             string xmlFmt = "<rect px='{0}' py='{1}' width='{2}' height='{3}' fillColor='0x33ffffff' strokeColor='{4}'></rect>";
-            string xmlChildren = string.Format(xmlFmt, rcChildren.Left, rcChildren.Top, rcChildren.Width, rcChildren.Height, "0x44ff0000");
+            //string xmlChildren = string.Format(xmlFmt, rcChildren.Left, rcChildren.Top, rcChildren.Width, rcChildren.Height, "0x44ff0000");
             string xmlWindow = string.Format(xmlFmt, rcMap.Left, rcMap.Top, rcMap.Width, rcMap.Height, "0x440000ff");
 
-            var childrenUi = mMiniMap.appendFromXML(xmlChildren);
+            //var childrenUi = mMiniMap.appendFromXML(xmlChildren);
             var windowUI = mMiniMap.appendFromXML(xmlWindow);
 
             //show mini of chindren
@@ -111,6 +113,14 @@ namespace ns_YAUI
             ui = new UIScrolledMap();
             
             ui.fromXML(node);
+
+            //mMapClient, 继承dragAble, scaleAble, rotateAble
+            (ui as UIScrolledMap).mMapClient.dragAble = ui.dragAble;
+            (ui as UIScrolledMap).mMapClient.rotateAble = ui.rotateAble;
+            (ui as UIScrolledMap).mMapClient.scaleAble = ui.scaleAble;
+            //ui.dragAble = false ; 
+            ui.rotateAble = false;
+            ui.scaleAble = false;
 
             UIRoot.Instance.loadXMLChildren(node.ChildNodes, (ui as UIScrolledMap).mMapClient, null);
 

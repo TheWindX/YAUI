@@ -445,6 +445,7 @@ namespace ns_YAUI
             mEvtMiddleUp += testMiddleUp;
             mEvtDoubleClick += testDoubleClick;
             mEvtKey += testKey;
+            mEvtWheel += testWheel;
             return this;
         }
 
@@ -709,6 +710,18 @@ namespace ns_YAUI
 
 
         internal Action<int> mEvtWheel;
+        void testWheel(int delta)
+        {
+            var ui = currentWidget;
+            while (ui != null)
+            {
+                if (!ui.doEvtOnWheel(delta) )
+                {
+                    return;
+                }
+                ui = ui.paresent as UIWidget;
+            }
+        }
 
         internal Action mHandleDraw;
         public UIRoot initHandleDraw(Action handleDraw)

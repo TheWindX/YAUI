@@ -12,15 +12,17 @@ namespace ns_YAUIUser
     {
         public testAll()
         {
-            //var test = testUse.Instance;
+            
             //var test = testPrimarys.Instance; 
             //var test = testTransform.Instance;
             //var test = testHierarchy.Instance;
             //var test = testTips.Instance;
             //var test = testMenu.Instance; 
             //var test = testAlign.Instance;
-            var test = testScrolledMap.Instance;
-            //var test = testLayout.Instance;
+            //var test = testScrolledMap.Instance;
+            var test = testLayout.Instance;
+            //var test = testUse.Instance;
+
             //var _0 =  testDir.Instance;
             //var _1 = testRoundRect.Instance;
             

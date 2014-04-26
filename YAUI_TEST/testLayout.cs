@@ -23,7 +23,7 @@ namespace ns_YAUIUser
             <lable text='♛' align='center' color='gold' size='32'></lable>
         </round_rect>
         <blank layout='vertical, shrink'>
-            <lable text='YAUI设计群' size='14' style='bold'></lable>
+            <lable text='YAUI交流讨论群' size='14' style='bold'></lable>
             <lable text='(1000人群)' size='10'></lable>
         </blank>
     </blank>
@@ -46,8 +46,19 @@ namespace ns_YAUIUser
         </blank>
     </rect>
 
-    <blank id='leftRight' layout='horizon, filled' >
-        <rect layout='vertical, inverse, expandY, filled' width='360' clip='true'>
+    <blank id='leftRight' layout='horizon, inverse, filled' >
+        <round_rect layout='vertical, expandY' margin='6' width='180' id='frind_list'>
+            <round_rect layout='expandX' height='28'>
+                <lable text='群成员' color='black' size='8' align='left'></lable>
+                <lable text='?' align='right'></lable>
+            </round_rect>
+            <lable text='西门吹雪' margin='*4' color='*black' size='*8'></lable>
+            <lable text='聂风'></lable>
+            <lable text='步惊云'></lable>
+            <lable text='武林神话'></lable>
+        </round_rect>
+
+        <rect layout='vertical, inverse, expandY, filled' clip='true'>
             <rect layout='expandX' height='28'>
                 <lable text='广告位2' align='left' size='8'></lable>
                 <blank align='right' layout='horizon, inverse, expand'>
@@ -75,16 +86,6 @@ namespace ns_YAUIUser
                 <lable text='武林神话: xxxxx'></lable>
             </rect>
         </rect>
-        <round_rect layout='vertical' margin='4' id='frind_list'>
-            <round_rect layout='expandX' height='28'>
-                <lable text='群成员' color='black' size='8' align='left'></lable>
-                <lable text='?' align='right'></lable>
-            </round_rect>
-            <lable text='西门吹雪' margin='*4' color='*black' size='*8'></lable>
-            <lable text='聂风'></lable>
-            <lable text='步惊云'></lable>
-            <lable text='武林神话'></lable>
-        </round_rect>
     </blank>
 </resizer>
 ";

@@ -1167,8 +1167,8 @@ namespace ns_YAUI
 
         
         //public delegate bool EvtMouse(UIWidget _this, int x, int y);
-        public delegate bool EvtKeyboard(UIWidget _this, int kc, bool isControl, bool isShift);
-        public delegate void EvtSizeChanged(UIWidget _this, int w, int h);
+        //public delegate bool EvtKeyboard(UIWidget _this, int kc, bool isControl, bool isShift);
+        //public delegate void EvtSizeChanged(UIWidget _this, int w, int h);
 
 
         public event EvtMouse evtOnMMove;
@@ -1247,6 +1247,12 @@ namespace ns_YAUI
             evtOnChar = null;
         }
 
+        public event Func<UIWidget, int, bool> evtOnWheel;
+        public void evtOnWheelClear()
+        {
+            evtOnWheel = null;
+        }
+
         internal bool doEvtLeftDown(int x, int y)
         {
             if (evtOnLMDown == null)
@@ -1319,6 +1325,15 @@ namespace ns_YAUI
             return evtOnChar(this, kc, isControl, isShift);
         }
 
+        internal bool doEvtOnWheel(int delta)
+        {
+            if (evtOnWheel == null)
+            {
+                return true;
+            }
+            return evtOnWheel(this, delta);
+        }
+
         internal bool doEvtDoubleClick(int x, int y)
         {
             if (evtOnDClick == null)
@@ -1363,6 +1378,7 @@ namespace ns_YAUI
                 mDragAble = value;
                 if (mDragAble)
                 {
+                    onDragEnd(0, 0);
                     evtOnLMDown += onDragBegin;
                 }
                 else
@@ -1417,6 +1433,7 @@ namespace ns_YAUI
                 mRotateAble = value;
                 if (mRotateAble)
                 {
+                    onRotateEnd(0, 0);
                     evtOnRMDown += onRotateBegin;
                 }
                 else
@@ -1436,6 +1453,7 @@ namespace ns_YAUI
         {
             UIRoot.Instance.mEvtWheel += onRotateMove;
             UIRoot.Instance.mEvtRightUp += onRotateEnd;
+            setDirty(true);
             return false;
         }
 
@@ -1452,6 +1470,7 @@ namespace ns_YAUI
         {
             UIRoot.Instance.mEvtWheel -= onRotateMove;
             UIRoot.Instance.mEvtRightUp -= onRotateEnd;
+            setDirty(true);
         }
 
         /// <summary>
@@ -1463,6 +1482,10 @@ namespace ns_YAUI
         /// scaleAble begin
         /// </summary>
         bool mScaleAble = false;
+        
+        /// <summary>
+        /// scaleAble end
+        /// </summary>
         public bool scaleAble
         {
             set
@@ -1471,21 +1494,28 @@ namespace ns_YAUI
                 mScaleAble = value;
                 if (mScaleAble)
                 {
+                    onScaleEnd(0, 0);
                     evtOnLMDown += onScaleBegin;
-                    UIRoot.Instance.evtLeftUp += onScaleEnd;
                 }
                 else
                 {
                     evtOnLMDown -= onScaleBegin;
-                    UIRoot.Instance.evtLeftUp -= onScaleEnd;
                     onScaleEnd(0, 0);
                 }
             }
 
             get
             {
-                return mDragAble;
+                return mScaleAble;
             }
+        }
+
+        bool onScaleBegin(UIWidget ui, int x, int y)
+        {
+            UIRoot.Instance.mEvtWheel += onScaleWheel;
+            UIRoot.Instance.evtLeftUp += onScaleEnd;
+            setDirty(true);
+            return false;
         }
 
         void onScaleWheel(int delta)
@@ -1496,24 +1526,19 @@ namespace ns_YAUI
             else sc = 0.9f;
             mScalex += sc - 1;
             mScaley += sc - 1;
+            if (mScalex == 0) mScalex += sc - 1;//to avoid zero, 
+            if (mScaley == 0) mScaley += sc - 1;
             updateFixPoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             setDirty(true);
-            return;
-        }
-
-        bool onScaleBegin(UIWidget ui, int x, int y)
-        {
-            UIRoot.Instance.mEvtWheel += onScaleWheel;
-            return false;
+            //return false;
         }
 
         void onScaleEnd(int x, int y)
         {
             UIRoot.Instance.mEvtWheel -= onScaleWheel;
+            UIRoot.Instance.evtLeftUp -= onScaleEnd;
+            setDirty(true);
         }
-        /// <summary>
-        /// scaleAble end
-        /// </summary>
 
         //utils
         protected static float min(float a, float b) { if (a < b)return a; else return b; }
