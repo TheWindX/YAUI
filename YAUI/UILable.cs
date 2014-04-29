@@ -16,16 +16,19 @@ using System.Xml;
 
 namespace ns_YAUI
 {
-    public enum EStyle
+    public enum EStyle : int
     {
-        normal,
-        bold,
-        italic,
+        normal = 0,
+        bold = 1,
+        italic = 2,
+        underline = 4,
+        strikeout = 8,
     }
 
-    public class UILable : UIWidget
+    public class UILabel : UIWidget
     {
         string mText = "template";
+        List<string> mLines = new List<string>();
         int mSz = 12;
         Font mFont;//todo, in font manager;
         uint mColor = 0xffffffff;
@@ -33,28 +36,87 @@ namespace ns_YAUI
 
         float mWidth = 0;
         float mHeight = 0;
-        
+        float mLineheight = 0;
+
+        float mLineWidthLimit = -1;
+
+        public bool link
+        {
+            set
+            {
+                if (value)
+                {
+                    evtOnEnter += () =>
+                    {
+                        textStyle = textStyle | EStyle.underline;
+                        setDirty(true);
+                    };
+                    evtOnExit += () =>
+                    {
+                        textStyle = textStyle & ~EStyle.underline;
+                        setDirty(true);
+                    };
+                }
+                else
+                {
+                    evtOnEnterClear();
+                    evtOnExitClear();
+                    textStyle = textStyle & ~EStyle.underline;
+                    setDirty(true);
+                }
+            }
+        }
+
         EStyle mStyle = EStyle.normal;
 
-        public UILable(string t = "Template", int sz = 12, EStyle st = EStyle.normal, uint color = 0xffffffff)
+        public UILabel(string t = "Template", int sz = 12, EStyle st = EStyle.normal, uint color = 0xffffffff, float maxLength = -1)
         {
             mStyle = st;
             mSz = sz;
             textColor = color;
             text = t;
+            mLineWidthLimit = maxLength;
+            updateFont();
         }
 
+        void splitByLength(string str, float length)
+        {
+            if (length <= 0) length = float.MaxValue;
+            string strRest = str;
+            while (strRest != "")
+            {
+                if (mHeight != 0) mHeight += lineHeightGain;
+                
+                var splitIdx = ns_YAUtils.Algorithms.binarySearch(strRest.Length-1, idx => 
+                    {
+                        var strTry = strRest.Substring(0, idx+1);
+                        var sz1 = TextRenderer.MeasureText(strTry, mFont);
+                        return sz1.Width <= length;
+                    });
+                string line = strRest.Substring(0, splitIdx + 1);
+                mLines.Add(line);
+
+                var sz = TextRenderer.MeasureText(line, mFont);
+                mWidth = max(mWidth, sz.Width);
+                mHeight = mHeight + sz.Height;
+                mLineheight = sz.Height;
+
+                if (splitIdx == strRest.Length - 1)
+                {
+                    break;
+                }
+                strRest = strRest.Substring(splitIdx + 1);
+            }
+        }
+
+        const int lineHeightGain = 2;
         public void updateFont()
         {
-            if (mStyle == EStyle.normal)
-                mFont = new Font("Arial", mSz, FontStyle.Regular);
-            else if (mStyle == EStyle.bold)
-                mFont = new Font("Arial", mSz, FontStyle.Bold);
-            else if (mStyle == EStyle.italic)
-                mFont = new Font("Arial", mSz, FontStyle.Italic);
-            var fontsz = TextRenderer.MeasureText(text, mFont);
-            mWidth = fontsz.Width;
-            mHeight = fontsz.Height;
+            mWidth = 0;
+            mHeight = 0;
+            mLines.Clear();
+            mFont = new Font("msyh", mSz, (FontStyle)mStyle);
+            splitByLength(mText, mLineWidthLimit);//calc mWidth & mHeight also
         }
 
         public uint textColor
@@ -98,6 +160,19 @@ namespace ns_YAUI
             }
         }
 
+        public EStyle textStyle
+        {
+            get
+            {
+                return mStyle;
+            }
+            set
+            {
+                mStyle = value;
+                updateFont();
+            }
+        }
+
         public override float width
         {
             get
@@ -116,7 +191,7 @@ namespace ns_YAUI
 
         public override string typeName
         {
-            get { return "lable"; }
+            get { return "label"; }
         }
 
         public override bool testSelfPick(PointF pos)
@@ -126,31 +201,70 @@ namespace ns_YAUI
 
         public override bool onDraw(Graphics g)
         {
-            //var td = g.MeasureString(mText, mFont);
-            //mRect.Width = (int)td.Width;
-            //mRect.Height = (int)td.Height;
-            g.DrawString(mText, mFont, mBrush, new PointF());
+            float h = 0;
+            for (int i = 0; i < mLines.Count; ++i)
+            {
+                var line = mLines[i];
+                g.DrawString(line, mFont, mBrush, new PointF(0, h));
+                h += mLineheight + lineHeightGain;
+            }
+
             return true;
+        }
+
+        static EStyle getStyle(XmlNode node)
+        {
+            string strRet = UIWidget.tryGetProp("style", node);
+            if (strRet == null) return EStyle.normal;
+
+            var strs = strRet.Split(',');
+            var st = strs.Aggregate(EStyle.normal, (style, prop)=>
+                {
+                    if(prop.Contains("normal") )
+                    {
+                        style |= EStyle.normal;
+                    }
+                    else if(prop.Contains("bold") )
+                    {
+                        style |= EStyle.bold;
+                    }
+                    else if(prop.Contains("underline") )
+                    {
+                        style |= EStyle.underline;
+                    }
+                    else if(prop.Contains("strikeout") )
+                    {
+                        style |= EStyle.strikeout;
+                    }
+                    return style;
+                });
+
+            return st;
         }
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
             string text = "template";
             int size = 12;
+            float maxLineWidth = -1;
             uint color = 0xffffffff;
             EStyle style = EStyle.normal;
             bool br = false;
 
-            text = getAttr(node, "text", "template", out br);
-            size = getAttr(node, "size", 12, out br);
-            color = (uint)getAttr<EColorUtil>(node, "color", schemes.textColor, out br);
+            text = getProp(node, "text", "template", out br);
+            size = getProp(node, "size", 12, out br);
+            color = (uint)getProp<EColorUtil>(node, "color", schemes.textColor, out br);
             if (!br)
             {
-                color = getAttr(node, "color", (uint)(schemes.textColor), out br);
+                color = getProp(node, "color", (uint)(schemes.textColor), out br);
             }
-            style = getAttr(node, "style", EStyle.normal, out br);
+            style = getStyle(node);
 
-            ui = new UILable(text, size, style, color);
+            maxLineWidth = getProp(node, "maxLineWidth", maxLineWidth, out br);
+            bool link = getProp(node, "link", false, out br);
+
+            ui = new UILabel(text, size, style, color, maxLineWidth);
+            (ui as UILabel).link = link;
             ui.fromXML(node);
             ui.paresent = p;
 

@@ -16,9 +16,9 @@ namespace ns_YAUIUser
             UIRoot.Instance.root.scaleAble = true;
             UIRoot.Instance.root.appendFromXML(@"
 <rect shrink='true' clip='*true' padding='5' fillColor='0xff3e4649' layout='vertical'>
-    <lable align='leftTop'></lable>
-    <lable align='rightTop' text='x'></lable>
-    <blank size='30'></blank>
+    <label align='leftTop'></label>
+    <label align='rightTop' text='x'></label>
+    <div size='30'></div>
     <resizer size='256'> </resizer>
 </rect>
 ");

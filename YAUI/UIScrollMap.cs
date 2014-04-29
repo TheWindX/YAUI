@@ -28,7 +28,8 @@ namespace ns_YAUI
             width = schemes.frameWidth;
             height = schemes.frameHeight;
             
-            dragAble = true;//默认只有dragAble
+            dragAble = true;//默认dragAble
+            scaleAble = true;//默认scaleAble
             mMapClient = appendFromXML(@"<map></map>") as UIMap;
             
             UIRoot.Instance.evtLeftUp += (x, y) =>
@@ -38,9 +39,9 @@ namespace ns_YAUI
                 };
 
             mMiniMapRect = appendFromXML(@"
-<blank clip='true' padding='16' shrink='true' align='rightTop'>
+<div clip='true' padding='16' shrink='true' align='rightTop'>
 <rect size='128' strokeColor='transparent'><map>
-</map></rect></blank>").findByTag("rect") as UIRect;
+</map></rect></div>").findByTag("rect") as UIRect;
             mMiniMap = mMiniMapRect.findByTag("map") as UIMap;
             mMiniMapRect.height = mMiniMapRect.width = mMiniMapSize;
             mMiniMapRect.alignParesent = EAlign.rightTop;

@@ -22,7 +22,7 @@ namespace ns_YAUIUser
     <round color='green'></round>
     <round_rect color='blue'></round_rect>
     <triangle color='maroon'></triangle>
-    <lable text='drag me!'></lable>
+    <label text='drag me!'></label>
 </map>
             ");
         }

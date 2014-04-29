@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace ns_YAUI
 {
-    class UIEdit : UILable
+    class UIEdit : UILabel
     {
         UIRect mBackGround = new UIRect(128, 22, 0xffffffff, 0);
         int mMaxCharLength;

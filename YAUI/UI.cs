@@ -131,8 +131,10 @@ namespace ns_YAUI
         public UI setAntiAliasing(bool enable)
         {
             mPainter.antiAliasing = enable;
+            mPainter.textAntiAliasing = enable;
             return this;
         }
+
         #endregion
 
         #region tips
@@ -166,13 +168,13 @@ namespace ns_YAUI
         #endregion
 
         #region debug
-        static UILable mTitle = null;
+        static UILabel mTitle = null;
         public void setTitle(string str)
         {
             if (mTitle == null)
             {
-                string content = @"<lable text=''></lable>";
-                mTitle = root.appendFromXML(string.Format(content, str)) as UILable;
+                string content = @"<label text=''></label>";
+                mTitle = root.appendFromXML(string.Format(content, str)) as UILabel;
             }
 
             mTitle.text = str;

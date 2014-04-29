@@ -79,7 +79,8 @@ namespace ns_YAUI
             mPropertyderived.Push(derived);
         }
 
-        public void setProperty(string key, ref string value)
+        //when '*xx" set in table
+        public void setPropertyInTable(string key, ref string value)
         {
             if (value == "") return;
             if (value == null) return;
@@ -93,7 +94,8 @@ namespace ns_YAUI
         }
 
         //继承获得属性
-        public string getProperty(string key)
+        //look up prop in table
+        public string getPropertyInTable(string key)
         {
             if (key == null && key.Count() == 0) return null;
             if (mPropertyderived.Count == 0) return null;
@@ -110,7 +112,7 @@ namespace ns_YAUI
             {
                 var m = mPropertyInnerMap.Pop();
                 var derived = mPropertyderived.Pop();
-                ret = getProperty(key);
+                ret = getPropertyInTable(key);
                 pushProperty(m, derived);
             }
             else if (ret == "")//no invalid
@@ -396,10 +398,10 @@ namespace ns_YAUI
         {
             regMethodFromXML("stub", UIStub.fromXML);
             regMethodFromXML("map", UIMap.fromXML);
-            regMethodFromXML("blank", UIBlank.fromXML);
+            regMethodFromXML("div", UIBlank.fromXML);
             regMethodFromXML("triangle", UIArrow.fromXML);
             regMethodFromXML("rect", UIRect.fromXML);
-            regMethodFromXML("lable", UILable.fromXML);
+            regMethodFromXML("label", UILabel.fromXML);
             regMethodFromXML("edit", UIEdit.fromXML);
             regMethodFromXML("line", UILine.fromXML);
             regMethodFromXML("round_rect", UIRoundRect.fromXML);

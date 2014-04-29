@@ -19,10 +19,10 @@ namespace ns_YAUI
 {
     public enum EForward 
     {
-        e_left,
-        e_right,
-        e_up,
-        e_down,
+        left,
+        right,
+        up,
+        down,
     }
 
     class UIArrow : UIWidget
@@ -35,9 +35,9 @@ namespace ns_YAUI
         Pen mPen;
 
 
-        EForward mForward = EForward.e_up;
+        EForward mForward = EForward.up;
 
-        public UIArrow(float w, float h, EForward forward = EForward.e_left, uint stroke = 0xffffffff, uint fill = 0xff888888)
+        public UIArrow(float w, float h, EForward forward = EForward.left, uint stroke = 0xffffffff, uint fill = 0xff888888)
         {
             _w = (int)w;
             _h = (int)h;
@@ -66,13 +66,13 @@ namespace ns_YAUI
             {
                 switch (mForward)
                 {
-                    case EForward.e_up:
+                    case EForward.up:
                         return transform(new PointF(_w / 2, 0));
-                    case EForward.e_down:
+                    case EForward.down:
                         return transform(new PointF(_w / 2, _h));
-                    case EForward.e_left:
+                    case EForward.left:
                         return transform(new PointF(0, _h / 2));
-                    case EForward.e_right:
+                    case EForward.right:
                         return transform(new PointF(_w, _h / 2));
                     default:
                         break;
@@ -150,7 +150,7 @@ namespace ns_YAUI
         {
             switch (mForward)
             {
-                case EForward.e_up:
+                case EForward.up:
                     {
                         float x;
                         if (pos.X < _w / 2)
@@ -170,7 +170,7 @@ namespace ns_YAUI
                             return true;
                         }
                     }
-                case EForward.e_right:
+                case EForward.right:
                     {
                         float x = _w - pos.X;
                         float y;
@@ -191,7 +191,7 @@ namespace ns_YAUI
                             return true;
                         }
                     }
-                case EForward.e_left:
+                case EForward.left:
                     {
                         float x = pos.X;
                         float y;
@@ -212,7 +212,7 @@ namespace ns_YAUI
                             return true;
                         }
                     }
-                case EForward.e_down:
+                case EForward.down:
                     {
                         float x;
                         float y = _h - pos.Y;
@@ -246,16 +246,16 @@ namespace ns_YAUI
 
             switch (mForward)
             {
-                case EForward.e_up:
+                case EForward.up:
                     p.AddLines(new PointF[] { new PointF(_w / 2, 0), new PointF(_w, _h), new PointF(0, _h) });
                     break;
-                case EForward.e_right:
+                case EForward.right:
                     p.AddLines(new PointF[] { new PointF(0, 0), new PointF(0, _h), new PointF(_w, _h/2) });
                     break;
-                case EForward.e_left:
+                case EForward.left:
                     p.AddLines(new PointF[] { new PointF(0, _h/2), new PointF(_w, 0), new PointF(_w, _h) });
                     break;
-                case EForward.e_down:
+                case EForward.down:
                     p.AddLines(new PointF[] { new PointF(0, 0), new PointF(_w, 0), new PointF(_w/2, _h) });
                     break;
                 default:
@@ -278,34 +278,34 @@ namespace ns_YAUI
             uint sc = (uint)schemes.strokeColor;
             bool br = true;
 
-            h = w = getAttr<float>(node, "length", schemes.widgetWidth, out br);
+            h = w = getProp<float>(node, "length", schemes.widgetWidth, out br);
             if (!br)
             {
-                w = getAttr<float>(node, "width", schemes.widgetWidth, out br);
-                h = getAttr<float>(node, "height", schemes.widgetHeight, out br);
+                w = getProp<float>(node, "width", schemes.widgetWidth, out br);
+                h = getProp<float>(node, "height", schemes.widgetHeight, out br);
             }
 
-            fc = (uint)getAttr<EColorUtil>(node, "color", schemes.fillColor, out br);
+            fc = (uint)getProp<EColorUtil>(node, "color", schemes.fillColor, out br);
             if (!br)
             {
-                fc = getAttr(node, "color", (uint)(schemes.fillColor), out br);
+                fc = getProp(node, "color", (uint)(schemes.fillColor), out br);
                 if (!br)
                 {
 
-                    fc = (uint)getAttr<EColorUtil>(node, "fillColor", schemes.fillColor, out br);
+                    fc = (uint)getProp<EColorUtil>(node, "fillColor", schemes.fillColor, out br);
                     if (!br)
                     {
-                        fc = getAttr(node, "fillColor", (uint)(schemes.fillColor), out br);
+                        fc = getProp(node, "fillColor", (uint)(schemes.fillColor), out br);
                     }
                 }
             }
-            sc = (uint)getAttr<EColorUtil>(node, "strokeColor", schemes.strokeColor, out br);
+            sc = (uint)getProp<EColorUtil>(node, "strokeColor", schemes.strokeColor, out br);
             if (!br)
             {
-                sc = getAttr(node, "strokeColor", (uint)(schemes.strokeColor), out br);
+                sc = getProp(node, "strokeColor", (uint)(schemes.strokeColor), out br);
             }
 
-            EForward fw = getAttr<EForward>(node, "forward", EForward.e_up, out br);
+            EForward fw = getProp<EForward>(node, "forward", EForward.up, out br);
 
             ui = new UIArrow(w, h, fw, sc, fc);
             ui.fromXML(node);

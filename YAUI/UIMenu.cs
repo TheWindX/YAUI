@@ -38,7 +38,7 @@ namespace ns_YAUI
         const string XMLItem =
 @"
 <rect strokeColor='0x00000000' clip='true'>
-    <lable enable='false' align='center'></lable>
+    <label enable='false' align='center'></label>
 </rect>
 ";
         Dictionary<string, UIRect> mNameItems = new Dictionary<string, UIRect>();
@@ -54,7 +54,7 @@ namespace ns_YAUI
             mNameItems.Add(cmdName, rc);
             rc.paresent = mRR;
 
-            var lb = rc.findByTag("lable") as UILable;
+            var lb = rc.findByTag("label") as UILabel;
             rc.fillColor = mBColor;
             rc.width = itemWidth;
             rc.height = itemHeight;
@@ -212,7 +212,7 @@ namespace ns_YAUI
                 mFColor = value;
                 foreach (UIRect item in mNameItems.Values)
                 {
-                    var lb = item.findByTag("rect/lable") as UILable;
+                    var lb = item.findByTag("rect/label") as UILabel;
                     lb.textColor = mFColor;
                 }
                 this.setDirty(true);

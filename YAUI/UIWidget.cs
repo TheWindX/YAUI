@@ -1553,20 +1553,27 @@ namespace ns_YAUI
             return new RectangleF(left, top, right - left, buttom - top);
         }
 
-        internal static T getAttr<T>(XmlNode node, string attName, T defaultVal, out bool valid) where T : IConvertible
+        internal static string tryGetProp(string attName, XmlNode node)
         {
-            valid = true;
-            var ret = node.Attributes.GetNamedItem(attName);
             string strRet = null;
-            if(ret == null)
+            var ret = node.Attributes.GetNamedItem(attName);
+            if (ret == null)
             {
-                strRet = UIRoot.Instance.getProperty(attName);
+                strRet = UIRoot.Instance.getPropertyInTable(attName);
             }
             else
             {
                 strRet = ret.Value;
             }
-            UIRoot.Instance.setProperty(attName, ref strRet);
+            UIRoot.Instance.setPropertyInTable(attName, ref strRet);
+            return strRet;
+        }
+
+        internal static T getProp<T>(XmlNode node, string attName, T defaultVal, out bool valid) where T : IConvertible
+        {
+            valid = true;
+            string strRet = tryGetProp(attName, node);
+            
             if (strRet != null)
             {
                 if (typeof(T) == typeof(int))
@@ -1782,13 +1789,13 @@ namespace ns_YAUI
                     height = strs1[1].castFloat();
                 }
             }
-            width = getAttr(node, "length", width, out br);
+            width = getProp(node, "length", width, out br);
             if (br)
                 height = width;
             else
             {
-                width = getAttr(node, "width", width, out br);
-                height = getAttr(node, "height", height, out br);
+                width = getProp(node, "width", width, out br);
+                height = getProp(node, "height", height, out br);
             }
 
             ret = node.Attributes.GetNamedItem("editMode");
@@ -1812,71 +1819,71 @@ namespace ns_YAUI
                 }
             }
 
-            px = getAttr(node, "px", px, out br);
-            py = getAttr(node, "py", py, out br);
-            mDir = getAttr(node, "dir", mDir, out br);
+            px = getProp(node, "px", px, out br);
+            py = getProp(node, "py", py, out br);
+            mDir = getProp(node, "dir", mDir, out br);
 
-            mScaley = mScalex = getAttr(node, "scale", mScalex, out br);
+            mScaley = mScalex = getProp(node, "scale", mScalex, out br);
             if (!br)
             {
-                mScalex = getAttr(node, "scaleX", mScalex, out br);
-                mScaley = getAttr(node, "scaleY", mScaley, out br);
+                mScalex = getProp(node, "scaleX", mScalex, out br);
+                mScaley = getProp(node, "scaleY", mScaley, out br);
             }
 
-            alignParesent = mAlign = getAttr(node, "align", mAlign, out br);
-            var alignRet = getAttr(node, "alignParesent", alignParesent, out br);
+            alignParesent = mAlign = getProp(node, "align", mAlign, out br);
+            var alignRet = getProp(node, "alignParesent", alignParesent, out br);
             if (br)
             {
                 alignParesent = alignRet;
             }
 
-            mOffsety = mOffsetx = getAttr(node, "offset", mOffsetx, out br);
+            mOffsety = mOffsetx = getProp(node, "offset", mOffsetx, out br);
             if (!br)
             {
-                mOffsetx = getAttr(node, "offsetX", mOffsetx, out br);
-                mOffsety = getAttr(node, "offsetY", mOffsety, out br);
+                mOffsetx = getProp(node, "offsetX", mOffsetx, out br);
+                mOffsety = getProp(node, "offsetY", mOffsety, out br);
             }
 
-            clip = getAttr(node, "clip", clip, out br);
-            enable = getAttr(node, "enable", enable, out br);
-            visible = getAttr(node, "visible", visible, out br);
+            clip = getProp(node, "clip", clip, out br);
+            enable = getProp(node, "enable", enable, out br);
+            visible = getProp(node, "visible", visible, out br);
 
-            dragAble = getAttr(node, "dragAble", dragAble, out br);
-            scaleAble = getAttr(node, "scaleAble", scaleAble, out br);
-            rotateAble = getAttr(node, "rotateAble", rotateAble, out br);
+            dragAble = getProp(node, "dragAble", dragAble, out br);
+            scaleAble = getProp(node, "scaleAble", scaleAble, out br);
+            rotateAble = getProp(node, "rotateAble", rotateAble, out br);
 
 
             parseLayout(node);
             //layout = getAttr(node, "layout", layout, out br);
-            layoutInverse = getAttr(node, "layoutInverse", layoutInverse, out br);
-            wrap = getAttr(node, "wrap", wrap, out br);
-            layoutFilled = getAttr(node, "layoutFilled", layoutFilled, out br);
-            shrinkAble = getAttr(node, "shrink", shrinkAble, out br);
-            expandAbleX = getAttr(node, "expand", expandAbleX, out br);
+            layoutInverse = getProp(node, "layoutInverse", layoutInverse, out br);
+            wrap = getProp(node, "wrap", wrap, out br);
+            layoutFilled = getProp(node, "layoutFilled", layoutFilled, out br);
+            shrinkAble = getProp(node, "shrink", shrinkAble, out br);
+            expandAbleX = getProp(node, "expand", expandAbleX, out br);
             if (br)
                 expandAbleY = expandAbleX;
             else
             {
-                expandAbleX = getAttr(node, "expandX", expandAbleX, out br);
-                expandAbleY = getAttr(node, "expandY", expandAbleY, out br);
+                expandAbleX = getProp(node, "expandX", expandAbleX, out br);
+                expandAbleY = getProp(node, "expandY", expandAbleY, out br);
             }
 
-            marginX = getAttr(node, "margin", marginX, out br);
+            marginX = getProp(node, "margin", marginX, out br);
             if (br)
                 marginY = marginX;
             else
             {
-                marginX = getAttr(node, "marginX", marginX, out br);
-                marginY = getAttr(node, "marginY", marginY, out br);
+                marginX = getProp(node, "marginX", marginX, out br);
+                marginY = getProp(node, "marginY", marginY, out br);
             }
 
-            paddingX = getAttr(node, "padding", paddingX, out br);
+            paddingX = getProp(node, "padding", paddingX, out br);
             if (br)
                 paddingY = paddingX;
             else
             {
-                paddingX = getAttr(node, "paddingX", paddingX, out br);
-                paddingY = getAttr(node, "paddingY", paddingY, out br);
+                paddingX = getProp(node, "paddingX", paddingX, out br);
+                paddingY = getProp(node, "paddingY", paddingY, out br);
             }
 
             return node.ChildNodes;

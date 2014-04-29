@@ -10,17 +10,17 @@ namespace ns_YAUI
     {
         const string XMLLayout = @"
 <round_rect enable='false' shrink='true' paddingX='5' paddingY='2' >
-    <lable text='asdf' style='normal'></lable>
+    <label text='asdf' style='normal'></label>
 </round_rect>
 ";
         UIRoundRect mRR = null;
-        UILable mText = null;
+        UILabel mText = null;
         internal UITips()
         {
             appendFromXML(XMLLayout);
             mRR = this.findByTag("round_rect") as UIRoundRect;
             mRR.fillColor = (uint)schemes.backgroundColor;
-            mText = this.findByTag("round_rect/lable") as UILable;
+            mText = this.findByTag("round_rect/label") as UILabel;
         }
 
         public int size

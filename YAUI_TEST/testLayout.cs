@@ -13,80 +13,80 @@ namespace ns_YAUIUser
         const string XMLPAGE = @"
 <resizer name='root' size='512' layout='vertical, filled' color='blue' editMode='dragAble, rotateAble, scaleAble'>
     <stub layout='horizon, inverse' align='rightTop' id='buttons'>
-        <lable text='×' margin='*2'></lable>
-        <lable text='□'></lable>
-        <lable text='_'></lable>
+        <label text='×' margin='*2'></label>
+        <label text='□'></label>
+        <label text='_'></label>
     </stub>
 
-    <blank layout='horizon, shrink' margin='4' id='head title'>
+    <div layout='horizon, shrink' margin='4' id='head title'>
         <round_rect size='64'>
-            <lable text='♛' align='center' color='gold' size='32'></lable>
+            <label text='♛' align='center' color='gold' size='32'></label>
         </round_rect>
-        <blank layout='vertical, shrink'>
-            <lable text='YAUI交流讨论群' size='14' style='bold'></lable>
-            <lable text='(1000人群)' size='10'></lable>
-        </blank>
-    </blank>
+        <div layout='vertical, shrink'>
+            <label text='YAUI交流讨论群' size='14' style='bold'></label>
+            <label text='(1000人群)' size='10'></label>
+        </div>
+    </div>
 
     <rect height='48' layout='expandX' id='tabs_advs'>
-        <blank layout='horizon' align='leftBottom' height='32' id='tabs'>
+        <div layout='horizon' align='leftBottom' height='32' id='tabs'>
             <innerTemplate name='tab'>
                 <round_rect layout='horizon, expandY' width='96' fillColor='royalblue' leftBottomCorner='false' rightBottomCorner='false'>
-                    <lable name='lb' text='聊天' align='center'></lable>
+                    <label name='lb' text='聊天' align='center'></label>
                 </round_rect>
             </innerTemplate>
             <apply innerTemplate='tab' lb.text='聊天' fillColor='blue'></apply>
             <apply innerTemplate='tab' lb.text='相片'></apply>
             <apply innerTemplate='tab' lb.text='文件'></apply>
-        </blank>
-        <blank layout='horizon, inverse' align='rightBottom' height='48' id='advs'>
+        </div>
+        <div layout='horizon, inverse' align='rightBottom' height='48' id='advs'>
             <round_rect layout='horizon, expandY' width='128'>
-                <lable text='广告位1' align='center'></lable>
+                <label text='广告位1' align='center'></label>
             </round_rect>
-        </blank>
+        </div>
     </rect>
 
-    <blank id='leftRight' layout='horizon, inverse, filled' >
+    <div id='leftRight' layout='horizon, inverse, filled' >
         <round_rect layout='vertical, expandY' margin='6' width='180' id='frind_list'>
             <round_rect layout='expandX' height='28'>
-                <lable text='群成员' color='black' size='8' align='left'></lable>
-                <lable text='?' align='right'></lable>
+                <label text='群成员' color='black' size='8' align='left'></label>
+                <label text='?' align='right'></label>
             </round_rect>
-            <lable text='西门吹雪' margin='*4' color='*black' size='*8'></lable>
-            <lable text='聂风'></lable>
-            <lable text='步惊云'></lable>
-            <lable text='武林神话'></lable>
+            <label text='西门吹雪' margin='*4' color='*black' size='*8'></label>
+            <label text='聂风'></label>
+            <label text='步惊云'></label>
+            <label text='武林神话'></label>
         </round_rect>
 
         <rect layout='vertical, inverse, expandY, filled' clip='true'>
             <rect layout='expandX' height='28'>
-                <lable text='广告位2' align='left' size='8'></lable>
-                <blank align='right' layout='horizon, inverse, expand'>
+                <label text='广告位2' align='left' size='8'></label>
+                <div align='right' layout='horizon, inverse, expand'>
                     <innerTemplate name='bt'>
                         <round_rect layout='expandY' margin='4'> 
-                            <lable name='lb' text='' align='center' size='8' color='black'></lable> 
+                            <label name='lb' text='' align='center' size='8' color='black'></label> 
                         </round_rect>
                     </innerTemplate>
                     <apply innerTemplate='bt' lb.text='发送'> </apply>
                     <apply innerTemplate='bt' lb.text='关闭'> </apply>
                     
-                </blank>
+                </div>
             </rect>
             <rect layout='expandX' height='128' color='white'>
             </rect>
             <rect layout='horizon, expandX' height='32' padding='4' clip='true'>
-                <lable text='A' color='blue' style='*bold'></lable>                
-                <lable text='☺' size='18' offsetY='-8' color='yellow'></lable>
-                <lable text='♪' color='red'></lable>
+                <label text='A' color='blue' style='*bold'></label>                
+                <label text='☺' size='18' offsetY='-8' color='yellow'></label>
+                <label text='♪' color='red'></label>
             </rect>
             <rect layout='vertical, expandX' clip='true' padding='4' color='white' id='chat'>
-                <lable text='西门吹雪: xxxxx' color='*blue'></lable>
-                <lable text='聂风: xxxxx'></lable>
-                <lable text='步惊云: xxxxx'></lable>
-                <lable text='武林神话: xxxxx'></lable>
+                <label text='西门吹雪: xxxxx' color='*blue'></label>
+                <label text='聂风: xxxxx'></label>
+                <label text='步惊云: xxxxx'></label>
+                <label text='武林神话: xxxxx'></label>
             </rect>
         </rect>
-    </blank>
+    </div>
 </resizer>
 ";
         public testLayout()

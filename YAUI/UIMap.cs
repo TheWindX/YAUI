@@ -75,11 +75,11 @@ namespace ns_YAUI
         {
             uint fc = 0;
             XmlNode ret = node.Attributes.GetNamedItem("color");
-            string strRet = (ret == null) ? UIRoot.Instance.getProperty("color") : ((ret.Value == "NA") ? null : ret.Value);
+            string strRet = (ret == null) ? UIRoot.Instance.getPropertyInTable("color") : ((ret.Value == "NA") ? null : ret.Value);
             if (strRet != null)
             {
                 fc = strRet.castHex(0xff888888);
-                UIRoot.Instance.setProperty("color", ref strRet);
+                UIRoot.Instance.setPropertyInTable("color", ref strRet);
             }
 
             var m = new UIMap();

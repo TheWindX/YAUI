@@ -16,16 +16,17 @@ namespace ns_YAUIUser
         {
             try
             {
-                UI.Instance.fromXML(@"
-<rect location='128, 128' color='black' dragAble='true' shrink='true' padding='5' layout='vertical'>
-    <blank size='32'></blank>
-    <resizer size='512'>
-        <scrolledMap expand='true'>
-            <rect dragAble='*true' color='red' location='128, 128'></rect>
-            <rect color='blue' location='384, 384'></rect>
-        </scrolledMap>
-    </resizer>
-</rect>");   
+                var ui = UI.Instance.fromXML(@"
+<scrolledMap>
+    <div layout='horizon'>
+        <triangle color='*white' forward='left'>
+        </triangle>
+        <label name='lb' link='true' text='下asdfasdfasdf划线，链asdfasdf接asdfasdfasdf文字控件，serasdfasdf' style='bold' color='red' maxLineWidth='256' size='12'></label>
+    </div>
+</scrolledMap>
+");   
+                var lb = ui.findByPath("lb") as UILabel;
+                //lb.link = true;
             }
             catch (XmlException e)
             {

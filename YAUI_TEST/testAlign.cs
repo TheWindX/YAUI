@@ -13,15 +13,15 @@ namespace ns_YAUIUser
         {
             UI.Instance.fromXML(@"
     <resizer location='128' size='384' padding='8' editMode='dragAble'>
-        <lable text='leftTop' align='leftTop'></lable>
-        <lable text='top' align='top'></lable>
-        <lable text='rightTop' align='rightTop'></lable>
-        <lable text='left' align='left'></lable>
-        <lable text='center' align='center'></lable>
-        <lable text='right' align='right'></lable>
-        <lable text='leftBottom' align='leftBottom'></lable>
-        <lable text='bottom' align='bottom'></lable>
-        <lable text='rightBottom' align='rightBottom'></lable>
+        <label text='leftTop' align='leftTop'></label>
+        <label text='top' align='top'></label>
+        <label text='rightTop' align='rightTop'></label>
+        <label text='left' align='left'></label>
+        <label text='center' align='center'></label>
+        <label text='right' align='right'></label>
+        <label text='leftBottom' align='leftBottom'></label>
+        <label text='bottom' align='bottom'></label>
+        <label text='rightBottom' align='rightBottom'></label>
     </resizer>
 ");
         }

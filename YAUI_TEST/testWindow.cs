@@ -12,13 +12,13 @@ namespace ns_YAUIUser
     {
         const string XMLLayout = @"
     <rect name='root' size='512' clip='true' layout='vertical' layoutFilled='true' padding='5' dragAble='true' rotateAble='true' scaleAble='true' strokeColor='*red' color='ff1ba1e2'>
-        <lable  text='top' align='leftTop'></lable>
+        <label  text='top' align='leftTop'></label>
         <rect size='24' fillColor='ffe04343' align='rightTop' offsetY='-5' >
-            <lable name='close' text='x' align='center' offsetX='1' offsetY='-1'></lable>
+            <label name='close' text='x' align='center' offsetX='1' offsetY='-1'></label>
         </rect>
-        <blank name='' size='30'></blank>
+        <div name='' size='30'></div>
         <rect name='tabContainer' layout='horizon' height='30' expandX='true' clip='true' color='0xffbfdbff'>
-        <lable name='tabToggle' text='∧' color='ff000000' size='10' margin='8' align='rightMiddle'></lable>
+        <label name='tabToggle' text='∧' color='ff000000' size='10' margin='8' align='rightMiddle'></label>
         </rect>
         <rect name='toolContainer' layout='horizon' height='100' expandX='true' fillColor='*0xff3e4649'></rect>
         <rect name='clientContainer' clip='true'></rect>
@@ -28,7 +28,7 @@ namespace ns_YAUIUser
 ";
         const string XMLTab = @"
     <rect clip='true' rightBottomCorner='false' leftBottomCorner='false' width='64' expandY='true' radius='8' fillColor='0xffd7e3f2'>
-        <lable text='name' color='0xff555555' style='normal' align='center'></lable>
+        <label text='name' color='0xff555555' style='normal' align='center'></label>
     </rect>
 ";
         const string XMLTool = @"
@@ -55,7 +55,7 @@ namespace ns_YAUIUser
             mClientBlank = mWindow.findByPath("editor");
             mClose = mWindow.findByPath("close");
             mResizer = mWindow.findByPath("resizer");
-            mLable = mWindow.findByPath("lable");
+            mLable = mWindow.findByPath("label");
             mClientCtn = mWindow.findByPath("clientContainer");
             mTabCtn = mWindow.findByPath("tabContainer");
             mToolCtn = mWindow.findByPath("toolContainer");
@@ -113,12 +113,12 @@ namespace ns_YAUIUser
                 if (mToolCtn.visible)
                 {
                     mToolCtn.visible = false;
-                    (mTabToggle as UILable).text = "∨";
+                    (mTabToggle as UILabel).text = "∨";
                 }
                 else
                 {
                     mToolCtn.visible = true;
-                    (mTabToggle as UILable).text = "∧";
+                    (mTabToggle as UILabel).text = "∧";
                 }
                 mToolCtn.setDirty(true);
                 return false;
@@ -141,7 +141,7 @@ namespace ns_YAUIUser
         public int addTab(string name)
         {
             var tab = UIRoot.Instance.loadFromXML(XMLTab);
-            (tab.findByPath("lable") as UILable).text = name;
+            (tab.findByPath("label") as UILabel).text = name;
             var tool = UIRoot.Instance.loadFromXML(XMLTool);
             tab.paresent = mTabCtn;
             tool.paresent = mToolCtn;
@@ -156,14 +156,14 @@ namespace ns_YAUIUser
         {
             if (id >= mToolTabs.Count) return false;
             var tab = mToolTabs[id];
-            (tab.Item1.findByPath("lable") as UILable).text = name;
+            (tab.Item1.findByPath("label") as UILabel).text = name;
             tab.Item1.setDirty(true);
             return true;
         }
 
         public void setWindowName(string name)
         {
-            (mLable as UILable).text = name;
+            (mLable as UILabel).text = name;
             mLable.setDirty(true);
         }
 

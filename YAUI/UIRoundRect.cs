@@ -230,32 +230,32 @@ namespace ns_YAUI
             uint sc = (uint)schemes.strokeColor;
             bool br = true;
 
-            fc = (uint)getAttr<EColorUtil>(node, "color", schemes.fillColor, out br);
+            fc = (uint)getProp<EColorUtil>(node, "color", schemes.fillColor, out br);
             if (!br)
             {
-                fc = getAttr(node, "color", (uint)(schemes.fillColor), out br);
+                fc = getProp(node, "color", (uint)(schemes.fillColor), out br);
                 if (!br)
                 {
 
-                    fc = (uint)getAttr<EColorUtil>(node, "fillColor", schemes.fillColor, out br);
+                    fc = (uint)getProp<EColorUtil>(node, "fillColor", schemes.fillColor, out br);
                     if (!br)
                     {
-                        fc = getAttr(node, "fillColor", (uint)(schemes.fillColor), out br);
+                        fc = getProp(node, "fillColor", (uint)(schemes.fillColor), out br);
                     }
                 }
             }
-            sc = (uint)getAttr<EColorUtil>(node, "strokeColor", schemes.strokeColor, out br);
+            sc = (uint)getProp<EColorUtil>(node, "strokeColor", schemes.strokeColor, out br);
             if (!br)
             {
-                sc = getAttr(node, "strokeColor", (uint)(schemes.strokeColor), out br);
+                sc = getProp(node, "strokeColor", (uint)(schemes.strokeColor), out br);
             }
             
-            r = getAttr(node, "radius", 6, out br)*2;
+            r = getProp(node, "radius", 6, out br)*2;
 
-            corners[0] = getAttr(node, "leftTopCorner", true, out br);
-            corners[1] = getAttr(node, "rightTopCorner", true, out br);
-            corners[2] = getAttr(node, "rightBottomCorner", true, out br);
-            corners[3] = getAttr(node, "leftBottomCorner", true, out br);
+            corners[0] = getProp(node, "leftTopCorner", true, out br);
+            corners[1] = getProp(node, "rightTopCorner", true, out br);
+            corners[2] = getProp(node, "rightBottomCorner", true, out br);
+            corners[3] = getProp(node, "leftBottomCorner", true, out br);
 
             ui = new UIRoundRect(w, h, r, corners, sc, fc);
             ui.fromXML(node);

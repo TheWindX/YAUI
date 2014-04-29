@@ -18,7 +18,7 @@ namespace ns_YAUIUser
         <round_rect name='r2' radius='5' size='256'>
             <round_rect  name='r3' size='128'>
                 <rect name='r4' length = 'NA' width='22' height='64'>
-                    <lable name='r5' text='LEELOO' color='0xffffff00'></lable>
+                    <label name='r5' text='LEELOO' color='0xffffff00'></label>
                 </rect>    
             </round_rect >
         </round_rect >

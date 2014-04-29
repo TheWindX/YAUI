@@ -128,24 +128,24 @@ namespace ns_YAUI
             uint sc = (uint)schemes.strokeColor;
             bool br = true;
 
-            fc = (uint)getAttr<EColorUtil>(node, "color", schemes.fillColor, out br);
+            fc = (uint)getProp<EColorUtil>(node, "color", schemes.fillColor, out br);
             if (!br)
             {
-                fc = getAttr(node, "color", (uint)(schemes.fillColor), out br);
+                fc = getProp(node, "color", (uint)(schemes.fillColor), out br);
                 if (!br)
                 {
 
-                    fc = (uint)getAttr<EColorUtil>(node, "fillColor", schemes.fillColor, out br);
+                    fc = (uint)getProp<EColorUtil>(node, "fillColor", schemes.fillColor, out br);
                     if (!br)
                     {
-                        fc = getAttr(node, "fillColor", (uint)(schemes.fillColor), out br);
+                        fc = getProp(node, "fillColor", (uint)(schemes.fillColor), out br);
                     }
                 }
             }
-            sc = (uint)getAttr<EColorUtil>(node, "strokeColor", schemes.strokeColor, out br);
+            sc = (uint)getProp<EColorUtil>(node, "strokeColor", schemes.strokeColor, out br);
             if (!br)
             {
-                sc = getAttr(node, "strokeColor", (uint)(schemes.strokeColor), out br);
+                sc = getProp(node, "strokeColor", (uint)(schemes.strokeColor), out br);
             } 
             
             ui = new UIRect(w, h, sc, fc);

@@ -57,52 +57,52 @@ namespace ns_YAUIUser
             string strRet = null;
 
             var ret = node.Attributes.GetNamedItem("width");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("width") : ((ret.Value == "NA") ? null : ret.Value);
+            strRet = (ret == null) ? UIRoot.Instance.getPropertyInTable("width") : ((ret.Value == "NA") ? null : ret.Value);
             if (strRet != null)
             {
                 w = strRet.castInt();
-                UIRoot.Instance.setProperty("width", ref strRet);
+                UIRoot.Instance.setPropertyInTable("width", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("height");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("height") : ((ret.Value == "NA") ? null : ret.Value);
+            strRet = (ret == null) ? UIRoot.Instance.getPropertyInTable("height") : ((ret.Value == "NA") ? null : ret.Value);
             if (strRet != null)
             {
                 h = strRet.castInt();
-                UIRoot.Instance.setProperty("height", ref strRet);
+                UIRoot.Instance.setPropertyInTable("height", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("length");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("length") : ((ret.Value == "NA") ? null : ret.Value);
+            strRet = (ret == null) ? UIRoot.Instance.getPropertyInTable("length") : ((ret.Value == "NA") ? null : ret.Value);
             if (strRet != null)
             {
                 h = strRet.castInt();
                 w = h;
-                UIRoot.Instance.setProperty("length", ref strRet);
+                UIRoot.Instance.setPropertyInTable("length", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("strokeColor");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("strokeColor") : ((ret.Value == "NA") ? null : ret.Value);
+            strRet = (ret == null) ? UIRoot.Instance.getPropertyInTable("strokeColor") : ((ret.Value == "NA") ? null : ret.Value);
             if (strRet != null)
             {
                 sc = strRet.castHex(0xffffffff);
-                UIRoot.Instance.setProperty("strokeColor", ref strRet);
+                UIRoot.Instance.setPropertyInTable("strokeColor", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("fillColor");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("fillColor") : ((ret.Value == "NA") ? null : ret.Value);
+            strRet = (ret == null) ? UIRoot.Instance.getPropertyInTable("fillColor") : ((ret.Value == "NA") ? null : ret.Value);
             if (strRet != null)
             {
                 fc = strRet.castHex(0xff888888);
-                UIRoot.Instance.setProperty("fillColor", ref strRet);
+                UIRoot.Instance.setPropertyInTable("fillColor", ref strRet);
             }
 
             ret = node.Attributes.GetNamedItem("color");
-            strRet = (ret == null) ? UIRoot.Instance.getProperty("color") : ((ret.Value == "NA") ? null : ret.Value);
+            strRet = (ret == null) ? UIRoot.Instance.getPropertyInTable("color") : ((ret.Value == "NA") ? null : ret.Value);
             if (strRet != null)
             {
                 fc = strRet.castHex(0xff888888);
-                UIRoot.Instance.setProperty("color", ref strRet);
+                UIRoot.Instance.setPropertyInTable("color", ref strRet);
             }
 
             ui = new newRect(w, h, sc, fc);
