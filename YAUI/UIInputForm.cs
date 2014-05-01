@@ -31,25 +31,24 @@ namespace ns_YAUI
             this.mTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.mTextBox.Font = new System.Drawing.Font("SimSun", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.mTextBox.ForeColor = System.Drawing.SystemColors.ActiveBorder;
-            this.mTextBox.Location = new System.Drawing.Point(12, 15);
+            this.mTextBox.Location = new System.Drawing.Point(0, 0);
             this.mTextBox.Name = "mTextBox";
-            this.mTextBox.Size = new System.Drawing.Size(366, 25);
+            this.mTextBox.Size = new System.Drawing.Size(366, 37);
             this.mTextBox.TabIndex = 1;
             this.mTextBox.Click += new System.EventHandler(this.mTextBox_Click);
             this.mTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.mTextBox_KeyUp);
-            //this.mTextBox.Leave += new System.EventHandler(this.mTextBox_Leave);
-            this.Deactivate += new System.EventHandler(this.mTextBox_Leave);
             // 
-            // InputForm
+            // UIInputForm
             // 
             this.BackColor = System.Drawing.Color.Maroon;
-            this.ClientSize = new System.Drawing.Size(390, 52);
+            this.ClientSize = new System.Drawing.Size(390, 256);
             this.ControlBox = false;
             this.Controls.Add(this.mTextBox);
             this.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "InputForm";
+            this.Name = "UIInputForm";
             this.TransparencyKey = System.Drawing.Color.Maroon;
+            this.Deactivate += new System.EventHandler(this.mTextBox_Leave);
             this.Load += new System.EventHandler(this.InputForm_Load);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.SimpleCustomControl_Paint);
             this.ResumeLayout(false);
@@ -89,16 +88,17 @@ namespace ns_YAUI
             }
         }
 
-        public void show(bool bShow, int x = 0, int y = 0)
+        public void show(bool bShow, int x = 0, int y = 0, int w=128, int h=128)
         {
             if (bShow)
             {
                 this.TopMost = true;
                 mTextBox.Text = mTintText;
-                uint c1 = 0x888888;
+                uint c1 = 0x0;
                 mTextBox.ForeColor = Color.FromArgb((Int32)c1);
                 this.Visible = true;
                 this.Location = UIPainterForm.mIns.PointToScreen(new Point((int)x, (int)y));
+                this.Size = new Size(w, h);
                 if (evtInputEnter != null)
                     evtInputEnter();
             }
@@ -123,7 +123,7 @@ namespace ns_YAUI
 
         private void mTextBox_Click(object sender, EventArgs e)
         {
-            uint c1 = 0xffffffff;
+            uint c1 = 0x0;
             mTextBox.Text = "";
             mTextBox.ForeColor = Color.FromArgb((Int32)c1);
         }

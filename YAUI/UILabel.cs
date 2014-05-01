@@ -79,6 +79,13 @@ namespace ns_YAUI
             updateFont();
         }
 
+        internal Size measureText(string text, int lines=1)
+        {
+            var sz = TextRenderer.MeasureText(text, mFont);
+            sz.Width = ((lines - 1) * lineHeightGain) + sz.Height * lines;
+            return sz;
+        }
+
         void splitByLength(string str, float length)
         {
             if (length <= 0) length = float.MaxValue;
@@ -109,7 +116,7 @@ namespace ns_YAUI
             }
         }
 
-        const int lineHeightGain = 2;
+        internal const int lineHeightGain = 2;
         public void updateFont()
         {
             mWidth = 0;
@@ -212,7 +219,7 @@ namespace ns_YAUI
             return true;
         }
 
-        static EStyle getStyle(XmlNode node)
+        internal static EStyle getStyle(XmlNode node)
         {
             string strRet = UIWidget.tryGetProp("style", node);
             if (strRet == null) return EStyle.normal;

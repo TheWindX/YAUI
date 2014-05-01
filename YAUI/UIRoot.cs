@@ -184,23 +184,27 @@ namespace ns_YAUI
             if (pnode != null)
             {
                 var patts = pnode.Attributes;
-                var nodeAttName = (node as XmlElement).GetAttribute("name");
-                foreach (XmlAttribute patt in patts)
+                var elem = node as XmlElement;
+                if (elem != null)
                 {
-                    var parts = patt.Name.Split('.');
-                    if (parts.Count() > 1)
+                    var nodeAttName = elem.GetAttribute("name");
+                    foreach (XmlAttribute patt in patts)
                     {
-                        if (parts[0] == nodeAttName)
+                        var parts = patt.Name.Split('.');
+                        if (parts.Count() > 1)
                         {
-                            var name = parts.Skip(1).Aggregate("",
-                                (si, str) => (si + (si == "" ? "" : ".") + str)
-                                );
-                            var value = patt.Value;
-                            (node as XmlElement).SetAttribute(name, value);
-                        }
-                        else
-                        {
-                            (node as XmlElement).SetAttribute(patt.Name, patt.Value);
+                            if (parts[0] == nodeAttName)
+                            {
+                                var name = parts.Skip(1).Aggregate("",
+                                    (si, str) => (si + (si == "" ? "" : ".") + str)
+                                    );
+                                var value = patt.Value;
+                                (node as XmlElement).SetAttribute(name, value);
+                            }
+                            else
+                            {
+                                (node as XmlElement).SetAttribute(patt.Name, patt.Value);
+                            }
                         }
                     }
                 }
@@ -733,8 +737,8 @@ namespace ns_YAUI
         }
 
 
-        internal Action<bool, int, int> mHandleInputShow;
-        public UIRoot initHandleInputShow(Action<bool, int, int> handleInputShow)
+        internal Action<bool, int, int, int, int> mHandleInputShow;
+        public UIRoot initHandleInputShow(Action<bool, int, int, int, int> handleInputShow)
         {
             mHandleInputShow = handleInputShow;
             return this;

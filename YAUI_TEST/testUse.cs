@@ -19,9 +19,8 @@ namespace ns_YAUIUser
                 var ui = UI.Instance.fromXML(@"
 <scrolledMap>
     <div layout='horizon'>
-        <triangle color='*white' forward='left'>
-        </triangle>
-        <label name='lb' link='true' text='下asdfasdfasdf划线，链asdfasdf接asdfasdfasdf文字控件，serasdfasdf' style='bold' color='red' maxLineWidth='256' size='12'></label>
+        <edit width='128' rows='3'></edit>
+        <!--label name='lb' link='true' text='下asdfasdfasdf划线，链asdfasdf接asdfasdfasdf文字控件，serasdfasdf' style='bold' color='red' maxLineWidth='256' size='12'></label-->
     </div>
 </scrolledMap>
 ");   
