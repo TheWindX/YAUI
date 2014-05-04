@@ -98,7 +98,7 @@ namespace ns_YAUI
             //    h = getAttr<float>(node, "height", schemes.frameHeight, out br);
             //}
 
-            fc = (uint)getProp<EColorUtil>(node, "color", schemes.fillColor, out br);
+            fc = (uint)getProp<EColorUtil>(node, "color", (EColorUtil)schemes.fillColor, out br);
             if (!br)
             {
                 fc = getProp(node, "color", (uint)(schemes.fillColor), out br);

@@ -75,7 +75,7 @@ namespace ns_YAUI
             text = getProp<string>(node, "text", "template", out br);
             width = getProp(node, "width", 128, out br);
             rows = getProp(node, "rows", rows, out br);
-            color = (uint)getProp<EColorUtil>(node, "color", schemes.textColor, out br);
+            color = (uint)getProp<EColorUtil>(node, "color", (EColorUtil)schemes.textColor, out br);
             if (!br)
             {
                 color = getProp(node, "color", (uint)(schemes.textColor), out br);

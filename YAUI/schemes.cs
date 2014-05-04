@@ -9,13 +9,13 @@ namespace ns_YAUI
     public class schemes
     {
         #region standard property
-        public static EColorUtil strokeColor = EColorUtil.lightgray;
-        public static EColorUtil fillColor = EColorUtil.darkgray;
-        public static EColorUtil textColor = EColorUtil.white;
+        public static uint strokeColor = (uint)EColorUtil.lightgray;
+        public static uint fillColor = (uint)EColorUtil.darkgray;
+        public static uint textColor = (uint)EColorUtil.white;
 
-        public static EColorUtil foregroundColor = EColorUtil.white;
-        public static EColorUtil backgroundColor = EColorUtil.silver;
-        public static EColorUtil selectColor = EColorUtil.darkgray;
+        public static uint foregroundColor = (uint)EColorUtil.white;
+        public static uint backgroundColor = (uint)EColorUtil.silver;
+        public static uint selectColor = (uint)EColorUtil.darkgray;
 
         public static float widgetWidth = 64;
         public static float widgetHeight = 64;

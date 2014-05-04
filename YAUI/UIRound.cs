@@ -142,22 +142,22 @@ namespace ns_YAUI
             bool br = true;
 
             w = h = getProp(node, "radius", schemes.widgetWidth/2, out br) * 2;
-            
-            fc = (uint)getProp<EColorUtil>(node, "color", schemes.fillColor, out br);
+
+            fc = (uint)getProp<EColorUtil>(node, "color", (EColorUtil)schemes.fillColor, out br);
             if (!br)
             {
                 fc = getProp(node, "color", (uint)(schemes.fillColor), out br);
                 if (!br)
                 {
 
-                    fc = (uint)getProp<EColorUtil>(node, "fillColor", schemes.fillColor, out br);
+                    fc = (uint)getProp<EColorUtil>(node, "fillColor", (EColorUtil)schemes.fillColor, out br);
                     if (!br)
                     {
                         fc = getProp(node, "fillColor", (uint)(schemes.fillColor), out br);
                     }
                 }
             }
-            sc = (uint)getProp<EColorUtil>(node, "strokeColor", schemes.strokeColor, out br);
+            sc = (uint)getProp<EColorUtil>(node, "strokeColor", (EColorUtil)schemes.strokeColor, out br);
             if (!br)
             {
                 sc = getProp(node, "strokeColor", (uint)(schemes.strokeColor), out br);

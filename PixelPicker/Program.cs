@@ -80,7 +80,10 @@ namespace ns_pixelPicker
                         var cl = ColorPicker.ColorPickerManager.GetColor((int)pt.X, (int)pt.Y);
                         //if (oldCl != cl)
                         {
+                            string hexColor = string.Format("0x{0:x}", cl.ToArgb());
                             ns_YAUtils.CSRepl.Instance.print(string.Format("{0}(0x{1:x}) , at ({2}, {3})", cl, cl.ToArgb(), pt.X, pt.Y));
+                            //Clipboard.SetDataObject(hexColor);
+                            Clipboard.SetText(hexColor);
                           //  oldCl = cl;
                         }
                     }

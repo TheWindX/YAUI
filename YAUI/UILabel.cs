@@ -254,13 +254,13 @@ namespace ns_YAUI
             string text = "template";
             int size = 12;
             float maxLineWidth = -1;
-            uint color = 0xffffffff;
+            uint color = schemes.textColor;
             EStyle style = EStyle.normal;
             bool br = false;
 
             text = getProp(node, "text", "template", out br);
             size = getProp(node, "size", 12, out br);
-            color = (uint)getProp<EColorUtil>(node, "color", schemes.textColor, out br);
+            color = (uint)getProp<EColorUtil>(node, "color", (EColorUtil)schemes.textColor, out br);
             if (!br)
             {
                 color = getProp(node, "color", (uint)(schemes.textColor), out br);

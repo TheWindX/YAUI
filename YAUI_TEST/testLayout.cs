@@ -11,9 +11,9 @@ namespace ns_YAUIUser
     class testLayout : iTestInstance
     {
         const string XMLPAGE = @"
-<resizer derived='true' name='root' size='512' layout='vertical, filled' color='blue' editMode='dragAble, rotateAble, scaleAble'>
+<resizer derived='true' name='root' size='512' layout='vertical, filled' color='0xff194e88' editMode='dragAble, rotateAble, scaleAble'>
     <stub layout='horizon, inverse' align='rightTop' id='buttons'>
-        <label text='×' margin='*2'></label>
+        <label text='×' color='*white' margin='*2'></label>
         <label text='□'></label>
         <label text='_'></label>
     </stub>
@@ -23,23 +23,23 @@ namespace ns_YAUIUser
             <label text='♛' align='center' color='gold' size='32'></label>
         </round_rect>
         <div layout='vertical, shrink'>
-            <label text='YAUI交流讨论群' size='14' style='bold'></label>
+            <label text='YAUI交流讨论群' color='*white' size='14' style='bold'></label>
             <label text='(1000人群)' size='10'></label>
         </div>
     </div>
 
-    <rect height='48' layout='expandX' id='tabs_advs'>
+    <rect height='40' layout='expandX' id='tabs_advs' color='0xff2d6398'>
         <div layout='horizon' align='leftBottom' height='32' id='tabs'>
             <innerTemplate name='tab'>
                 <round_rect layout='horizon, expandY' width='96' fillColor='royalblue' leftBottomCorner='false' rightBottomCorner='false'>
                     <label name='lb' text='聊天' align='center'></label>
                 </round_rect>
             </innerTemplate>
-            <apply innerTemplate='tab' lb.text='聊天' fillColor='blue'></apply>
-            <apply innerTemplate='tab' lb.text='相片'></apply>
-            <apply innerTemplate='tab' lb.text='文件'></apply>
+            <apply innerTemplate='tab' lb.text='聊天' lb.color='white' fillColor='0xff81a6c3'></apply>
+            <apply innerTemplate='tab' lb.text='相片' lb.color='white' fillColor='transparent' strokeColor='transparent'></apply>
+            <apply innerTemplate='tab' lb.text='文件' lb.color='white' fillColor='transparent' strokeColor='transparent'></apply>
         </div>
-        <div layout='horizon, inverse' align='rightBottom' height='48' id='advs'>
+        <div layout='horizon, inverse' align='rightBottom' height='60' id='advs'>
             <round_rect layout='horizon, expandY' width='128'>
                 <label text='广告位1' align='center'></label>
             </round_rect>
@@ -47,7 +47,7 @@ namespace ns_YAUIUser
     </rect>
 
     <div id='leftRight' layout='horizon, inverse, filled' >
-        <round_rect layout='vertical, expandY' margin='6' width='180' id='frind_list'>
+        <round_rect layout='vertical, expandY' margin='6' width='180' id='frind_list' color='0xffedf5fa'>
             <round_rect layout='expandX' height='28'>
                 <label text='群成员' color='black' size='8' align='left'></label>
                 <label text='?' align='right'></label>
@@ -59,7 +59,7 @@ namespace ns_YAUIUser
         </round_rect>
 
         <rect layout='vertical, inverse, expandY, filled' clip='true'>
-            <rect layout='expandX' height='28'>
+            <rect layout='expandX' height='28' color='0xffced6dd'>
                 <label text='广告位2' align='left' size='8'></label>
                 <div align='right' layout='horizon, inverse, expand'>
                     <innerTemplate name='bt'>
@@ -74,7 +74,7 @@ namespace ns_YAUIUser
             </rect>
             <rect layout='expandX' height='128' color='white'>
             </rect>
-            <rect layout='horizon, expandX' height='32' padding='4' clip='true'>
+            <rect layout='horizon, expandX' height='32' padding='4' clip='true' color='0xffced6dd'>
                 <label text='A' color='blue' style='*bold'></label>                
                 <label text='☺' size='18' offsetY='-8' color='yellow'></label>
                 <label text='♪' color='red'></label>
@@ -103,7 +103,7 @@ namespace ns_YAUIUser
         public string desc()
         {
             return @"
-    一个较复杂的layout例子
+    simulation window
 ";
         }
 

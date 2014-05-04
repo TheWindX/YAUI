@@ -10,37 +10,50 @@ namespace ns_YAUIUser
 {
     class testFrame : Singleton<testFrame>
     {
-        const string XMLLayout = @"
-    <resizer layout='vertical, filled' size='768, 768' editMode='dragAble'> <!--  root  -->
-        <rect layout='horizon, expandX' color='red'> <!--  title  -->
-            <label text='YAUI example demo' size='20'></label>
+        string XMLLayout = string.Format(@"
+    <resizer layout='vertical, filled' size='1024, 768' editMode='dragAble, rotateAble, scaleAble' color='0xfff1f1f1'> <!--  root  -->
+        <rect layout='expandX'> <!--  title  -->
+            <div layout='horizon, shrink' align='left'>
+                <label text='YAUI' color='0xff545453' size='20'></label>
+                <label text='.com' color='0xff90c140' size='20' offsetX='-15'></label>
+            </div>
         </rect>
 
-        <rect layout='horizon, expandX' height='32' color='blue'> <!--  example & demo  tab-->
-            <rect layout='expandY' width='128'><label link='true' text='example' align='center' id='example'></label></rect>
-            <rect layout='expandY' width='128'><label link='true' text='demo' align='center' id='demo'></label></rect>
+        <rect layout='horizon, expandX' height='32' color='0xffd3d3d3'> <!--  example & demo  tab-->
+            <div layout='expandY' width='128'><label link='true' text='example' align='center' id='example'></label></div>
+            <div layout='expandY' width='128'><label link='true' text='demo' align='center' id='demo'></label></div>
         </rect>
 
         <rect layout='horizon, filled' height='32'> <!--  tab & content -->
-            <rect layout='vertical, expandY' width='128' id='contents'> <!--  contents -->
+            <round_rect margin='4' layout='vertical, expandY' width='128' id='contents'> <!--  contents -->
                 <rect layout='expandX' height='32'><label text='test1' align='center'></label></rect>
                 <rect layout='expandX' height='32'><label text='test2' align='center'></label></rect>
-            </rect>
-            <rect layout='vertical, filled'> <!--  content -->
-                <label size='20' id='title'></label> <!--  content title-->
+            </round_rect>
+            <round_rect margin='4' layout='vertical, filled'> <!--  content -->
+                <label size='20' color='0x{0:x}' id='title'></label> <!--  content title-->
                 <div debugName='pre' layout='horizon, shrink' height='32'> <!--  prev/next -->
-                    <rect layout='expandY' width='96' margin='*4' id='pre'><label link='true' text='前一个' align='center'></label></rect>
-                    <rect debugName='next' layout='expandY' width='96' id='next'><label link='true' text='下一个' align='center'></label></rect>
+                    <rect layout='expandY' width='96' margin='*4' id='pre'>
+                        <triangle forward='left' align='left' length='6' color='black'></triangle>
+                        <label link='true' text='prev' align='center' color='0x{0:x}'></label>
+                    </rect>
+                    <rect debugName='next' layout='expandY' width='96' id='next'>
+                        <triangle forward='left' align='left' length='6' color='black'></triangle>
+                        <label link='true' text='next' align='center' color='0x{0:x}'></label>
+                    </rect>
                 </div>
-                <label id='desc'></label> <!-- desc -->
+                <label id='desc' color='0x{0:x}'></label> <!-- desc -->
                 
-                <scrolledMap id='client' clip='true'>
-                    <rect color='red'></rect>
-                </scrolledMap>
-            </rect>
+                <rect margin='4'>
+                    <scrolledMap id='client' expand='true' clip='true'>
+                    </scrolledMap>
+                </rect>
+            </round_rect>
         </rect>
     </resizer>
-";
+", colorFontNormal);
+        const uint colorFontMark = 0xff8ac007;
+        const uint colorFontNormal = 0xff545453;
+
         List<iTestInstance> mExampleInstance = new List<iTestInstance>();
         Dictionary<iTestInstance, UIWidget> mExample2Contents = new Dictionary<iTestInstance, UIWidget>();
         
@@ -74,7 +87,14 @@ namespace ns_YAUIUser
         
         UIWidget mRoot = null;
 
-        const string contentTemplate = @"<rect layout='expandX' height='32'><label link='true' align='center'></label></rect>";
+        string contentTemplate = string.Format(@"<div layout='expandX' height='32'><label link='true' align='center' color='0x{0:x}'></label></div>", colorFontNormal);
+
+        void initScheme()
+        {
+            schemes.strokeColor = 0xffd4d4d4;
+            schemes.fillColor = 0xfff1f1f1;
+            schemes.textColor = 0xff404040;
+        }
 
         void initPreNext()
         {
@@ -163,10 +183,10 @@ namespace ns_YAUIUser
             if (cate == ECategory.example)
             {
                 lbDemo.textStyle = EStyle.normal;
-                lbDemo.textColor = (uint)EColorUtil.white;
+                lbDemo.textColor = colorFontNormal;
 
                 lbExample.textStyle = EStyle.bold | EStyle.underline;
-                lbExample.textColor = (uint)EColorUtil.red;
+                lbExample.textColor = colorFontMark;
 
                 testInstance = mExampleInstance;
                 testInstance2ui = mExample2Contents;
@@ -174,10 +194,10 @@ namespace ns_YAUIUser
             else if (cate == ECategory.demo)
             {
                 lbExample.textStyle = EStyle.normal;
-                lbExample.textColor = (uint)EColorUtil.white;
+                lbExample.textColor = colorFontNormal;
 
                 lbDemo.textStyle = EStyle.bold | EStyle.underline;
-                lbDemo.textColor = (uint)EColorUtil.red;
+                lbDemo.textColor = colorFontMark;
 
                 testInstance = mDemoInstance;
                 testInstance2ui = mDemo2Contents;
@@ -209,7 +229,7 @@ namespace ns_YAUIUser
             var client = mRoot.findByID("client") as UIScrolledMap;
             if (select)
             {
-                (cont.findByTag("label") as UILabel).textColor = (uint)EColorUtil.red;
+                (cont.findByTag("label") as UILabel).textColor = colorFontMark;
                 (cont.findByTag("label") as UILabel).textStyle = EStyle.underline | EStyle.bold;
                 mContentIdx = idx;
 
@@ -222,7 +242,7 @@ namespace ns_YAUIUser
             }
             else
             {
-                (cont.findByTag("label") as UILabel).textColor = (uint)EColorUtil.white;
+                (cont.findByTag("label") as UILabel).textColor = colorFontNormal;
                 (cont.findByTag("label") as UILabel).textStyle = EStyle.normal;
                 client.clear();
                 ins.lostAttach();
@@ -245,6 +265,7 @@ namespace ns_YAUIUser
 
         public testFrame()
         {
+            initScheme();
             mRoot = UIRoot.Instance.root.appendFromXML(XMLLayout);
 
             addInstance(new TestInstance3() );
@@ -255,11 +276,14 @@ namespace ns_YAUIUser
             addInstance(new testHierarchy());
             addInstance(new testLayout());
 
+            
             initCategory(ECategory.example);
             initCategory(ECategory.demo);
             initPreNext();
 
             setCategory(ECategory.example);
+            setContent(mContentIdx, false);
+            setContent(1, true);
         }
     }
 
