@@ -76,7 +76,7 @@ namespace ns_YAUI
             mMiniMap.px -= rcInMap.Left;
             mMiniMap.py -= rcInMap.Top;
 
-            const string xmlFmt = "<rect px='{0}' py='{1}' width='{2}' height='{3}' fillColor='0x33ffffff' ></rect>";
+            const string xmlFmt = "<rect px='{0}' py='{1}' width='{2}' height='{3}' fillColor='0x33aaaaaa' ></rect>";
             //string xmlChildren = string.Format(xmlFmt, rcChildren.Left, rcChildren.Top, rcChildren.Width, rcChildren.Height, "0x44ff0000");
             string xmlWindow = string.Format(xmlFmt, rcMap.Left, rcMap.Top, rcMap.Width, rcMap.Height);
 

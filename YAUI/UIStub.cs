@@ -35,7 +35,7 @@ namespace ns_YAUI
 	        get 
 	        { 
                 var rc = getChildrenOccupy();
-                if (rc.Value != null)
+                if (rc != null)
                 {
                     return rc.Value;
                 }

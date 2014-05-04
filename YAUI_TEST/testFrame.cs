@@ -87,7 +87,7 @@ namespace ns_YAUIUser
         
         UIWidget mRoot = null;
 
-        string contentTemplate = string.Format(@"<div layout='expandX' height='32'><label link='true' align='center' color='0x{0:x}'></label></div>", colorFontNormal);
+        string contentTemplate = string.Format(@"<div padding='4' layout='expandX' height='32'><label link='true' align='left' color='0x{0:x}'></label></div>", colorFontNormal);
 
         void initScheme()
         {
@@ -275,7 +275,8 @@ namespace ns_YAUIUser
             addInstance(new testAlign());
             addInstance(new testHierarchy());
             addInstance(new testLayout());
-
+            addInstance(new testTips());
+            addInstance(new testMenu());
             
             initCategory(ECategory.example);
             initCategory(ECategory.demo);
