@@ -39,6 +39,28 @@ namespace ns_YAUI
             }
         }
 
+        public override float width
+        {
+            get
+            {
+                return 1000000;
+            }
+            set
+            {
+            }
+        }
+
+        public override float height
+        {
+            get
+            {
+                return 1000000;
+            }
+            set
+            {
+            }
+        }
+
         public override RectangleF drawRect
         {
             get

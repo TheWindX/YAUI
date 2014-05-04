@@ -21,8 +21,8 @@ namespace ns_YAUIUser
             //var test = testAlign.Instance;
             //var test = testScrolledMap.Instance;
             //var test = testLayout.Instance;
-            var test = testUse.Instance;
-
+            //var test = testUse.Instance;
+            var test = testFrame.Instance;
             //var _0 =  testDir.Instance;
             //var _1 = testRoundRect.Instance;
             

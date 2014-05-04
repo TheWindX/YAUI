@@ -23,6 +23,7 @@ namespace ns_YAUI
             get { return "scrolledMap"; }
         }
 
+
         public UIScrolledMap()
         {
             width = schemes.frameWidth;
@@ -102,8 +103,14 @@ namespace ns_YAUI
             return false;
         }
 
+        public override void clear()
+        {
+            mMapClient.clear();
+        }
+
         public void appendUI(UIWidget ui)
         {
+            if (ui == null) return;
             ui.paresent = mMapClient;
             showMini();
             setDirty(true);

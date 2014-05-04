@@ -52,6 +52,7 @@
     <Compile Include="testAlign.cs" />
     <Compile Include="testAll.cs" />
     <Compile Include="testDirty.cs" />
+    <Compile Include="testFrame.cs" />
     <Compile Include="testHierarchy.cs" />
     <Compile Include="testLayout2.cs" />
     <Compile Include="testLayout.cs" />

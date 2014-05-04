@@ -28,18 +28,12 @@ namespace ns_YAUI
         }
 
         //test children directly
-        public override bool testRectPick
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-        //blank 只用于排版不用于捡选
-        //public override bool testSelfPick(PointF pos)
+        //public override bool testRectPick
         //{
-        //    return false;
+        //    get
+        //    {
+        //        return false;
+        //    }
         //}
 
         public override string typeName
