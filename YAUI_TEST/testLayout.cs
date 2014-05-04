@@ -12,11 +12,11 @@ namespace ns_YAUIUser
     {
         const string XMLPAGE = @"
 <resizer derived='true' name='root' size='512' layout='vertical, filled' color='0xff194e88' editMode='dragAble, rotateAble, scaleAble'>
-    <stub layout='horizon, inverse' align='rightTop' id='buttons'>
+    <div layout='horizon, inverse' align='rightTop' id='buttons'>
         <label text='×' color='*white' margin='*2'></label>
         <label text='□'></label>
         <label text='_'></label>
-    </stub>
+    </div>
 
     <div layout='horizon, shrink' margin='4' id='head title'>
         <round_rect size='64'>
@@ -52,7 +52,7 @@ namespace ns_YAUIUser
                 <label text='群成员' color='black' size='8' align='left'></label>
                 <label text='?' align='right'></label>
             </round_rect>
-            <label text='西门吹雪' margin='*4' color='*black' size='*8'></label>
+            <label text='楚楚' margin='*4' color='*black' size='*8'></label>
             <label text='聂风'></label>
             <label text='步惊云'></label>
             <label text='武林神话'></label>
@@ -80,7 +80,7 @@ namespace ns_YAUIUser
                 <label text='♪' color='red'></label>
             </rect>
             <rect layout='vertical, expandX' clip='true' padding='4' color='white' id='chat'>
-                <label text='西门吹雪: xxxxx' color='*blue'></label>
+                <label text='楚楚: xxxxx' color='*blue'></label>
                 <label text='聂风: xxxxx'></label>
                 <label text='步惊云: xxxxx'></label>
                 <label text='武林神话: xxxxx'></label>

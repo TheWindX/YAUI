@@ -54,10 +54,7 @@
     <Compile Include="testDirty.cs" />
     <Compile Include="testFrame.cs" />
     <Compile Include="testHierarchy.cs" />
-    <Compile Include="testLayout2.cs" />
     <Compile Include="testLayout.cs" />
-    <Compile Include="testLayout3.cs" />
-    <Compile Include="testLayoutShrinkExpand.cs" />
     <Compile Include="testMenu.cs" />
     <Compile Include="testNewControl.cs" />
     <Compile Include="testPrimarys.cs" />

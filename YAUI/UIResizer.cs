@@ -117,6 +117,13 @@ namespace ns_YAUI
             rsz.layout = ELayout.none;
             rsz.layoutInverse = false;
             rsz.layoutFilled = false;
+            
+            //rsz.mScalex = 1.0f;
+            //rsz.mScaley = 1.0f;
+            //rsz.direction = 0;
+
+
+
             rsz.wrap = false;
             //rsz.expandAbleY = rsz.expandAbleX = false;
             rsz.shrinkAble = false;
@@ -125,6 +132,8 @@ namespace ns_YAUI
             //rsz.rotateAble = false;
             //rsz.scaleAble = false;
 
+            rsz.mClient.setScale(1, 1);
+            rsz.mClient.direction = 0;
 
             //client 不能覆盖的属性
             //rsz.mClient.layout = ELayout.none;

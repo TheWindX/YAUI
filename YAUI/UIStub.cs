@@ -30,6 +30,22 @@ namespace ns_YAUI
             }
         }
 
+        public override RectangleF drawRect
+        {
+	        get 
+	        { 
+                var rc = getChildrenOccupy();
+                if (rc.Value != null)
+                {
+                    return rc.Value;
+                }
+                else
+                {
+                    return new RectangleF(0, 0, schemes.widgetWidth, schemes.widgetHeight);
+                }
+            }
+        }
+       
         public override bool testSelfPick(PointF pos)
         {
             return false;

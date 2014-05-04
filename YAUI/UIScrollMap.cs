@@ -14,6 +14,7 @@ namespace ns_YAUI
     {
 
         internal UIMap mMapClient = null;
+        UIBlank mMiniMapDiv = null;
         UIRect mMiniMapRect = null;
         UIMap mMiniMap = null;
         float mMiniMapSize = 128;
@@ -32,7 +33,7 @@ namespace ns_YAUI
             dragAble = true;//默认dragAble
             rotateAble = true;//默认dragAble
             scaleAble = true;//默认scaleAble
-            mMapClient = appendFromXML(@"<map></map>") as UIMap;
+            mMapClient = appendFromXML(@"<map name='client'></map>") as UIMap;
             
             UIRoot.Instance.evtLeftUp += (x, y) =>
                 {
@@ -40,10 +41,11 @@ namespace ns_YAUI
                     setDirty(true);
                 };
 
-            mMiniMapRect = appendFromXML(@"
-<div clip='true' padding='16' shrink='true' align='rightTop'>
-<rect size='128' strokeColor='transparent'><map>
-</map></rect></div>").findByTag("rect") as UIRect;
+            mMiniMapDiv = appendFromXML(@"
+<div name='mini' clip='true' padding='16' shrink='true' align='rightTop'>
+<rect size='128' fillColor='transparent' strokeColor='transparent'><map>
+</map></rect></div>") as UIBlank;
+            mMiniMapRect = mMiniMapDiv.findByTag("rect") as UIRect;
             mMiniMap = mMiniMapRect.findByTag("map") as UIMap;
             mMiniMapRect.height = mMiniMapRect.width = mMiniMapSize;
             mMiniMapRect.alignParesent = EAlign.rightTop;
@@ -74,9 +76,9 @@ namespace ns_YAUI
             mMiniMap.px -= rcInMap.Left;
             mMiniMap.py -= rcInMap.Top;
 
-            string xmlFmt = "<rect px='{0}' py='{1}' width='{2}' height='{3}' fillColor='0x33ffffff' strokeColor='{4}'></rect>";
+            const string xmlFmt = "<rect px='{0}' py='{1}' width='{2}' height='{3}' fillColor='0x33ffffff' ></rect>";
             //string xmlChildren = string.Format(xmlFmt, rcChildren.Left, rcChildren.Top, rcChildren.Width, rcChildren.Height, "0x44ff0000");
-            string xmlWindow = string.Format(xmlFmt, rcMap.Left, rcMap.Top, rcMap.Width, rcMap.Height, "0x440000ff");
+            string xmlWindow = string.Format(xmlFmt, rcMap.Left, rcMap.Top, rcMap.Width, rcMap.Height);
 
             //var childrenUi = mMiniMap.appendFromXML(xmlChildren);
             var windowUI = mMiniMap.appendFromXML(xmlWindow);
@@ -94,13 +96,9 @@ namespace ns_YAUI
                 g.SetClip(p, CombineMode.Intersect);
             }
 
-            for (int i = mChildrent.Count - 1; i >= 0; --i)
-            {
-                (mChildrent[i] as UIWidget).doDraw(g);
-            }
-
-            //mMapClient.doDraw(g);
-
+            mMapClient.doDraw(g);
+            mMiniMapDiv.doDraw(g);
+            
             return false;
         }
 

@@ -147,6 +147,11 @@ namespace ns_YAUI
             return this;
         }
 
+        public void setWindowSize(int w, int h)
+        {
+            mPainter.Size = new Size(w, h);
+            root.setDirty(true);
+        }
         #endregion
 
         #region tips

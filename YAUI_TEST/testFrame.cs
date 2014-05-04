@@ -11,7 +11,7 @@ namespace ns_YAUIUser
     class testFrame : Singleton<testFrame>
     {
         string XMLLayout = string.Format(@"
-    <resizer layout='vertical, filled' size='1024, 768' editMode='dragAble, rotateAble, scaleAble' color='0xfff1f1f1'> <!--  root  -->
+    <resizer scale='0.9' location='24' layout='vertical, filled' size='700, 768' editMode='dragAble, rotateAble, scaleAble' color='0xfff1f1f1'> <!--  root  -->
         <rect layout='expandX'> <!--  title  -->
             <div layout='horizon, shrink' align='left'>
                 <label text='YAUI' color='0xff545453' size='20'></label>
@@ -284,6 +284,7 @@ namespace ns_YAUIUser
             setCategory(ECategory.example);
             setContent(mContentIdx, false);
             setContent(1, true);
+            UI.Instance.setWindowSize(768, 768);
         }
     }
 
