@@ -111,11 +111,11 @@ namespace ns_YAUI
             }
         }
 
-        public float mDir = 0;//0~360
+        public float direction = 0;//0~360
         public void rotateSelf(float dir)
         {
-            mDir += dir;
-            mDir = mDir % 360;
+            direction += dir;
+            direction = direction % 360;
         }
 
         public void rotate(float dir)
@@ -123,8 +123,8 @@ namespace ns_YAUI
             var m = new Matrix();
             m.RotateAt(dir, new PointF(-px, -py));
 
-            mDir = mDir + dir;
-            mDir = mDir % 360;
+            direction = direction + dir;
+            direction = direction % 360;
 
             px = px + m.OffsetX;
             py = py + m.OffsetY;
@@ -133,13 +133,13 @@ namespace ns_YAUI
         public void rotatePointF(PointF center/* abs position */, float dir)
         {
             var fp = invertTransformAbs(center);
-            mDir += dir;
-            mDir = mDir % 360;
+            direction += dir;
+            direction = direction % 360;
 
             var ppt = invertTransformParesentAbs(center);
 
             Matrix m = new Matrix();
-            m.Rotate(mDir);
+            m.Rotate(direction);
             m.Scale(mScalex, mScaley);
 
             var ppt1 = fp.transform(m);
@@ -167,7 +167,7 @@ namespace ns_YAUI
             var ppt = invertTransformParesentAbs(center);
 
             Matrix m = new Matrix();
-            m.Rotate(mDir);
+            m.Rotate(direction);
             m.Scale(mScalex, mScaley);
 
             var ppt1 = fp.transform(m);
@@ -198,7 +198,7 @@ namespace ns_YAUI
             if(mParesent != null)
                 m = mParesent.getAbsMatrix().Clone();
             m.Translate(px, py);
-            m.Rotate(mDir);
+            m.Rotate(direction);
             m.Scale(mScalex, mScaley);
             return m;
         }
@@ -252,7 +252,7 @@ namespace ns_YAUI
         {
             Matrix m = new Matrix();
             m.Translate(px, py);
-            m.Rotate(mDir);
+            m.Rotate(direction);
             m.Scale(mScalex, mScaley);
             
             return m;
@@ -275,7 +275,7 @@ namespace ns_YAUI
         {
             var ppt = invertTransformParesentAbs(new PointF(x, y));
             Matrix m = new Matrix();
-            m.Rotate(mDir);
+            m.Rotate(direction);
             m.Scale(mScalex, mScaley);
 
             var pts = new PointF[] { fp };

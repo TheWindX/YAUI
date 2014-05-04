@@ -30,6 +30,7 @@ namespace ns_YAUI
             height = schemes.frameHeight;
             
             dragAble = true;//默认dragAble
+            rotateAble = true;//默认dragAble
             scaleAble = true;//默认scaleAble
             mMapClient = appendFromXML(@"<map></map>") as UIMap;
             
@@ -114,6 +115,13 @@ namespace ns_YAUI
             ui.paresent = mMapClient;
             showMini();
             setDirty(true);
+        }
+
+        public void resetTransform()
+        {
+            mMapClient.setScale(1, 1);
+            mMapClient.py = mMapClient.px = 0;
+            mMapClient.direction = 0;
         }
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)

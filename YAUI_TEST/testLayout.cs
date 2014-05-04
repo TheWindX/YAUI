@@ -8,10 +8,10 @@ namespace ns_YAUIUser
 {
     using ns_YAUI;
 
-    class testLayout : Singleton<testLayout>
+    class testLayout : iTestInstance
     {
         const string XMLPAGE = @"
-<resizer name='root' size='512' layout='vertical, filled' color='blue' editMode='dragAble, rotateAble, scaleAble'>
+<resizer derived='true' name='root' size='512' layout='vertical, filled' color='blue' editMode='dragAble, rotateAble, scaleAble'>
     <stub layout='horizon, inverse' align='rightTop' id='buttons'>
         <label text='×' margin='*2'></label>
         <label text='□'></label>
@@ -89,10 +89,39 @@ namespace ns_YAUIUser
     </div>
 </resizer>
 ";
-        public testLayout()
+        
+        public ECategory category()
         {
-            UIRoot.Instance.root.appendFromXML(XMLPAGE);
+            return ECategory.example;
+        }
 
+        public string title()
+        {
+            return "layout";
+        }
+
+        public string desc()
+        {
+            return @"
+    一个较复杂的layout例子
+";
+        }
+
+        public UIWidget getAttach()
+        {
+            return UI.Instance.fromXML(XMLPAGE, false);
+        }
+
+        public void lostAttach()
+        {
+            UI.Instance.clearID("buttons");
+            UI.Instance.clearID("head title");
+            UI.Instance.clearID("tabs_advs");
+            UI.Instance.clearID("tabs");
+            UI.Instance.clearID("advs");
+            UI.Instance.clearID("frind_list");
+            UI.Instance.clearID("chat");
+            UI.Instance.clearID("leftRight");
         }
     }
 }

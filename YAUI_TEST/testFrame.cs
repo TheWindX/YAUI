@@ -32,9 +32,7 @@ namespace ns_YAUIUser
                     <rect layout='expandY' width='96' margin='*4' id='pre'><label link='true' text='前一个' align='center'></label></rect>
                     <rect debugName='next' layout='expandY' width='96' id='next'><label link='true' text='下一个' align='center'></label></rect>
                 </div>
-                <label text='1. 简介
-2. 要点
-3. 总结' id='desc'></label> <!-- desc -->
+                <label id='desc'></label> <!-- desc -->
                 
                 <scrolledMap id='client' clip='true'>
                     <rect color='red'></rect>
@@ -208,7 +206,7 @@ namespace ns_YAUIUser
 
             ins = mExampleInstance[idx];
             cont = mExample2Contents[ins];
-            //var client = mRoot.findByID("client") as UIScrolledMap;
+            var client = mRoot.findByID("client") as UIScrolledMap;
             if (select)
             {
                 (cont.findByTag("label") as UILabel).textColor = (uint)EColorUtil.red;
@@ -217,15 +215,17 @@ namespace ns_YAUIUser
 
                 (mRoot.findByID("desc") as UILabel).text = ins.desc();
                 (mRoot.findByID("title") as UILabel).text = ins.title();
-                //client.clear();
-                //client.appendUI(ins.getAttach());
+                //UIRoot.Instance.setPropertyderived(false);
+                client.resetTransform();
+                client.clear();
+                client.appendUI(ins.getAttach());
             }
             else
             {
                 (cont.findByTag("label") as UILabel).textColor = (uint)EColorUtil.white;
                 (cont.findByTag("label") as UILabel).textStyle = EStyle.normal;
-                //client.clear();
-                //ins.lostAttach();
+                client.clear();
+                ins.lostAttach();
             }
 
             mRoot.setDirty(true);
@@ -246,10 +246,14 @@ namespace ns_YAUIUser
         public testFrame()
         {
             mRoot = UIRoot.Instance.root.appendFromXML(XMLLayout);
-            addInstance(new TestInstance1() );
-            addInstance(new TestInstance2() );
+
             addInstance(new TestInstance3() );
             addInstance(new TestInstance4() );
+            addInstance(new testPrimarys());
+            addInstance(new testTransform());
+            addInstance(new testAlign());
+            addInstance(new testHierarchy());
+            addInstance(new testLayout());
 
             initCategory(ECategory.example);
             initCategory(ECategory.demo);
@@ -273,62 +277,6 @@ namespace ns_YAUIUser
         string desc();
         UIWidget getAttach(); //content to show
         void lostAttach(); //清理资源
-    }
-
-    public class TestInstance1 : iTestInstance
-    {
-        public ECategory category()
-        {
-            return ECategory.example;
-        }
-
-        public string title()
-        {
-            return "test1";
-        }
-
-        public string desc()
-        {
-            return "";
-        }
-
-        public UIWidget getAttach() //content to show
-        {
-            return null;
-        }
-
-        public void lostAttach() //清理资源
-        {
-            return;
-        }
-    }
-
-    public class TestInstance2 : iTestInstance
-    {
-        public ECategory category()
-        {
-            return ECategory.example;
-        }
-
-        public string title()
-        {
-            return "test2";
-        }
-
-        public string desc()
-        {
-            return "";
-        }
-
-        public UIWidget getAttach() //content to show
-        {
-            return null;
-        }
-
-        public void lostAttach() //清理资源
-        {
-            return;
-        }
     }
 
     public class TestInstance3 : iTestInstance

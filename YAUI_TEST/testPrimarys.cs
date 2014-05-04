@@ -5,20 +5,44 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ns_YAUI;
+
 namespace ns_YAUIUser
 {
-    class testPrimarys : Singleton<testPrimarys> 
+    class testPrimarys : iTestInstance
     {
-        public testPrimarys()
+        public ECategory category()
         {
-            UI.Instance.fromXML(@"
+            return ECategory.example;
+        }
+
+        public string title()
+        {
+            return "primary";
+        }
+
+        public string desc()
+        {
+            return
+@"
+    基本控件
+";
+        }
+
+        public UIWidget getAttach()
+        {
+            return UI.Instance.fromXML(@"
 <stub dragAble='*true'>
-    <rect color='red'></rect>
-    <round color='green'></round>
-    <round_rect color='blue'></round_rect>
-    <triangle color='maroon'></triangle>
-</stub>
-            ");
+    <rect location='100' color='red'></rect>
+    <round location='200, 100' color='green'></round>
+    <round_rect location='100, 200' color='blue'></round_rect>
+    <triangle location='200' color='maroon'></triangle>
+</stub>", false);
+        }
+
+        public void lostAttach()
+        {
+            //throw new NotImplementedException();
         }
     }
+   
 }

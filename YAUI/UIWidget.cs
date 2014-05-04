@@ -1131,7 +1131,7 @@ namespace ns_YAUI
             {
                 Matrix m = new Matrix();
                 m.Translate(px, py);
-                m.Rotate(mDir);
+                m.Rotate(direction);
                 m.Scale(mScalex, mScaley);
                 return m;
             }
@@ -1460,7 +1460,7 @@ namespace ns_YAUI
         void onRotateMove(int delta)
         {
             beginFixPoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
-            mDir += delta * 0.2f;
+            direction += delta * 0.2f;
             updateFixPoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             setDirty(true);
             return;
@@ -1798,10 +1798,11 @@ namespace ns_YAUI
                 height = getProp(node, "height", height, out br);
             }
 
-            ret = node.Attributes.GetNamedItem("editMode");
-            if (ret != null)
+            strRet = tryGetProp("editMode", node);
+
+            if (strRet != null)
             {
-                var strs = ret.Value.Split(',').ToList();
+                var strs = strRet.Split(',').ToList();
                 var strs1 = new List<string>();
                 strs.ForEach(str => strs1.Add(str.Trim()) );
 
@@ -1821,7 +1822,7 @@ namespace ns_YAUI
 
             px = getProp(node, "px", px, out br);
             py = getProp(node, "py", py, out br);
-            mDir = getProp(node, "dir", mDir, out br);
+            direction = getProp(node, "dir", direction, out br);
 
             mScaley = mScalex = getProp(node, "scale", mScalex, out br);
             if (!br)

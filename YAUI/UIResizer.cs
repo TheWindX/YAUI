@@ -17,11 +17,11 @@ namespace ns_YAUI
             width = 256;
             height = 256;
             mClient = appendFromXML(@"
-<rect debugName='UIResizer_client' size='512' clip='true' expand='true'>
+<rect size='512' clip='true' expand='true'>
 </rect>
 ") as UIRect;
             mResizer = appendFromXML(@"
-<rect debugName='UIResizer_resizer' size='32' align='rightBottom'>
+<rect size='32' align='rightBottom'>
 </rect>
 ") as UIRect;
             float spx = 0;
@@ -57,12 +57,17 @@ namespace ns_YAUI
                 };
         }
 
+        public override void clear()
+        {
+            mClient.clear();
+        }
+
         public override string typeName
         {
             get { return "resizer"; }
         }
 
-        public void append(UIWidget ui)
+        public void appendUI(UIWidget ui)
         {
             ui.paresent = mClient;
         }

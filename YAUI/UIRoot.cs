@@ -769,6 +769,11 @@ namespace ns_YAUI
             mName2Widget.Add(name, ui);
         }
 
+        internal void clearIDWidget(string name)
+        {
+            mName2Widget.Remove(name);
+        }
+
         internal void clearIDMap()
         {
             mName2Widget.Clear();

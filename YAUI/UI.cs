@@ -44,12 +44,18 @@ namespace ns_YAUI
         #region methods
         public UIWidget fromXML(string strXML, bool attachRoot = true)
         {
+            UIRoot.Instance.pushProperty(null, false);
             var ui = UIRoot.Instance.loadFromXML(strXML);
-            if(ui == null)return null;//? exception
+            if (ui == null)
+            {
+                UIRoot.Instance.popProperty();
+                return null;//? exception
+            }
             if(attachRoot)
             {
                 ui.paresent = UIRoot.Instance.root;
             }
+            UIRoot.Instance.popProperty();
             return ui;
         }
 
@@ -127,6 +133,12 @@ namespace ns_YAUI
             mPainter.Show();
             return this;
         }
+
+        public void clearID(string id)
+        {
+            UIRoot.Instance.clearIDWidget(id);
+        }
+
         //TODO, setting...
         public UI setAntiAliasing(bool enable)
         {
