@@ -41,7 +41,7 @@ namespace ns_YAUIUser
                         <label link='true' text='next' align='center' color='0x{0:x}'></label>
                     </rect>
                 </div>
-                <label id='desc' color='0x{0:x}'></label> <!-- desc -->
+                <label id='desc' color='0x{0:x}' size='10'></label> <!-- desc -->
                 
                 <rect margin='4'>
                     <scrolledMap id='client' expand='true' clip='true'>
