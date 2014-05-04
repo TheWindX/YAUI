@@ -24,10 +24,10 @@ namespace ns_YAUIUser
         {
             return
 @"
-    1. 左键拖拽图形;
-    2. 按住左键，滚轮缩放;
-    3. 按住右键，滚轮旋转;
-    4. 空白处也可transform(map space);
+1. 左键拖拽图形;
+2. 按住左键，滚轮缩放;
+3. 按住右键，滚轮旋转;
+4. 空白处也可transform(map space);
 ";
         }
 

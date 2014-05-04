@@ -25,7 +25,7 @@ namespace ns_YAUIUser
         {
             return
 @"
-    left click to toggle tips
+left click to toggle tips
 ";
         }
 

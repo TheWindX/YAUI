@@ -23,8 +23,8 @@ namespace ns_YAUIUser
         {
             return
 @"
-    1. 9个锚点;
-    2. offset， margin, padding 作用;
+1. 9个锚点;
+2. offset， margin, padding 作用;
 ";
         }
 

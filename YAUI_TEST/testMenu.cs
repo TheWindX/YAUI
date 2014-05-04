@@ -25,7 +25,7 @@ namespace ns_YAUIUser
         {
             return
 @"
-    right click to rise a context menu
+right click to rise a context menu
 ";
         }
 

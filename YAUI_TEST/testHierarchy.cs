@@ -24,7 +24,7 @@ namespace ns_YAUIUser
         {
             return
 @"
-    控件的层级关系;
+控件的层级关系;
 ";
         }
 

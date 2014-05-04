@@ -24,7 +24,7 @@ namespace ns_YAUIUser
         {
             return
 @"
-    基本控件
+基本控件
 ";
         }
 

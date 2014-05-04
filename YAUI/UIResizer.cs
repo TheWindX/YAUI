@@ -21,7 +21,7 @@ namespace ns_YAUI
 </rect>
 ") as UIRect;
             mResizer = appendFromXML(@"
-<rect size='32' align='rightBottom'>
+<rect size='32' color='silver' align='rightBottom'>
 </rect>
 ") as UIRect;
             float spx = 0;

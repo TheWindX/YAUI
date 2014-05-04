@@ -103,7 +103,7 @@ namespace ns_YAUIUser
         public string desc()
         {
             return @"
-    simulation window
+simulation window
 ";
         }
 
