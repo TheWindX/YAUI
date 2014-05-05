@@ -26,17 +26,15 @@ namespace ns_YAUIUser
 
         <rect layout='horizon, filled' height='32'> <!--  tab & content -->
             <round_rect margin='4' layout='vertical, expandY' width='128' id='contents'> <!--  contents -->
-                <rect layout='expandX' height='32'><label text='test1' align='center'></label></rect>
-                <rect layout='expandX' height='32'><label text='test2' align='center'></label></rect>
             </round_rect>
             <round_rect margin='4' layout='vertical, filled'> <!--  content -->
                 <label size='20' color='0x{0:x}' id='title'></label> <!--  content title-->
-                <div debugName='pre' layout='horizon, shrink' height='32'> <!--  prev/next -->
+                <div layout='horizon, shrink' height='32'> <!--  prev/next -->
                     <rect layout='expandY' width='96' margin='*4' id='pre'>
                         <triangle forward='left' align='left' length='6' color='black'></triangle>
                         <label link='true' text='prev' align='center' color='0x{0:x}'></label>
                     </rect>
-                    <rect debugName='next' layout='expandY' width='96' id='next'>
+                    <rect layout='expandY' width='96' id='next'>
                         <triangle forward='left' align='left' length='6' color='black'></triangle>
                         <label link='true' text='next' align='center' color='0x{0:x}'></label>
                     </rect>
@@ -201,6 +199,7 @@ namespace ns_YAUIUser
 
                 testInstance = mDemoInstance;
                 testInstance2ui = mDemo2Contents;
+                
             }
 
             for (int i = 0; i < testInstance.Count; ++i)
@@ -224,8 +223,8 @@ namespace ns_YAUIUser
             iTestInstance ins = null;
             UIWidget cont = null;
 
-            ins = mExampleInstance[idx];
-            cont = mExample2Contents[ins];
+            ins = instances[idx];
+            cont = ins2ui[ins];
             var client = mRoot.findByID("client") as UIScrolledMap;
             if (select)
             {
@@ -277,6 +276,8 @@ namespace ns_YAUIUser
             addInstance(new testLayout());
             addInstance(new testTips());
             addInstance(new testMenu());
+
+            addInstance(new ns_game.YAGame());
             
             initCategory(ECategory.example);
             initCategory(ECategory.demo);

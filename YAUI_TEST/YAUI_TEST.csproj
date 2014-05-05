@@ -66,6 +66,7 @@
     <Compile Include="testTranform.cs" />
     <Compile Include="testUse.cs" />
     <Compile Include="testWindow.cs" />
+    <Compile Include="YAGame.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

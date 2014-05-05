@@ -21,7 +21,7 @@ namespace ns_YAUIUser
             mRect.paresent = this;
             wpreserver = w;
             hpreserver = h;
-            ns_YAUI.TimerManager.get().setInterval(t => { mRect.width = (int)(Math.Abs(Math.Sin(t / 1000.0)) * (double)wpreserver); setDirty(true); }, 10);
+            ns_YAUI.TimerManager.get().setInterval((i, t) => { mRect.width = (int)(Math.Abs(Math.Sin(t / 1000.0)) * (double)wpreserver); setDirty(true); }, 10);
         }
 
         public override float width

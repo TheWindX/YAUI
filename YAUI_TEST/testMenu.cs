@@ -73,7 +73,9 @@ right click to rise a context menu
 
         public void lostAttach()
         {
+            mMenu.paresent = null;
             mMenu = null;
+            
             UI.Instance.root.evtOnRMUp -= rightHandler;
             UI.Instance.root.evtOnLMDown -= leftHandler;
         }

@@ -450,7 +450,7 @@ namespace ns_YAUI
             mEvtMiddleDown += testMiddleDown;
             mEvtMiddleUp += testMiddleUp;
             mEvtDoubleClick += testDoubleClick;
-            mEvtKey += testKey;
+            evtOnKey += testKey;
             mEvtWheel += testWheel;
             return this;
         }
@@ -517,7 +517,7 @@ namespace ns_YAUI
 
         public void handleEvtKey(int kc, bool iC, bool iS)
         {
-            if (mEvtKey != null) mEvtKey(kc, iC, iS);
+            if (evtOnKey != null) evtOnKey(kc, iC, iS);
         }
 
         #endregion
@@ -699,7 +699,7 @@ namespace ns_YAUI
         }
 
 
-        internal Action<int, bool, bool> mEvtKey;
+        public event Action<int, bool, bool> evtOnKey;
         void testKey(int kc, bool isC, bool isS)
         {
             var ui = currentWidget;

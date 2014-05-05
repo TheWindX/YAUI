@@ -43,7 +43,7 @@ namespace ns_YAUIUser
             var moon = sun.findByID("moon");
 
             timeID = TimerManager.get().setInterval(
-                t =>
+                (i, t) =>
                 {
                     earth.rotate(0.3f);
                     moon.rotate(0.2f);

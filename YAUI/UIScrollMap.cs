@@ -17,6 +17,7 @@ namespace ns_YAUI
         UIBlank mMiniMapDiv = null;
         UIRect mMiniMapRect = null;
         UIMap mMiniMap = null;
+        UIRect mMiniWinow = null;
         float mMiniMapSize = 128;
 
         public override string typeName
@@ -24,7 +25,7 @@ namespace ns_YAUI
             get { return "scrolledMap"; }
         }
 
-
+        const string xmlFmt = "<rect px='{0}' py='{1}' width='{2}' height='{3}' fillColor='0x33aaaaaa' ></rect>";
         public UIScrolledMap()
         {
             width = schemes.frameWidth;
@@ -54,6 +55,12 @@ namespace ns_YAUI
                 {
                     mMapClient.doDraw(g);
                 };
+
+
+            string xmlWindow = string.Format(xmlFmt, 0, 0, 128, 128);
+
+            //var childrenUi = mMiniMap.appendFromXML(xmlChildren);
+            mMiniWinow = mMiniMap.appendFromXML(xmlWindow) as UIRect;
         }
 
         public void showMini()
@@ -76,11 +83,15 @@ namespace ns_YAUI
             mMiniMap.px -= rcInMap.Left;
             mMiniMap.py -= rcInMap.Top;
 
-            const string xmlFmt = "<rect px='{0}' py='{1}' width='{2}' height='{3}' fillColor='0x33aaaaaa' ></rect>";
+            
             //string xmlChildren = string.Format(xmlFmt, rcChildren.Left, rcChildren.Top, rcChildren.Width, rcChildren.Height, "0x44ff0000");
             string xmlWindow = string.Format(xmlFmt, rcMap.Left, rcMap.Top, rcMap.Width, rcMap.Height);
 
-            //var childrenUi = mMiniMap.appendFromXML(xmlChildren);
+            mMiniWinow.px = rcMap.Left;
+            mMiniWinow.py = rcMap.Top;
+            mMiniWinow.width = rcMap.Width;
+            mMiniWinow.height = rcMap.Height;
+            ////var childrenUi = mMiniMap.appendFromXML(xmlChildren);
             var windowUI = mMiniMap.appendFromXML(xmlWindow);
 
             //show mini of chindren
