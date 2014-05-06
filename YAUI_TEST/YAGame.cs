@@ -1,17 +1,37 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using ns_YAUI;
 
 namespace ns_YAUIUser
 {
     namespace ns_game
     {
+        class bonusBlock
+        {
+            public List<bonus> mBonus = new List<bonus>();
+
+
+            internal bonus addNewBonus()
+            {
+                bonus b = new bonus();
+                mBonus.Add(b);
+                return b;
+            }
+        }
+
         class world
         {
+            System.Random mRandGen = new System.Random();
+            int randRange(int max, int min = 0)
+            {
+                int r = mRandGen.Next() % (max - min + 1);
+                return min + r;
+            }
+
+
             public UIWidget mUI = null;
             const string XMLFrame = @"
 <rect clip='false' enable='false' size='480,360'>
@@ -27,20 +47,28 @@ namespace ns_YAUIUser
                 mGetReady = mUI.findByPath("ready") as UILabel;
                 mFailed = mUI.findByPath("failed") as UILabel;
                 mWin = mUI.findByPath("win") as UILabel;
-                mRole = new role();
-                
+                mRole = new role(this);
             }
 
             UILabel mGetReady = null;
             UILabel mFailed = null;
             UILabel mWin = null;
+
+            enum EState
+            {
+                invalid,
+                ready,
+                gaming,
+                fail,
+                youwin,
+            }
+
+            EState mState = EState.invalid;
             public void init()
             {
-                //get ready
-                mGetReady.visible = true;
-                mFailed.visible = false;
-                mWin.visible = false;
-
+                mState = EState.ready;
+                showInit();
+                
                 Action<int, int> clickHander = null;
                 clickHander = (x, y) =>
                     {
@@ -50,17 +78,50 @@ namespace ns_YAUIUser
 
                 UIRoot.Instance.evtLeftUp += clickHander;
 
-                mRole.exit();
+                mState = EState.ready;
             }
 
+            private void showInit()
+            {
+                //get ready
+                mGetReady.visible = true;
+                mFailed.visible = false;
+                mWin.visible = false;
+                mRole.hide();
+            }
+
+            int timeIDGenBonus = -1;
             public void start()
             {
-                mRole.enter(mUI); 
+                Console.WriteLine("world.start");
+                mState = EState.gaming;
+                mRole.show();
+                mRole.starFly();
+
+                timeIDGenBonus = TimerManager.get().setInterval(onTimerGenBonus, 300);
             }
 
-            public void enter()
+            int mConstBonusBlockMax = 5;
+            void onTimerGenBonus(uint det, uint last)
             {
-                init();
+                if (mBonus.Count == 0)
+                {
+                    for (int i = 0; i < mConstBonusBlockMax; ++i)
+                    {
+                        addBonus();
+                    }
+                }
+                else
+                {
+                    while (getLastBonusX() < 600)
+                    {
+                        addBonus();
+                    }
+                    while (getFirstBonusX() < -100)
+                    {
+                        removeBonus();
+                    }
+                }
             }
 
             public void exit()
@@ -71,15 +132,104 @@ namespace ns_YAUIUser
             {
                 
             }
+
+            Queue<bonusBlock> mBonus = new Queue<bonusBlock>();
+
+            float mConstBonusMaxY= 300;
+            float mConstBonusMinY = 50;
+
+            float mConstBonusStartPosX = -100;
+            float mConstBonusIntervalX = 200;
+
+            float getLastBonusX()
+            {
+                if (mBonus.Count == 0) return mConstBonusStartPosX;
+                else
+                {
+                    var last = mBonus.Last();
+                    return last.mBonus[0].mUI.px;
+                }
+            }
+
+            float getFirstBonusX()
+            {
+                if (mBonus.Count == 0) return mConstBonusStartPosX;
+                else
+                {
+                    var first = mBonus.First();
+                    return first.mBonus[0].mUI.px;
+                }
+            }
+
+
+            void addBonus()
+            {
+                Console.WriteLine("add bonus");
+                var bb = new bonusBlock();
+                var num = randRange(2, 1);
+
+                float xpos = (int)getLastBonusX();
+                Console.WriteLine("xpos:"+xpos);
+                for (int i = 0; i < num; ++i)
+                {
+                    var b = bb.addNewBonus();
+                    b.mUI.paresent = mUI;
+                    b.mUI.px = xpos+mConstBonusIntervalX;
+                    Console.WriteLine(b.mUI.px);
+                    b.mUI.py = randRange((int)mConstBonusMaxY, (int)mConstBonusMinY);
+                }
+
+                mBonus.Enqueue(bb);
+            }
+
+            void removeBonus()
+            {
+                Console.WriteLine("removeBonus");
+                var bb = mBonus.Dequeue();
+
+                for (int i = 0; i < bb.mBonus.Count; ++i)
+                {
+                    var b = bb.mBonus[i];
+                    b.mUI.paresent = null;
+                }
+            }
+
+            internal IEnumerable<move> getAllCollids()
+            {
+                List<move> ret = new List<move>();
+                foreach(var elem in mBonus)
+                {
+                    var bs = elem.mBonus;
+                    foreach (var belem in bs)
+                    {
+                        yield return belem;
+                    }
+                }
+            }
+
+            //向前飞，所有物体后行
+            float mConstVelX = 50;
+            float mVelX = 50;
+            internal void moveForward(uint det, uint last)
+            {
+                var moves = getAllCollids();
+                foreach (var elem in moves)
+                {
+                    elem.mUI.px = elem.mUI.px - mVelX * det/1000f;
+                }
+            }
+
+            //结束画面
+            internal static void showEnd()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         class move
         {
             public UIWidget mUI = null;
-            public void setNum()
-            {
-            }
-
+            
             public move(int size)
             {
                 mUI = new UIRect(size, size);
@@ -108,23 +258,61 @@ namespace ns_YAUIUser
                 mLb.text = num.ToString();
             }
 
+            public int getNum(int num = 2)
+            {
+                if (mLb == null)
+                {
+                    mLb = new UILabel(num.ToString());
+                    mLb.paresent = mUI;
+                }
+                return int.Parse(mLb.text);
+            }
+
+
+
             public void setColor(uint col)
             {
                 (mUI as UIRect).fillColor = col;
             }
+
+            internal bool hasCollid(move elem)
+            {
+                RectangleF r1 = elem.mUI.drawRect.transform(elem.mUI.getLocalMatrix());
+                RectangleF r2 = mUI.drawRect.transform(mUI.getLocalMatrix());
+
+                if (r2.Contains(r1.leftTop() )) return true;
+                else if (r2.Contains(r1.rightBottom() )) return true;
+                else if (r1.Contains(r2.leftTop() ) ) return true;
+                return false;
+            }
         }
+
+        class bonus : move
+        {
+            public bonus()
+                : base(32)
+            {
+            }
+        }
+
+        class bonusNumber : bonus
+        {
+            public bonusNumber(int num)
+            {
+                setNum(num);
+            }
+        }
+
+        
 
         class role : move
         {
-            public role():base(24)
+            public role(world w):base(24)
             {
+                mWorld = w;
+                mUI.paresent = w.mUI;
             }
-
-            public void enter(UIWidget p)
-            {
-                mUI.paresent = p;
-                startControl();
-            }
+            world mWorld = null;
 
             void onKey(int kc, bool isC, bool isS)
             {
@@ -135,18 +323,15 @@ namespace ns_YAUIUser
 
             void onLMD(int x, int y)
             {
-                {
-                    Console.WriteLine(x+", "+y);
-                };
-                mTap = true;
+                flyUp();
             }
 
 
-            void reset()
+            void resetFly()
             {
                 mTap = false;
                 mVelY = 0;
-                timeID = -1;
+                flyingTimeID = -1;
                 
                 mUI.px = mConstPx;
                 mUI.py = mConstPy;
@@ -155,56 +340,185 @@ namespace ns_YAUIUser
 
             float mConstPx = 100;
             float mConstPy = 100;
+            float mConstPyGround = 360;
             float mConstAccY = 100;
             float mConstUpV = -110;
 
             bool mStarted = false;
             bool mTap = false;
+            bool mStart = false;
             float mVelY = 0;
-            int timeID = -1;
-            
+            float mAccY = 100;
+            int flyingTimeID = -1;
 
-            public void onTime(uint det, uint last)
+
+            public void flyUp()
+            {
+                mTap = true;
+            }
+
+            public void calcFly(uint det, uint last)
             {
                 if (mTap)
                 {
                     mVelY = mConstUpV;
                     mTap = false;
                 }
-                float t = (float)det/1000;
-                mUI.py = mUI.py +(mVelY * t + 0.5f * t * t*mConstAccY);
-                mVelY = mVelY + mConstAccY * t;
-                Console.WriteLine(mVelY);
-                //Console.WriteLine(last);
-                mUI.setDirty(true);
+                float t = (float)det / 1000;
+                mUI.py = mUI.py + (mVelY * t + 0.5f * t * t * mAccY);
+                mVelY = mVelY + mAccY * t;
             }
 
-            public void startControl()
+            public void onFlyingTime(uint det, uint last)
             {
-                if (mStarted) return;
-                reset();
-                mStarted = true;
+                if (mState == EState.flying)
+                {
+                    mWorld.moveForward(det, last);
+                    calcFly(det, last);
+                    //Console.WriteLine(mVelY);
+                    //Console.WriteLine(last);
+                    move collider = null;
+                    if (checkCollid(out collider))
+                    {
+                        bonus bns = (collider as bonus);
+                        if (bns != null)
+                        {
+                            if (checkBonus(bns) == EBonusRst.same)
+                            {
+                                upgrade();
+                            }
+                            else if (checkBonus(bns) == EBonusRst.change)
+                            {
+                                falling();
+                            }
+                        }
+                    }
+
+                    if(checkIfIsGround() )
+                    {
+                        die();
+                        world.showEnd();
+                    }
+                    mUI.setDirty(true);
+                }
+                else if (mState == EState.falling)
+                {
+                    calcFly(det, last);
+                    if(checkIfIsGround() )
+                    {
+                        die();
+                        world.showEnd();
+                    }
+                }
+            }
+
+            private void die()
+            {
+                mState = EState.dead;
+                TimerManager.get().clearTimer(flyingTimeID);
+                setColor((uint)EColorUtil.black);
+            }
+
+            private bool checkIfIsGround()
+            {
+                if (mUI.py > mConstPyGround) return true;
+                return false;
+            }
+
+            private void falling()
+            {
+                mState = EState.falling;
+                mVelY = mConstFallenVel;
+                mAccY = 0;
+
+                Console.WriteLine("falling");
+            }
+
+            //进级
+            private void upgrade()
+            {
+                Console.WriteLine("upgrade");
+            }
+
+            private EBonusRst checkBonus(bonus bns)
+            {
+                int num = bns.getNum();
+                if (num == this.getNum())
+                    return EBonusRst.same;
+                else
+                    return EBonusRst.invalid;
+            }
+
+            enum EBonusRst
+            {
+                same,
+                change,
+                invalid,
+            }
+
+            bool checkCollid(out move collider)
+            {
+                var collids = mWorld.getAllCollids();
+                bool isCollid = false;
+                foreach (var elem in collids)
+                {
+                    isCollid = elem.hasCollid(this);
+                    if (isCollid)
+                    {
+                        collider = elem;
+                        return true;
+                    }
+                }
+                collider = null;
+                return false;
+            }
+
+            public void starFly()
+            {
+                resetFly();
+                mState = EState.flying;
                 UIRoot.Instance.evtLeftDown += onLMD;
-
-                timeID = TimerManager.get().setInterval(onTime, 20);
+                flyingTimeID = TimerManager.get().setInterval(onFlyingTime, 10);
             }
-            public void stopControl()
-            {
-                if (!mStarted) return;
-                reset();
-                mStarted = false;
 
-                UIRoot.Instance.evtOnKey -= onKey;
+            //public void stopControl()
+            //{
+            //    if (!mStarted) return;
+            //    resetFly();
+            //    mStarted = false;
+
+            //    UIRoot.Instance.evtOnKey -= onKey;
+            //    UIRoot.Instance.evtLeftDown -= onLMD;
+            //    TimerManager.get().clearTimer(flyingTimeID);
+            //}
+
+            enum EState
+            {
+                init,
+                flying,
+                falling,
+                dead,
+            }
+
+            EState mState = EState.init;
+            private float mConstFallenVel = 200;
+
+            public void fallen()
+            {
+                mState = EState.falling;
                 UIRoot.Instance.evtLeftDown -= onLMD;
-                TimerManager.get().clearTimer(timeID);
             }
 
-            public void exit()
+            internal void hide()
             {
-                stopControl();
+                mUI.visible = false;
+            }
+
+            internal void show()
+            {
+                mUI.visible = true;
             }
         }
-
 
 
         class YAGame : iTestInstance
@@ -231,12 +545,10 @@ namespace ns_YAUIUser
             }
 
 
-
-
             public ns_YAUI.UIWidget getAttach()
             {
                 mWorld = new world();
-                mWorld.enter();
+                mWorld.init();
                 return mWorld.mUI;
             }
 
