@@ -927,7 +927,7 @@ namespace ns_YAUI
                 var c = mChildrent[i] as UIWidget;
                 if (!c.visible) continue;
 
-                if (c.align != EAlign.noAlign)
+                if (c.align != EAlign.noAlign && c.alignParesent != EAlign.noAlign)
                 {
                     noInLayout.Add(c);
                     continue;
@@ -1036,7 +1036,7 @@ namespace ns_YAUI
                 for (int i = mChildrent.Count - 1; i >= 0; --i)
                 {
                     var c = mChildrent[i] as UIWidget;
-                    if (c.align != EAlign.noAlign) continue;
+                    if (c.align != EAlign.noAlign && c.alignParesent != EAlign.noAlign) continue;
                     c.px = c.px - childrentRect.Value.Left;
                     c.py = c.py - childrentRect.Value.Top;
                 }
@@ -1098,7 +1098,7 @@ namespace ns_YAUI
             for (int i = mChildrent.Count - 1; i >= 0; --i)
             {
                 var c = mChildrent[i] as UIWidget;
-                if (c.align != EAlign.noAlign) continue;
+                if (c.align != EAlign.noAlign && c.alignParesent != EAlign.noAlign) continue;
                 var lrc = c.layoutRect.transform(c.getLocalMatrix());
                 if (!ret.HasValue)
                 {

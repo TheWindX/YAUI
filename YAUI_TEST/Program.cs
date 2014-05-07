@@ -14,7 +14,7 @@ namespace ns_YAUIUser
         static void Main(string[] args)
         {
             UI.Instance.init().setAntiAliasing(true);
-            var tall = testFrame.Instance;
+            var tall = testAll.Instance;
             UI.Instance.run();
         }
     }

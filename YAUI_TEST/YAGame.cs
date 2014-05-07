@@ -13,10 +13,18 @@ namespace ns_YAUIUser
         {
             public List<bonus> mBonus = new List<bonus>();
 
-
             internal bonus addNewBonus()
             {
-                bonus b = new bonus();
+                int r = world.randRange(1, 0);
+                bonus b = null;
+                if (r == 0)
+                {
+                    b = new bonusNumber();
+                }
+                else
+                {
+                    b = new bonusOp();
+                }
                 mBonus.Add(b);
                 return b;
             }
@@ -24,8 +32,8 @@ namespace ns_YAUIUser
 
         class world
         {
-            System.Random mRandGen = new System.Random();
-            int randRange(int max, int min = 0)
+            public static System.Random mRandGen = new System.Random();
+            public static int randRange(int max, int min = 0)
             {
                 int r = mRandGen.Next() % (max - min + 1);
                 return min + r;
@@ -35,25 +43,25 @@ namespace ns_YAUIUser
             public UIWidget mUI = null;
             const string XMLFrame = @"
 <rect clip='false' enable='false' size='480,360'>
-    <label name='ready' text='Get Ready' color='yellow' align='center' size='24' style='bold'></label>
-    <label name='failed' text='Failed' color='red' align='center' size='24' style='bold'></label>
-    <label name='win' text='You Win!' color='green' align='center' size='24' style='bold'></label>
+    <label name='prompt' text='Get Ready' color='gold' align='center' size='24' style='bold'></label>
+    <label name='log' offset='24' color='green' align='leftTop' size='10' style='normal'></label>
+    <label name='score' offsetX='24' offsetY='48' color='green' align='leftTop' size='10' style='normal'></label>
 </rect>
 ";
             role mRole = null;
             public world()
             {
                 mUI = UI.Instance.fromXML(XMLFrame, false);
-                mGetReady = mUI.findByPath("ready") as UILabel;
-                mFailed = mUI.findByPath("failed") as UILabel;
-                mWin = mUI.findByPath("win") as UILabel;
+                mPrompt = mUI.findByPath("prompt") as UILabel;
+                mLog = mUI.findByPath("log") as UILabel;
+                mScore = mUI.findByPath("score") as UILabel;
                 mRole = new role(this);
             }
 
-            UILabel mGetReady = null;
-            UILabel mFailed = null;
-            UILabel mWin = null;
-
+            UILabel mPrompt = null;
+            UILabel mLog = null ;
+            UILabel mScore = null;
+            
             enum EState
             {
                 invalid,
@@ -63,30 +71,32 @@ namespace ns_YAUIUser
                 youwin,
             }
 
+            public void onClick(int x, int y)
+            {
+                start();
+                UIRoot.Instance.evtLeftUp -= onClick;
+            }
+
             EState mState = EState.invalid;
             public void init()
             {
+                clean();
+                mRole.init();
+                
                 mState = EState.ready;
                 showInit();
                 
-                Action<int, int> clickHander = null;
-                clickHander = (x, y) =>
-                    {
-                        start();
-                        UIRoot.Instance.evtLeftUp -= clickHander;        
-                    };
-
-                UIRoot.Instance.evtLeftUp += clickHander;
-
+                UIRoot.Instance.evtLeftUp += onClick;
                 mState = EState.ready;
+                mUI.setDirty(true);
             }
 
             private void showInit()
             {
                 //get ready
-                mGetReady.visible = true;
-                mFailed.visible = false;
-                mWin.visible = false;
+                mPrompt.visible = true;
+                showColorString((uint)EColorUtil.gold, "get ready?");
+                mLog.visible = false;
                 mRole.hide();
             }
 
@@ -96,7 +106,7 @@ namespace ns_YAUIUser
                 Console.WriteLine("world.start");
                 mState = EState.gaming;
                 mRole.show();
-                mRole.starFly();
+                mRole.start();
 
                 timeIDGenBonus = TimerManager.get().setInterval(onTimerGenBonus, 300);
             }
@@ -124,21 +134,12 @@ namespace ns_YAUIUser
                 }
             }
 
-            public void exit()
-            {
-            }
-
-            public void dead()
-            {
-                
-            }
-
             Queue<bonusBlock> mBonus = new Queue<bonusBlock>();
 
             float mConstBonusMaxY= 300;
             float mConstBonusMinY = 50;
 
-            float mConstBonusStartPosX = -100;
+            float mConstBonusStartPosX = 300;
             float mConstBonusIntervalX = 200;
 
             float getLastBonusX()
@@ -170,13 +171,23 @@ namespace ns_YAUIUser
 
                 float xpos = (int)getLastBonusX();
                 Console.WriteLine("xpos:"+xpos);
+
+                List<float> posYs = new List<float>();
                 for (int i = 0; i < num; ++i)
                 {
+                    int y = randRange((int)mConstBonusMaxY, (int)mConstBonusMinY);
+                    //b.mUI.py
+                    bool tooClose = false;
+                    for (int j = 0; j < posYs.Count; ++j)
+                    {
+                        if (Math.Abs(posYs[j] - y) < 90) { tooClose = true; break; }
+                    }
+                    if (tooClose) continue;
                     var b = bb.addNewBonus();
                     b.mUI.paresent = mUI;
-                    b.mUI.px = xpos+mConstBonusIntervalX;
-                    Console.WriteLine(b.mUI.px);
-                    b.mUI.py = randRange((int)mConstBonusMaxY, (int)mConstBonusMinY);
+                    b.mUI.px = xpos + mConstBonusIntervalX;
+                    b.mUI.py = y;
+                    posYs.Add(y);
                 }
 
                 mBonus.Enqueue(bb);
@@ -196,13 +207,13 @@ namespace ns_YAUIUser
 
             internal IEnumerable<move> getAllCollids()
             {
-                List<move> ret = new List<move>();
                 foreach(var elem in mBonus)
                 {
                     var bs = elem.mBonus;
                     foreach (var belem in bs)
                     {
-                        yield return belem;
+                        if (belem.mUI.visible) 
+                            yield return belem;
                     }
                 }
             }
@@ -220,9 +231,76 @@ namespace ns_YAUIUser
             }
 
             //结束画面
-            internal static void showEnd()
+            internal void showFail()
             {
-                throw new NotImplementedException();
+                showWaring("you fail!");
+            }
+
+            internal void showScore(int num)
+            {
+                mScore.visible = true;
+                mScore.text = "score:" + num;
+            }
+
+            internal void showWaring(string p)
+            {
+                showColorString((uint)EColorUtil.red, p);
+            }
+
+            internal void showLog(string str)
+            {
+                mLog.visible = true;
+                mLog.text = str;
+            }
+
+            private void showColorString(uint p1, string str)
+            {
+                mPrompt.visible = true;
+                mPrompt.text = str;
+                mPrompt.textColor = p1;
+            }
+
+            internal void clean()
+            {
+                UIRoot.Instance.evtLeftUp -= onClick;
+                UIRoot.Instance.evtLeftUp -= failToInit;
+                mState = EState.invalid;
+                mPrompt.visible = false;
+                mLog.visible = false;
+                mScore.visible = false;
+                clearBonus();
+                if(mRole != null)
+                    mRole.clean();
+                TimerManager.get().clearTimer(timeIDGenBonus);
+                TimerManager.get().clearTimer(timeIDFailToInit);
+                UIRoot.Instance.evtLeftUp -= failToInit;
+            }
+
+            private void clearBonus()
+            {
+                foreach (var elem in mBonus)
+                {
+                    var bs = elem.mBonus;
+                    foreach (var belem in bs)
+                    {
+                        belem.mUI.paresent = null;
+                    }
+                }
+
+                mBonus.Clear();
+            }
+
+            void failToInit(int x, int y)
+            {
+                UIRoot.Instance.evtLeftUp -= failToInit;
+                init();
+            }
+
+            int timeIDFailToInit = -1;
+            internal void fail()
+            {
+                showFail();
+                timeIDFailToInit = TimerManager.get().setTimeout(t => UIRoot.Instance.evtLeftUp += failToInit, 1000);
             }
         }
 
@@ -233,12 +311,19 @@ namespace ns_YAUIUser
             public move(int size)
             {
                 mUI = new UIRect(size, size);
+                mUI.name = "debug";
+                mUI.offsety = mUI.offsetx = 2;
             }
 
             public void destory()
             {
                 mUI.paresent = null;
                 mUI = null;
+            }
+
+            public void setSize(float sz)
+            {
+                mUI.height = mUI.width = sz;
             }
 
             public void setPosition(float x, float y)
@@ -248,27 +333,30 @@ namespace ns_YAUIUser
             }
 
             UILabel mLb = null;
-            public void setNum(int num)
+
+            public string getText()
+            {
+                return mLb.text;
+            }
+            
+            public void setText(string str, bool align=false)
             {
                 if (mLb == null)
                 {
-                    mLb = new UILabel(num.ToString());
+                    mLb = new UILabel(str);
                     mLb.paresent = mUI;
+                    if (align)
+                    {
+                        mLb.alignParesent = mLb.align = UIWidget.EAlign.center;
+                    }
                 }
-                mLb.text = num.ToString();
+                else mLb.text = str;
             }
 
-            public int getNum(int num = 2)
+            public void setTextColor(uint color)
             {
-                if (mLb == null)
-                {
-                    mLb = new UILabel(num.ToString());
-                    mLb.paresent = mUI;
-                }
-                return int.Parse(mLb.text);
+                mLb.textColor = color;
             }
-
-
 
             public void setColor(uint col)
             {
@@ -285,6 +373,19 @@ namespace ns_YAUIUser
                 else if (r1.Contains(r2.leftTop() ) ) return true;
                 return false;
             }
+
+            public void setShink(bool bShink = true)
+            {
+                mUI.paddingY = mUI.paddingX = 4;
+                mUI.shrinkAble = true;
+                //mLb.align = UIWidget.EAlign.center;
+            }
+
+            public void setCenter()
+            {
+                mLb.align = UIWidget.EAlign.center;
+                mLb.alignParesent = UIWidget.EAlign.center;
+            }
         }
 
         class bonus : move
@@ -292,27 +393,160 @@ namespace ns_YAUIUser
             public bonus()
                 : base(32)
             {
+                setShink();
+            }
+
+            public void hide()
+            {
+                mUI.visible = false;
             }
         }
 
         class bonusNumber : bonus
         {
+            public static int[] nums= new int[]{2, 4, 8, 16, 32, 64, 128, 256, 512, 1024};
+
+            public int number = 0;
             public bonusNumber(int num)
             {
-                setNum(num);
+                number = num;
+                setText(num.ToString() );
+            }
+
+            public bonusNumber()
+            {
+                int r = world.randRange(9, 0);
+                number = nums[r];
+                setText(number.ToString() );
             }
         }
 
-        
+        class bonusOp : bonus
+        {
+            public static string[] ops = new string[] { "+", "-", "×", "÷" };
+            public enum EOP : int {plus=0, minus, mul, div }
+            public EOP mOp = EOP.plus;
+            public bonusOp(EOP op)
+            {
+                mOp = 0;
+                setText(ops[(int)op], true);
+            }
+
+            public bonusOp()
+            {
+                int r = world.randRange(3, 0);
+                mOp = (EOP)r;
+                setText(ops[r], true);
+            }
+
+            public static string opStringify(EOP op)
+            {
+                return ops[(int)op];
+            }
+
+            public static int calc(EOP op, int opr1, int opr2)
+            {
+                if (op == EOP.plus) { return opr1 + opr2; }
+                if (op == EOP.minus) { return opr1 - opr2; }
+                if (op == EOP.mul) { return opr1 * opr2; }
+                if (opr2 == 0)
+                    throw new GameExeption(GameExeption.EType.DivByZero);
+                if (opr1 % opr2 != 0)
+                    throw new GameExeption(GameExeption.EType.noExactDivision);
+                return opr1 / opr2;
+            }
+        }
+
+        class GameExeption : Exception
+        {
+            public enum EType
+            {
+                NumberNow,
+                OperatorNow,
+                DivByZero,
+                noExactDivision,
+            }
+
+            public EType mType = EType.NumberNow;
+            public GameExeption(EType type)
+            {
+                mType = type;
+            }
+
+            public override string Message 
+            {
+                get
+                {
+                    if (mType == EType.DivByZero)
+                    {
+                        return "Div by zero";
+                    }
+                    else if (mType == EType.noExactDivision)
+                    {
+                        return "无整除";
+                    }
+                    else if (mType == EType.NumberNow)
+                    {
+                        return "取得不是整数";
+                    }
+                    else if (mType == EType.OperatorNow)
+                    {
+                        return "取得不是操作符";
+                    }
+                    throw new Exception();
+                }
+            }
+        }
 
         class role : move
         {
-            public role(world w):base(24)
+            public role(world w):base(48)
             {
                 mWorld = w;
                 mUI.paresent = w.mUI;
+                setNumber(2);
+                setShink();
             }
             world mWorld = null;
+            
+            string mExpr = "2";
+            int mResult = 0;
+            bonusOp.EOP mOp;
+            bool mNumberOrOp = true;
+            void appendNum(int number)
+            {
+                if (mNumberOrOp) throw new GameExeption(GameExeption.EType.NumberNow);
+                else
+                {
+                    mResult = bonusOp.calc(mOp, mResult, number);
+                    mExpr = mExpr + number;
+                    setText(mResult+":"+mExpr);
+                    mNumberOrOp = true;
+
+                    mWorld.showScore(mResult);
+                }
+            }
+
+            void appendOp(bonusOp.EOP op)
+            {
+                if (!mNumberOrOp) throw new GameExeption(GameExeption.EType.OperatorNow);
+                else
+                {
+                    mOp = op;
+                    mExpr = mExpr + bonusOp.opStringify(op);
+                    setText(mResult + ":" + mExpr);
+                    mNumberOrOp = false;
+
+                    mWorld.showScore(mResult);
+                }
+            }
+
+            void setNumber(int number)
+            {
+                mNumberOrOp = true;
+                mResult = number;
+                setText(mResult.ToString());
+            }
 
             void onKey(int kc, bool isC, bool isS)
             {
@@ -330,26 +564,31 @@ namespace ns_YAUIUser
             void resetFly()
             {
                 mTap = false;
+                mExpr = "";
                 mVelY = 0;
+                mAccY = mConstFallenVel;
                 flyingTimeID = -1;
-                
+                mState = EState.init;
                 mUI.px = mConstPx;
                 mUI.py = mConstPy;
+                setNumber(2);
+                setColor((uint)EColorUtil.green);
             }
 
-
-            float mConstPx = 100;
+            //const
+            float mConstPx = 100;//初始位置
             float mConstPy = 100;
-            float mConstPyGround = 360;
-            float mConstAccY = 100;
+            float mConstPyGround = 320;//地面高度，判断是否撞地
+            
+            //控制飞行
+                //点击控制
             float mConstUpV = -110;
-
-            bool mStarted = false;
             bool mTap = false;
-            bool mStart = false;
-            float mVelY = 0;
+            float mVelY = 0; //
             float mAccY = 100;
             int flyingTimeID = -1;
+
+
 
 
             public void flyUp()
@@ -359,20 +598,20 @@ namespace ns_YAUIUser
 
             public void calcFly(uint det, uint last)
             {
-                if (mTap)
-                {
-                    mVelY = mConstUpV;
-                    mTap = false;
-                }
                 float t = (float)det / 1000;
                 mUI.py = mUI.py + (mVelY * t + 0.5f * t * t * mAccY);
                 mVelY = mVelY + mAccY * t;
             }
 
-            public void onFlyingTime(uint det, uint last)
+            public void onTimeFlying(uint det, uint last)
             {
                 if (mState == EState.flying)
                 {
+                    if (mTap)
+                    {
+                        mVelY = mConstUpV;
+                        mTap = false;
+                    }
                     mWorld.moveForward(det, last);
                     calcFly(det, last);
                     //Console.WriteLine(mVelY);
@@ -383,43 +622,64 @@ namespace ns_YAUIUser
                         bonus bns = (collider as bonus);
                         if (bns != null)
                         {
-                            if (checkBonus(bns) == EBonusRst.same)
+                            bns.hide();
+                            try
                             {
-                                upgrade();
+                                bonusNumber bn = bns as bonusNumber;
+                                if (bn != null)
+                                {
+                                    appendNum(bn.number);
+                                }
+                                else
+                                {
+                                    bonusOp bo = bns as bonusOp;
+                                    if (bo != null)
+                                    {
+                                        appendOp(bo.mOp);
+                                    }
+                                }
                             }
-                            else if (checkBonus(bns) == EBonusRst.change)
+                            catch (GameExeption ge)
                             {
                                 falling();
+                                mWorld.showLog(ge.Message);
+                            }
+                            catch (Exception e)
+                            {
+
                             }
                         }
                     }
 
-                    if(checkIfIsGround() )
+                    if (checkIfGround())
                     {
                         die();
-                        world.showEnd();
                     }
-                    mUI.setDirty(true);
+                    
                 }
                 else if (mState == EState.falling)
                 {
                     calcFly(det, last);
-                    if(checkIfIsGround() )
+                    if(checkIfGround() )
                     {
                         die();
-                        world.showEnd();
                     }
                 }
+                else if (mState == EState.dead)
+                {
+                }
+                mUI.setDirty(true);
             }
 
             private void die()
             {
                 mState = EState.dead;
-                TimerManager.get().clearTimer(flyingTimeID);
                 setColor((uint)EColorUtil.black);
+                clean();
+                mWorld.fail();
             }
 
-            private bool checkIfIsGround()
+            private bool checkIfGround()
             {
                 if (mUI.py > mConstPyGround) return true;
                 return false;
@@ -427,34 +687,28 @@ namespace ns_YAUIUser
 
             private void falling()
             {
+                UIRoot.Instance.evtLeftDown -= onLMD;
+                mTap = false;
                 mState = EState.falling;
                 mVelY = mConstFallenVel;
                 mAccY = 0;
-
-                Console.WriteLine("falling");
             }
 
-            //进级
-            private void upgrade()
-            {
-                Console.WriteLine("upgrade");
-            }
+            //private EBonusRst checkBonus(bonus bns)
+            //{
+            //    int num = bns.getNum();
+            //    if (num == this.getNum())
+            //        return EBonusRst.same;
+            //    else
+            //        return EBonusRst.invalid;
+            //}
 
-            private EBonusRst checkBonus(bonus bns)
-            {
-                int num = bns.getNum();
-                if (num == this.getNum())
-                    return EBonusRst.same;
-                else
-                    return EBonusRst.invalid;
-            }
-
-            enum EBonusRst
-            {
-                same,
-                change,
-                invalid,
-            }
+            //enum EBonusRst
+            //{
+            //    same,
+            //    change,
+            //    invalid,
+            //}
 
             bool checkCollid(out move collider)
             {
@@ -473,12 +727,16 @@ namespace ns_YAUIUser
                 return false;
             }
 
-            public void starFly()
+            internal void init()
             {
                 resetFly();
-                mState = EState.flying;
+            }
+
+            public void start()
+            {   
                 UIRoot.Instance.evtLeftDown += onLMD;
-                flyingTimeID = TimerManager.get().setInterval(onFlyingTime, 10);
+                mState = EState.flying;
+                flyingTimeID = TimerManager.get().setInterval(onTimeFlying, 10);
             }
 
             //public void stopControl()
@@ -517,6 +775,13 @@ namespace ns_YAUIUser
             internal void show()
             {
                 mUI.visible = true;
+            }
+
+            internal void clean()
+            {
+                mTap = false;
+                mExpr = "";
+                TimerManager.get().clearTimer(flyingTimeID);
             }
         }
 

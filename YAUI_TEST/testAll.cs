@@ -20,7 +20,7 @@ namespace ns_YAUIUser
         public testAll()
         {
             initScheme();
-            //var test = testFrame.Instance;
+            var test = testFrame.Instance;
             //var test = testPrimarys.Instance; 
             //var test = testTransform.Instance;
             //var test = testHierarchy.Instance;
