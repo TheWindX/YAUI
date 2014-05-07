@@ -694,22 +694,6 @@ namespace ns_YAUIUser
                 mAccY = 0;
             }
 
-            //private EBonusRst checkBonus(bonus bns)
-            //{
-            //    int num = bns.getNum();
-            //    if (num == this.getNum())
-            //        return EBonusRst.same;
-            //    else
-            //        return EBonusRst.invalid;
-            //}
-
-            //enum EBonusRst
-            //{
-            //    same,
-            //    change,
-            //    invalid,
-            //}
-
             bool checkCollid(out move collider)
             {
                 var collids = mWorld.getAllCollids();
@@ -738,17 +722,6 @@ namespace ns_YAUIUser
                 mState = EState.flying;
                 flyingTimeID = TimerManager.get().setInterval(onTimeFlying, 10);
             }
-
-            //public void stopControl()
-            //{
-            //    if (!mStarted) return;
-            //    resetFly();
-            //    mStarted = false;
-
-            //    UIRoot.Instance.evtOnKey -= onKey;
-            //    UIRoot.Instance.evtLeftDown -= onLMD;
-            //    TimerManager.get().clearTimer(flyingTimeID);
-            //}
 
             enum EState
             {

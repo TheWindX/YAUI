@@ -153,7 +153,7 @@ namespace ns_YAUtils
         {
             public int mID = 0;
             public int mIndex = 0;
-            Action<UInt32, bool> mIntevalHandler = null;
+            Action<UInt32, UInt32, bool> mIntevalHandler = null;
             UInt32 mStartTime;
             UInt32 mDuration;
             UInt32 mInterval;
@@ -164,7 +164,7 @@ namespace ns_YAUtils
                 if (ret)
                 {
                     mValid = false;
-                    mIntevalHandler(now - mStartTime, true);
+                    mIntevalHandler(0, now - mStartTime, true);
                 }
                 return ret;
             }
@@ -174,9 +174,10 @@ namespace ns_YAUtils
                 bool ret = now > mIntervalCount;
                 if (ret)
                 {
+                    uint det = now - mIntervalCount;
                     mIntervalCount = mIntervalCount + mInterval;
                     var t = ((float)(now - mStartTime)) / mDuration;
-                    mIntevalHandler(now - mStartTime, false);
+                    mIntevalHandler(det + mInterval, now - mStartTime, false);
 #if NO_ACCUMULATE
                     if (mIntervalCount < now)
                     {
@@ -192,7 +193,7 @@ namespace ns_YAUtils
 
             public bool mValid = true;
 
-            internal TimeContext(int id, UInt32 now, Action<UInt32, bool> handler, UInt32 duration, UInt32 interval)
+            internal TimeContext(int id, UInt32 now, Action<UInt32, UInt32, bool> handler, UInt32 duration, UInt32 interval)
             {
                 mID = id;
                 mIntevalHandler = handler;
@@ -276,24 +277,24 @@ namespace ns_YAUtils
         int mIDCount = 0;
 
 
-        //timer as it in html5
+      //timer as it in html5
         public int setTimeout(Action<UInt32> handler, UInt32 duration)
         {
             UInt32 start = mTimer();
-            var elem = new TimeContext(++mIDCount, mTimer(), (t, b) => { handler(t); }, duration, UInt32.MaxValue);
+            var elem = new TimeContext(++mIDCount, mTimer(), (i, t, b) => { handler(t); }, duration, UInt32.MaxValue);
             mInterpolates.push(elem);
             mID2Interpolation.Add(mIDCount, elem);
             //Console.WriteLine("add timer:" + mIDCount);
             return mIDCount;
         }
 
-        public int setInterval(Action<UInt32> intervalHandler, UInt32 interval, Action<UInt32> endHandler = null, UInt32 duration = UInt32.MaxValue)
+        public int setInterval(Action<UInt32, UInt32> intervalHandler, UInt32 interval, Action<UInt32> endHandler = null, UInt32 duration = UInt32.MaxValue)
         {
-            if (intervalHandler == null) intervalHandler = (n) => { };
+            if (intervalHandler == null) intervalHandler = (i, n) => { };
             if (endHandler == null) endHandler = (n) => { };
 
             UInt32 start = mTimer();
-            var elem = new TimeContext(++mIDCount, mTimer(), (t, b) => { if (b) endHandler(t); else intervalHandler(t); }, duration, interval);
+            var elem = new TimeContext(++mIDCount, mTimer(), (i, t, b) => { if (b) endHandler(t); else intervalHandler(i, t); }, duration, interval);
             mInterpolates.push(elem);
             mID2Interpolation.Add(mIDCount, elem);
             //Console.WriteLine("add timer:" + mIDCount);
@@ -343,7 +344,7 @@ namespace ns_YAUtils
                     if (t.tillEnd(now))
                     {
                         mID2Interpolation.Remove(t.mID);
-                        mInterpolates.pop();//这里保证是还在top上
+                        mInterpolates.pop();//这里保证是还在top上
                     }
                     else if (t.tillInterval(now))
                     {

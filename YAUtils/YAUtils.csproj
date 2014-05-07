@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Algorithms.cs" />
     <Compile Include="array.cs" />
+    <Compile Include="InheriteBase.cs" />
     <Compile Include="repl.cs" />
     <Compile Include="singleton.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
