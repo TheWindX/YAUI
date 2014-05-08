@@ -36,10 +36,11 @@ namespace ns_YAUI
             scaleAble = true;//默认scaleAble
             mMapClient = appendFromXML(@"<map name='client'></map>") as UIMap;
             
-            UIRoot.Instance.evtLeftUp += (x, y) =>
+            evtOnLMUp += (ui, x, y) =>
                 {
                     showMini();
                     setDirty(true);
+                    return false;
                 };
 
             mMiniMapDiv = appendFromXML(@"
@@ -106,9 +107,8 @@ namespace ns_YAUI
                 p.AddRectangle(r);
                 g.SetClip(p, CombineMode.Intersect);
             }
-
-            mMapClient.doDraw(g);
             mMiniMapDiv.doDraw(g);
+            mMapClient.doDraw(g);
             
             return false;
         }

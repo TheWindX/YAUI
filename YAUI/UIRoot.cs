@@ -2,7 +2,7 @@
 /*
  * author: xiaofeng.li
  * mail: 453588006@qq.com
- * desc: 
+ * desc: base of UI
  * */
 
 using System;
@@ -33,8 +33,8 @@ namespace ns_YAUI
             mRoot = new UIMap();//map
         }
 
-        UIWidget mDirtyRoot = null;
-        UIWidget mDirtyRootOld = null;//当mDirtyRoot发生变化时，off couse, mDirtyRootOld也要redraw
+        UIWidget mDirtyRoot = null;//当mDirtyRoot发生变化时，off couse, mDirtyRootOld也要redraw
+        UIWidget mDirtyRootOld = null;//for swap
 
         public UIWidget dirtyRoot
         {
@@ -48,7 +48,7 @@ namespace ns_YAUI
             }
         }
 
-        public void dirtyRedraw()
+        public void dirtyRedraw() //脏区域绘制
         {
             if (mDirtyRoot == null) mDirtyRoot = root;
             if (mDirtyRootOld == null) mDirtyRootOld = root;
@@ -60,9 +60,52 @@ namespace ns_YAUI
         #endregion
 
         #region XML
+
+        #region template & innerTemplate
         Dictionary<string, XmlElement> mName2Template = new Dictionary<string, XmlElement>();
         Dictionary<string, Stack<XmlElement>> mName2InnerTemplate = new Dictionary<string, Stack<XmlElement>>();
 
+
+        void innerTemplatePush(string name, XmlNode node)
+        {
+            Stack<XmlElement> st;
+            if (!mName2InnerTemplate.TryGetValue(name, out st))
+            {
+                st = new Stack<XmlElement>();
+                mName2InnerTemplate.Add(name, st);
+            }
+            st.Push(node as XmlElement);
+        }
+
+        void innerTemplatePop(string name)
+        {
+            Stack<XmlElement> st;
+            if (!mName2InnerTemplate.TryGetValue(name, out st))
+            {
+                throw new Exception("innerTemplatePop(" + name + ")" + " failed");
+            }
+            else
+            {
+                st.Pop();
+            }
+        }
+
+
+        protected XmlNode innerTemplateTop(string name)
+        {
+            Stack<XmlElement> st;
+            if (!mName2InnerTemplate.TryGetValue(name, out st))
+            {
+                throw new Exception("innerTemplateTop(" + name + ")" + " failed");
+            }
+            else
+            {
+                return st.Peek();
+            }
+        }
+        #endregion
+
+        #region 属性继承
         Stack<Dictionary<string, string>> mPropertyInnerMap = new Stack<Dictionary<string, string>>();
         Stack<Boolean> mPropertyderived = new Stack<Boolean>();
 
@@ -127,44 +170,7 @@ namespace ns_YAUI
             mPropertyInnerMap.Pop();
             mPropertyderived.Pop();
         }
-
-        void innerTemplatePush(string name, XmlNode node)
-        {
-            Stack<XmlElement> st;
-            if (!mName2InnerTemplate.TryGetValue(name, out st))
-            {
-                st = new Stack<XmlElement>();
-                mName2InnerTemplate.Add(name, st);
-            }
-            st.Push(node as XmlElement);
-        }
-
-        void innerTemplatePop(string name)
-        {
-            Stack<XmlElement> st;
-            if (!mName2InnerTemplate.TryGetValue(name, out st))
-            {
-                throw new Exception("innerTemplatePop(" + name + ")" + " failed");
-            }
-            else
-            {
-                st.Pop();
-            }
-        }
-
-
-        protected XmlNode innerTemplateTop(string name)
-        {
-            Stack<XmlElement> st;
-            if (!mName2InnerTemplate.TryGetValue(name, out st))
-            {
-                throw new Exception("innerTemplateTop(" + name + ")" + " failed");
-            }
-            else
-            {
-                return st.Peek();
-            }
-        }
+        #endregion
 
         public delegate XmlNodeList funcFromXML(XmlNode nd, out UIWidget ui, UIWidget p);
 
@@ -361,8 +367,6 @@ namespace ns_YAUI
                 string innerTemplateName = null;
                 var uichild = loadFromXMLNode(elem, p, pnode, out innerTemplateName);
                 if (innerTemplateName != null) innerTemplateNames.Add(innerTemplateName);
-                //var v = elem.Attributes.GetNamedItem("height");
-                //Console.WriteLine(v==null?':v.Value );
                 if (uichild != null)
                 {
                     uichild.paresent = p;

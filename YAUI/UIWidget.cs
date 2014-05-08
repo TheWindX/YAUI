@@ -71,12 +71,12 @@ namespace ns_YAUI
                 base.paresent = value;
                 if (base.paresent != null)
                 {
-                    (base.paresent as UIWidget).setDirty();
+                    //(base.paresent as UIWidget).setDirty();
                 }
                 if (value != null)
                 {
                     setDepthHead();
-                    (paresent as UIWidget).setDirty();
+                    //(paresent as UIWidget).setDirty();
                 }
                 //event
                 if(evtChangeParesent != null)
@@ -360,7 +360,13 @@ namespace ns_YAUI
         {
             mOccupyRect = null;
         }
-        
+
+        public void setRenderRoot()
+        {
+            UIRoot.Instance.dirtyRoot = this.paresent as UIWidget;
+            if (UIRoot.Instance.mHandleDraw != null) UIRoot.Instance.mHandleDraw();
+        }
+
         public void setDirty(bool redrawImmediatly = false)
         {
 #if DIRTYRECTOPTIMAS
@@ -1969,6 +1975,7 @@ namespace ns_YAUI
             return true;
         }
 
+        GraphicsState mGs = null;
         internal void doDrawAlone(Graphics g)
         {
             var pList = new List<UIWidget>();
@@ -1979,7 +1986,10 @@ namespace ns_YAUI
                 pList.Add(cur);
                 cur = cur.paresent as UIWidget;
             }
-            var gs = g.Save();
+            if (mGs == null)
+            {
+                mGs = g.Save();
+            }
             foreach(UIWidget u in pList.Reverse<UIWidget>() )
             {
                 Matrix _mtx = g.Transform;
@@ -1997,7 +2007,8 @@ namespace ns_YAUI
                 }
             }
             doDraw(g);
-            g.Restore(gs);
+            if (mGs == null)
+                g.Restore(mGs);
         }
 
         internal void doDraw(Graphics g)
@@ -2007,7 +2018,7 @@ namespace ns_YAUI
             if (evtPreDraw != null)
                     evtPreDraw();
 
-            var gs = g.Save();
+            mGs = g.Save();
 
             Matrix _mtx = g.Transform;
             _mtx.Multiply(this.getLocalMatrix());
@@ -2017,7 +2028,7 @@ namespace ns_YAUI
             //catch it?
             if (!onDraw(g))
             {
-                g.Restore(gs);
+                g.Restore(mGs);
                 return;
             }
 
@@ -2038,7 +2049,7 @@ namespace ns_YAUI
 
             //for text drawing            
 
-            g.Restore(gs);
+            g.Restore(mGs);
             //popMatrix(g);
         }
 

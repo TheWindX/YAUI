@@ -114,26 +114,31 @@ namespace ns_YAUI
         public bool antiAliasing = false;
         public bool textAntiAliasing = false;
         public EvtPaint evtPaint;
-        //private Bitmap m_bmpOffscreen;
+#if DIRTYRECTOPTIMAS_1
+        private Bitmap m_bmpOffscreen;
+#endif
         private void OnPaint(object sender, PaintEventArgs e)
         {
             Graphics gxOff; //Offscreen graphics
-            //if (m_bmpOffscreen == null) //Bitmap for doublebuffering
-            //{
-            //    m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
-            //}
-            //else
-            //{
-            //    var sz = m_bmpOffscreen.Size;
-            //    if (ClientSize.Width != sz.Width
-            //        || ClientSize.Height != sz.Height)
-            //    {
-            //        m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
-            //        UIRoot.Instance.root.setDirty();
-            //    }
-            //}
-            //gxOff = Graphics.FromImage(m_bmpOffscreen);
+#if DIRTYRECTOPTIMAS_1
+            if (m_bmpOffscreen == null) //Bitmap for doublebuffering
+            {
+                m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+            }
+            else
+            {
+                var sz = m_bmpOffscreen.Size;
+                if (ClientSize.Width != sz.Width
+                    || ClientSize.Height != sz.Height)
+                {
+                    m_bmpOffscreen = new Bitmap(ClientSize.Width, ClientSize.Height);
+                    UIRoot.Instance.root.setDirty();
+                }
+            }
+            gxOff = Graphics.FromImage(m_bmpOffscreen);
+#else
             gxOff = e.Graphics;
+#endif
             if (antiAliasing)
                 gxOff.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             else
@@ -146,7 +151,9 @@ namespace ns_YAUI
 
             if (evtPaint != null)
                 evtPaint(gxOff);
-            //e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);
+#if DIRTYRECTOPTIMAS_1
+            e.Graphics.DrawImage(m_bmpOffscreen, 0, 0);
+#endif
             //mReflush = true;
         }
 

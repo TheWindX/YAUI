@@ -23,7 +23,7 @@ namespace ns_YAUIUser
             <label text='♛' align='center' color='gold' size='32'></label>
         </round_rect>
         <div layout='vertical, shrink'>
-            <label text='YAUI交流讨论群' color='*white' size='14' style='bold'></label>
+            <label text='风云交流讨论群' color='*white' size='14' style='bold'></label>
             <label text='(1000人群)' size='10'></label>
         </div>
     </div>
@@ -55,7 +55,7 @@ namespace ns_YAUIUser
             <label text='楚楚' margin='*4' color='*black' size='*8'></label>
             <label text='聂风'></label>
             <label text='步惊云'></label>
-            <label text='武林神话'></label>
+            <label text='无名'></label>
         </round_rect>
 
         <rect layout='vertical, inverse, expandY, filled' clip='true'>
@@ -80,10 +80,14 @@ namespace ns_YAUIUser
                 <label text='♪' color='red'></label>
             </rect>
             <rect layout='vertical, expandX' clip='true' padding='4' color='white' id='chat'>
-                <label text='楚楚: xxxxx' color='*blue'></label>
-                <label text='聂风: xxxxx'></label>
-                <label text='步惊云: xxxxx'></label>
-                <label text='武林神话: xxxxx'></label>
+                <label text='楚楚:' color='*blue'></label>
+                <label text='   金鳞岂是池中物' color='black' size='10'></label>
+                <label text='聂风:'></label>
+                <label text='   一遇风云便化龙' color='black' size='10'></label>
+                <label text='步惊云'></label>
+                <label text='   九霄龙吟惊天变' color='black' size='10'></label>
+                <label text='无名:'></label>
+                <label text='   还看我武林神话' color='black' size='10'></label>
             </rect>
         </rect>
     </div>

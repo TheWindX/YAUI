@@ -275,7 +275,7 @@ namespace ns_YAUIUser
             addInstance(new testTips());
             addInstance(new testMenu());
 
-            addInstance(new ns_game.YAGame());
+            addInstance(new YAGame());
             
             initCategory(ECategory.example);
             initCategory(ECategory.demo);
