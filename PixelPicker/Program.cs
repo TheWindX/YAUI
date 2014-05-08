@@ -72,7 +72,7 @@ namespace ns_pixelPicker
         {
             //System.Drawing.Color oldCl = new System.Drawing.Color();
             ns_YAUtils.TimerManager.get().setInterval(
-                t =>
+                (i, t) =>
                 {
                     if (ColorPicker.CursorPointManager.GetMouseLeftDown() )
                     {

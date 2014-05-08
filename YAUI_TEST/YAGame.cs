@@ -15,7 +15,7 @@ namespace ns_YAUIUser
 
             internal bonus addNewBonus()
             {
-                int r = world.randRange(1, 0);
+                int r = 0;// world.randRange(1, 0);
                 bonus b = null;
                 if (r == 0)
                 {
@@ -23,7 +23,7 @@ namespace ns_YAUIUser
                 }
                 else
                 {
-                    b = new bonusOp();
+                    //b = new bonusOp();
                 }
                 mBonus.Add(b);
                 return b;
@@ -32,6 +32,7 @@ namespace ns_YAUIUser
 
         class world
         {
+            public const int ROW_BLOCKS = 4;
             public static System.Random mRandGen = new System.Random();
             public static int randRange(int max, int min = 0)
             {
@@ -39,27 +40,51 @@ namespace ns_YAUIUser
                 return min + r;
             }
 
+            public static List<int> randList(int max, int min = 0)
+            {
+                List<int> ls = new List<int>();
+                int count = max - min + 1;
+                for (int i = 0; i < count; ++i)
+                {
+                    ls.Add(min + i);
+                }
+                for (int i = 0; i < count; ++i)
+                {
+                    int r =randRange(count-1, 0);
+                    int m = ls[i];
+                    ls[i] = ls[r];
+                    ls[r] = m;
+                }
+                return ls;
+            }
 
-            public UIWidget mUI = null;
+            public UIWidget mRoot = null;
+            public UIWidget mUIx = null;
+            public UIWidget mUIMainRole = null;
+            public UIWidget mUIRoles = null;
+
             const string XMLFrame = @"
-<rect clip='false' enable='false' size='480,360'>
-    <label name='prompt' text='Get Ready' color='gold' align='center' size='24' style='bold'></label>
-    <label name='log' offset='24' color='green' align='leftTop' size='10' style='normal'></label>
-    <label name='score' offsetX='24' offsetY='48' color='green' align='leftTop' size='10' style='normal'></label>
+<rect color='black' clip='true' enable='false' size='480,360'>
+    <div name='roles'></div>
+    <div name='mainRole'></div>
+    <div name='forground' layout='expand'>
+        <label name='prompt' text='Get Ready' color='gold' align='center' size='24' style='bold'></label>
+        <label name='score' offset='24' color='green' align='leftTop' size='10' style='normal'></label>
+    </div>
 </rect>
 ";
-            role mRole = null;
+            mainRole mMainRole = null;
             public world()
             {
-                mUI = UI.Instance.fromXML(XMLFrame, false);
-                mPrompt = mUI.findByPath("prompt") as UILabel;
-                mLog = mUI.findByPath("log") as UILabel;
-                mScore = mUI.findByPath("score") as UILabel;
-                mRole = new role(this);
+                mRoot = UI.Instance.fromXML(XMLFrame, false);
+                mUIMainRole = mRoot.findByPath("mainRole");
+                mUIRoles = mRoot.findByPath("roles");
+                mPrompt = mRoot.findByPath("forground/prompt") as UILabel;
+                mScore = mRoot.findByPath("forground/score") as UILabel;
+                mMainRole = new mainRole(this);
             }
 
             UILabel mPrompt = null;
-            UILabel mLog = null ;
             UILabel mScore = null;
             
             enum EState
@@ -81,32 +106,24 @@ namespace ns_YAUIUser
             public void init()
             {
                 clean();
-                mRole.init();
+                mMainRole.init();
+                mMainRole.hide();
                 
                 mState = EState.ready;
-                showInit();
+                showColorHint("get ready?");
                 
                 UIRoot.Instance.evtLeftUp += onClick;
                 mState = EState.ready;
-                mUI.setDirty(true);
-            }
-
-            private void showInit()
-            {
-                //get ready
-                mPrompt.visible = true;
-                showColorString((uint)EColorUtil.gold, "get ready?");
-                mLog.visible = false;
-                mRole.hide();
+                mRoot.setDirty(true);
             }
 
             int timeIDGenBonus = -1;
             public void start()
             {
-                Console.WriteLine("world.start");
                 mState = EState.gaming;
-                mRole.show();
-                mRole.start();
+                mMainRole.show();
+                mMainRole.start();
+                showColorHint();
 
                 timeIDGenBonus = TimerManager.get().setInterval(onTimerGenBonus, 300);
             }
@@ -165,29 +182,26 @@ namespace ns_YAUIUser
 
             void addBonus()
             {
-                Console.WriteLine("add bonus");
+                //Console.WriteLine("add bonus");
                 var bb = new bonusBlock();
-                var num = randRange(2, 1);
+                //var num = randRange(2, 1);
 
                 float xpos = (int)getLastBonusX();
-                Console.WriteLine("xpos:"+xpos);
+                //Console.WriteLine("xpos:"+xpos);
 
-                List<float> posYs = new List<float>();
-                for (int i = 0; i < num; ++i)
+                int blankIdx = randRange(ROW_BLOCKS-1, 1);
+                var ls = randList(9, 0);
+                for (int i = 0; i < world.ROW_BLOCKS; ++i)
                 {
-                    int y = randRange((int)mConstBonusMaxY, (int)mConstBonusMinY);
-                    //b.mUI.py
-                    bool tooClose = false;
-                    for (int j = 0; j < posYs.Count; ++j)
+                    if (i != blankIdx)
                     {
-                        if (Math.Abs(posYs[j] - y) < 90) { tooClose = true; break; }
+                        var b = new bonusNumber();
+                        b.setIdx(ls[i]);
+                        b.mUI.paresent = mUIRoles;
+                        b.mUI.px = xpos + mConstBonusIntervalX;
+                        b.mUI.py = (360 / ROW_BLOCKS) * i;
+                        bb.mBonus.Add(b);
                     }
-                    if (tooClose) continue;
-                    var b = bb.addNewBonus();
-                    b.mUI.paresent = mUI;
-                    b.mUI.px = xpos + mConstBonusIntervalX;
-                    b.mUI.py = y;
-                    posYs.Add(y);
                 }
 
                 mBonus.Enqueue(bb);
@@ -230,31 +244,19 @@ namespace ns_YAUIUser
                 }
             }
 
-            //结束画面
-            internal void showFail()
-            {
-                showWaring("you fail!");
-            }
-
             internal void showScore(int num)
             {
                 mScore.visible = true;
                 mScore.text = "score:" + num;
             }
 
-            internal void showWaring(string p)
+            public void showColorHint(string str="", uint p1=(uint)EColorUtil.gold)
             {
-                showColorString((uint)EColorUtil.red, p);
-            }
-
-            internal void showLog(string str)
-            {
-                mLog.visible = true;
-                mLog.text = str;
-            }
-
-            private void showColorString(uint p1, string str)
-            {
+                if (str == "")
+                {
+                    mPrompt.visible = false;
+                    return;
+                }
                 mPrompt.visible = true;
                 mPrompt.text = str;
                 mPrompt.textColor = p1;
@@ -263,17 +265,16 @@ namespace ns_YAUIUser
             internal void clean()
             {
                 UIRoot.Instance.evtLeftUp -= onClick;
-                UIRoot.Instance.evtLeftUp -= failToInit;
+                UIRoot.Instance.evtLeftUp -= endToWin;
                 mState = EState.invalid;
                 mPrompt.visible = false;
-                mLog.visible = false;
                 mScore.visible = false;
                 clearBonus();
-                if(mRole != null)
-                    mRole.clean();
+                if(mMainRole != null)
+                    mMainRole.clean();
                 TimerManager.get().clearTimer(timeIDGenBonus);
                 TimerManager.get().clearTimer(timeIDFailToInit);
-                UIRoot.Instance.evtLeftUp -= failToInit;
+                UIRoot.Instance.evtLeftUp -= endToWin;
             }
 
             private void clearBonus()
@@ -290,17 +291,23 @@ namespace ns_YAUIUser
                 mBonus.Clear();
             }
 
-            void failToInit(int x, int y)
+            void endToWin(int x, int y)
             {
-                UIRoot.Instance.evtLeftUp -= failToInit;
+                UIRoot.Instance.evtLeftUp -= endToWin;
                 init();
             }
 
             int timeIDFailToInit = -1;
             internal void fail()
             {
-                showFail();
-                timeIDFailToInit = TimerManager.get().setTimeout(t => UIRoot.Instance.evtLeftUp += failToInit, 1000);
+                showColorHint("You failed!", (uint)EColorUtil.red);
+                timeIDFailToInit = TimerManager.get().setTimeout(t => UIRoot.Instance.evtLeftUp += endToWin, 1000);
+            }
+
+            internal void win()
+            {
+                showColorHint("You win!", (uint)EColorUtil.goldenrod);
+                timeIDFailToInit = TimerManager.get().setTimeout(t => UIRoot.Instance.evtLeftUp += endToWin, 1000);
             }
         }
 
@@ -311,7 +318,8 @@ namespace ns_YAUIUser
             public move(int size)
             {
                 mUI = new UIRect(size, size);
-                mUI.name = "debug";
+                mLb = new UILabel();
+                mLb.paresent = mUI;
                 mUI.offsety = mUI.offsetx = 2;
             }
 
@@ -332,25 +340,16 @@ namespace ns_YAUIUser
                 mUI.py = y;
             }
 
-            UILabel mLb = null;
+            protected UILabel mLb = null;
 
             public string getText()
             {
                 return mLb.text;
             }
             
-            public void setText(string str, bool align=false)
+            public void setText(string str)
             {
-                if (mLb == null)
-                {
-                    mLb = new UILabel(str);
-                    mLb.paresent = mUI;
-                    if (align)
-                    {
-                        mLb.alignParesent = mLb.align = UIWidget.EAlign.center;
-                    }
-                }
-                else mLb.text = str;
+                mLb.text = str;
             }
 
             public void setTextColor(uint color)
@@ -378,14 +377,8 @@ namespace ns_YAUIUser
             {
                 mUI.paddingY = mUI.paddingX = 4;
                 mUI.shrinkAble = true;
-                //mLb.align = UIWidget.EAlign.center;
             }
 
-            public void setCenter()
-            {
-                mLb.align = UIWidget.EAlign.center;
-                mLb.alignParesent = UIWidget.EAlign.center;
-            }
         }
 
         class bonus : move
@@ -393,7 +386,9 @@ namespace ns_YAUIUser
             public bonus()
                 : base(32)
             {
-                setShink();
+                mLb.alignParesent = mLb.align = UIWidget.EAlign.center;
+                mUI.width = 64;
+                mUI.height = 360 / (float)world.ROW_BLOCKS;
             }
 
             public void hide()
@@ -407,6 +402,12 @@ namespace ns_YAUIUser
             public static int[] nums= new int[]{2, 4, 8, 16, 32, 64, 128, 256, 512, 1024};
 
             public int number = 0;
+            public void setIdx(int idx)
+            {
+                number = nums[idx];
+                setText(number.ToString());
+            }
+
             public bonusNumber(int num)
             {
                 number = num;
@@ -421,42 +422,6 @@ namespace ns_YAUIUser
             }
         }
 
-        class bonusOp : bonus
-        {
-            public static string[] ops = new string[] { "+", "-", "×", "÷" };
-            public enum EOP : int {plus=0, minus, mul, div }
-            public EOP mOp = EOP.plus;
-            public bonusOp(EOP op)
-            {
-                mOp = 0;
-                setText(ops[(int)op], true);
-            }
-
-            public bonusOp()
-            {
-                int r = world.randRange(3, 0);
-                mOp = (EOP)r;
-                setText(ops[r], true);
-            }
-
-            public static string opStringify(EOP op)
-            {
-                return ops[(int)op];
-            }
-
-            public static int calc(EOP op, int opr1, int opr2)
-            {
-                if (op == EOP.plus) { return opr1 + opr2; }
-                if (op == EOP.minus) { return opr1 - opr2; }
-                if (op == EOP.mul) { return opr1 * opr2; }
-                if (opr2 == 0)
-                    throw new GameExeption(GameExeption.EType.DivByZero);
-                if (opr1 % opr2 != 0)
-                    throw new GameExeption(GameExeption.EType.noExactDivision);
-                return opr1 / opr2;
-            }
-        }
-
         class GameExeption : Exception
         {
             public enum EType
@@ -465,6 +430,7 @@ namespace ns_YAUIUser
                 OperatorNow,
                 DivByZero,
                 noExactDivision,
+                noTheSameNumber,
             }
 
             public EType mType = EType.NumberNow;
@@ -472,82 +438,41 @@ namespace ns_YAUIUser
             {
                 mType = type;
             }
-
-            public override string Message 
-            {
-                get
-                {
-                    if (mType == EType.DivByZero)
-                    {
-                        return "Div by zero";
-                    }
-                    else if (mType == EType.noExactDivision)
-                    {
-                        return "无整除";
-                    }
-                    else if (mType == EType.NumberNow)
-                    {
-                        return "取得不是整数";
-                    }
-                    else if (mType == EType.OperatorNow)
-                    {
-                        return "取得不是操作符";
-                    }
-                    throw new Exception();
-                }
-            }
         }
 
-        class role : move
+        class mainRole : move
         {
-            public role(world w):base(48)
+            void setNumber(int number)
+            {
+                mResult = number;
+                setText(mResult.ToString());
+            }
+
+            public mainRole(world w):base(24)
             {
                 mWorld = w;
-                mUI.paresent = w.mUI;
+                mUI.paresent = w.mUIMainRole;
                 setNumber(2);
                 setShink();
             }
             world mWorld = null;
             
             string mExpr = "2";
-            int mResult = 0;
-            bonusOp.EOP mOp;
-            bool mNumberOrOp = true;
+            int mResult = 2;
             void appendNum(int number)
             {
-                if (mNumberOrOp) throw new GameExeption(GameExeption.EType.NumberNow);
+                if (number == mResult)
+                {
+                    mResult = mResult * 2;
+                    setText(mResult.ToString() );
+                }
                 else
                 {
-                    mResult = bonusOp.calc(mOp, mResult, number);
-                    mExpr = mExpr + number;
-                    setText(mResult+":"+mExpr);
-                    mNumberOrOp = true;
-
-                    mWorld.showScore(mResult);
+                    throw new GameExeption(GameExeption.EType.noTheSameNumber);
                 }
             }
 
-            void appendOp(bonusOp.EOP op)
-            {
-                if (!mNumberOrOp) throw new GameExeption(GameExeption.EType.OperatorNow);
-                else
-                {
-                    mOp = op;
-                    mExpr = mExpr + bonusOp.opStringify(op);
-                    setText(mResult + ":" + mExpr);
-                    mNumberOrOp = false;
-
-                    mWorld.showScore(mResult);
-                }
-            }
-
-            void setNumber(int number)
-            {
-                mNumberOrOp = true;
-                mResult = number;
-                setText(mResult.ToString());
-            }
-
+           
             void onKey(int kc, bool isC, bool isS)
             {
                     {
@@ -572,7 +497,7 @@ namespace ns_YAUIUser
                 mUI.px = mConstPx;
                 mUI.py = mConstPy;
                 setNumber(2);
-                setColor((uint)EColorUtil.green);
+                setColor((uint)EColorUtil.gold);
             }
 
             //const
@@ -630,19 +555,16 @@ namespace ns_YAUIUser
                                 {
                                     appendNum(bn.number);
                                 }
-                                else
+                               
+                                if (mResult == 32)
                                 {
-                                    bonusOp bo = bns as bonusOp;
-                                    if (bo != null)
-                                    {
-                                        appendOp(bo.mOp);
-                                    }
+                                    mState = EState.init;
+                                    mWorld.win();
                                 }
                             }
                             catch (GameExeption ge)
                             {
                                 falling();
-                                mWorld.showLog(ge.Message);
                             }
                             catch (Exception e)
                             {
@@ -774,12 +696,14 @@ namespace ns_YAUIUser
 
             public string title()
             {
-                return "GameDemo";
+                return "flappy 2048";
             }
 
             public string desc()
             {
-                return "Yet Another GAME";
+                return @"
+the game you know
+";
             }
 
 
@@ -787,12 +711,13 @@ namespace ns_YAUIUser
             {
                 mWorld = new world();
                 mWorld.init();
-                return mWorld.mUI;
+                return mWorld.mRoot;
             }
 
             public void lostAttach()
             {
-                return;
+                if (mWorld != null)
+                    mWorld.clean();
             }
         }
     }

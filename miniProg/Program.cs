@@ -73,7 +73,7 @@ namespace ns_YAMini
                 CSRepl.Instance.print("time1 is end");
             }, 1000);
 
-            ns_YAUtils.TimerManager.get().setInterval( t=>CSRepl.Instance.print("time2 in intervals at "+t), 500, 
+            ns_YAUtils.TimerManager.get().setInterval( (i,t)=>CSRepl.Instance.print("time2 in intervals at "+t), 500, 
                 t=>CSRepl.Instance.print("time2 is end at "+t), 3001);
         }
     }

@@ -264,53 +264,53 @@ namespace ns_YAUtils
         }
     };
 
-    class test
-    {
-        public void t1()
-        {
-            var t = new array<int>();
-            t.push(3);
-            t.push(4);
-            t.push(5);
-            Console.WriteLine("pop:" + t.pop());
-            Console.WriteLine("pop:" + t.pop());
-            Console.WriteLine("pop:" + t.pop());
-            Console.WriteLine("size:" + t.size());
+    //class test
+    //{
+    //    public void t1()
+    //    {
+    //        var t = new array<int>();
+    //        t.push(3);
+    //        t.push(4);
+    //        t.push(5);
+    //        Console.WriteLine("pop:" + t.pop());
+    //        Console.WriteLine("pop:" + t.pop());
+    //        Console.WriteLine("pop:" + t.pop());
+    //        Console.WriteLine("size:" + t.size());
 
-            t.push(300);
-            t.resize(100);
-            Debug.Assert(t.size() == 100);
+    //        t.push(300);
+    //        t.resize(100);
+    //        Debug.Assert(t.size() == 100);
 
 
-            for (int i = 0; i < 10000; ++i)
-            {
-                t.push(i + 1);
-            }
-            Debug.Assert(t.size() == 10100);
-            Console.WriteLine("size:" + t.size());
+    //        for (int i = 0; i < 10000; ++i)
+    //        {
+    //            t.push(i + 1);
+    //        }
+    //        Debug.Assert(t.size() == 10100);
+    //        Console.WriteLine("size:" + t.size());
 
-            t.resize(102);
-            Debug.Assert(t.size() == 102);
-            Console.WriteLine("size:" + t.size());
-            t.erase(100);
-            t.erase(1000);
-            Debug.Assert(t.size() == 101);
-            Console.WriteLine("size:" + t.size());
+    //        t.resize(102);
+    //        Debug.Assert(t.size() == 102);
+    //        Console.WriteLine("size:" + t.size());
+    //        t.erase(100);
+    //        t.erase(1000);
+    //        Debug.Assert(t.size() == 101);
+    //        Console.WriteLine("size:" + t.size());
 
-            t.resize(0);
-            t.push(3);
-            t.push(4);
-            t.push(5);
-            t.insert(0, 2);
-            t.insert(4, 6);
-            int i0 = t.at(0);
-            int i1 = t.find(3);
-            Console.WriteLine("size:" + t.size());
+    //        t.resize(0);
+    //        t.push(3);
+    //        t.push(4);
+    //        t.push(5);
+    //        t.insert(0, 2);
+    //        t.insert(4, 6);
+    //        int i0 = t.at(0);
+    //        int i1 = t.find(3);
+    //        Console.WriteLine("size:" + t.size());
 
-            foreach (var elem in t)
-            {
-                Console.WriteLine(elem);
-            }
-        }
-    }
+    //        foreach (var elem in t)
+    //        {
+    //            Console.WriteLine(elem);
+    //        }
+    //    }
+    //}
 }

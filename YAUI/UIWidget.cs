@@ -1,7 +1,7 @@
 ﻿/*
  * author: xiaofeng.li
  * mail: 453588006@qq.com
- * desc: 
+ * desc: the very basic of YAUI
  * */
 
 using System;

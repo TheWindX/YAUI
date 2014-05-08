@@ -1,7 +1,4 @@
-﻿
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +19,7 @@ namespace ns_YAUtils
                 int mid = (begin + end) / 2;
                 if (func(mid))
                 {
-                    subBinarySearch(mid, end, out idx, func);
+                    subBinarySearch(mid, end, out idx, func);//tail optimas, of couse
                 }
                 else
                 {

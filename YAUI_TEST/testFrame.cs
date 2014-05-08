@@ -267,8 +267,6 @@ namespace ns_YAUIUser
             initScheme();
             mRoot = UIRoot.Instance.root.appendFromXML(XMLLayout);
 
-            addInstance(new TestInstance3() );
-            addInstance(new TestInstance4() );
             addInstance(new testPrimarys());
             addInstance(new testTransform());
             addInstance(new testAlign());
@@ -298,7 +296,6 @@ namespace ns_YAUIUser
 
     public interface iTestInstance
     {
-
         ECategory category();
         string title();
         string desc();
@@ -306,60 +303,5 @@ namespace ns_YAUIUser
         void lostAttach(); //清理资源
     }
 
-    public class TestInstance3 : iTestInstance
-    {
-        public ECategory category()
-        {
-            return ECategory.demo;
-        }
-
-        public string title()
-        {
-            return "dtest1";
-        }
-
-        public string desc()
-        {
-            return "";
-        }
-
-        public UIWidget getAttach() //content to show
-        {
-            return null;
-        }
-
-        public void lostAttach() //清理资源
-        {
-            return;
-        }
-    }
-
-    public class TestInstance4 : iTestInstance
-    {
-        public ECategory category()
-        {
-            return ECategory.demo;
-        }
-
-        public string title()
-        {
-            return "dtest2";
-        }
-
-        public string desc()
-        {
-            return "";
-        }
-
-        public UIWidget getAttach() //content to show
-        {
-            return null;
-        }
-
-        public void lostAttach() //清理资源
-        {
-            return;
-        }
-    }
 }
 
