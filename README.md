@@ -1,27 +1,11 @@
-YAUI(Yeah Another implement of gUI)
-的实现了一套类似于html的 UI系统，但有着更好的排版系统(advance layout)，和简单性，提倡通过简单的矢量图形与排版系统构造可用的GUI——（不特意实现复杂控件)
-如：                   
-
-&lt;rect shrink='true' clip='*true' padding='5' fillColor='blue' layout='vertical'&gt;                                                                           
-    &lt;lable align='leftTop' text='标题'&gt;&lt;lable&gt;                                                                  
-    &lt;lable align='rightTop' text='x'&gt;&lt;lable&gt;                                                                  
-    &lt;llank length='30'&gt;lt;blank&gt;                                                                  
-    &lt;resizer length='512' clip='true'&gt;&lt;resizer&gt; 
-&lt;rect&gt;                         
-
-模拟绘制一个windows上标准的工具窗口.
-
-query & 事件绑定：
-root.childOfPath("button").evtOnLeftDown
-  += (ui, x, y)
-    =>print("i am touched");
-
-
-实现了可捡(pick, edit)图形的交互(除控件外的图形化object编辑.
-如:
-<round dragAble='true'></round>
-表示一个UI上可捡拖拽的圆
-
-
-YART
-目标是构造类型系统，在正在进行的YAUI的基础上图形化表示
+YAUI（Yet Another UI), 是一个新思路GUI系统, 它参考了一些其它UI(特别是html)的设计，和我的一些新思路：
+以下是它的特点:
+1. 较完备的layout, 我发觉GUI最麻烦和重要的部分，其实是排版和布局，我们看到的网页，复杂的编辑器界面，困难就在此;
+2. 我用控件模板和属性继承的提供类似css的功能;
+3. 基础性，组合性，并不直接提供高级控件(目前)，而是最基础的 stub, map, rect，lable(等基础绘制图元)，容易地组合出高级控件;
+4. 可捡图元对象和变换，这个可用于提供可视化对象的编辑功能，(比如说实现类似于Maya的 节点图，这是这个UI实现的最初动机);
+5. XML layout desc, 实用的query，消息绑定，因此UI的一般使用方法是，
+      var ui = UI.loadXML(strXML);                   //创建
+      UILabel lable = ui.findByID(id) as UILable;  //query
+      lable.text = "click me";                             //属性
+      lable.evtClick = ()=>print("i am touched!");//事件
