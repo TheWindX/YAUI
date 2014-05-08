@@ -12,9 +12,6 @@ YAUI（Yet Another UI), 是一个新思路GUI系统, 它参考了一些其它UI(
 5. XML layout desc, 实用的query，消息绑定，因此UI的一般使用方法是，
  
       var ui = UI.loadXML(strXML);                   //创建
-
       UILabel lable = ui.findByID(id) as UILable;  //query
-      
       lable.text = "click me";                             //属性
-      
       lable.evtClick = ()=>print("i am touched!");//事件
