@@ -33,7 +33,7 @@ namespace ns_YAUI
             this.mTextBox.ForeColor = System.Drawing.SystemColors.ActiveBorder;
             this.mTextBox.Location = new System.Drawing.Point(0, 0);
             this.mTextBox.Name = "mTextBox";
-            this.mTextBox.Size = new System.Drawing.Size(366, 37);
+            this.mTextBox.Size = new System.Drawing.Size(378, 31);
             this.mTextBox.TabIndex = 1;
             this.mTextBox.Click += new System.EventHandler(this.mTextBox_Click);
             this.mTextBox.KeyUp += new System.Windows.Forms.KeyEventHandler(this.mTextBox_KeyUp);
@@ -41,7 +41,7 @@ namespace ns_YAUI
             // UIInputForm
             // 
             this.BackColor = System.Drawing.Color.Maroon;
-            this.ClientSize = new System.Drawing.Size(390, 256);
+            this.ClientSize = new System.Drawing.Size(418, 340);
             this.ControlBox = false;
             this.Controls.Add(this.mTextBox);
             this.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -118,8 +118,8 @@ namespace ns_YAUI
             mTextBox.Text = "";
         }
 
-        public Action evtInputEnter = null;
-        public Action<string> evtInputExit = null;
+        public event Action evtInputEnter = null;
+        public event Action<string> evtInputExit = null;
 
         private void mTextBox_Click(object sender, EventArgs e)
         {

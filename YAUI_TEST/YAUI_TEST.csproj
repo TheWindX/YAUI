@@ -66,6 +66,7 @@
     <Compile Include="testUse.cs" />
     <Compile Include="testWindow.cs" />
     <Compile Include="YAGame.cs" />
+    <Compile Include="YAMM.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

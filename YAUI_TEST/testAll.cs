@@ -19,8 +19,8 @@ namespace ns_YAUIUser
         }
         public testAll()
         {
-            initScheme();
-            var test = testFrame.Instance;
+            //initScheme();
+            //var test = testFrame.Instance;
             //var test = testPrimarys.Instance; 
             //var test = testTransform.Instance;
             //var test = testHierarchy.Instance;
@@ -31,7 +31,7 @@ namespace ns_YAUIUser
             //var test = testScrolledMap.Instance;
             //var test = testLayout.Instance;
             //var test = testUse.Instance;
-            
+            var test = YAMM.Instance;
             //var _0 =  testDir.Instance;
             //var _1 = testRoundRect.Instance;
             

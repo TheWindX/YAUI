@@ -152,6 +152,26 @@ namespace ns_YAUI
             mPainter.Size = new Size(w, h);
             root.setDirty(true);
         }
+
+        public void setUICenter(UIWidget uiInRoot)
+        {
+            var sz = mPainter.Size;
+            var pt = root.invertTransform(new PointF(sz.Width/2, sz.Height/2));
+            uiInRoot.center = pt;
+        }
+
+        public void input(int x, int y, Action<string> continuous, int length=128)
+        {
+            UIInputForm.Instance.show(true, x, y, length, 16);
+            Action<string> handler = null;
+            handler = delegate(string str)
+                {
+                    Console.WriteLine("input");
+                    continuous(str);
+                    UIInputForm.Instance.evtInputExit -= handler;
+                };
+            UIInputForm.Instance.evtInputExit += handler;
+        }
         #endregion
 
         #region tips

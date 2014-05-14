@@ -16,15 +16,25 @@ namespace ns_YAUIUser
         {
             try
             {
-                var ui = UI.Instance.fromXML(@"
-<scrolledMap>
-    <div layout='horizon'>
-        <edit width='128' rows='3'></edit>
-        <!--label name='lb' link='true' text='下asdfasdfasdf划线，链asdfasdf接asdfasdfasdf文字控件，serasdfasdf' style='bold' color='red' maxLineWidth='256' size='12'></label-->
-    </div>
-</scrolledMap>
-");   
-                var lb = ui.findByPath("lb") as UILabel;
+                const string XMLLayout = @"
+<div location='30, 0' rectExclude='false' layout='horizon, shrink' dragAble='true'>
+        <round_rect rectExclude='false' layout='shrink' padding='0'>
+            <label text='template' name='label' margin='5'>
+            </label>
+            <round radius='8' align='left' alignParesent='right' name='subs' rectExclude='false'>
+                <label text='+' align='center' offset='2'></label>
+            </round>
+        </round_rect>
+</div>
+";
+        //UI.Instance.root.dragAble = false;
+        var ui = UI.Instance.fromXML(XMLLayout);
+        var subs = ui.findByPath("subs");
+        
+        var ui2 = UI.Instance.fromXML(XMLLayout, false);
+        ui2.paresent = subs;
+        
+        UI.Instance.flush();
                 //lb.link = true;
             }
             catch (XmlException e)

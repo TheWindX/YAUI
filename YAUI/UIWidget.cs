@@ -1098,7 +1098,7 @@ namespace ns_YAUI
             #endregion
         }
 
-        internal RectangleF? getChildrenOccupy()
+        public RectangleF? getChildrenOccupy()
         {
             RectangleF? ret = null;
             for (int i = mChildrent.Count - 1; i >= 0; --i)
@@ -1806,6 +1806,9 @@ namespace ns_YAUI
 
             strRet = tryGetProp("editMode", node);
 
+
+            testPickRectExclude = getProp(node, "rectExclude", testPickRectExclude, out br);
+
             if (strRet != null)
             {
                 var strs = strRet.Split(',').ToList();
@@ -1910,20 +1913,21 @@ namespace ns_YAUI
 
         public virtual bool testSelfPick(PointF pos)
         {
-            if (testRectPick)
+            if (testPickRectExclude)
                 return true;
             else
-                return false;//除非被改写
-        }
-
-
-        public virtual bool testRectPick
-        {
-            get
             {
-                return true;
+                var r = drawRect;
+                if (r.Contains(pos))
+                {
+                    return true;
+                }
+                return false;
             }
         }
+
+        //是否做矩形排除
+        protected bool testPickRectExclude = true;
 
         public bool doTestPick(PointF pos, out UIWidget ui, bool testEnable = true)
         {
@@ -1935,11 +1939,9 @@ namespace ns_YAUI
 
             var t = transformMatrix.Clone();
             t.Invert();
-            var ps = new PointF[] { pos };
-            t.TransformPoints(ps);
-            var newpos = ps[0];
+            var newpos = pos.transform(t);
 
-            if (testRectPick)
+            if (testPickRectExclude)
             {
                 var r = drawRect;
                 if (!r.Contains(newpos))

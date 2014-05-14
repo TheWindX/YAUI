@@ -15,7 +15,7 @@ namespace ns_YAUIUser
         <rect layout='expandX'> <!--  title  -->
             <div layout='horizon, shrink' align='left'>
                 <label text='YAUI' color='0xff545453' size='20'></label>
-                <label text='.com' color='0xff90c140' size='20' offsetX='-15'></label>
+                <label text='.demo' color='0xff90c140' size='20' offsetX='-15'></label>
             </div>
         </rect>
 

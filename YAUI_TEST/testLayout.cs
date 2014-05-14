@@ -84,10 +84,6 @@ namespace ns_YAUIUser
                 <label text='   金鳞岂是池中物' color='black' size='10'></label>
                 <label text='聂风:'></label>
                 <label text='   一遇风云便化龙' color='black' size='10'></label>
-                <label text='步惊云'></label>
-                <label text='   九霄龙吟惊天变' color='black' size='10'></label>
-                <label text='无名:'></label>
-                <label text='   还看我武林神话' color='black' size='10'></label>
             </rect>
         </rect>
     </div>

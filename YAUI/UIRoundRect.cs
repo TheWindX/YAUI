@@ -161,11 +161,6 @@ namespace ns_YAUI
             get { return "round_rect"; }
         }
 
-        public override bool testSelfPick(PointF pos)
-        {
-            return true;
-        }
-
         public override bool onDraw(Graphics g)
         {
             GraphicsPath p = new GraphicsPath();

@@ -23,6 +23,7 @@ namespace ns_YAUI
         {
             mColor = c;
             mBrush = new SolidBrush(Color.FromArgb((int)c));
+            testPickRectExclude = false;
         }
 
 
@@ -72,14 +73,6 @@ namespace ns_YAUI
         public override string typeName
         {
             get { return "map"; }
-        }
-
-        public override bool testRectPick
-        {
-            get
-            {
-                return false;
-            }
         }
 
         public override bool testSelfPick(PointF pos)

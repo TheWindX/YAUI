@@ -2,8 +2,8 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using ns_YAUI;
+
 namespace ns_YAUIUser
 {
     class bonusBlock
@@ -40,17 +40,15 @@ namespace ns_YAUIUser
         public UIWidget mUIx = null;
         public UIWidget mUIMainRole = null;
         public UIWidget mUIRoles = null;
-        const string XMLFrame = @"
-<rect color='black' clip='true' size='480,360'>
+        const string XMLFrame = @"<rect color='black' size='480,360'>
     <div name='roles'  enable='false'></div>
     <div name='mainRole' enable='false'></div>
     <div name='forground' layout='expand' enable='false'>
         <label name='prompt' text='Get Ready' color='gold' align='center' size='24' style='bold'></label>
         <label name='score' offset='12' color='gold' align='leftTop' size='12' style='bold'></label>
-        <label name='bestScore' text='' offsetX='0' offsetY='12' color='yellow' align='top' size='12' style='bold'></label>
+        <label name='bestScore' text='' offsetX='0' offsetY='12' color='gold' align='top' size='12' style='bold'></label>
     </div>
-</rect>
-";
+</rect>";
         mainRole mMainRole = null;
         public world()
         {
@@ -80,7 +78,6 @@ namespace ns_YAUIUser
         public bool onClick(UIWidget ui, int x, int y)
         {
             start();
-            Console.WriteLine("evtLeftUp -= onClick");
             mRoot.evtOnLMUp -= onClick;
             return false;
         }
@@ -90,13 +87,10 @@ namespace ns_YAUIUser
             clean();
             mMainRole.init();
             mMainRole.hide();
-
             mState = EState.ready;
             showColorHint("get ready?");
-            Console.WriteLine("evtLeftUp += onClick;");
             mRoot.evtOnLMUp += onClick;
             mState = EState.ready;
-            //(mRoot.paresent.paresent as UIWidget).setRenderRoot();
         }
         int timeIDGenBonus = -1;
         public void start()
@@ -107,32 +101,19 @@ namespace ns_YAUIUser
             showColorHint();
             timeIDGenBonus = TimerManager.get().setInterval(onTimerGenBonus, 300);
         }
-        int mConstBonusBlockMax = 5;
         void onTimerGenBonus(uint det, uint last)
         {
-            if (mBonus.Count == 0)
+            while (getLastBonusX() < 310)
             {
-                for (int i = 0; i < mConstBonusBlockMax; ++i)
-                {
-                    addBonus();
-                }
+                addBonus();
             }
-            else
+            while (getFirstBonusX() < -100)
             {
-                while (getLastBonusX() < 600)
-                {
-                    addBonus();
-                }
-                while (getFirstBonusX() < -100)
-                {
-                    removeBonus();
-                }
+                removeBonus();
             }
         }
         Queue<bonusBlock> mBonus = new Queue<bonusBlock>();
-        float mConstBonusMaxY = 300;
-        float mConstBonusMinY = 50;
-        float mConstBonusStartPosX = 300;
+        float mConstBonusStartPosX = 300;//起始
         float mConstBonusIntervalX = 200;
         float getLastBonusX()
         {
@@ -156,14 +137,24 @@ namespace ns_YAUIUser
         {
             var bb = new bonusBlock();
             float xpos = (int)getLastBonusX();
-            int blankIdx = randRange(ROW_BLOCKS - 1, 1);
             var ls = randList(9, 0);
+            int blankIdx = randRange(ROW_BLOCKS - 1, 1);
+            var upgradeIdx = randRange(ROW_BLOCKS-2, 0);
+            if (upgradeIdx == blankIdx) upgradeIdx = blankIdx + 1;
             for (int i = 0; i < world.ROW_BLOCKS; ++i)
             {
                 if (i != blankIdx)
                 {
                     var b = new bonusNumber();
-                    b.setIdx(ls[i]);
+                    if (i != upgradeIdx)
+                    {
+                        b.setIdx(ls[i]);
+                    }
+                    else
+                    {
+                        int curNum = mMainRole.mResult;
+                        b.setNumber(curNum);
+                    }
                     b.mUI.paresent = mUIRoles;
                     b.mUI.px = xpos + mConstBonusIntervalX;
                     b.mUI.py = (360 / ROW_BLOCKS) * i;
@@ -174,7 +165,6 @@ namespace ns_YAUIUser
         }
         void removeBonus()
         {
-            Console.WriteLine("removeBonus");
             var bb = mBonus.Dequeue();
             for (int i = 0; i < bb.mBonus.Count; ++i)
             {
@@ -194,9 +184,8 @@ namespace ns_YAUIUser
                 }
             }
         }
-        //向前飞，所有物体后行
-        float mConstVelX = 50;
-        float mVelX = 50;
+        float mConstVelX = 50/2;
+        float mVelX = 50/2;
         internal void moveForward(uint det, uint last)
         {
             var moves = getAllCollids();
@@ -230,8 +219,6 @@ namespace ns_YAUIUser
         }
         internal void clean()
         {
-            Console.WriteLine("evtLeftUp -= onClick;");
-            Console.WriteLine("evtLeftUp -= endToWin;");
             mRoot.evtOnLMUp -= onClick;
             mRoot.evtOnLMUp -= endToWin;
             mState = EState.invalid;
@@ -257,7 +244,6 @@ namespace ns_YAUIUser
         }
         bool endToWin(UIWidget ui, int x, int y)
         {
-            Console.WriteLine("evtLeftUp -= endToWin;");
             mRoot.evtOnLMUp -= endToWin;
             init();
             return false;
@@ -270,7 +256,6 @@ namespace ns_YAUIUser
             timeIDFailToInit = TimerManager.get().setTimeout(t => 
                 {
                     mRoot.evtOnLMUp += endToWin;
-                    Console.WriteLine("evtLeftUp += endToWin;");
                 }, 1000);
         }
         internal void win()
@@ -279,7 +264,6 @@ namespace ns_YAUIUser
             timeIDFailToInit = TimerManager.get().setTimeout(t =>
             {
                 mRoot.evtOnLMUp += endToWin;
-                //Console.WriteLine("evtLeftUp += endToWin;");
             }, 1000);
         }
     }
@@ -364,10 +348,21 @@ namespace ns_YAUIUser
             number = nums[idx];
             setText(number.ToString());
         }
+
         public bonusNumber(int num)
         {
-            number = num;
-            setText(num.ToString());
+            setNumber(num);
+        }
+
+        public void setNumber(int num)
+        {
+            try
+            {
+                int idxC = -1;
+                nums.First(n => { idxC++; return n == num; });
+                setIdx(idxC);
+            }
+            catch (Exception e){}
         }
         public bonusNumber()
         {
@@ -406,13 +401,15 @@ namespace ns_YAUIUser
         {
             mWorld = w;
             mUI.paresent = w.mUIMainRole;
+            mLb.textColor = (uint)EColorUtil.purple;
+            mLb.textStyle = EStyle.bold;
             setNumber(2);
             setShink();
         }
         world mWorld = null;
 
         string mExpr = "2";
-        int mResult = 2;
+        internal int mResult = 2;
         void appendNum(int number)
         {
             if (number == mResult)
@@ -426,13 +423,6 @@ namespace ns_YAUIUser
             {
                 throw new GameExeption(GameExeption.EType.noTheSameNumber);
             }
-        }
-
-        void onKey(int kc, bool isC, bool isS)
-        {
-            {
-                Console.WriteLine(kc);
-            };
         }
         bool onLMD(UIWidget ui, int x, int y)
         {
@@ -452,17 +442,14 @@ namespace ns_YAUIUser
             setNumber(2);
             setColor((uint)EColorUtil.gold);
         }
-        //const
-        float mConstPx = 100;//初始位置
+
+        float mConstPx = 100;//初始位置//const
         float mConstPy = 100;
         float mConstPyGround = 320;//地面高度，判断是否撞地
-
-        //控制飞行
-        //点击控制
-        float mConstUpV = -110;
+        float mConstUpV = -150/2;//向上速度
         bool mTap = false;
-        float mVelY = 0; //
-        float mAccY = 100;
+        float mVelY = 0; //mConstUpV
+        float mAccY = 200/2;//加速
         int flyingTimeID = -1;
         public void flyUp()
         {
@@ -485,8 +472,6 @@ namespace ns_YAUIUser
                 }
                 mWorld.moveForward(det, last);
                 calcFly(det, last);
-                //Console.WriteLine(mVelY);
-                //Console.WriteLine(last);
                 move collider = null;
                 if (checkCollid(out collider))
                 {
@@ -511,9 +496,6 @@ namespace ns_YAUIUser
                         catch (GameExeption ge)
                         {
                             falling();
-                        }
-                        catch (Exception e)
-                        {
                         }
                     }
                 }
@@ -550,8 +532,6 @@ namespace ns_YAUIUser
         }
         private void falling()
         {
-            Console.WriteLine("evtOnLMUp -= onLMD;");
-
             mWorld.mRoot.evtOnLMDown -= onLMD;
             mTap = false;
             mState = EState.falling;
@@ -580,7 +560,6 @@ namespace ns_YAUIUser
         }
         public void start()
         {
-            Console.WriteLine("evtOnLMDwon += onLMD;");
             mWorld.mRoot.evtOnLMDown += onLMD;
             mState = EState.flying;
             flyingTimeID = TimerManager.get().setInterval(onTimeFlying, 10);
@@ -593,7 +572,7 @@ namespace ns_YAUIUser
             dead,
         }
         EState mState = EState.init;
-        private float mConstFallenVel = 200;
+        private float mConstFallenVel = 200/2;
         private int mConstDest = 2048;
         public void fallen()
         {
@@ -612,7 +591,6 @@ namespace ns_YAUIUser
         {
             mTap = false;
             mExpr = "";
-            Console.WriteLine("evtOnLMDown -= onLMD;");
             mWorld.mRoot.evtOnLMDown -= onLMD;
             TimerManager.get().clearTimer(flyingTimeID);
         }
@@ -631,7 +609,7 @@ namespace ns_YAUIUser
         public string desc()
         {
             return @"
-you know
+the game you know
 ";
         }
         public ns_YAUI.UIWidget getAttach()

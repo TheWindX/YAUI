@@ -108,11 +108,6 @@ namespace ns_YAUI
             get { return "rect"; }
         }
 
-        public override bool testSelfPick(PointF pos)
-        {
-            return true;
-        }
-
         public override bool onDraw(Graphics g) 
         {
             g.FillRectangle(mBrush, 0, 0, _w, _h);

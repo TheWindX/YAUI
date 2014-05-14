@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 using ns_YAUtils;
 
-namespace ns_YART
+namespace ns_YAUtils
 {
     public abstract class InheriteBase
     {
@@ -53,6 +53,7 @@ namespace ns_YART
                 return true;
             }
             var ls = deriveFrom();
+            if (ls == null) return false;
             foreach (Type elem in ls)
             {
                 if (elem == t)

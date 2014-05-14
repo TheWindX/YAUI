@@ -17,17 +17,14 @@ namespace ns_YAUI
 {
     public class UIStub : UIWidget
     {
+        public UIStub()
+        {
+            testPickRectExclude = false;
+        }
+
         public override string typeName
         {
             get { return "stub"; }
-        }
-
-        public override bool testRectPick
-        {
-            get
-            {
-                return false;
-            }
         }
 
         public override RectangleF drawRect
