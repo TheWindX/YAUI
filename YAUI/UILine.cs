@@ -7,52 +7,42 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Xml;
 
-
 namespace ns_YAUI
 {
-    class UILine : UIWidget
+    public class UILine : UIWidget
     {
-        int _length = 0;
-        int _lineWidth = 0;
-        uint fcolor;
-        Brush mBrush;
-        bool mHorizen;
-        public UILine(int length, int lineWidth, uint fillcolor = 0xffffffff, bool horizon = true)
+        PointF mBegin = new PointF();
+        PointF mEnd = new PointF();
+
+        uint mColor;
+        Pen mPen;
+
+        //start
+        public void setBegin(float x, float y)
         {
-            mHorizen = horizon;
-            _length = length;
-            _lineWidth = lineWidth;
-            fcolor = fillcolor;
-            mBrush = new SolidBrush(Color.FromArgb((Int32)fcolor));
+            mBegin = new PointF(x, y);
         }
 
-        public void setFillColor(uint fill = 0xff888888)
+        //end
+        public void setEnd(float x, float y)
         {
-            fcolor = fill;
-            mBrush = new SolidBrush(Color.FromArgb((Int32)fcolor));
+            mEnd = new PointF(x, y);
         }
 
-        public int length
+        //override
+        public override float width
         {
             get
             {
-                return _length;
-            }
-            set
-            {
-                _length = value;
+                return Math.Abs(mEnd.X - mBegin.X);
             }
         }
 
-        public int lineWidth
+        public override float height
         {
             get
             {
-                return _lineWidth;
-            }
-            set
-            {
-                _length = value;
+                return Math.Abs(mEnd.Y - mBegin.Y);
             }
         }
 
@@ -60,10 +50,25 @@ namespace ns_YAUI
         {
             get
             {
-                if(mHorizen)
-                    return new RectangleF(0, -_lineWidth, _length, _lineWidth*2);
-                else
-                    return new RectangleF(-_lineWidth, 0, _lineWidth*2, _length);
+                float left, right, top, bottom = 0;
+                left = min(mBegin.X, mEnd.X);
+                top = min(mBegin.Y, mEnd.Y);
+                right = max(mBegin.X, mEnd.X);
+                bottom = max(mBegin.Y, mEnd.Y);
+                return new RectangleF(left, top, right - left, bottom - top);
+            }
+        }
+
+        public uint color
+        {
+            get
+            {
+                return mColor;
+            }
+            set
+            {
+                mColor = value;
+                mPen = new Pen(Color.FromArgb((Int32)mColor));
             }
         }
 
@@ -72,42 +77,54 @@ namespace ns_YAUI
             get { return "line"; }
         }
 
-        public override bool testSelfPick(PointF pos)
+        public override bool onDraw(Graphics g)
         {
+            g.DrawLine(mPen, mBegin, mEnd);
             return true;
         }
 
-        public override bool onDraw(Graphics g)
-        {
-            GraphicsPath p = new GraphicsPath();
-            p.AddRectangle(drawRect);
-            g.FillPath(mBrush, p);
-            return true;
-        }
+        
 
         public static XmlNodeList fromXML(XmlNode node, out UIWidget ui, UIWidget p)
         {
-            int length = 16;
-            uint color = 0xffffffff;
-            int lineWidth = 2;
-            bool horizon = true;
-            var ret = node.Attributes.GetNamedItem("length");
-            if (ret != null) length = ret.Value.castInt(16);
+            uint color = (uint)schemes.strokeColor;
+            bool br = true;
 
-            ret = node.Attributes.GetNamedItem("line_width");
-            if (ret != null) lineWidth = ret.Value.castInt(12);
+            color = (uint)getProp<EColorUtil>(node, "color", (EColorUtil)schemes.strokeColor, out br);
+            string strBegin = tryGetProp("begin", node);
+            PointF ptBegin = parsePt(strBegin);
 
-            ret = node.Attributes.GetNamedItem("color");
-            if (ret != null) color = ret.Value.castHex(0xffffffff);
+            string strEnd = tryGetProp("end", node);
+            PointF ptEnd = parsePt(strEnd);
 
-            ret = node.Attributes.GetNamedItem("horizon");
-            if (ret != null) horizon = ret.Value.castBool(true);
+            var uiLine = new UILine();
+            uiLine.setBegin(ptBegin.X, ptBegin.Y);
+            uiLine.setEnd(ptEnd.X, ptEnd.Y);
+            uiLine.color = color;
 
-            ui = new UILine(length, lineWidth, color, horizon);
-            ui.fromXML(node);
-            ui.paresent = p;
+            uiLine.fromXML(node);
 
+            ui = uiLine;
             return node.ChildNodes;
+        }
+
+        private static PointF parsePt(string strPt)
+        {
+            PointF ptRet = new PointF();
+            if (strPt == null) return ptRet;
+            var strs = strPt.Split(',').ToList();
+            var strs1 = new List<string>();
+            strs.ForEach(str => strs1.Add(str.Trim()));
+            int c = strs1.Count();
+            if (c > 0)
+            {
+                ptRet.Y = ptRet.X = strs1[0].castFloat();
+            }
+            if (c > 1)
+            {
+                ptRet.Y = strs1[1].castFloat();
+            }
+            return ptRet;
         }
     }
 }

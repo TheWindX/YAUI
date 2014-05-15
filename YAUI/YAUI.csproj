@@ -72,6 +72,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UILabel.cs" />
+    <Compile Include="UILine.cs" />
     <Compile Include="UIScrollMap.cs" />
     <Compile Include="UIMenu.cs" />
     <Compile Include="UIPainterForm.cs">
@@ -82,13 +83,13 @@
     <Compile Include="UI.cs" />
     <Compile Include="UIBlank.cs" />
     <Compile Include="UIEdit.cs" />
-    <Compile Include="UILine.cs" />
     <Compile Include="UIMap.cs" />
     <Compile Include="UIRect.cs" />
     <Compile Include="UIResizer.cs" />
     <Compile Include="UIRoot.cs" />
     <Compile Include="UIRound.cs" />
     <Compile Include="UIRoundRect.cs" />
+    <Compile Include="UIStraitLine.cs" />
     <Compile Include="UIStub.cs" />
     <Compile Include="UIArrow.cs" />
     <Compile Include="UITips.cs" />
@@ -122,11 +123,6 @@
       <Project>{a97ad18a-b2ee-44fb-becd-10496ec8fb1f}</Project>
       <Name>YAUtils</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="UIInputForm.resx">
-      <DependentUpon>UIInputForm.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

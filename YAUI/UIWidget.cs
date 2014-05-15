@@ -451,6 +451,17 @@ namespace ns_YAUI
             }
         }
 
+        public RectangleF getRetangleInParesent()
+        {
+            Matrix mtx = new Matrix();
+            if (mParesent != null)
+            {
+                mtx = (mParesent as UIWidget).transformMatrix;
+            }
+
+            return occupyRect.transform(mtx);
+        }
+
         public float borderX
         {
             get { return drawRect.Width; }
@@ -1142,7 +1153,16 @@ namespace ns_YAUI
                 return m;
             }
         }
-        
+
+        public Matrix invertTransformMatrix
+        {
+            get
+            {
+                var t = transformMatrix;
+                t.Invert();
+                return t;
+            }
+        }
         public void translate(int dx, int dy)
         {
             px += dx;

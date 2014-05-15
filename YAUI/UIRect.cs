@@ -95,14 +95,6 @@ namespace ns_YAUI
             _h = h;
         }
 
-        public override RectangleF drawRect
-        {
-            get
-            {
-                return new RectangleF(0, 0, _w, _h);
-            }
-        }
-
         public override string typeName
         {
             get { return "rect"; }
