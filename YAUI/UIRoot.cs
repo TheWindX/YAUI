@@ -471,6 +471,11 @@ namespace ns_YAUI
             mDirtyRoot = null;
         }
 
+        public void handleLDClick(int x, int y)
+        {
+            if (mEvtDoubleClick != null) mEvtDoubleClick(x, y);
+        }
+
         public void handleLeftDown(int x, int y)
         {
             if (evtLeftDown != null) evtLeftDown(x, y);

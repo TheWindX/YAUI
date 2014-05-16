@@ -204,7 +204,7 @@ namespace ns_YAUI
 
         public void setDepthTail()
         {
-            mDepth = mChildrent.Count + 1;
+            mDepth = mChildrent.Count + 20;
             sortSibling();
         }
 
@@ -916,6 +916,7 @@ namespace ns_YAUI
         public bool wrap = false;
         public bool layoutFilled = false;//最后一个layout的，填满
         //这个因与渲染的遍历次序不同,因此不能放到draw里
+        //TODO, need adjust before every draw?
         public virtual void adjustLayout()
         {
             if (!visible) return;
@@ -1429,11 +1430,14 @@ namespace ns_YAUI
             return;
         }
 
+        public Action<int, int> evtOnDragBegin = null;
         bool onDragBegin(UIWidget _this, int x, int y)
         {
             beginFixPoint((float)x, (float)y);
             //这个改变先后关系
             this.setDepthHead();
+
+            if (evtOnDragBegin != null) evtOnDragBegin(x, y);
 
             UIRoot.Instance.evtMove += onDragMove;
             UIRoot.Instance.evtLeftUp += onDragEnd;

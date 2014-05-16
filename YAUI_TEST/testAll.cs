@@ -32,6 +32,7 @@ namespace ns_YAUIUser
             //var test = testLayout.Instance;
             //var test = testUse.Instance;
             var test = YAMM.Instance;
+            //var test = testLine1.Instance;
             //var _0 =  testDir.Instance;
             //var _1 = testRoundRect.Instance;
             

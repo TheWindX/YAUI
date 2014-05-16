@@ -117,6 +117,7 @@ namespace ns_YAUI
                 mPainter.evtLeftUp += UIRoot.Instance.handleEvtLeftUp;
                 mPainter.evtRightDown += UIRoot.Instance.handleEvtRightDown;
                 mPainter.evtRightUp += UIRoot.Instance.handleEvtRightUp;
+                mPainter.evtDClick += UIRoot.Instance.handleLDClick;
                 mPainter.evtMove += UIRoot.Instance.handleEvtMove;
                 mPainter.evtOnWheel += UIRoot.Instance.handleEvtWheel;
                 mPainter.evtOnKey += UIRoot.Instance.handleEvtKey;
@@ -162,7 +163,7 @@ namespace ns_YAUI
 
         public void input(int x, int y, Action<string> continuous, int length=128)
         {
-            UIInputForm.Instance.show(true, x, y, length, 16);
+            UIInputForm.Instance.show(true, x, y, length, 32);
             Action<string> handler = null;
             handler = delegate(string str)
                 {
