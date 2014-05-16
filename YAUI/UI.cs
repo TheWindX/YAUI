@@ -183,18 +183,27 @@ namespace ns_YAUI
             root.setDirty(true);
         }
 
+        bool mOpen = false;
         public UITips setTips(string text = null)
         {
             if(text != null)
             {
                 mTips.text = text;
                 mTips.paresent = root;
-                UIRoot.Instance.evtMove += moveTipHandle;
+                if (!mOpen)
+                {
+                    mOpen = true;
+                    UIRoot.Instance.evtMove += moveTipHandle;
+                }
             }
             else
             {
                 mTips.paresent = null;
-                UIRoot.Instance.evtMove -= moveTipHandle;
+                if (mOpen)
+                {
+                    mOpen = false;
+                    UIRoot.Instance.evtMove -= moveTipHandle;
+                }
             }
             return mTips;
         }

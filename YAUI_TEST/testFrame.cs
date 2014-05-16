@@ -276,6 +276,7 @@ namespace ns_YAUIUser
             addInstance(new testMenu());
 
             addInstance(new YAGame());
+            addInstance(new YAMM());
             
             initCategory(ECategory.example);
             initCategory(ECategory.demo);

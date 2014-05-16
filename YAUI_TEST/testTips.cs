@@ -71,6 +71,8 @@ left click to toggle tips
             UI.Instance.root.evtOnLMUp -= toggle;
             UI.Instance.root.evtOnMMove -= moveHandler;
             UI.Instance.setTips(null);
+            UI.Instance.root.evtOnMMove -= moveHandler;
+            UI.Instance.root.evtOnLMUp -= toggle;
         }
     }
 

@@ -40,7 +40,7 @@ namespace ns_YAUIUser
         public UIWidget mUIx = null;
         public UIWidget mUIMainRole = null;
         public UIWidget mUIRoles = null;
-        const string XMLFrame = @"<rect color='black' size='480,360'>
+        const string XMLFrame = @"<rect color='black' clip='true' size='480,360'>
     <div name='roles'  enable='false'></div>
     <div name='mainRole' enable='false'></div>
     <div name='forground' layout='expand' enable='false'>

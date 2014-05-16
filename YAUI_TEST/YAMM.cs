@@ -22,10 +22,10 @@ namespace ns_YAUIUser
             <label color='white' text='template' name='label' margin='5'>
             </label>
             <round radius='8' align='left' fillColor='white' alignParesent='right' rectExclude='false' name='subs'>
-                <round radius='8' fillColor='white' align='center'></round>
-                <label text='+' color='black' align='center' offset='2'></label>
+                <round radius='8' fillColor='darkgray' align='center'></round>
+                <label text='+' color='white' align='center' offset='2'></label>
             </round>
-            <round name='end' fillColor='white' radius='4' align='right' alignParesent='left' rectExclude='false'>
+            <round name='end' fillColor='darkgray' radius='4' align='right' alignParesent='left' rectExclude='false'>
             </round>
         </round_rect>
 ";
@@ -426,7 +426,7 @@ namespace ns_YAUIUser
         }
     }
 
-    class YAMM : Singleton<YAMM>
+    class YAMM : iTestInstance
     {
         YAMMRootNode mRoot = null;
         YAMMNode mCurrent = null;
@@ -510,15 +510,16 @@ namespace ns_YAUIUser
             mCurrent = node;
             if (mCurrent != null) mCurrent.setChoose(true);
         }
-
-        public YAMM()
+        static public YAMM Instance = null;
+        public void initMM()
         {
             init();
             var ui = mRoot.cast<UIMM>();
-            UI.Instance.setUICenter(ui.mRoot);
-            ui.mRoot.px = 100;
+            ui.mRoot.px = 50;
+            ui.mRoot.py = 100;
             ui.mRoot.paresent = UI.Instance.root;
             test();
+            Instance = this;
         }
 
         public YAMMNode addNode(string name)
@@ -534,6 +535,7 @@ namespace ns_YAUIUser
         {
             node.cast<treeNode>().setParesent(null);
             node.cast<UIMM>().breakLink();
+            YAMM.Instance.mRoot.cast<UIMM>().rerangeChildren();
             UI.Instance.flush();
         }
 
@@ -542,23 +544,58 @@ namespace ns_YAUIUser
             var root = mCurrent;
             var n1 = addNode("topic1");
             var n2 = addNode("topic2");
-            var n3 = addNode("topic3");
+            //var n3 = addNode("topic3");
             setCurrent(n1);
             var n11 = addNode("sub_topic11");
-            var n12 = addNode("sub_topic12");
+            //var n12 = addNode("sub_topic12");
 
             setCurrent(n2);
             var n21 = addNode("sub_topic21");
             var n22 = addNode("sub_topic22");
 
-            setCurrent(n3);
-            var n31 = addNode("sub_topic31");
-            var n32 = addNode("sub_topic32");
+            //setCurrent(n3);
+            //var n31 = addNode("sub_topic31");
+            //var n32 = addNode("sub_topic32");
 
             setCurrent(root);
-            
-            
+            TimerManager.get().setTimeout(t =>
+                {
+                    root.cast<UIMM>().rerangeChildren();
+                    UI.Instance.flush();
+                }, 100);
+
             UI.Instance.flush();
+        }
+
+        ECategory iTestInstance.category()
+        {
+            return ECategory.demo;
+        }
+
+        string iTestInstance.title()
+        {
+            return "YAMM";
+        }
+
+        string iTestInstance.desc()
+        {
+            return @"yet another mind manager
+1. you can drag nodes;
+2. pick a node then 'insert(key)' to add;
+3. pick a node then 'del(key)' to remove;
+4. pick a node then 'left, right, up, down' to iterator nodes;
+5. double click to relayout;";
+        }
+
+        UIWidget iTestInstance.getAttach()
+        {
+            initMM();
+            return mCurrent.cast<UIMM>().mRoot;
+        }
+
+        void iTestInstance.lostAttach()
+        {
+            return;
         }
     }
 }
