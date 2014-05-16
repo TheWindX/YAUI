@@ -32,7 +32,9 @@ namespace ns_YAUI
         int mSz = 12;
         Font mFont;//todo, in font manager;
         uint mColor = 0xffffffff;
+        uint mLinkColor = 0xffffffff;
         Brush mBrush;
+        Brush mBrushLink;
 
         float mWidth = 0;
         float mHeight = 0;
@@ -40,6 +42,7 @@ namespace ns_YAUI
 
         float mLineWidthLimit = -1;
 
+        bool mBlink = false;
         public bool link
         {
             set
@@ -48,11 +51,13 @@ namespace ns_YAUI
                 {
                     evtOnEnter += () =>
                     {
+                        mBlink = true;
                         textStyle = textStyle | EStyle.underline;
                         setDirty(true);
                     };
                     evtOnExit += () =>
                     {
+                        mBlink = false;
                         textStyle = textStyle & ~EStyle.underline;
                         setDirty(true);
                     };
@@ -69,12 +74,13 @@ namespace ns_YAUI
 
         EStyle mStyle = EStyle.normal;
 
-        public UILabel(string t = "Template", int sz = 12, EStyle st = EStyle.normal, uint color = 0xffffffff, float maxLength = -1)
+        public UILabel(string t = "Template", int sz = 12, EStyle st = EStyle.normal, uint color = 0xffffffff, uint colorLink = 0xffffffff, float maxLength = -1)
         {
             mStyle = st;
             mSz = sz;
-            textColor = color;
             text = t;
+            textColor = color;
+            textColorLink = colorLink;
             mLineWidthLimit = maxLength;
             updateFont();
         }
@@ -136,6 +142,19 @@ namespace ns_YAUI
             {
                 mColor = value;
                 mBrush = new SolidBrush(Color.FromArgb((Int32)mColor));
+            }
+        }
+
+        public uint textColorLink
+        {
+            get
+            {
+                return mLinkColor;
+            }
+            set
+            {
+                mLinkColor = value;
+                mBrushLink = new SolidBrush(Color.FromArgb((Int32)mLinkColor));
             }
         }
 
@@ -209,10 +228,12 @@ namespace ns_YAUI
         public override bool onDraw(Graphics g)
         {
             float h = 0;
+            Brush brush = mBrush;
+            if (mBlink) brush = mBrushLink;
             for (int i = 0; i < mLines.Count; ++i)
             {
                 var line = mLines[i];
-                g.DrawString(line, mFont, mBrush, new PointF(0, h));
+                g.DrawString(line, mFont, brush, new PointF(0, h));
                 h += mLineheight + lineHeightGain;
             }
 
@@ -255,6 +276,7 @@ namespace ns_YAUI
             int size = 12;
             float maxLineWidth = -1;
             uint color = schemes.textColor;
+            uint colorLink = schemes.textColorLinked;
             EStyle style = EStyle.normal;
             bool br = false;
 
@@ -265,12 +287,18 @@ namespace ns_YAUI
             {
                 color = getProp(node, "color", (uint)(schemes.textColor), out br);
             }
+
+            colorLink = (uint)getProp<EColorUtil>(node, "linkColor", (EColorUtil)schemes.textColorLinked, out br);
+            if (!br)
+            {
+                colorLink = getProp(node, "linkColor", (uint)(schemes.textColorLinked), out br);
+            }
             style = getStyle(node);
 
             maxLineWidth = getProp(node, "maxLineWidth", maxLineWidth, out br);
             bool link = getProp(node, "link", false, out br);
 
-            ui = new UILabel(text, size, style, color, maxLineWidth);
+            ui = new UILabel(text, size, style, color, colorLink, maxLineWidth);
             (ui as UILabel).link = link;
             ui.fromXML(node);
             ui.paresent = p;

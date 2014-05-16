@@ -115,6 +115,8 @@ namespace ns_YAUI
             uint sc = (uint)schemes.strokeColor;
             bool br = true;
 
+            float lineWidth = (uint)getProp<float>(node, "lineWidth", 1, out br);
+
             fc = (uint)getProp<EColorUtil>(node, "color", (EColorUtil)schemes.fillColor, out br);
             if (!br)
             {
@@ -136,10 +138,16 @@ namespace ns_YAUI
             } 
             
             ui = new UIRect(w, h, sc, fc);
+            (ui as UIRect).setLineWidth(lineWidth);
             ui.fromXML(node);
             if(p != null)
                 ui.paresent = p;
             return node.ChildNodes;
+        }
+
+        public void setLineWidth(float lineWidth)
+        {
+            mPen.Width = lineWidth;
         }
     }
 }

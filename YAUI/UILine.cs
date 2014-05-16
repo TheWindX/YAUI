@@ -23,6 +23,11 @@ namespace ns_YAUI
             mBegin = new PointF(x, y);
         }
 
+        public void setLineWidth(float w)
+        {
+            mPen.Width = w;
+        }
+
         //end
         public void setEnd(float x, float y)
         {
@@ -90,6 +95,8 @@ namespace ns_YAUI
             uint color = (uint)schemes.strokeColor;
             bool br = true;
 
+            float lineWidth = (uint)getProp<float>(node, "lineWidth", 1, out br);
+
             color = (uint)getProp<EColorUtil>(node, "color", (EColorUtil)schemes.strokeColor, out br);
             string strBegin = tryGetProp("begin", node);
             PointF ptBegin = parsePt(strBegin);
@@ -98,6 +105,7 @@ namespace ns_YAUI
             PointF ptEnd = parsePt(strEnd);
 
             var uiLine = new UILine();
+            uiLine.setLineWidth(lineWidth);//must be under color
             uiLine.setBegin(ptBegin.X, ptBegin.Y);
             uiLine.setEnd(ptEnd.X, ptEnd.Y);
             uiLine.color = color;

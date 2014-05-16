@@ -17,7 +17,7 @@ namespace ns_YAUI
             shrinkAble = true;
             mBackGround.width = w;
             mBackGround.height = fontSz*lines+UILabel.lineHeightGain*(lines-1);
-            mLabel = new UILabel(bgText, fontSz, EStyle.normal, color, w);
+            mLabel = new UILabel(bgText, fontSz, EStyle.normal, color, color, w);
             
             this.evtOnLMDown += onClick;
             mBackGround.paresent = this;

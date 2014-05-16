@@ -25,23 +25,23 @@ namespace ns_YAUIUser
         </rect>
 
         <rect layout='horizon, filled' height='32'> <!--  tab & content -->
-            <round_rect margin='4' layout='vertical, expandY' width='128' id='contents'> <!--  contents -->
+            <round_rect lineWidth='2' margin='4' layout='vertical, expandY' width='128' id='contents'> <!--  contents -->
             </round_rect>
-            <round_rect margin='4' layout='vertical, filled'> <!--  content -->
+            <round_rect lineWidth='2' margin='4' layout='vertical, filled'> <!--  content -->
                 <label size='20' color='0x{0:x}' id='title'></label> <!--  content title-->
                 <div layout='horizon, shrink' height='32'> <!--  prev/next -->
                     <rect layout='expandY' width='96' margin='*4' id='pre'>
                         <triangle forward='left' align='left' length='6' color='black'></triangle>
-                        <label link='true' text='prev' align='center' color='0x{0:x}'></label>
+                        <label link='true' xlinkColor='0xff8ac007' text='prev' align='center' color='0x{0:x}'></label>
                     </rect>
                     <rect layout='expandY' width='96' id='next'>
                         <triangle forward='left' align='left' length='6' color='black'></triangle>
-                        <label link='true' text='next' align='center' color='0x{0:x}'></label>
+                        <label link='true' xlinkColor='0xff8ac007' text='next' align='center' color='0x{0:x}'></label>
                     </rect>
                 </div>
                 <label margin='4' id='desc' color='0x{0:x}' size='10'></label> <!-- desc -->
                 
-                <rect margin='8'>
+                <rect id='clientBG' margin='8' color='black'>
                     <scrolledMap id='client' expand='true' clip='true'>
                     </scrolledMap>
                 </rect>
@@ -51,6 +51,12 @@ namespace ns_YAUIUser
 ", colorFontNormal);
         const uint colorFontMark = 0xff8ac007;
         const uint colorFontNormal = 0xff545453;
+
+        void setClientColor(uint col)
+        {
+            var ui = mRoot.findByPath("clientBG");
+            (ui as UIRect).fillColor = col;
+        }
 
         List<iTestInstance> mExampleInstance = new List<iTestInstance>();
         Dictionary<iTestInstance, UIWidget> mExample2Contents = new Dictionary<iTestInstance, UIWidget>();

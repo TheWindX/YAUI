@@ -12,6 +12,7 @@ namespace ns_YAUI
         public static uint strokeColor = (uint)EColorUtil.lightgray;
         public static uint fillColor = (uint)EColorUtil.darkgray;
         public static uint textColor = (uint)EColorUtil.white;
+        public static uint textColorLinked = (uint)EColorUtil.skyblue;
 
         public static uint foregroundColor = (uint)EColorUtil.white;
         public static uint backgroundColor = (uint)EColorUtil.silver;

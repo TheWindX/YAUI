@@ -1490,7 +1490,10 @@ namespace ns_YAUI
         void onRotateMove(int delta)
         {
             beginFixPoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
-            direction += delta * 0.2f;
+            if(delta > 0)
+                direction += 15;
+            else
+                direction -= 15;
             updateFixPoint(UIRoot.Instance.cursorX, UIRoot.Instance.cursorY);
             setDirty(true);
             return;

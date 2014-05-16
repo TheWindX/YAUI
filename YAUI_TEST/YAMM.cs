@@ -18,14 +18,14 @@ namespace ns_YAUIUser
 
         //rect exclude is used for when children is outside of paresent pick rect
         const string XMLLayout = @"
-        <round_rect strokeColor='*white' fillColor='*silver' rectExclude='false' layout='shrink' padding='0' dragAble='true'>
+        <round_rect strokeColor='*white' fillColor='*dimgray' rectExclude='false' layout='shrink' padding='0' dragAble='true'>
             <label color='white' text='template' name='label' margin='5'>
             </label>
-            <round radius='8' align='left' fillColor='white' alignParesent='right' rectExclude='false' name='subs'>
-                <round radius='8' fillColor='darkgray' align='center'></round>
+            <round radius='8' align='left' fillColor='dimgray' alignParesent='right' rectExclude='false' name='subs'>
+                <round radius='8' fillColor='dimgray' align='center'></round>
                 <label text='+' color='white' align='center' offset='2'></label>
             </round>
-            <round name='end' fillColor='darkgray' radius='4' align='right' alignParesent='left' rectExclude='false'>
+            <round name='end' fillColor='gold' radius='4' align='right' alignParesent='left' rectExclude='false'>
             </round>
         </round_rect>
 ";
@@ -48,10 +48,12 @@ namespace ns_YAUIUser
             };
 
             mline1 = new UILine();//line1
-            mline1.color = (uint)EColorUtil.silver;
+            mline1.color = (uint)EColorUtil.dimgray;
+            mline1.setLineWidth(2);
 
             mline2 = new UILine();
-            mline2.color = (uint)EColorUtil.silver;
+            mline2.color = (uint)EColorUtil.dimgray;
+            mline2.setLineWidth(2);
 
             mRoot.evtOnDragMove += (x, y) =>
                 {
@@ -105,8 +107,8 @@ namespace ns_YAUIUser
             (mRoot.findByPath("label") as UILabel).text = text;
         }
         const float mConstYInterval = 40;
-        const float mConstXoffset = 20;
-        const float mConstYoffset = -15;
+        const float mConstXoffset = 30;
+        const float mConstYoffset = -17;
         RectangleF getRect()
         {
             return mRoot.getRetangleInParesent();
@@ -364,12 +366,12 @@ namespace ns_YAUIUser
             var ui = cast<UIMM>();
             var rc = ui.mRoot as UIRoundRect;
             if (p)
-            {   
-                rc.fillColor = (uint)EColorUtil.red;
+            {
+                rc.fillColor = (uint)EColorUtil.darkkhaki;
             }
             else
             {
-                rc.fillColor = (uint)EColorUtil.silver;
+                rc.fillColor = (uint)EColorUtil.dimgray;
             }
         }
 
@@ -391,9 +393,17 @@ namespace ns_YAUIUser
             UIMM ui = cast<UIMM>();
             var subs = ui.mRoot.findByPath("subs");
             if (mExpandOpen)
-                (subs.findByTag("label") as UILabel).text = "+";
+            {
+                var lb = (subs.findByTag("label") as UILabel);
+                lb.text = "+";
+                lb.offsety = lb.offsetx = 2;
+            }
             else
-                (subs.findByTag("label") as UILabel).text = "-";
+            {
+                var lb = (subs.findByTag("label") as UILabel);
+                lb.text = "—";
+                lb.offsety = lb.offsetx = 0;
+            }
             treeNode tn = cast<treeNode>();
             var cs = tn.children().ToArray();
             for (int i = 0; i < cs.Length; ++i)
@@ -516,7 +526,7 @@ namespace ns_YAUIUser
             init();
             var ui = mRoot.cast<UIMM>();
             ui.mRoot.px = 50;
-            ui.mRoot.py = 100;
+            ui.mRoot.py = 256;
             ui.mRoot.paresent = UI.Instance.root;
             test();
             Instance = this;
@@ -547,7 +557,7 @@ namespace ns_YAUIUser
             //var n3 = addNode("topic3");
             setCurrent(n1);
             var n11 = addNode("sub_topic11");
-            //var n12 = addNode("sub_topic12");
+            var n12 = addNode("sub_topic12");
 
             setCurrent(n2);
             var n21 = addNode("sub_topic21");
@@ -579,7 +589,7 @@ namespace ns_YAUIUser
 
         string iTestInstance.desc()
         {
-            return @"yet another mind manager
+            return @"   Yet Another Mind Manager
 1. you can drag nodes;
 2. pick a node then 'insert(key)' to add;
 3. pick a node then 'del(key)' to remove;

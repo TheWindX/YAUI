@@ -253,9 +253,17 @@ namespace ns_YAUI
             corners[3] = getProp(node, "leftBottomCorner", true, out br);
 
             ui = new UIRoundRect(w, h, r, corners, sc, fc);
+            float lineWidth = getProp(node, "lineWidth", 1, out br);
+            (ui as UIRoundRect).setLineWidth(lineWidth);
+
             ui.fromXML(node);
             ui.paresent = p;
             return node.ChildNodes;
+        }
+
+        public void setLineWidth(float lineWidth)
+        {
+            mPen.Width = lineWidth;
         }
     }
 }
