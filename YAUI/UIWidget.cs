@@ -1196,8 +1196,6 @@ namespace ns_YAUI
         //public delegate bool EvtMouse(UIWidget _this, int x, int y);
         //public delegate bool EvtKeyboard(UIWidget _this, int kc, bool isControl, bool isShift);
         //public delegate void EvtSizeChanged(UIWidget _this, int w, int h);
-
-
         public event EvtMouse evtOnMMove;
         public void evtOnMMoveClear()
         {
