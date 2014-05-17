@@ -1963,6 +1963,11 @@ namespace ns_YAUI
                 ui = null;
                 return false;
             }
+            if (!visible)
+            {
+                ui = null;
+                return false;
+            }
 
             var t = transformMatrix.Clone();
             t.Invert();

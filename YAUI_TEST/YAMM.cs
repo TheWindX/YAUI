@@ -23,7 +23,7 @@ namespace ns_YAUIUser
             </label>
             <round radius='6' align='left' fillColor='dimgray' alignParesent='right' rectExclude='false' name='subs'>
                 <round radius='6' fillColor='dimgray' align='center'></round>
-                <label text='—' size='10' color='white' align='center' offsetX='1' offsetY='-1'></label>
+                <label text='—' size='10' color='white' align='center' offsetX='1' offsetY='-2'></label>
             </round>
             <round name='end' fillColor='gold' radius='4' align='right' alignParesent='left' rectExclude='false'>
             </round>
@@ -396,15 +396,15 @@ namespace ns_YAUIUser
             {
                 var lb = (subs.findByTag("label") as UILabel);
                 lb.text = "—";
-                lb.offsety = -1;
+                lb.offsety = -2;
                 lb.offsetx = 1;
             }
             else
             {
                 var lb = (subs.findByTag("label") as UILabel);
                 lb.text = "+";
-                lb.offsety = lb.offsetx = 2;
-                lb.offsetx = 3;
+                lb.offsety = lb.offsetx = 0;
+                lb.offsetx = 2;
             }
             treeNode tn = cast<treeNode>();
             var cs = tn.children().ToArray();
@@ -414,18 +414,6 @@ namespace ns_YAUIUser
                 c.cast<UIMM>().show(mExpandOpen);
             }
         }
-
-        //public void rerangeChildren()
-        //{
-        //    treeNode tn = cast<treeNode>();
-        //    var cs = tn.children();
-        //    for (int i = 0; i < cs.Count; ++i)
-        //    {
-        //        var c = cs[i];
-        //        var cui = c.cast<UIMM>();
-        //        cui.mRectangle;mRectangle
-        //    }
-        //}
     }
 
     class YAMMRootNode : ns_YAUtils.InheriteBase

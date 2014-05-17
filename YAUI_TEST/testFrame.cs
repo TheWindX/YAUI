@@ -12,11 +12,12 @@ namespace ns_YAUIUser
     {
         string XMLLayout = string.Format(@"
     <resizer scale='0.9' location='24' layout='vertical, filled' size='700, 768' editMode='dragAble, rotateAble, scaleAble' color='0xfff1f1f1'> <!--  root  -->
-        <rect layout='expandX'> <!--  title  -->
+        <rect layout='expandX,'> <!--  title  -->
             <div layout='horizon, shrink' align='left'>
                 <label text='YAUI' color='0xff545453' size='20'></label>
                 <label text='.demo' color='0xff90c140' size='20' offsetX='-15'></label>
             </div>
+            <label id='about' text='about' style='underline' link='true' align='right' color='0xff90c140' marginX='6'></label>
         </rect>
 
         <rect layout='horizon, expandX' height='32' color='0xffd3d3d3'> <!--  example & demo  tab-->
@@ -47,6 +48,13 @@ namespace ns_YAUIUser
                 </rect>
             </round_rect>
         </rect>
+        <round_rect visible='false' id='aboutPage' size='384, 128' offsetY='0' strokeColor='transparent' color='0xff000000' align='rightTop'>
+            <label name='url' text='https://github.com/TheWindX/YAUI' style='underline' color='0xff90c140' align='center' rectExclude='false'>
+                <!--label text='Yet Another gUI' offsetY='-30' align='center'></label-->
+                <label text='453588006@qq.com' offsetY='30' align='center'></label>
+            </label>
+            <label name='close' text='X' style='bold' color='0xff90c140' align='rightTop'></label>
+        </round_rect>
     </resizer>
 ", colorFontNormal);
         const uint colorFontMark = 0xff8ac007;
@@ -130,17 +138,68 @@ namespace ns_YAUIUser
             };
         }
 
-        void initCategory(ECategory cate)
+        int mTimeIDAboutPage = -1;
+        bool mFadeIn = true;
+        void initFrame()
         {
+            UILabel lbAbout = mRoot.findByID("about") as UILabel;
+            UIRoundRect rrAbout = mRoot.findByID("aboutPage") as UIRoundRect;
+            UILabel lbClose = mRoot.findByPath("close") as UILabel;
+
+            UILabel lbURl = rrAbout.findByPath("url") as UILabel;
+            UILabel lbAuth = lbURl.findByTag("label") as UILabel;
+
+            Action<uint, uint> fade = (det, last) =>
+            {
+                rrAbout.visible = true;
+                float rate = ((float)last / 500);
+                if (rate > 1) rate = 1;
+                if (!mFadeIn) rate = 1 - rate;
+                uint color = (uint)(0x1000000 * (uint)(256 * rate));
+                rrAbout.fillColor = color;
+                lbClose.textColor = color + 0x0090c140;
+                lbURl.textColor = color + 0x0090c140;
+                lbAuth.textColor = color + 0x004f4f4f;
+
+                UI.Instance.flush();
+            };
+
+            lbAbout.evtOnLMUp += (ui, x, y) =>
+            {
+                if (mTimeIDAboutPage != -1) return false;
+                mTimeIDAboutPage = TimerManager.get().setInterval(fade, 20, t => { mFadeIn = !mFadeIn; mTimeIDAboutPage = -1; UI.Instance.flush(); }, 500);
+                return false;
+            };
+
+            lbClose.evtOnLMUp += (ui, x, y) =>
+            {
+                if (mTimeIDAboutPage != -1) return false;
+                mTimeIDAboutPage = TimerManager.get().setInterval(fade, 20, t => { mFadeIn = !mFadeIn; mTimeIDAboutPage = -1; rrAbout.visible = false; UI.Instance.flush(); }, 500);
+
+                return false;
+            };
+
+            lbURl.evtOnLMUp += (ui, x, y) =>
+            {
+                System.Diagnostics.Process.Start(lbURl.text);
+                return false;
+            };
+
+            lbAuth.evtOnLMUp += (ui, x, y) =>
+            {
+                System.Diagnostics.Process.Start("mailto:" + lbAuth.text);
+                return false;
+            };
+
             UILabel lbExample = mRoot.findByID("example") as UILabel;
             UILabel lbDemo = mRoot.findByID("demo") as UILabel;
 
             lbExample.evtOnLMUpClear();
             lbExample.evtOnLMUp += (ui, x, y) =>
-                {
-                    setCategory(ECategory.example);
-                    return false;
-                };
+            {
+                setCategory(ECategory.example);
+                return false;
+            };
 
             lbDemo.evtOnLMUpClear();
             lbDemo.evtOnLMUp += (ui, x, y) =>
@@ -148,7 +207,9 @@ namespace ns_YAUIUser
                 setCategory(ECategory.demo);
                 return false;
             };
-
+        }
+        void initCategory(ECategory cate)
+        {
             List<iTestInstance> contents = null;
             Dictionary<iTestInstance, UIWidget> content2ui = null;
             mCurrentCategory = cate;
@@ -283,7 +344,8 @@ namespace ns_YAUIUser
 
             addInstance(new YAGame());
             addInstance(new YAMM());
-            
+
+            initFrame();
             initCategory(ECategory.example);
             initCategory(ECategory.demo);
             initPreNext();

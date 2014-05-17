@@ -255,16 +255,16 @@ namespace ns_YAUIUser
             showColorHint("You failed!", (uint)EColorUtil.red);
             timeIDFailToInit = TimerManager.get().setTimeout(t => 
                 {
-                    mRoot.evtOnLMUp += endToWin;
-                }, 1000);
+                    endToWin(null, 0, 0);
+                }, 500);
         }
         internal void win()
         {
             showColorHint("You win!", (uint)EColorUtil.goldenrod);
             timeIDFailToInit = TimerManager.get().setTimeout(t =>
             {
-                mRoot.evtOnLMUp += endToWin;
-            }, 1000);
+                endToWin(null, 0, 0);
+            }, 500);
         }
     }
     class move

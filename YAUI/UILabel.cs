@@ -52,13 +52,14 @@ namespace ns_YAUI
                     evtOnEnter += () =>
                     {
                         mBlink = true;
+                        mStyleBack = textStyle;
                         textStyle = textStyle | EStyle.underline;
                         setDirty(true);
                     };
                     evtOnExit += () =>
                     {
                         mBlink = false;
-                        textStyle = textStyle & ~EStyle.underline;
+                        textStyle = mStyleBack;
                         setDirty(true);
                     };
                 }
@@ -66,17 +67,19 @@ namespace ns_YAUI
                 {
                     evtOnEnterClear();
                     evtOnExitClear();
-                    textStyle = textStyle & ~EStyle.underline;
+                    textStyle = mStyleBack;
                     setDirty(true);
                 }
             }
         }
 
+        EStyle mStyleBack = EStyle.normal;
         EStyle mStyle = EStyle.normal;
 
         public UILabel(string t = "Template", int sz = 12, EStyle st = EStyle.normal, uint color = 0xffffffff, uint colorLink = 0xffffffff, float maxLength = -1)
         {
             mStyle = st;
+            mStyleBack = st;
             mSz = sz;
             text = t;
             textColor = color;
