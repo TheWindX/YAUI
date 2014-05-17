@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ns_YAUIUser</RootNamespace>
-    <AssemblyName>YAUIUser</AssemblyName>
+    <AssemblyName>YAUI_DEMO</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -73,9 +73,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\YAUI\YAUI.csproj">
+    <ProjectReference Include="..\YAUI\YAUIDLL.csproj">
       <Project>{44a65251-f8ff-44bf-be47-40482f28e11d}</Project>
-      <Name>YAUI</Name>
+      <Name>YAUIDLL</Name>
     </ProjectReference>
     <ProjectReference Include="..\YAUtils\YAUtils.csproj">
       <Project>{a97ad18a-b2ee-44fb-becd-10496ec8fb1f}</Project>

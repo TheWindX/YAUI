@@ -1,11 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAUI", "YAUI\YAUI.csproj", "{44A65251-F8FF-44BF-BE47-40482F28E11D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAUtils", "YAUtils\YAUtils.csproj", "{A97AD18A-B2EE-44FB-BECD-10496EC8FB1F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAUI_DEMO", "YAUI_DEMO\YAUI_DEMO.csproj", "{0A161930-181C-4757-BD94-3D3B32F47B29}"
+	ProjectSection(ProjectDependencies) = postProject
+		{44A65251-F8FF-44BF-BE47-40482F28E11D} = {44A65251-F8FF-44BF-BE47-40482F28E11D}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAUIDLL", "YAUI\YAUIDLL.csproj", "{44A65251-F8FF-44BF-BE47-40482F28E11D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +20,6 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|x64.ActiveCfg = Release|Any CPU
-		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|x86.ActiveCfg = Release|Any CPU
 		{A97AD18A-B2EE-44FB-BECD-10496EC8FB1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A97AD18A-B2EE-44FB-BECD-10496EC8FB1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A97AD18A-B2EE-44FB-BECD-10496EC8FB1F}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -41,6 +36,14 @@ Global
 		{0A161930-181C-4757-BD94-3D3B32F47B29}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0A161930-181C-4757-BD94-3D3B32F47B29}.Release|x64.ActiveCfg = Release|Any CPU
 		{0A161930-181C-4757-BD94-3D3B32F47B29}.Release|x86.ActiveCfg = Release|Any CPU
+		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|x64.ActiveCfg = Release|Any CPU
+		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
