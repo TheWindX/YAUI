@@ -76,8 +76,8 @@ namespace ns_YAUIUser
             </rect>
             <rect layout='horizon, expandX' height='32' padding='4' clip='true' color='0xffced6dd'>
                 <label text='A' color='blue' style='*bold'></label>                
-                <label text='☺' size='18' offsetY='-8' color='yellow'></label>
-                <label text='♪' color='red'></label>
+                <label text='☺' size='18' offsetX='2' offsetY='-3' color='seagreen'></label>
+                <label text='♪' color='red' offsetX='-6' offsetY='1'></label>
             </rect>
             <rect layout='vertical, expandX' clip='true' padding='4' color='white' id='chat'>
                 <label text='楚楚:' color='*blue'></label>

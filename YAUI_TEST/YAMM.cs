@@ -21,9 +21,9 @@ namespace ns_YAUIUser
         <round_rect strokeColor='*white' fillColor='*dimgray' rectExclude='false' layout='shrink' padding='0' dragAble='true'>
             <label color='white' text='template' name='label' margin='5'>
             </label>
-            <round radius='8' align='left' fillColor='dimgray' alignParesent='right' rectExclude='false' name='subs'>
+            <round radius='8' scale='0.8' align='left' fillColor='dimgray' alignParesent='right' rectExclude='false' name='subs'>
                 <round radius='8' fillColor='dimgray' align='center'></round>
-                <label text='+' color='white' align='center' offset='2'></label>
+                <label text='—' color='white' align='center' offsetX='2' offsetY='-1'></label>
             </round>
             <round name='end' fillColor='gold' radius='4' align='right' alignParesent='left' rectExclude='false'>
             </round>
@@ -49,11 +49,11 @@ namespace ns_YAUIUser
 
             mline1 = new UILine();//line1
             mline1.color = (uint)EColorUtil.dimgray;
-            mline1.setLineWidth(2);
+            mline1.setLineWidth(3);
 
             mline2 = new UILine();
             mline2.color = (uint)EColorUtil.dimgray;
-            mline2.setLineWidth(2);
+            mline2.setLineWidth(3);
 
             mRoot.evtOnDragMove += (x, y) =>
                 {
@@ -395,14 +395,16 @@ namespace ns_YAUIUser
             if (mExpandOpen)
             {
                 var lb = (subs.findByTag("label") as UILabel);
-                lb.text = "+";
-                lb.offsety = lb.offsetx = 2;
+                lb.text = "—";
+                lb.offsety = -1;
+                lb.offsetx = 2;
             }
             else
             {
                 var lb = (subs.findByTag("label") as UILabel);
-                lb.text = "—";
-                lb.offsety = lb.offsetx = 0;
+                lb.text = "+";
+                lb.offsety = lb.offsetx = 2;
+                lb.offsetx = 3;
             }
             treeNode tn = cast<treeNode>();
             var cs = tn.children().ToArray();
