@@ -30,7 +30,6 @@ demo
 ----
 [download][1]
 
-![demo pic][2]
 ![demo pic][21]
 ![demo pic][3]
 ![demo pic][4]
