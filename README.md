@@ -31,6 +31,7 @@ demo
 [download][1]
 
 ![demo pic][2]
+![demo pic][21]
 ![demo pic][3]
 ![demo pic][4]
 ![demo pic][5]
@@ -68,6 +69,7 @@ me
 > 453588006@qq.com
 [1]:https://raw.githubusercontent.com/TheWindX/YAUI/master/demo.zip
 [2]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo2.png
+[21]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo21.png
 [3]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo3.png
 [4]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo4.png
 [5]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo5.png
