@@ -40,6 +40,8 @@ demo
 todo list
 ----
 - more feathers, 位图支持, 渐变色填充，xml定义控件，预置控件(window style)...
+- 修改dirty rect 实现, 优化;
+- (visula) runtime, demo.
 - 渲染支持，render by cairo or direct2D，direct3D/openGL/opengl es?
 - layered window? app UI system?
 - canvas(in html5) version?
