@@ -5,7 +5,7 @@ YAUI（**Y** et **A** nother **UI**), 是一个新思路GUI系统, 它参考了�
 
 以下是它的特点:
 
-- 较完备的**layout**, GUI比较麻烦的地方，在于排版布局，我们看到的网页，复杂的编辑器界面，困就在此;
+- 较完备的**layout**, GUI比较麻烦的地方，在于排版布局，YAUI的布局系统类似html;
 - **组合性**，并不直接提供高级控件(目前)，而是基础绘制图元，通过控件模板容易地组合出高级控件，属性继承的提供类似css的功能;
 - **可捡图元**对象和变换，可用于提供可视化对象的编辑功能;
 - **XML** layout desc, 使用**query**, 事件绑定;
@@ -14,14 +14,16 @@ YAUI（**Y** et **A** nother **UI**), 是一个新思路GUI系统, 它参考了�
 
 ```
   var strXML = @"
-    <div layout='shrink'>
+    <div layout='vertical, shrink'>
       <label id='lb' text='touch me!'><label>
+      <label id='lb2' text='touch me again!'><label>
+      <label id='lb3' text='donnot touch me!'><label>
     </div>";                                //layout 
 ```
     
 ```
   var ui = UI.loadXML(strXML);                 
-  var lb = ui.findByID('lb') as UILable;     //query
+  var lb = ui.findByID('lb1') as UILable;     //query
   lb.text = "touch me!";                     //属性
   lb.evtClick = ()=>print("i am touched!");  //事件
 ```
