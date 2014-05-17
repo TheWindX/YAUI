@@ -30,49 +30,46 @@ left click to toggle tips
         }
 
 
-        bool moveHandler(UIWidget ui, int x, int y)
+        void moveHandler(int x, int y)
             {
                 UI.Instance.setTips("position at:" + UI.Instance.getCursorPosition());
-                return false;
+                //return false;
             }
 
         bool toggleState = false;
-        bool toggle(UIWidget ui, int x, int y)
+        void toggle(int x, int y)
        
             {
                 toggleState = !toggleState;
                 if (toggleState)
                 {
-                    moveHandler(null, 0, 0);
-                    UI.Instance.root.evtOnMMove += moveHandler;
+                    moveHandler(0, 0);
+                    UIRoot.Instance.evtMove += moveHandler;
                 }
                 else
                 {
                     UI.Instance.setTips(null);
                     UI.Instance.flush();
-                    UI.Instance.root.evtOnMMove -= moveHandler;
+                    UIRoot.Instance.evtMove -= moveHandler;
                 }
-                return false;
+                //return false;
             }
         public UIWidget getAttach()
         {
-            toggle(null, 0, 0);
-            UI.Instance.root.evtOnLMUp += toggle;
+            toggle(0, 0);
+            UIRoot.Instance.evtLeftDown += toggle;
             return UI.Instance.fromXML(@"
 <stub dragAble='*true'>
 </stub>", false);
-            //UI.Instance.getTip().foreground = (uint)EColorUtil.red;
-            //UI.Instance.getTip().background = (uint)EColorUtil.black;
-            //UI.Instance.getTip().size = 20;
         }
 
         public void lostAttach()
         {
-            UI.Instance.root.evtOnLMUp -= toggle;
-            UI.Instance.root.evtOnMMove -= moveHandler;
+            UIRoot.Instance.evtLeftDown -= toggle;
+            UIRoot.Instance.evtMove -= moveHandler;
             UI.Instance.setTips(null);
-            UI.Instance.root.evtOnMMove -= moveHandler;
-            UI.Instance.root.evtOnLMUp -= toggle;
+            UIRoot.Instance.evtMove -= moveHandler;
+            UIRoot.Instance.evtLeftDown -= toggle;
         }
     }
 

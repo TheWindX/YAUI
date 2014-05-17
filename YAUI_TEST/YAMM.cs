@@ -21,9 +21,9 @@ namespace ns_YAUIUser
         <round_rect strokeColor='*white' fillColor='*dimgray' rectExclude='false' layout='shrink' padding='0' dragAble='true'>
             <label color='white' text='template' name='label' margin='5'>
             </label>
-            <round radius='8' scale='0.8' align='left' fillColor='dimgray' alignParesent='right' rectExclude='false' name='subs'>
-                <round radius='8' fillColor='dimgray' align='center'></round>
-                <label text='—' color='white' align='center' offsetX='2' offsetY='-1'></label>
+            <round radius='6' align='left' fillColor='dimgray' alignParesent='right' rectExclude='false' name='subs'>
+                <round radius='6' fillColor='dimgray' align='center'></round>
+                <label text='—' size='10' color='white' align='center' offsetX='1' offsetY='-1'></label>
             </round>
             <round name='end' fillColor='gold' radius='4' align='right' alignParesent='left' rectExclude='false'>
             </round>
@@ -397,7 +397,7 @@ namespace ns_YAUIUser
                 var lb = (subs.findByTag("label") as UILabel);
                 lb.text = "—";
                 lb.offsety = -1;
-                lb.offsetx = 2;
+                lb.offsetx = 1;
             }
             else
             {

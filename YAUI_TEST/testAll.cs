@@ -19,7 +19,7 @@ namespace ns_YAUIUser
         }
         public testAll()
         {
-            //initScheme();
+            initScheme();
             var test = testFrame.Instance;
             //var test = testPrimarys.Instance; 
             //var test = testTransform.Instance;
