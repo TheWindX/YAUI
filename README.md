@@ -1,7 +1,7 @@
 YAUI
 ----
 
-YAUI（**Y** et **A** nother **UI**), 是一个新思路GUI系统, 它参考了传统GUI和HTML的设计
+YAUI（**Y** et **A** nother **UI**), 是一个新思路的GUI系统, 它参考了传统GUI和HTML的设计
 
 以下是它的特点:
 
