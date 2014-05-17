@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ns_YAUI;
-
+using ns_YAUtils;
 namespace ns_YAUIUser
 {
     class testFrame : Singleton<testFrame>

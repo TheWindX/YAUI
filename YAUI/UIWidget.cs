@@ -15,10 +15,6 @@ using System.Drawing;
 
 using System.Xml;
 
-using ns_utils;
-
-
-
 namespace ns_YAUI
 {
     using EvtMouse = Func<UIWidget, int, int, bool>;
@@ -65,6 +61,7 @@ namespace ns_YAUI
         {
             set
             {
+                UIRoot.Instance.mLayoutUpdate = true;
                 var oldParesent = base.paresent;
                 if (value == oldParesent) return;
 
@@ -386,12 +383,13 @@ namespace ns_YAUI
                 UIRoot.Instance.dirtyRoot = null;
             }
 #else
-            UIRoot.Instance.dirtyRoot = UIRoot.Instance.root;
+            //UIRoot.Instance.dirtyRoot = UIRoot.Instance.root;
 #endif
-            if (redrawImmediatly)
-            {
-                UIRoot.Instance.dirtyRedraw();
-            }
+            //if (redrawImmediatly)
+            //{
+            //    UIRoot.Instance.dirtyRedraw();
+            //}
+            UIRoot.Instance.mRenderUpdate = true;
         }
 
         //向上找到
@@ -534,6 +532,7 @@ namespace ns_YAUI
             set
             {
                 mVisiable = value;
+                UIRoot.Instance.mLayoutUpdate = true;
             }
         }
 
@@ -2011,7 +2010,7 @@ namespace ns_YAUI
         internal void doDrawAlone(Graphics g)
         {
             var pList = new List<UIWidget>();
-            adjustLayout();
+            //adjustLayout();
             UIWidget cur = paresent as UIWidget;
             for (; cur != null; )
             {

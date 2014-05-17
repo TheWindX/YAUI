@@ -8,7 +8,7 @@ using System.Drawing;
 namespace ns_YAUIUser
 {
     using ns_YAUI;
-
+    using ns_YAUtils;
     class UIMM : ns_YAUtils.InheriteBase
     {
         public override Type[] deriveFrom()

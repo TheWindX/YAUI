@@ -127,8 +127,18 @@ namespace ns_YAUI
             {
                 CSRepl.Instance.runOnce();
                 TimerProvide.Instance.updateTimer();
-                TimerManager.tickAll();
                 UIRoot.Instance.updateTimer();
+                if (UIRoot.Instance.mLayoutUpdate)
+                {
+                    UIRoot.Instance.root.adjustLayout();
+                    UIRoot.Instance.mRenderUpdate = true;
+                    UIRoot.Instance.mLayoutUpdate = false;
+                }
+                if (UIRoot.Instance.mRenderUpdate)
+                {
+                    UIRoot.Instance.dirtyRedraw();
+                    UIRoot.Instance.mRenderUpdate = false;
+                }
             };
 
             mPainter.Show();
@@ -144,7 +154,7 @@ namespace ns_YAUI
         public UI setAntiAliasing(bool enable)
         {
             mPainter.antiAliasing = enable;
-            //mPainter.textAntiAliasing = enable;
+            mPainter.textAntiAliasing = enable;
             return this;
         }
 

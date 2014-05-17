@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace ns_YAUIUser
 {
     using ns_YAUI;
-    class testResizer : ns_YAUI.Singleton<testResizer>
+    using ns_YAUtils;
+    class testResizer : Singleton<testResizer>
     {
         public testResizer()
         {

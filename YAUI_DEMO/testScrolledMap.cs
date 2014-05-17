@@ -9,7 +9,7 @@ using System.Xml;
 namespace ns_YAUIUser
 {
     using ns_YAUI;
-
+    using ns_YAUtils;
     class testScrolledMap : Singleton<testScrolledMap>
     {
         public testScrolledMap()

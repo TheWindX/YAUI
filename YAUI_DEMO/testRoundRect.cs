@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ns_YAUIUser
 {
     using ns_YAUI;
-
+    using ns_YAUtils;
     class testRoundRect : Singleton<testRoundRect>
     {
         public testRoundRect()

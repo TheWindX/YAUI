@@ -74,6 +74,7 @@ namespace ns_YAUI
             set
             {
                 _w = value;
+                UIRoot.Instance.mLayoutUpdate = true;
             }
         }
 
@@ -86,6 +87,7 @@ namespace ns_YAUI
             set
             {
                 _h = value;
+                UIRoot.Instance.mLayoutUpdate = true;
             }
         }
 

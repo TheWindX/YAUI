@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
-
+using ns_YAUtils;
 
 namespace ns_YAUI
 {
@@ -464,11 +464,12 @@ namespace ns_YAUI
         #region handle
         public void handleDraw(Graphics g)
         {
-            if (mDirtyRootOld == null) { mDirtyRootOld = root; }
-            //Console.WriteLine(mDirtyRootOld.name);
-            mDirtyRootOld.doDrawAlone(g);
-            mDirtyRootOld = mDirtyRoot;
-            mDirtyRoot = null;
+            //if (mDirtyRootOld == null) { mDirtyRootOld = root; }
+            ////Console.WriteLine(mDirtyRootOld.name);
+            //mDirtyRootOld.doDrawAlone(g);
+            //mDirtyRootOld = mDirtyRoot;
+            //mDirtyRoot = null;
+            root.doDraw(g);
         }
 
         public void handleLDClick(int x, int y)
@@ -759,6 +760,11 @@ namespace ns_YAUI
             if (mEvtInputDone != null) mEvtInputDone(str);
 
         }
+        #endregion
+
+        #region update
+        public bool mLayoutUpdate = true;
+        public bool mRenderUpdate = true;
         #endregion
 
         #region manager
