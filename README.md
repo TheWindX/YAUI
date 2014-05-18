@@ -15,7 +15,7 @@ YAUI（**Y** et **A** nother **UI**), 是一个新思路的GUI系统, 它参考�
 ```
   var strXML = @"
     <div layout='vertical, shrink'>
-      <label id='lb' text='touch me!'><label>
+      <label id='lb1' text='touch me!'><label>
       <label id='lb2' text='touch me again!'><label>
       <label id='lb3' text='donnot touch me!'><label>
     </div>";                                //layout 
