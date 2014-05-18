@@ -154,7 +154,7 @@ namespace ns_YAUI
         public UI setAntiAliasing(bool enable)
         {
             mPainter.antiAliasing = enable;
-            mPainter.textAntiAliasing = enable;
+            //mPainter.textAntiAliasing = enable;
             return this;
         }
 

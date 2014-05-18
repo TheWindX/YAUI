@@ -54,9 +54,9 @@ namespace ns_YAUIUser
         {
             mRoot = UI.Instance.fromXML(XMLFrame, false);
 
-            mRoot.evtOnLMDown += (ui, x, y)=>{return false;};
-            mRoot.evtOnLMUp += (ui, x, y) => { return false; };
-            mRoot.evtOnMMove += (ui, x, y) => { return false; };
+            //mRoot.evtOnLMDown += (ui, x, y)=>{return false;};
+            //mRoot.evtOnLMUp += (ui, x, y) => { return false; };
+            //mRoot.evtOnMMove += (ui, x, y) => { return false; };
             mUIMainRole = mRoot.findByPath("mainRole");
             mUIRoles = mRoot.findByPath("roles");
             mPrompt = mRoot.findByPath("forground/prompt") as UILabel;
