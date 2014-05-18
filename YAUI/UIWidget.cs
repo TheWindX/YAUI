@@ -2057,8 +2057,10 @@ namespace ns_YAUI
 
             //Console.WriteLine("draw" + this.name + ":");
             //catch it?
+            if (evtOnPreDraw != null) evtOnPreDraw(g);
             if (!onDraw(g))
             {
+                if (evtOnPostDraw != null) evtOnPostDraw(g);
                 g.Restore(mGs);
                 return;
             }
@@ -2088,6 +2090,12 @@ namespace ns_YAUI
         public void evtOnPostDrawClear() 
         {
             evtOnPostDraw = null;
+        }
+
+        public event Action<Graphics> evtOnPreDraw;
+        public void evtOnPreDrawClear()
+        {
+            evtOnPreDraw = null;
         }
 
         public virtual bool onDraw(Graphics g) { return true; }

@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 
 namespace ns_YAUIUser
@@ -21,16 +18,15 @@ namespace ns_YAUIUser
         <round_rect strokeColor='*white' fillColor='*dimgray' rectExclude='false' layout='shrink' padding='0' dragAble='true'>
             <label color='white' text='template' name='label' margin='5'>
             </label>
-            <round radius='6' align='left' fillColor='dimgray' alignParesent='right' rectExclude='false' name='subs'>
-                <round radius='6' fillColor='dimgray' align='center'></round>
-                <label text='—' size='10' color='white' align='center' offsetX='1' offsetY='-2'></label>
+            <round radius='6' strokeColor='transparent' align='left' fillColor='green' alignParesent='right' rectExclude='false' name='subs'>
+                <round radius='6' fillColor='0xff0293d2' align='center'></round>
+                <label text='—' size='10' color='white' align='center' offsetX='1' offsetY='-1'></label>
             </round>
             <round name='end' fillColor='gold' radius='4' align='right' alignParesent='left' rectExclude='false'>
             </round>
         </round_rect>
 ";
         public UIWidget mRoot = null;
-        //public System.Drawing.RectangleF mRectangle = new System.Drawing.RectangleF();
         public UILine mline1 = null;
         public UILine mline2 = null;
 
@@ -49,11 +45,11 @@ namespace ns_YAUIUser
 
             mline1 = new UILine();//line1
             mline1.color = (uint)EColorUtil.dimgray;
-            mline1.setLineWidth(3);
+            mline1.setLineWidth(2);
 
             mline2 = new UILine();
             mline2.color = (uint)EColorUtil.dimgray;
-            mline2.setLineWidth(3);
+            mline2.setLineWidth(2);
 
             mRoot.evtOnDragMove += (x, y) =>
                 {
@@ -115,8 +111,6 @@ namespace ns_YAUIUser
         }
         public void rerangeChildren()
         {
-            //clearLines();
-            //Console.WriteLine("rerangeChildren:" + (mRoot.findByPath("label") as UILabel).text);
             treeNode tn = cast<treeNode>();
             var cs = tn.children();
             float height = 0;
@@ -311,6 +305,28 @@ namespace ns_YAUIUser
         public YAMMNode()
         {
             UIMM ui = cast<UIMM>();
+            ui.mRoot.evtOnPreDraw += g =>
+                {
+                    var tn = cast<treeNode>();
+                    if (tn.firstChild() == null)
+                    {
+                        ui.mRoot.findByPath("subs").visible = false;
+                    }
+                    else
+                    {
+                        ui.mRoot.findByPath("subs").visible = true;
+                    }
+
+                    if (tn.mParesent == null)
+                    {
+                        ui.mRoot.findByPath("end").visible = false;
+                    }
+                    else
+                    {
+                        ui.mRoot.findByPath("end").visible = true;
+                    }
+
+                };
         }
 
         public void setParesent(YAMMNode t)
@@ -318,7 +334,6 @@ namespace ns_YAUIUser
             treeNode tselfNode = cast<treeNode>();
             treeNode pNode = t.cast<treeNode>();
             tselfNode.setParesent(pNode);
-            //调整 自身UI
         }
 
         public void setText(string str)
@@ -396,7 +411,7 @@ namespace ns_YAUIUser
             {
                 var lb = (subs.findByTag("label") as UILabel);
                 lb.text = "—";
-                lb.offsety = -2;
+                lb.offsety = -1;
                 lb.offsetx = 1;
             }
             else
@@ -424,6 +439,13 @@ namespace ns_YAUIUser
                 typeof(YAMMNode)
             };
         }
+
+        public YAMMRootNode()
+        {
+            var ui = cast<UIMM>();
+            var endUI = ui.mRoot.findByPath("end");
+            endUI.visible = false;
+        }
     }
 
     class YAMM : iTestInstance
@@ -446,7 +468,6 @@ namespace ns_YAUIUser
                     {
                         mCurrent.tryAdd(delegate(YAMMNode n) { 
                             setCurrent(n);
-                            setCenter(n);
                         });
                         
                     }
@@ -498,12 +519,6 @@ namespace ns_YAUIUser
                 };
         }
 
-        //使某个node 居中显示
-        private void setCenter(YAMMNode node)
-        {
-            //
-        }
-
         public void setCurrent(YAMMNode node)
         {
             if (mCurrent != null) mCurrent.setChoose(false);
@@ -544,25 +559,18 @@ namespace ns_YAUIUser
             var root = mCurrent;
             var n1 = addNode("topic1");
             var n2 = addNode("topic2");
-            //var n3 = addNode("topic3");
             setCurrent(n1);
             var n11 = addNode("sub_topic11");
             var n12 = addNode("sub_topic12");
-
             setCurrent(n2);
             var n21 = addNode("sub_topic21");
             var n22 = addNode("sub_topic22");
-
-            //setCurrent(n3);
-            //var n31 = addNode("sub_topic31");
-            //var n32 = addNode("sub_topic32");
-
             setCurrent(root);
             TimerManager.get().setTimeout(t =>
                 {
                     root.cast<UIMM>().rerangeChildren();
                     UI.Instance.flush();
-                }, 100);
+                }, 200);
 
             UI.Instance.flush();
         }

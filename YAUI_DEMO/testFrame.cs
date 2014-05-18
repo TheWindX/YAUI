@@ -140,6 +140,7 @@ namespace ns_YAUIUser
 
         int mTimeIDAboutPage = -1;
         bool mFadeIn = true;
+        uint mFadeTime = 1000;
         void initFrame()
         {
             UILabel lbAbout = mRoot.findByID("about") as UILabel;
@@ -152,7 +153,7 @@ namespace ns_YAUIUser
             Action<uint, uint> fade = (det, last) =>
             {
                 rrAbout.visible = true;
-                float rate = ((float)last / 500);
+                float rate = ((float)last / mFadeTime);
                 if (rate > 1) rate = 1;
                 if (!mFadeIn) rate = 1 - rate;
                 uint color = (uint)(0x1000000 * (uint)(256 * rate));
@@ -167,14 +168,14 @@ namespace ns_YAUIUser
             lbAbout.evtOnLMUp += (ui, x, y) =>
             {
                 if (mTimeIDAboutPage != -1) return false;
-                mTimeIDAboutPage = TimerManager.get().setInterval(fade, 20, t => { mFadeIn = !mFadeIn; mTimeIDAboutPage = -1; UI.Instance.flush(); }, 500);
+                mTimeIDAboutPage = TimerManager.get().setInterval(fade, 10, t => { mFadeIn = !mFadeIn; mTimeIDAboutPage = -1; UI.Instance.flush(); }, mFadeTime);
                 return false;
             };
 
             lbClose.evtOnLMUp += (ui, x, y) =>
             {
                 if (mTimeIDAboutPage != -1) return false;
-                mTimeIDAboutPage = TimerManager.get().setInterval(fade, 20, t => { mFadeIn = !mFadeIn; mTimeIDAboutPage = -1; rrAbout.visible = false; UI.Instance.flush(); }, 500);
+                mTimeIDAboutPage = TimerManager.get().setInterval(fade, 10, t => { mFadeIn = !mFadeIn; mTimeIDAboutPage = -1; rrAbout.visible = false; UI.Instance.flush(); }, mFadeTime);
 
                 return false;
             };
