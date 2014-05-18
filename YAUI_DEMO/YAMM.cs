@@ -18,8 +18,8 @@ namespace ns_YAUIUser
         <round_rect strokeColor='*white' fillColor='*dimgray' rectExclude='false' layout='shrink' padding='0' dragAble='true'>
             <label color='white' text='template' name='label' margin='5'>
             </label>
-            <round radius='6' strokeColor='transparent' align='left' fillColor='green' alignParesent='right' rectExclude='false' name='subs'>
-                <round radius='6' fillColor='0xff0293d2' align='center'></round>
+            <round radius='6' align='left' fillColor='green' alignParesent='right' rectExclude='false' name='subs'>
+                <round radius='6' fillColor='green' align='center'></round>
                 <label text='—' size='10' color='white' align='center' offsetX='1' offsetY='-1'></label>
             </round>
             <round name='end' fillColor='gold' radius='4' align='right' alignParesent='left' rectExclude='false'>
