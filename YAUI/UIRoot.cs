@@ -10,7 +10,7 @@ using System.Xml;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 using System.Drawing;
 using ns_YAUtils;
 
@@ -747,8 +747,9 @@ namespace ns_YAUI
         }
 
 
-        internal Action<bool, int, int, int, int> mHandleInputShow;
-        public UIRoot initHandleInputShow(Action<bool, int, int, int, int> handleInputShow)
+        public delegate void delegateHandlerInputShow(bool bShow, int x, int y, int w, int h);
+        internal delegateHandlerInputShow mHandleInputShow;
+        public UIRoot initHandleInputShow(delegateHandlerInputShow handleInputShow)
         {
             mHandleInputShow = handleInputShow;
             return this;

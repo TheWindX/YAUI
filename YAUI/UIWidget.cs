@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+
 
 using System.Drawing.Drawing2D;
 using System.Drawing;
@@ -1599,6 +1599,24 @@ namespace ns_YAUI
             return strRet;
         }
 
+        internal static bool TryParse<T>(string strEnum, out T outVal)
+        {
+            Array vals = Enum.GetValues(typeof(T) );
+            for(int i = 0; i<vals.Length; ++i)
+            {
+                object o = vals.GetValue(i);
+                if(o.ToString() == strEnum)
+                {
+                    outVal = (T)o;
+                    return true;
+                }
+            }
+            outVal = (T)vals.GetValue(0);
+            return false;
+        }
+
+
+
         internal static T getProp<T>(XmlNode node, string attName, T defaultVal, out bool valid) where T : IConvertible
         {
             valid = true;
@@ -1633,35 +1651,36 @@ namespace ns_YAUI
                 else if (typeof(T) == typeof(EColorUtil))
                 {
                     EColorUtil col;
-                    bool br = Enum.TryParse<EColorUtil>(strRet, out col);
+                    
+                    bool br = TryParse<EColorUtil>(strRet, out col);
                     if(br)
                         return (T)Convert.ChangeType(col, typeof(T)); //strRet.castInt();
                 }
                 else if (typeof(T) == typeof(EAlign))
                 {
                     EAlign align;
-                    var br = Enum.TryParse(strRet, true, out align); //(typeof(EAlign), strRet);
+                    var br = TryParse(strRet, out align); //(typeof(EAlign), strRet);
                     if(br)
                         return (T)Convert.ChangeType(align, typeof(T)); //strRet.castInt();
                 }
                 else if (typeof(T) == typeof(ELayout))
                 {
                     ELayout layout;
-                    var br = Enum.TryParse(strRet, true, out layout); //(typeof(EAlign), strRet);
+                    var br = TryParse(strRet, out layout); //(typeof(EAlign), strRet);
                     if(br)
                         return (T)Convert.ChangeType(layout, typeof(T)); //strRet.castInt();
                 }
                 else if(typeof(T) == typeof(EStyle))
                 {
                     EStyle style;
-                    var br = Enum.TryParse(strRet, true, out style); //(typeof(EAlign), strRet);
+                    var br = TryParse(strRet, out style); //(typeof(EAlign), strRet);
                     if (br)
                         return (T)Convert.ChangeType(style, typeof(T)); //strRet.castInt();
                 }
                 else if (typeof(T) == typeof(EForward))
                 {
                     EForward forward;
-                    var br = Enum.TryParse(strRet, true, out forward); //(typeof(EAlign), strRet);
+                    var br = TryParse(strRet, out forward); //(typeof(EAlign), strRet);
                     if (br)
                         return (T)Convert.ChangeType(forward, typeof(T)); //strRet.castInt();
                 }
