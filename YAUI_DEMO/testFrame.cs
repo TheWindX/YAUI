@@ -340,6 +340,7 @@ namespace ns_YAUIUser
             addInstance(new testAlign());
             addInstance(new testHierarchy());
             addInstance(new testLayout());
+            addInstance(new testLayout2());
             addInstance(new testTips());
             addInstance(new testMenu());
 

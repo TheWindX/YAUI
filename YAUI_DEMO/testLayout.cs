@@ -11,7 +11,7 @@ namespace ns_YAUIUser
     class testLayout : iTestInstance
     {
         const string XMLPAGE = @"
-<resizer derived='true' name='root' size='512' layout='vertical, filled' color='0xff194e88' editMode='dragAble, rotateAble, scaleAble'>
+<resizer location='24, 24' scale='0.9' derived='true' name='root' size='512' layout='vertical, filled' color='0xff194e88' editMode='dragAble, rotateAble, scaleAble'>
     <div layout='horizon, inverse' align='rightTop' id='buttons'>
         <label text='×' color='*white' margin='*2'></label>
         <label text='□'></label>

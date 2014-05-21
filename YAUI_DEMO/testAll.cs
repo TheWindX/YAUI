@@ -30,7 +30,8 @@ namespace ns_YAUIUser
             //test.getAttach().paresent = ns_YAUI.UI.Instance.root;
             //var test = testScrolledMap.Instance;
             //var test = testLayout.Instance;
-            //var test = testUse.Instance;
+            //var test = new testUse() as iTestInstance;
+            //test.getAttach();
             //var test = YAMM.Instance;
             //var test = testLine1.Instance;
             //var _0 =  testDir.Instance;

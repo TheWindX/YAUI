@@ -10,13 +10,9 @@ namespace ns_YAUIUser
 {
     using ns_YAUI;
 
-    class testUse : iTestInstance
+    class testLayout2 : iTestInstance
     {
-        public testUse()
-        {
-
-        }
-
+        
         ECategory iTestInstance.category()
         {
             return ECategory.example;
@@ -24,7 +20,7 @@ namespace ns_YAUIUser
 
         string iTestInstance.title()
         {
-            return "flat UI";
+            return "layout2";
         }
 
         string iTestInstance.desc()
@@ -37,11 +33,11 @@ namespace ns_YAUIUser
             try
             {
                 const string XMLLayout1 = @"
-<rect size='320, 480' layout='vertical, filled' fillColor='0xff33b887'>
+<rect size='320, 480' location='24, 24' layout='vertical, filled' fillColor='0xff33b887'>
 <div height='42' expandX='true'>
     <label align='left' name='back' text='取消' size='*16' color='*white' style='*bold'></label>
     <label align='center' text='删除' color='0xffffaf60'></label>
-    <label align='right' text='确定'></label>
+    <label align='right' name='enter' text='确定'></label>
 </div>
 <div height='100' layout='horizon,filled' expandX='true'>
     <rect width='140' expandY='true' fillColor='*0xffdeb887'> 
@@ -70,7 +66,7 @@ namespace ns_YAUIUser
 </rect>
 ";
                 const string XMLLayout2 = @"
-<rect size='320, 480' layout='vertical' fillColor='0xff33b887'>
+<rect size='320, 480' location='24, 24' layout='vertical' fillColor='0xff33b887'>
     <div height='42' layout='horizon, expandX, filled'>
         <rect width='80' fillColor='*0' layout='expandY'>
             <label text='+' color='white' style='bold' size='24' align='center'></label>
@@ -110,7 +106,14 @@ namespace ns_YAUIUser
                 var ui1 = UI.Instance.fromXML(XMLLayout2, false);
                 var back = ui.findByPath("back");
                 back.evtOnLMUp += (self, x, y) =>
-                {   
+                {
+                    ui1.paresent = ui.paresent;
+                    ui.paresent = null;
+                    return false;
+                };
+                var enter = ui.findByPath("enter");
+                enter.evtOnLMUp += (self, x, y) =>
+                {
                     ui1.paresent = ui.paresent;
                     ui.paresent = null;
                     return false;
