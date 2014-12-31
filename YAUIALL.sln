@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAUI_DEMO", "YAUI_DEMO\YAUI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YAUIDLL", "YAUI\YAUIDLL.csproj", "{44A65251-F8FF-44BF-BE47-40482F28E11D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pixelPicker", "PixelPicker\pixelPicker.csproj", "{858D80A4-8DBB-4CE2-A05A-4FC481D286F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VolumeController", "VolumeController\VolumeController.csproj", "{30D226E3-961A-4272-A2C7-733915F0291B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,22 @@ Global
 		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|x64.ActiveCfg = Release|Any CPU
 		{44A65251-F8FF-44BF-BE47-40482F28E11D}.Release|x86.ActiveCfg = Release|Any CPU
+		{858D80A4-8DBB-4CE2-A05A-4FC481D286F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{858D80A4-8DBB-4CE2-A05A-4FC481D286F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{858D80A4-8DBB-4CE2-A05A-4FC481D286F4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{858D80A4-8DBB-4CE2-A05A-4FC481D286F4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{858D80A4-8DBB-4CE2-A05A-4FC481D286F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{858D80A4-8DBB-4CE2-A05A-4FC481D286F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{858D80A4-8DBB-4CE2-A05A-4FC481D286F4}.Release|x64.ActiveCfg = Release|Any CPU
+		{858D80A4-8DBB-4CE2-A05A-4FC481D286F4}.Release|x86.ActiveCfg = Release|Any CPU
+		{30D226E3-961A-4272-A2C7-733915F0291B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30D226E3-961A-4272-A2C7-733915F0291B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30D226E3-961A-4272-A2C7-733915F0291B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{30D226E3-961A-4272-A2C7-733915F0291B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{30D226E3-961A-4272-A2C7-733915F0291B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30D226E3-961A-4272-A2C7-733915F0291B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30D226E3-961A-4272-A2C7-733915F0291B}.Release|x64.ActiveCfg = Release|Any CPU
+		{30D226E3-961A-4272-A2C7-733915F0291B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
