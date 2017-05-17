@@ -34,11 +34,18 @@ demo
 [download](https://raw.githubusercontent.com/TheWindX/YAUI/master/demo.zip)
 
 
-![2](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo2.png)
 ![21](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo21.png)
+
+
 ![3](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo3.png)
+
+
 ![31](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo31.png)
+
+
 ![4](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo4.png)
+
+
 ![5](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo5.png)
 
 
