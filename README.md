@@ -32,26 +32,17 @@ YAUI（**Y** et **A** nother **UI**), 是一个新思路的GUI系统, 它参考�
 demo
 ----
 [download](https://raw.githubusercontent.com/TheWindX/YAUI/master/demo.zip)
-
-![demo pic](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo2.png)
-![demo pic][3]
-![demo pic][31]
-![demo pic][4]
-![demo pic][5]
-
+[2](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo2.png)
+[21](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo21.png)
+[3](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo3.png)
+[31](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo31.png)
+[4](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo4.png)
+[5](https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo5.png)
 
 
 todo list
 ----
-- more feathers, 位图支持, 渐变色填充，xml定义控件，预置控件(window style)...
-- 修改dirty rect 实现, 优化;
-- (visula) runtime, demo.
-- 渲染支持，render by cairo or direct2D，direct3D/openGL/opengl es?
-- layered window? directUI?
-- canvas(in html5) version?
-- c++ & scripts version?
-
-
+(implement in html canvas)?
 
 Version
 ----
@@ -72,11 +63,3 @@ me
 > lxf0525@gmail.com
 
 > 453588006@qq.com
-[1]:https://raw.githubusercontent.com/TheWindX/YAUI/master/demo.zip
-[2]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo2.png
-[21]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo21.png
-[3]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo3.png
-[31]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo31.png
-[4]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo4.png
-[5]:https://raw.githubusercontent.com/TheWindX/YAUI/master/doc/demo5.png
-    
